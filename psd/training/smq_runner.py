@@ -49,6 +49,7 @@ class SMQSegmenter:
         kmeans_metric: str = "euclidean",
         sampling_quantile: float = 0.5,
         replacement_strategy: str = "representative",
+        vocab_merge: int | None = None,
     ) -> None:
         _bootstrap()
         from model import Trainer  # external/SMQ/model.py
@@ -70,6 +71,7 @@ class SMQSegmenter:
         )
         self.patch_size = patch_size
         self.num_actions = num_actions
+        self.vocab_merge = vocab_merge   # 推理期码本合并目标词数（None=不合并）
 
     def fit(
         self,
@@ -123,6 +125,8 @@ class SMQSegmenter:
         self.trainer.model.to(device)
         state = torch.load(ckpt_path, map_location="cpu")
         self.trainer.model.load_state_dict(state)
+        if getattr(self, "vocab_merge", None):
+            merge_codebook_inplace(self, int(self.vocab_merge))
 
         assert data.ndim == 4, f"期望 (C,T,V,M)，实际 {data.shape}"
         t_true = data.shape[1]
@@ -138,3 +142,45 @@ class SMQSegmenter:
         with torch.no_grad():
             self.trainer.model(x, mask)
         return self.trainer.model.indices[0][:t_true].detach().cpu().numpy()
+
+
+def merge_codebook_inplace(seg: "SMQSegmenter", target_k: int) -> dict:
+    """推理期码本合并（只改内存，不动 checkpoint 文件）。
+
+    把 K 个码字按均值向量余弦相似度贪心合并到 target_k 个"超码"：
+    被合并双方的 embedding 行写成完全相同的加权均值向量——由于距离
+    并列时 torch.argmax 恒取更低索引，冗余行自然不再被选中，
+    运动词序列因此变长（抗碎片化）。评估专用：eval 分支无 EMA 更新。
+    """
+    import torch
+    import torch.nn.functional as F
+
+    vq = seg.trainer.model.vq
+    emb = vq._embedding.detach().clone()          # (K, W, D)
+    k_total = emb.shape[0]
+    assert 1 <= target_k <= k_total, f"target_k={target_k} 越界"
+    weights = vq.cluster_size.detach().flatten().float()   # (K,)
+    means = emb.mean(dim=1)                                # (K, D)
+
+    alive = list(range(k_total))
+    while len(alive) > target_k:
+        best_c, best_pair = -2.0, None
+        for a_idx in range(len(alive)):
+            for b_idx in range(a_idx + 1, len(alive)):
+                i, j = alive[a_idx], alive[b_idx]
+                c = F.cosine_similarity(means[i], means[j], dim=0).item()
+                if c > best_c:
+                    best_c, best_pair = c, (i, j)
+        i, j = best_pair
+        w_i, w_j = float(weights[i]), float(weights[j])
+        merged_emb = (emb[i] * w_i + emb[j] * w_j) / max(w_i + w_j, 1e-6)
+        merged_mean = (means[i] * w_i + means[j] * w_j) / max(w_i + w_j, 1e-6)
+        emb[i] = merged_emb
+        emb[j] = merged_emb.clone()      # 必须逐位相同以触发 argmax 平局规则
+        means[i] = merged_mean
+        weights[i] = w_i + w_j
+        alive.remove(j)
+
+    vq._embedding.data.copy_(emb.to(vq._embedding.dtype))
+    return {"k_before": k_total, "k_after": len(alive),
+            "surviving": sorted(alive)}

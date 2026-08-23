@@ -56,6 +56,8 @@ def main() -> None:
                     help="覆盖 config 的 min_seg_len（后处理敏感性扫描用，不影响训练）")
     ap.add_argument("--short-run", choices=["drop", "merge"], default="drop",
                     help="短 run 处理：drop=丢弃留洞(原行为) | merge=吸收进长邻居")
+    ap.add_argument("--vocab-merge", type=int, default=None,
+                    help="推理期码本合并目标词数（抗碎片化快速验证，不改 checkpoint）")
     ap.add_argument("--out", default="reports/p02-smq-iou.json")
     args = ap.parse_args()
     assert args.iou or args.vis, "至少指定 --iou 或 --vis"
@@ -87,6 +89,7 @@ def main() -> None:
         decay=cfg["decay"], kmeans=cfg["kmeans"], kmeans_metric=cfg["kmeans_metric"],
         sampling_quantile=cfg["sampling_quantile"],
         replacement_strategy=cfg["replacement_strategy"],
+        vocab_merge=args.vocab_merge,
     )
 
     results = {"protocol": ("seed-pseudo-gt-episode-IoU" if args.gt_protocol == "seeds"
