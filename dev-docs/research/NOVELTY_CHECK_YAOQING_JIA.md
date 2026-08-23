@@ -60,7 +60,8 @@
 ## 5. 边界声明（诚实版）
 
 - ⚠️ **未验证面**: GitHub 工具链对「有论文无代码」的工作覆盖有限（AGENTS.md 禁 WebSearch 的结构性代价）。**投稿前必须做一次 arXiv / Google Scholar 人工终审**，本报告不替代它。
-- ⚠️ niais/Awesome 目录（685★）未逐条扫描（与 firework8 高度重叠，抽样核对未见新增相关条目）；若需双保险可补扫。
+- ✅ ~~niais/Awesome 目录未逐条扫描~~ **已于同日补扫确认**：`Yingfei-Wu/Awesome-Self-supervised-Skeleton-based-Action-Recognition` 全量 43 条目均为自监督表征学习范式（MSM/CL，NTU 线性探针协议），零「锚点+聚类伪标签」组合、零动物域——结论不变。
+- 📌 **附带发现**: AimCLR 官方续作 AimCLR++ 存在（`Levigty/AimCLR-v2`，PR 2024，NTU xsub 77.2% vs v1 的 74.3%）——P0.1 预训练骨干若收敛不佳，可直接升级候选。
 - 中文文献（知网系）完全不在覆盖范围。
 
 ## 6. 建议回写清单（由用户或收尾会话统一执行，W1 未越权改动）
