@@ -42,21 +42,21 @@
 | 事项 | 状态 |
 |------|------|
 | 建仓 + truth 链 + 宪法 + 资产地图 | ✅ 完成（commit `a512daf`） |
-| Python 环境 / venv | ❌ 未建立（P0.1 前置） |
-| P0.1-P0.6 全部子阶段 | ⏳ 未开工（无任何代码） |
-| external/ 第三方仓库克隆（AimCLR/SMQ/TCL） | ⏳ 未克隆 |
-| 姚青 JIA 创新性核验调研 | ⏳ 未做（阻塞 P0.3 与论文框架设计） |
+| Python 环境 / venv | ✅ 已建立：`.venv` Python 3.12.4 + torch 2.11.0+cu128（GPU capability (12,0) 实测通过；torch 系经 K9 venv 本地复制安装，见 `requirements.txt` 注释） |
+| P0 子阶段 | **P0.1 ✅ 达标**（kNN 20.89% vs 随机 8.33%，2.51×，`reports/p01-aimclr-2026-08-23.md`）；P0.2-P0.6 ⏳ |
+| external/ 第三方仓库克隆 | AimCLR ✅（P0.1 使用）；SMQ / TCL ⏳ P0.2/P0.4 开工前 |
+| 姚青 JIA 创新性核验调研 | ✅ 初步通过（W1 零占坑，见 `dev-docs/research/NOVELTY_CHECK_YAOQING_JIA.md`；投稿前 Scholar 终审保留） |
 | 远程仓库（GitHub） | ⏳ 未创建 |
 
-## 4. 环境基线（继承 K9 运行时经验，本仓环境未建——未验证项）
+## 4. 环境基线（✅ 本仓已建成并实测，2026-08-23）
 
-| 项 | 经验值（来源 K9 runtime） |
-|----|--------------------------|
-| Python | 3.12 |
-| PyTorch | 2.11+cu128（RTX 5060 为 sm_120 架构，必须 cu128 构建） |
-| GPU | RTX 5060（本地） |
-| mamba_ssm | WSL 内编译成功经验：CUDA 12.8 + gcc-12 + sm_120；纯 PyTorch 回退实现也在 K9 仓（videomamba_skeleton.py） |
-| Git 身份 | 本仓已配置 local：`K9 Training Dev <k9-training@local>`（与 K9 仓一致） |
+| 项 | 实测值 |
+|----|--------|
+| Python | 3.12.4（`.venv`） |
+| PyTorch | **2.11.0+cu128 实测**（RTX 5060 sm_120，capability (12,0)；获取方式：K9 venv 同版本二进制本地复制——官方源直连仅 ~130KB/s 不可行，见 `requirements.txt`） |
+| GPU | RTX 5060 Laptop 8GB（driver 573.24） |
+| mamba_ssm | ⏳ 未安装（P0.5 事项，按交接指引刻意不装）；WSL 编译经验 + 纯 PyTorch 回退在 K9 仓 |
+| Git 身份 | 本仓 local：`K9 Training Dev <k9-training@local>` |
 
 ## 5. 数据资产（2026-08-23 已盘点，路径实锤 ✓）
 
@@ -68,7 +68,7 @@
 | Animal Kingdom | `D:\Desktop\k9-training-system\data\animal_kingdom` | action_recognition/、pose_estimation/、video_grounding/ |
 | APTv2 | `D:\Desktop\k9-training-system\data\APTv2`（另有 aptv2_annotations/canidae/yolo/yolo_pose 四个伴生目录） | APTv2/ 子目录 |
 
-数据文件**不搬移**，本仓通过路径配置访问。数量级声明（226 序列/338 视频/242K 文件）来自 K9 truth 文档，本仓尚未逐一复核。
+数据文件**不搬移**，本仓通过路径配置访问。✅ 数量级已由 W2 实测复核（2026-08-23）：AK 犬科 329 视频 / 34,772 帧级标注行、APTv2 83,304 文件、InterPet4D smal_npy 226 ✓——原 K9 声明「338/242K」确证为规划期未验证估计，详见 `reports/data-inventory-2026-08-23.md`。P0.1 补充实测：smal fit 覆盖 dog01–12 共 12 类，1 个 clip 全帧 NaN 已剔除（225 有效）。
 
 ## 6. 可复用资产指针
 
@@ -82,6 +82,8 @@
 | 数字 | 含义 | 来源 |
 |------|------|------|
 | 79.18% | AimCLR 在 NTU60 的参照成绩（AAAI 2022 原文） | 调研文档 |
+| **20.89% (2.51×)** | **P0.1 AimCLR 在 InterPet4D 的 kNN top-1（公开真实层，dog ID 12 类代理 probe，随机基线 8.33%）** | `reports/p01-knn-result.json` |
+| 77.2% | AimCLR++（PR 2024）NTU xsub，v1 为 74.3%——骨干升级候选 | W1 附带发现 |
 | 82.7% | TCL 用 10% 标注达到的成绩（全监督参照 88.6%，CVPR 2021） | 调研文档 |
 | 4.5% | 22 类随机猜测基线 | K9 实验 |
 | 46.97% | ST-GCN+BC 合成数据 best_val_acc（epoch 21） | K9 phase-3 |
@@ -123,3 +125,4 @@
 | v1.0 | 2026-08-23 | 建仓交接：项目身份/双仓边界/环境基线/数据盘点/任务路由 |
 | v1.1 | 2026-08-23 | 任务路由改三窗口并行：handovers/ 白名单互斥边界 + 收尾回写约定 |
 | v1.2 | 2026-08-23 | 三窗口收官：§8 路由改为完成态 + P0.2 指向；会话历史补 W2/W3/收尾记录 |
+| v1.3 | 2026-08-23 | W3 补完收尾：§3 状态表/§4 环境基线同步实测事实（venv✅ P0.1✅ AimCLR✅ 核验✅）、§5 数据复核口径回填、§7 速查表增补 P0.1 kNN 与 AimCLR++ 候选 |
