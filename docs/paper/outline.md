@@ -55,18 +55,18 @@
 
 ## 4. 章节规划（逐节：内容 / 关键 claim / 图表 / 状态）
 
-### Abstract（150–250 词）— 🚫 终稿不做，占位规范先行
-- 四要素齐全（背景/方法/结果/结论）+ **≥3 个数值结果**（占位符计数：[RESULT-1] kNN 倍率、[RESULT-2] 22 类精度、[RESULT-3] 标注预算节省比）。
+### Abstract（150–250 词）— ✅ 占位初稿已成 `introduction.md`（数字占位，终稿待回填）
+- 四要素齐全（背景/方法/结果/结论）+ **≥3 个数值结果**（[RESULT-1] kNN 倍率已实填、[RESULT-2] 22 类精度、[RESULT-3] 标注预算节省比）。
 - 五句公式（Farquhar）：成果一句 → 为什么难 → 怎么做（关键词可检索性）→ 证据 → 最亮眼的数字。
 - ❌ 删开头式套话（"Recently, ... has attracted increasing attention" 类）。
 
-### 1. Introduction（~1.5 页）— 🚫 终稿不做（等 P0 数字），但以下元素本窗口定稿
+### 1. Introduction（~1.5 页）— ✅ 六段式初稿已成 `introduction.md`（数字占位，终稿待 P0 数据）
 - 贡献 bullets ×4（每条 ≤2 行）：
   1. 提出 物理-语义解耦框架，形式化"评估标准演化"并给出解耦机制（C1）；
   2. 首次将图像域锚点-聚类-伪标签组合迁移到时序骨架域（C2，附核验边界）；
   3. 在公开真实动物骨架数据上验证免标注预训练与无监督分割的有效性（C3/C4）；
   4. 给出三层数据口径下的完整低资源管线与主动学习闭环（C5-C7）。
-- Hero figure：fig1 框架总览图（放 Intro 或 §3 开头，PR 惯例两可，倾向 Intro 尾部）。
+- Hero figure：fig1 框架总览图，落点 §1 尾（v0.3 定稿），绘制规格见 `figure-specs.md`。
 - Methods 必须从第 2-3 页开始（galaxy 红线）。
 
 ### 2. Related Work（~1.5 页）— ✅ **已成稿** `related-work.md`
@@ -95,8 +95,8 @@
 - 消融矩阵：预训练开关 / 分割开关 / 锚点数扫描 / 伪标签迭代轮数 / 主动学习策略。
 - 敏感性分析：种子比例、聚类数 K、置信度阈值。
 
-### 6. Conclusion and Limitations（~0.5 页）— ⏳ 占位
-- Limitations 独立成段（诚实原则）：代理探针口径、单一物种家族验证、Scholar 终审未做。
+### 6. Conclusion and Limitations（~0.5 页）— ✅ 骨架已成 `conclusion-limitations.md`（含 4 条 Limitations + rebuttal 预案）
+- Limitations 独立成段（诚实原则）：代理探针口径、单一物种家族、Scholar 终审未做、消费级算力规模。
 
 ---
 
@@ -186,10 +186,11 @@ Abstract 0.2 ｜ Intro 1.5 ｜ RW 1.5 ｜ Method 4 ｜ Experiments 3 ｜ Ablatio
 ## 9. 本窗口完成度声明（诚实版）
 
 - ✅ 本大纲（含 Claims-Evidence 矩阵、图表规划、引用计划）
-- ✅ `related-work.md` 英文初稿 ≥800 词（经 auto-review-loop 清单 + check-citations 清单自审一轮）
+- ✅ `related-work.md` 英文初稿 1074 词（经两轮对抗评审，见 `review-log.md`）
 - ✅ `method.md` 英文框架（数字留占位符）
-- ✅ `experiment-skeleton.md` 三层口径骨架（含图表规范节）
-- 🚫 不做：实验数字填充（等 P0.2-P0.5）、Introduction 终稿、投稿格式排版
+- ✅ `experiment-skeleton.md` 三层口径骨架（含统计协议与图表规范）
+- ✅ 增量二：`introduction.md`（Abstract 占位稿 + Intro 六段式）、`conclusion-limitations.md`、`figure-specs.md`
+- 🚫 不做：实验数字填充（等 P0.2-P0.5）、Introduction/Abstract 终稿回填、投稿格式排版、矢量终图绘制
 
 ## 10. 方法论适配记录（工具集 → PR 英文期刊裁剪）
 
@@ -208,3 +209,4 @@ Abstract 0.2 ｜ Intro 1.5 ｜ RW 1.5 ｜ Method 4 ｜ Experiments 3 ｜ Ablatio
 | v0.1 | 2026-08-23 | W5 窗口建纲：故事线 + C1-C8 矩阵 + 逐节规划 + 图表/引用计划 |
 | v0.2 | 2026-08-23 | 五视角对抗评审：新增 §8 风险登记册（R1-R7，含两条 CRITICAL）+ PR 收录检查单；引用计划补三个数据集论文 [CITATION-NEEDED]；章节重编号 |
 | v0.3 | 2026-08-23 | 第二轮对抗评审：§0 贡献句降级为能力性主张 + 风险登记册增 R8-R10（种子噪声/类别不平衡/E6 场景真实性）+ fig1 落点决策闭合；评审全程记录见 `review-log.md` |
+| v0.4 | 2026-08-23 | 增量二：Abstract/Introduction/Conclusion-Limitations 占位初稿（introduction.md / conclusion-limitations.md）+ fig1/fig2 绘制规格（figure-specs.md）；§4/§5/§9 状态同步。W5 写作侧可做项至此清空，剩余全部为 P0 数据依赖 |
