@@ -1,0 +1,44 @@
+# P0.2 E-A 实验：修复编码器码塌缩——唯一变量 mse_loss_weight 0.001→1.0
+# 假设（W7 Step A 实证链）：commit(1.0)≫recon(0.001) 梯度失衡致编码器输出塌向
+#   单点（latent patch 间 cos=0.999999），VQ 随之单码化。给重建梯度正常话语权。
+# 其余全部继承 v3 基线（官方默认超参，忠实移植已核对 external/SMQ/main.py）。
+
+run_name: "p02_smq_eA"
+
+data_root: "D:/Desktop/k9-training-system/data/interpet4d/smal_npy"
+work_root: "data/processed/p02"
+
+in_channels: 3
+target_t: null
+num_joints: 24
+num_person: 1
+conf_threshold: 0.5
+
+filters: 128
+num_layers: 3
+latent_dim: 16
+num_actions: 16
+patch_size: 32
+decay: 0.5
+kmeans: true
+kmeans_metric: euclidean
+sampling_quantile: 0.5
+replacement_strategy: representative
+
+epochs: 30
+batch_size: 4
+ep_clips_train: 4
+lr: 5.0e-4
+commit_weight: 1.0
+mse_loss_weight: 1.0    # ← E-A 唯一变量（v3=0.001）
+joint_distance_recons: true
+sample_rate: 1
+seed: 1538574472
+
+eval_episodes: 4
+ep_clips: 5
+eval_seed: 42
+min_seg_len: 32
+boundary_tol: 16
+random_baseline_sims: 200
+vis_episodes: 2

@@ -61,10 +61,12 @@ def main() -> None:
     eval_dir = work / "eval_clips"
 
     # 1) 导出全部有效 clip 视图（幂等：协议指纹一致则复用，否则重导出）
-    proto_fp = f"target_t={cfg['target_t']}"
+    proto_fp = f"target_t={cfg['target_t']}|norm={cfg.get('norm_mode', 'sequence')}"
     marker = feats_all / ".done"
     if not (marker.exists() and marker.read_text(encoding="utf-8") == proto_fp):
-        report = export_smq_features(cfg["data_root"], feats_all, target_t=cfg["target_t"])
+        report = export_smq_features(cfg["data_root"], feats_all,
+                                     target_t=cfg["target_t"],
+                                     normalize=cfg.get("norm_mode", "sequence"))
         print(f"[p02] 导出 {len(report['names'])} clips；剔除无效: {report['skipped']}")
         marker.write_text(proto_fp, encoding="utf-8")
     else:
@@ -103,8 +105,8 @@ def main() -> None:
     t_desc = "native" if cfg["target_t"] is None else cfg["ep_clips_train"] * cfg["target_t"]
     print(f"[p02] 训练集 {n_train} episodes（每 {cfg['ep_clips_train']} clips 拼接，T={t_desc}）")
 
-    # 4) 日志 tee 到 runs/
-    runs_dir = REPO_ROOT / "runs" / "p02_smq"
+    # 4) 日志 tee 到 runs/（run_name 支持多实验隔离，缺省保持 v3 兼容路径）
+    runs_dir = REPO_ROOT / "runs" / cfg.get("run_name", "p02_smq")
     runs_dir.mkdir(parents=True, exist_ok=True)
     log_f = open(runs_dir / "train_log.txt", "w", encoding="utf-8")
     sys.stdout = _Tee(sys.__stdout__, log_f)

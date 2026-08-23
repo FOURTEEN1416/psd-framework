@@ -27,7 +27,12 @@ import numpy as np  # noqa: E402
 import torch  # noqa: E402
 import yaml  # noqa: E402
 
-from psd.data.smq_input import build_episode, group_into_episodes, select_eval_clips  # noqa: E402
+from psd.data.smq_input import (  # noqa: E402
+    build_episode,
+    build_seed_gt_episode,
+    group_into_episodes,
+    select_eval_clips,
+)
 from psd.training.segment_iou import (  # noqa: E402
     boundary_f1,
     match_segments,
@@ -42,6 +47,10 @@ def main() -> None:
     ap.add_argument("--iou", action="store_true", help="执行拼接式 episode IoU 评估")
     ap.add_argument("--ckpt", default=None)
     ap.add_argument("--vis", action="store_true", help="输出前 N 个 episode 的可视化 PNG")
+    ap.add_argument("--gt-protocol", choices=["concat", "seeds"], default="concat",
+                    help="GT 口径：concat=拼接协议(源clip区间) | seeds=规则种子伪GT"
+                         "（conf>=0.8 且 >=0.5s，W6 §8 规则；双口径并列汇报）")
+    ap.add_argument("--seeds-dir", default="data/seeds/rule_seeds")
     ap.add_argument("--out", default="reports/p02-smq-iou.json")
     args = ap.parse_args()
     assert args.iou or args.vis, "至少指定 --iou 或 --vis"
@@ -75,7 +84,11 @@ def main() -> None:
         replacement_strategy=cfg["replacement_strategy"],
     )
 
-    results = {"protocol": "concatenation-episode-IoU",
+    results = {"protocol": ("seed-pseudo-gt-episode-IoU" if args.gt_protocol == "seeds"
+                            else "concatenation-episode-IoU"),
+               "gt_protocol": args.gt_protocol,
+               "seed_consumption_rules": ({"min_conf": 0.8, "min_duration_s": 0.5}
+                                          if args.gt_protocol == "seeds" else None),
                "metric_layer": "public-real(InterPet4D smal_npy)",
                "ckpt": str(ckpt), "episodes": []}
     ious, f1s = [], []
@@ -84,7 +97,13 @@ def main() -> None:
         data = ep["data"]
         indices = seg.infer_indices(data, ckpt)
         pred = segmentation_from_indices(indices, min_len=cfg["min_seg_len"])
-        gt = [(s["start"], s["end"]) for s in ep["segments"]]
+        if args.gt_protocol == "seeds":
+            seed_gt = build_seed_gt_episode(REPO_ROOT / args.seeds_dir, feats_all, group)
+            gt = [(s["start"], s["end"]) for s in seed_gt]
+            gt_labels = [s["label"] for s in seed_gt]
+        else:
+            gt = [(s["start"], s["end"]) for s in ep["segments"]]
+            gt_labels = [s["name"] for s in ep["segments"]]
         gt_bounds = [s for _, s in gt][:-1]
 
         m = match_segments(pred, gt)
@@ -96,6 +115,8 @@ def main() -> None:
         ious.append(m["mean_matched_iou"]); f1s.append(f1_b)
         results["episodes"].append({
             "id": k, "clips": group, "T": int(data.shape[1]),
+            "n_gt_segments": len(gt),
+            "gt_labels": gt_labels,
             "gt_segments": [list(s) for s in gt],
             "pred_segments": [list(s) for s in pred],
             "mean_matched_iou": round(m["mean_matched_iou"], 4),

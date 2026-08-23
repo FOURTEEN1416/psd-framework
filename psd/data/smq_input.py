@@ -26,19 +26,42 @@ from psd.data.interpet4d import (
 SMAL_NUM_JOINTS = 24
 
 
+def _normalize_framewise(kp: np.ndarray) -> np.ndarray:
+    """逐帧归一化（E-H，对齐官方 LARa hip-centered 思路）：
+    每帧独立去有效关节质心 + 中位数半径缩放。
+
+    与序列级归一的区别：保留跨帧的姿态变化信息（序列级统计会把慢漂移
+    连同运动信号一起抹平），只去除全局平移/尺度。
+    """
+    out = np.empty_like(kp)
+    for t in range(kp.shape[0]):
+        frame = kp[t]
+        valid = np.isfinite(frame).all(axis=-1)
+        if valid.sum() == 0:
+            out[t] = frame
+            continue
+        centroid = frame[valid].mean(axis=0, keepdims=True)
+        centered = frame - centroid
+        radii = np.linalg.norm(centered[valid], axis=-1)
+        scale = float(np.median(radii))
+        if not np.isfinite(scale) or scale < 1e-6:
+            scale = 1.0
+        out[t] = centered / scale
+    return out.astype(np.float32)
+
+
 def clip_to_smq_view(
     kp: np.ndarray,
     weight: np.ndarray,
     target_t: int | None = 128,
     conf_threshold: float = 0.5,
-    normalize: bool = True,
+    normalize: bool | str = True,
 ) -> np.ndarray:
     """(T,24,3)+置信度 → SMQ 视图 (3, T, 24, 1) float32。
 
-    target_t=None 时保留原生帧长（E-D 协议：全长序列保留运动细节，
-    匹配 SMQ 论文的长未修剪序列设定）。
-    流程与 W3 的 to_ntu_view 对齐：重采样(可选) → 质心去中心+尺度归一 →
-    低置信置零；V=24 原生关节数（SMQ 以 V 为构造参数，无死槽位需求）。
+    normalize: False=不归一 | True/'sequence'=序列级质心+尺度（W3 口径）
+             | 'frame'=逐帧质心+尺度（E-H：保留跨帧姿态变化）
+    target_t=None 保留原生帧长。低置信关节置零在归一之后统一执行。
     """
     if target_t is not None:
         kp = resample_to_fixed_t(np.asarray(kp, dtype=np.float64), target_t=target_t)
@@ -50,8 +73,10 @@ def clip_to_smq_view(
     assert kp.ndim == 3 and kp.shape[1] == SMAL_NUM_JOINTS and kp.shape[2] == 3
     assert weight.shape == kp.shape[:2]
 
-    if normalize:
+    if normalize is True or normalize == "sequence":
         kp = _normalize_sequence(kp, weight)
+    elif normalize == "frame":
+        kp = _normalize_framewise(kp)
     kp[weight < conf_threshold] = 0.0
 
     view = np.transpose(kp, (2, 0, 1))[:, :, :, None]  # (3,T,24,1)
@@ -59,10 +84,12 @@ def clip_to_smq_view(
 
 
 def export_smq_features(data_root: str | Path, out_dir: str | Path,
-                        target_t: int | None = None) -> dict:
+                        target_t: int | None = None,
+                        normalize: bool | str = True) -> dict:
     """smal_npy/*.npz → features/<stem>.npy（跳过无效 clip）。
 
-    target_t=None 保留原生帧长。返回 {"features_dir", "names", "skipped"}。
+    target_t=None 保留原生帧长；normalize 见 clip_to_smq_view。
+    返回 {"features_dir", "names", "skipped"}。
     """
     src = Path(data_root)
     feats = Path(out_dir)
@@ -74,7 +101,8 @@ def export_smq_features(data_root: str | Path, out_dir: str | Path,
         if not is_valid_clip(clip["kp_world"]):
             skipped.append(path.stem)
             continue
-        view = clip_to_smq_view(clip["kp_world"], clip["kp_weight"], target_t=target_t)
+        view = clip_to_smq_view(clip["kp_world"], clip["kp_weight"],
+                                target_t=target_t, normalize=normalize)
         np.save(feats / f"{path.stem}.npy", view)
         names.append(path.stem)
     return {"features_dir": str(feats), "names": names, "skipped": skipped}
@@ -166,3 +194,56 @@ def build_episode(features_dir: str | Path, clip_names: list[str]) -> dict:
         segments.append({"name": name, "start": pos, "end": pos + v.shape[1]})
         pos += v.shape[1]
     return {"data": np.concatenate(views, axis=1), "segments": segments}
+
+
+# ---------------------------------------------------------------- 种子伪 GT（双口径第二协议）
+
+def load_seed_segments(
+    seeds_dir: str | Path,
+    name: str,
+    *,
+    min_conf: float = 0.8,
+    min_duration_s: float = 0.5,
+    fps: float = 30.0,
+) -> list[dict]:
+    """读取单 clip 的规则种子段，按 W6 报告 §8 消费规则过滤。
+
+    规则：置信度 ≥min_conf 且最短持续 ≥min_duration_s。
+    口径标注：「公开真实层-物理先验伪标签」（与拼接协议并列汇报，不择优单报）。
+    只读消费 data/seeds 生成物与 rule_seeds.py 引擎输出（W6 领地，禁改）。
+    """
+    d = np.load(Path(seeds_dir) / f"{name}.npz", allow_pickle=True)
+    min_frames = max(1, int(round(min_duration_s * fps)))
+    out: list[dict] = []
+    for s in d["segments"]:
+        conf = float(s["conf"])
+        dur = int(s["end"]) - int(s["start"])
+        if conf >= min_conf and dur >= min_frames:
+            out.append({"start": int(s["start"]), "end": int(s["end"]),
+                        "label": str(s["label"]), "conf": conf})
+    return out
+
+
+def build_seed_gt_episode(
+    seeds_dir: str | Path,
+    features_dir: str | Path,
+    clip_names: list[str],
+    *,
+    min_conf: float = 0.8,
+    min_duration_s: float = 0.5,
+) -> list[dict]:
+    """各 clip 种子伪 GT → 拼接 episode 坐标系（偏移 = 特征视图实际帧长累计）。
+
+    帧数以 features_all 导出视图为准（与模型输入严格同源），保证坐标零错位。
+    """
+    feats = Path(features_dir)
+    segs: list[dict] = []
+    pos = 0
+    for n in clip_names:
+        t = int(np.load(feats / f"{n}.npy", mmap_mode="r").shape[1])
+        for s in load_seed_segments(seeds_dir, n, min_conf=min_conf,
+                                    min_duration_s=min_duration_s):
+            segs.append({"start": s["start"] + pos, "end": s["end"] + pos,
+                         "label": s["label"], "conf": s["conf"]})
+        pos += t
+    return segs
