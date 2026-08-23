@@ -50,11 +50,11 @@ def fetch_gdrive(dest: Path, proxy: str | None, folder_id: str | None) -> int:
         return 2
     fid = folder_id or GDRIVE_ROOT_ID
     url = f"https://drive.google.com/drive/folders/{fid}"
-    args = ["--folder", url, "-O", str(dest), "--remaining-ok"]
-    if proxy:
-        args += ["--proxy", proxy]
     print(f"[gdown] 下载 {url} -> {dest}" + (f" (proxy={proxy})" if proxy else ""))
-    rc = gdown.main(args=args)
+    # gdown >= 4/5 移除了 CLI 风格的 main(args)；改用 download_folder 编程接口
+    # （v6 签名：url/id/output/quiet/proxy/speed/use_cookies/verify/user_agent/skip_download/resume）
+    out = gdown.download_folder(url=url, output=str(dest), proxy=proxy, quiet=False)
+    rc = 0 if out else 1
     if rc == 0:
         print("[gdown] 完成。注意：根目录含 released_model/，如只需数据可删除该子目录。")
         print(f"[next] 校验：python scripts/fetch_ntu_data.py --verify --dest {dest.as_posix()}")

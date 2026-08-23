@@ -101,11 +101,11 @@
 | **W4 重启** | `handovers/W7-p02-smq-rescue.md`（唯一任务书） | P0.2 SMQ 分割**救援**（诊断优先，双口径评估，切换需用户裁决） | 原 W4 白名单全部（`*smq*` 文件、psd/models+training、scripts/configs 的 p02 文件、reports/p02-*）；含 W4 未提交产物接管清单 |
 | **W8** | `handovers/W8-p03-jia-phaseA.md` | ✅ **Phase A 完成**（commit `5d790c7`：纯度 0.534=随机 1.615×、噪声消融 30% 仅降 3.1pp、TDD 98 绿、P0.4 池格式已移交）；Phase B 22 类映射等路径 a 合成数据 | 已收官 |
 | **W4 重启** | `handovers/W7-p02-smq-rescue.md` | 🔄 救援进行中：根因确诊=码本坍缩（非协议盲），E-A 单变量修复早期证据阳性（16/16 码激活），**03:35 定时任务自动执行双口径评估**，结果判读待晨检 | 原 W4 白名单；窗口锁 `reports/p02-window-lock.md` |
-| **W9** | `handovers/W9-ntu-repro.md` | Phase A ✅ 完成（协议核实闭环：79.18%系released-model口径/正文78.9%，勘误我方错误arXiv号）；🚧 数据获取受阻——**等用户三选一（代理/百度转存/机构申请）**；Phase B 待数据+GPU | `*ntu*` 文件、reports/ntu-* |
+| **W9** | `handovers/W9-ntu-repro.md` | Phase A ✅ **全部完成**（协议核实 + 数据已就位并校验通过，见 `reports/ntu-phasea-2026-08-24.md` v1.1；用户经 GKD 加速器走通渠道 A）；Phase B 复现训练待 P0.2 释放 GPU 后排程 | `*ntu*` 文件、reports/ntu-* |
 | **W10（新）** | `handovers/W10-p04-tcl.md` | P0.4 TCL 半监督自训练迭代（消费 W8 伪标签池格式 + 附录B工程清单） | `*p04*/*tcl*` 新文件、reports/p04-* |
 | ~~W5~~ | `handovers/W5-p06-paper-draft.md` | ✅ 写作侧收官，剩余为 P0 数据依赖 | `docs/paper/**` 保持只读待回填 |
 
-> ⏳ **用户待决一项**：NTU 数据获取渠道三选一（A 开代理告知端口 / B 百度网盘手动转存 / C 机构邮箱官方申请）——详见 `reports/ntu-phasea-2026-08-24.md` §4.3。
+> ⏳ ~~用户待决一项：NTU 数据获取渠道~~ → **已决并完成（渠道 A，2026-08-24）**：数据就位校验通过。
 > 三项用户裁决已落档 `dev-docs/decisions/0002-user-rulings-ntu-synthetic-e6.md`：① NTU 验证纳入（两相推进中）；② 路径 a 合成数据选移植重建（P0.5 前执行）；③ E6 双贴合场景方向确认。
 
 > 并行纪律：各窗口只提交白名单内文件；stage-plan 编辑前重读最新内容做行级替换；`.venv` 归实验窗口主用、他人只读 import；遇 git `index.lock` 等待重试。
