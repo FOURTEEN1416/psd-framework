@@ -51,6 +51,8 @@ def main() -> None:
                     help="GT 口径：concat=拼接协议(源clip区间) | seeds=规则种子伪GT"
                          "（conf>=0.8 且 >=0.5s，W6 §8 规则；双口径并列汇报）")
     ap.add_argument("--seeds-dir", default="data/seeds/rule_seeds")
+    ap.add_argument("--min-seg-len", type=int, default=None,
+                    help="覆盖 config 的 min_seg_len（后处理敏感性扫描用，不影响训练）")
     ap.add_argument("--out", default="reports/p02-smq-iou.json")
     args = ap.parse_args()
     assert args.iou or args.vis, "至少指定 --iou 或 --vis"
@@ -96,7 +98,8 @@ def main() -> None:
         ep = build_episode(feats_all, group)
         data = ep["data"]
         indices = seg.infer_indices(data, ckpt)
-        pred = segmentation_from_indices(indices, min_len=cfg["min_seg_len"])
+        min_len = args.min_seg_len if args.min_seg_len is not None else cfg["min_seg_len"]
+        pred = segmentation_from_indices(indices, min_len=min_len)
         if args.gt_protocol == "seeds":
             seed_gt = build_seed_gt_episode(REPO_ROOT / args.seeds_dir, feats_all, group)
             gt = [(s["start"], s["end"]) for s in seed_gt]

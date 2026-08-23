@@ -1,0 +1,707 @@
+{
+ "protocol": "seed-pseudo-gt-episode-IoU",
+ "gt_protocol": "seeds",
+ "seed_consumption_rules": {
+  "min_conf": 0.8,
+  "min_duration_s": 0.5
+ },
+ "metric_layer": "public-real(InterPet4D smal_npy)",
+ "ckpt": "runs\\p02_smq_eA\\models\\epoch-30.model",
+ "episodes": [
+  {
+   "id": 1,
+   "clips": [
+    "interpet_dog08_p17_take01_ego_001",
+    "interpet_dog06_p02_take01_ego_001",
+    "interpet_dog03_p02_take01_ego_001",
+    "interpet_dog09_p19_take01_ego_001",
+    "interpet_dog10_p07_take01_ego_001"
+   ],
+   "T": 3258,
+   "n_gt_segments": 22,
+   "gt_labels": [
+    "standing",
+    "standing",
+    "standing",
+    "standing",
+    "standing",
+    "sitting",
+    "sitting",
+    "walking",
+    "standing",
+    "sitting",
+    "standing",
+    "standing",
+    "jump",
+    "standing",
+    "standing",
+    "standing",
+    "jump",
+    "jump",
+    "sitting",
+    "standing",
+    "standing",
+    "sitting"
+   ],
+   "gt_segments": [
+    [
+     150,
+     175
+    ],
+    [
+     195,
+     343
+    ],
+    [
+     466,
+     493
+    ],
+    [
+     494,
+     512
+    ],
+    [
+     513,
+     540
+    ],
+    [
+     672,
+     734
+    ],
+    [
+     779,
+     911
+    ],
+    [
+     923,
+     947
+    ],
+    [
+     948,
+     967
+    ],
+    [
+     968,
+     1006
+    ],
+    [
+     1214,
+     1246
+    ],
+    [
+     1264,
+     1289
+    ],
+    [
+     1663,
+     1681
+    ],
+    [
+     2067,
+     2119
+    ],
+    [
+     2120,
+     2149
+    ],
+    [
+     2150,
+     2212
+    ],
+    [
+     2407,
+     2448
+    ],
+    [
+     2449,
+     2471
+    ],
+    [
+     2598,
+     2620
+    ],
+    [
+     2621,
+     2647
+    ],
+    [
+     3092,
+     3111
+    ],
+    [
+     3240,
+     3257
+    ]
+   ],
+   "pred_segments": [
+    [
+     160,
+     256
+    ],
+    [
+     448,
+     576
+    ],
+    [
+     1088,
+     1216
+    ],
+    [
+     1216,
+     1312
+    ],
+    [
+     1408,
+     1536
+    ],
+    [
+     1536,
+     1664
+    ],
+    [
+     1856,
+     2016
+    ],
+    [
+     2080,
+     2208
+    ],
+    [
+     2240,
+     2400
+    ],
+    [
+     2560,
+     2656
+    ],
+    [
+     2752,
+     2880
+    ],
+    [
+     2880,
+     3040
+    ]
+   ],
+   "mean_matched_iou": 0.1306,
+   "seg_precision@0.5": 0.0,
+   "seg_recall@0.5": 0.0,
+   "boundary_f1": 0.0606,
+   "boundary_p": 0.0833,
+   "boundary_r": 0.0476,
+   "random_baseline_iou": 0.1411
+  },
+  {
+   "id": 2,
+   "clips": [
+    "interpet_dog07_p07_take01_ego_001",
+    "interpet_dog12_p11_take01_ego_001",
+    "interpet_dog04_p02_take01_ego_001",
+    "interpet_dog05_p02_take02_ego_001",
+    "interpet_dog01_p01_take01_ego_001"
+   ],
+   "T": 2410,
+   "n_gt_segments": 25,
+   "gt_labels": [
+    "walking",
+    "sitting",
+    "sitting",
+    "standing",
+    "sitting",
+    "sitting",
+    "standing",
+    "jump",
+    "jump",
+    "jump",
+    "standing",
+    "standing",
+    "sitting",
+    "sitting",
+    "standing",
+    "walking",
+    "standing",
+    "sitting",
+    "running",
+    "walking",
+    "standing",
+    "standing",
+    "standing",
+    "standing",
+    "standing"
+   ],
+   "gt_segments": [
+    [
+     0,
+     19
+    ],
+    [
+     77,
+     218
+    ],
+    [
+     219,
+     508
+    ],
+    [
+     524,
+     652
+    ],
+    [
+     653,
+     714
+    ],
+    [
+     715,
+     740
+    ],
+    [
+     775,
+     837
+    ],
+    [
+     885,
+     901
+    ],
+    [
+     902,
+     921
+    ],
+    [
+     922,
+     975
+    ],
+    [
+     1233,
+     1262
+    ],
+    [
+     1404,
+     1455
+    ],
+    [
+     1574,
+     1626
+    ],
+    [
+     1644,
+     1785
+    ],
+    [
+     1881,
+     1896
+    ],
+    [
+     1916,
+     1932
+    ],
+    [
+     2044,
+     2059
+    ],
+    [
+     2060,
+     2083
+    ],
+    [
+     2107,
+     2156
+    ],
+    [
+     2157,
+     2173
+    ],
+    [
+     2184,
+     2221
+    ],
+    [
+     2278,
+     2297
+    ],
+    [
+     2298,
+     2316
+    ],
+    [
+     2317,
+     2343
+    ],
+    [
+     2344,
+     2376
+    ]
+   ],
+   "pred_segments": [
+    [
+     96,
+     256
+    ],
+    [
+     320,
+     512
+    ],
+    [
+     544,
+     704
+    ],
+    [
+     992,
+     1248
+    ],
+    [
+     1248,
+     1376
+    ],
+    [
+     1632,
+     1792
+    ],
+    [
+     2144,
+     2272
+    ]
+   ],
+   "mean_matched_iou": 0.4559,
+   "seg_precision@0.5": 0.5714,
+   "seg_recall@0.5": 0.16,
+   "boundary_f1": 0.1935,
+   "boundary_p": 0.4286,
+   "boundary_r": 0.125,
+   "random_baseline_iou": 0.2566
+  },
+  {
+   "id": 3,
+   "clips": [
+    "interpet_dog02_p04_take01_ego_001",
+    "interpet_dog11_p22_take01_ego_001",
+    "interpet_dog08_p17_take01_ego_002",
+    "interpet_dog06_p02_take01_ego_002",
+    "interpet_dog03_p02_take01_ego_002"
+   ],
+   "T": 3145,
+   "n_gt_segments": 31,
+   "gt_labels": [
+    "standing",
+    "sitting",
+    "sitting",
+    "standing",
+    "standing",
+    "sitting",
+    "running",
+    "jump",
+    "standing",
+    "sitting",
+    "sitting",
+    "standing",
+    "standing",
+    "sitting",
+    "standing",
+    "running",
+    "standing",
+    "sitting",
+    "running",
+    "standing",
+    "sitting",
+    "sitting",
+    "running",
+    "standing",
+    "standing",
+    "sitting",
+    "standing",
+    "running",
+    "running",
+    "walking",
+    "running"
+   ],
+   "gt_segments": [
+    [
+     29,
+     45
+    ],
+    [
+     58,
+     78
+    ],
+    [
+     79,
+     257
+    ],
+    [
+     258,
+     469
+    ],
+    [
+     577,
+     618
+    ],
+    [
+     619,
+     643
+    ],
+    [
+     644,
+     671
+    ],
+    [
+     672,
+     692
+    ],
+    [
+     693,
+     709
+    ],
+    [
+     710,
+     731
+    ],
+    [
+     732,
+     867
+    ],
+    [
+     930,
+     946
+    ],
+    [
+     947,
+     991
+    ],
+    [
+     1046,
+     1070
+    ],
+    [
+     1131,
+     1147
+    ],
+    [
+     1227,
+     1242
+    ],
+    [
+     1326,
+     1371
+    ],
+    [
+     1372,
+     1391
+    ],
+    [
+     1558,
+     1581
+    ],
+    [
+     1597,
+     1803
+    ],
+    [
+     1824,
+     2101
+    ],
+    [
+     2102,
+     2176
+    ],
+    [
+     2177,
+     2196
+    ],
+    [
+     2197,
+     2215
+    ],
+    [
+     2480,
+     2510
+    ],
+    [
+     2570,
+     2590
+    ],
+    [
+     2664,
+     2691
+    ],
+    [
+     2711,
+     2743
+    ],
+    [
+     2816,
+     2869
+    ],
+    [
+     2870,
+     2886
+    ],
+    [
+     2887,
+     2932
+    ]
+   ],
+   "pred_segments": [
+    [
+     0,
+     480
+    ],
+    [
+     704,
+     800
+    ],
+    [
+     800,
+     960
+    ],
+    [
+     1664,
+     1792
+    ]
+   ],
+   "mean_matched_iou": 0.3945,
+   "seg_precision@0.5": 0.25,
+   "seg_recall@0.5": 0.0323,
+   "boundary_f1": 0.0606,
+   "boundary_p": 0.3333,
+   "boundary_r": 0.0333,
+   "random_baseline_iou": 0.2069
+  },
+  {
+   "id": 4,
+   "clips": [
+    "interpet_dog09_p19_take03_ego_001",
+    "interpet_dog10_p07_take01_ego_002",
+    "interpet_dog07_p07_take01_ego_002",
+    "interpet_dog12_p11_take01_ego_002",
+    "interpet_dog04_p02_take01_ego_002"
+   ],
+   "T": 2535,
+   "n_gt_segments": 15,
+   "gt_labels": [
+    "standing",
+    "standing",
+    "standing",
+    "sitting",
+    "standing",
+    "standing",
+    "standing",
+    "sitting",
+    "standing",
+    "standing",
+    "sitting",
+    "standing",
+    "standing",
+    "standing",
+    "standing"
+   ],
+   "gt_segments": [
+    [
+     536,
+     559
+    ],
+    [
+     560,
+     583
+    ],
+    [
+     682,
+     707
+    ],
+    [
+     753,
+     774
+    ],
+    [
+     775,
+     797
+    ],
+    [
+     828,
+     859
+    ],
+    [
+     960,
+     985
+    ],
+    [
+     1025,
+     1205
+    ],
+    [
+     1206,
+     1299
+    ],
+    [
+     1467,
+     1518
+    ],
+    [
+     1519,
+     1744
+    ],
+    [
+     1985,
+     2045
+    ],
+    [
+     2227,
+     2247
+    ],
+    [
+     2248,
+     2305
+    ],
+    [
+     2484,
+     2512
+    ]
+   ],
+   "pred_segments": [
+    [
+     64,
+     160
+    ],
+    [
+     288,
+     512
+    ],
+    [
+     1024,
+     1152
+    ],
+    [
+     1280,
+     1376
+    ],
+    [
+     1504,
+     1792
+    ],
+    [
+     1888,
+     1984
+    ],
+    [
+     2080,
+     2240
+    ],
+    [
+     2336,
+     2464
+    ]
+   ],
+   "mean_matched_iou": 0.2091,
+   "seg_precision@0.5": 0.25,
+   "seg_recall@0.5": 0.1333,
+   "boundary_f1": 0.0909,
+   "boundary_p": 0.125,
+   "boundary_r": 0.0714,
+   "random_baseline_iou": 0.1755
+  }
+ ],
+ "aggregate": {
+  "mean_matched_iou": 0.2975,
+  "std": 0.1325,
+  "boundary_f1_mean": 0.1014,
+  "n_episodes": 4
+ }
+}
