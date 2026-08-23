@@ -30,7 +30,7 @@
 | 类型 | 路径 |
 |------|------|
 | ✅ 可写 | `docs/DATA_LOCATIONS.md`（数量列 + 回填记录表 + 删除头部「⚠️ 未复核」警告行）、`dev-docs/project-brief.md` §4 过期警告行、`dev-docs/stage-plan.md` 启动前置 #2 勾选为 ✅、`reports/data-inventory-2026-08-23.md`（新建，证据归档） |
-| ❌ 禁触 | `psd/`、`scripts/`、`configs/`、`external/`、`dev-docs/research/`、`PAPER_POSITIONING.md`、stage-plan 其他任何行 |
+| ❌ 禁触 | `psd/`、`scripts/`、`configs/`、`external/`、`dev-docs/research/`、`PAPER_POSITIONING.md`、`dev-docs/handovers/**`、stage-plan 其他任何行 |
 
 > **stage-plan 编辑纪律**：用精确文本替换只改前置 #2 那一行的勾选状态，禁止重写全文或改动其他章节（W3 窗口稍后会改 P0.1 行状态，避免踩踏）。
 > 编辑 project-brief/stage-plan 前先重新 Read 最新内容再 Edit。

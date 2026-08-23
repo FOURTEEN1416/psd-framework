@@ -60,7 +60,7 @@
 | 类型 | 路径 |
 |------|------|
 | ✅ 可写 | `dev-docs/research/NOVELTY_CHECK_YAOQING_JIA.md`（新建，唯一产出） |
-| ❌ 禁触 | `stage-plan.md`、`project-brief.md`、`PAPER_POSITIONING.md`、`docs/`、`psd/`、`scripts/`、`configs/`、`external/`、`DATA_LOCATIONS.md` 及一切代码/配置 |
+| ❌ 禁触 | `stage-plan.md`、`project-brief.md`、`PAPER_POSITIONING.md`、`docs/`、`psd/`、`scripts/`、`configs/`、`external/`、`dev-docs/handovers/**`、`DATA_LOCATIONS.md` 及一切代码/配置 |
 
 > 若结论影响其他 truth 文档（如 PAPER_POSITIONING 第 12 行「待核验」），在 NOVELTY_CHECK 文末列「建议回写清单」，由用户或收尾窗口统一执行，**不要自己改**。
 
