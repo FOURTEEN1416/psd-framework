@@ -94,11 +94,17 @@
 
 ## 8. 下一步任务
 
-**三窗口并行已全部收官（2026-08-23）**：W1 创新核验 ✅ / W2 数据盘点 ✅ / W3 P0.1 达标 ✅。收尾回写已完成（PAPER_POSITIONING / brief / stage-plan 前置状态）。
+**当前三线并行（2026-08-23 晚起）**：
 
-**当前主线 → P0.2 SMQ 时序分割**（见 `stage-plan.md` §1；开工前先克隆 SMQ 到 external/）。
+| 窗口 | 交接文档 | 任务 | 领地（互斥） |
+|------|---------|------|-------------|
+| W4 | `handovers/W4-p02-smq.md` | P0.2 SMQ 时序分割 | `*smq*` 文件 + psd/models/training |
+| W5 | `handovers/W5-p06-paper-draft.md` | P0.6 论文初稿启动 | 仅 `docs/paper/**`，零环境依赖 |
+| W6 | `handovers/W6-rule-seeds.md` | 规则引擎粗标（P0.3 锚点备料） | `rule_seeds` 前缀文件，起步用 InterPet4D 原生类别 |
 
-> 历史路由表存档：W1=`handovers/W1-novelty-check.md`，W2=`handovers/W2-data-inventory.md`，W3=`handovers/W3-p01-bootstrap.md`（均已完成，交接文档保留作过程证据）。
+> 并行纪律：各窗口只提交白名单内文件；stage-plan 编辑前重读最新内容做行级替换；`.venv` 归 W4 主用、他人只读 import；遇 git `index.lock` 等待重试。
+
+**已收官存档**：W1 创新核验 ✅ / W2 数据盘点 ✅ / W3→P0.1 达标 ✅（交接文档保留作过程证据：`W1-novelty-check.md` / `W2-data-inventory.md` / `W3-p01-bootstrap.md`）。
 
 ## 9. 硬规则速查（完整版见 AGENTS.md）
 
