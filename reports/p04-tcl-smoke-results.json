@@ -1,0 +1,472 @@
+{
+  "date": "2026-08-24T04:18:30",
+  "metric_layer": "public_real_physics_prior",
+  "config_echo": {
+    "filter": {
+      "conf_min": 0.8,
+      "min_duration_s": 0.5
+    },
+    "split": {
+      "eval_ratio": 0.3,
+      "split_seed": 42
+    },
+    "head": {
+      "hidden_dim": 64,
+      "epochs": 150,
+      "lr": 0.001,
+      "weight_decay": 0.0001,
+      "batch_size": 128,
+      "device": "cpu"
+    },
+    "calibration": {
+      "method": "softmax_temperature",
+      "target_median_prob_margin": 0.1
+    },
+    "tau_select_rule": {
+      "rule": "quantile",
+      "target_coverage": 0.35
+    },
+    "iteration": {
+      "max_iters": 6,
+      "converge_change_rate": 0.01,
+      "precision_drop_patience": 2
+    },
+    "ablation_matrix": [
+      {
+        "calib": true,
+        "standing": "consensus",
+        "alpha": 1.0
+      },
+      {
+        "calib": true,
+        "standing": "none",
+        "alpha": 1.0
+      },
+      {
+        "calib": false,
+        "standing": "consensus",
+        "alpha": 1.0
+      },
+      {
+        "calib": true,
+        "standing": "consensus",
+        "alpha": 0.0
+      }
+    ],
+    "run_seeds": [
+      42,
+      43,
+      44
+    ],
+    "smoke": true
+  },
+  "pipeline_meta": {
+    "n_raw_segments": 4708,
+    "n_filtered_segments": 1430,
+    "filtered_label_stats": {
+      "running": 118,
+      "walking": 77,
+      "standing": 653,
+      "sitting": 444,
+      "jump": 111,
+      "lying": 26,
+      "rise_transition": 1
+    },
+    "n_anchor_segments": 973,
+    "n_eval_segments": 457,
+    "smoke": true
+  },
+  "cells": {
+    "on_consensus_a1.0": {
+      "rounds_agg": [
+        {
+          "round": "r0_prototype",
+          "n_runs": 3,
+          "pool_size_mean": 28.0,
+          "pool_size_std": 0.0,
+          "coverage_mean": 0.35,
+          "coverage_std": 0.0,
+          "precision_mean": 0.5357,
+          "precision_std": 0.0
+        },
+        {
+          "round": "r1_selftrain",
+          "n_runs": 3,
+          "pool_size_mean": 55.0,
+          "pool_size_std": 2.0,
+          "coverage_mean": 0.6875,
+          "coverage_std": 0.025,
+          "precision_mean": 0.5879,
+          "precision_std": 0.0109
+        },
+        {
+          "round": "r2_selftrain",
+          "n_runs": 3,
+          "pool_size_mean": 63.0,
+          "pool_size_std": 1.0,
+          "coverage_mean": 0.7875,
+          "coverage_std": 0.0125,
+          "precision_mean": 0.5767,
+          "precision_std": 0.0229
+        },
+        {
+          "round": "r3_selftrain",
+          "n_runs": 3,
+          "pool_size_mean": 64.3333,
+          "pool_size_std": 2.3094,
+          "coverage_mean": 0.8042,
+          "coverage_std": 0.0289,
+          "precision_mean": 0.57,
+          "precision_std": 0.016
+        },
+        {
+          "round": "r4_selftrain",
+          "n_runs": 2,
+          "pool_size_mean": 66.5,
+          "pool_size_std": 3.5355,
+          "coverage_mean": 0.8313,
+          "coverage_std": 0.0442,
+          "precision_mean": 0.5789,
+          "precision_std": 0.0011
+        },
+        {
+          "round": "r5_selftrain",
+          "n_runs": 1,
+          "pool_size_mean": 67.0,
+          "pool_size_std": 0.0,
+          "coverage_mean": 0.8375,
+          "coverage_std": 0.0,
+          "precision_mean": 0.5821,
+          "precision_std": 0.0
+        },
+        {
+          "round": "r6_selftrain",
+          "n_runs": 1,
+          "pool_size_mean": 69.0,
+          "pool_size_std": 0.0,
+          "coverage_mean": 0.8625,
+          "coverage_std": 0.0,
+          "precision_mean": 0.5797,
+          "precision_std": 0.0
+        }
+      ],
+      "paired_first_vs_final": {
+        "seeds": [
+          42,
+          43,
+          44
+        ],
+        "delta_pp_mean": 3.54,
+        "delta_pp_std": 1.3476,
+        "paired_t_stat": 4.5542,
+        "paired_t_p": 0.045,
+        "note": "n=3 seeds 配对 t 检验，统计功效有限，效应量以 Δpp 为主披露"
+      },
+      "standing_precision_trajectory": {
+        "round_1": {
+          "mean": 0.6923,
+          "std": 0.0
+        },
+        "round_2": {
+          "mean": 0.707,
+          "std": 0.0127
+        },
+        "round_3": {
+          "mean": 0.7196,
+          "std": 0.0237
+        },
+        "round_4": {
+          "mean": 0.7333,
+          "std": 0.0
+        },
+        "round_5": {
+          "mean": 0.7333,
+          "std": 0.0
+        },
+        "round_6": {
+          "mean": 0.7333,
+          "std": 0.0
+        }
+      },
+      "stop_reasons": [
+        "precision_drop",
+        "precision_drop",
+        "budget"
+      ],
+      "tau_operating_by_seed": {
+        "42": 0.1192,
+        "43": 0.1192,
+        "44": 0.1192
+      }
+    },
+    "on_none_a1.0": {
+      "rounds_agg": [
+        {
+          "round": "r0_prototype",
+          "n_runs": 3,
+          "pool_size_mean": 28.0,
+          "pool_size_std": 0.0,
+          "coverage_mean": 0.35,
+          "coverage_std": 0.0,
+          "precision_mean": 0.5357,
+          "precision_std": 0.0
+        },
+        {
+          "round": "r1_selftrain",
+          "n_runs": 3,
+          "pool_size_mean": 66.6667,
+          "pool_size_std": 1.5275,
+          "coverage_mean": 0.8333,
+          "coverage_std": 0.0191,
+          "precision_mean": 0.5752,
+          "precision_std": 0.0239
+        },
+        {
+          "round": "r2_selftrain",
+          "n_runs": 3,
+          "pool_size_mean": 74.3333,
+          "pool_size_std": 1.1547,
+          "coverage_mean": 0.9292,
+          "coverage_std": 0.0144,
+          "precision_mean": 0.5739,
+          "precision_std": 0.0226
+        },
+        {
+          "round": "r3_selftrain",
+          "n_runs": 3,
+          "pool_size_mean": 74.6667,
+          "pool_size_std": 0.5774,
+          "coverage_mean": 0.9333,
+          "coverage_std": 0.0072,
+          "precision_mean": 0.5714,
+          "precision_std": 0.0138
+        },
+        {
+          "round": "r4_selftrain",
+          "n_runs": 2,
+          "pool_size_mean": 75.0,
+          "pool_size_std": 0.0,
+          "coverage_mean": 0.9375,
+          "coverage_std": 0.0,
+          "precision_mean": 0.5667,
+          "precision_std": 0.0094
+        }
+      ],
+      "paired_first_vs_final": {
+        "seeds": [
+          42,
+          43,
+          44
+        ],
+        "delta_pp_mean": 3.76,
+        "delta_pp_std": 1.335,
+        "paired_t_stat": 4.8826,
+        "paired_t_p": 0.0395,
+        "note": "n=3 seeds 配对 t 检验，统计功效有限，效应量以 Δpp 为主披露"
+      },
+      "standing_precision_trajectory": {
+        "round_1": {
+          "mean": 0.6109,
+          "std": 0.0498
+        },
+        "round_2": {
+          "mean": 0.6306,
+          "std": 0.0337
+        },
+        "round_3": {
+          "mean": 0.6356,
+          "std": 0.0146
+        },
+        "round_4": {
+          "mean": 0.6386,
+          "std": 0.0192
+        }
+      },
+      "stop_reasons": [
+        "converged",
+        "converged",
+        "converged"
+      ],
+      "tau_operating_by_seed": {
+        "42": 0.1192,
+        "43": 0.1192,
+        "44": 0.1192
+      }
+    },
+    "off_consensus_a1.0": {
+      "rounds_agg": [
+        {
+          "round": "r0_prototype",
+          "n_runs": 3,
+          "pool_size_mean": 28.0,
+          "pool_size_std": 0.0,
+          "coverage_mean": 0.35,
+          "coverage_std": 0.0,
+          "precision_mean": 0.5357,
+          "precision_std": 0.0
+        },
+        {
+          "round": "r1_selftrain",
+          "n_runs": 3,
+          "pool_size_mean": 28.0,
+          "pool_size_std": 0.0,
+          "coverage_mean": 0.35,
+          "coverage_std": 0.0,
+          "precision_mean": 0.5357,
+          "precision_std": 0.0
+        }
+      ],
+      "paired_first_vs_final": {
+        "seeds": [
+          42,
+          43,
+          44
+        ],
+        "delta_pp_mean": 0.0,
+        "delta_pp_std": 0.0,
+        "paired_t_stat": NaN,
+        "paired_t_p": NaN,
+        "note": "n=3 seeds 配对 t 检验，统计功效有限，效应量以 Δpp 为主披露"
+      },
+      "standing_precision_trajectory": {},
+      "stop_reasons": [
+        "converged",
+        "converged",
+        "converged"
+      ],
+      "tau_operating_by_seed": {
+        "42": 0.0003,
+        "43": 0.0003,
+        "44": 0.0003
+      }
+    },
+    "on_consensus_a0.0": {
+      "rounds_agg": [
+        {
+          "round": "r0_prototype",
+          "n_runs": 3,
+          "pool_size_mean": 28.0,
+          "pool_size_std": 0.0,
+          "coverage_mean": 0.35,
+          "coverage_std": 0.0,
+          "precision_mean": 0.5714,
+          "precision_std": 0.0
+        },
+        {
+          "round": "r1_selftrain",
+          "n_runs": 3,
+          "pool_size_mean": 55.3333,
+          "pool_size_std": 1.1547,
+          "coverage_mean": 0.6917,
+          "coverage_std": 0.0144,
+          "precision_mean": 0.6023,
+          "precision_std": 0.0084
+        },
+        {
+          "round": "r2_selftrain",
+          "n_runs": 3,
+          "pool_size_mean": 62.3333,
+          "pool_size_std": 0.5774,
+          "coverage_mean": 0.7792,
+          "coverage_std": 0.0072,
+          "precision_mean": 0.5882,
+          "precision_std": 0.0207
+        },
+        {
+          "round": "r3_selftrain",
+          "n_runs": 3,
+          "pool_size_mean": 62.6667,
+          "pool_size_std": 2.3094,
+          "coverage_mean": 0.7833,
+          "coverage_std": 0.0289,
+          "precision_mean": 0.591,
+          "precision_std": 0.0384
+        },
+        {
+          "round": "r4_selftrain",
+          "n_runs": 2,
+          "pool_size_mean": 64.0,
+          "pool_size_std": 0.0,
+          "coverage_mean": 0.8,
+          "coverage_std": 0.0,
+          "precision_mean": 0.6016,
+          "precision_std": 0.011
+        },
+        {
+          "round": "r5_selftrain",
+          "n_runs": 2,
+          "pool_size_mean": 65.5,
+          "pool_size_std": 2.1213,
+          "coverage_mean": 0.8188,
+          "coverage_std": 0.0265,
+          "precision_mean": 0.5958,
+          "precision_std": 0.0193
+        },
+        {
+          "round": "r6_selftrain",
+          "n_runs": 1,
+          "pool_size_mean": 64.0,
+          "pool_size_std": 0.0,
+          "coverage_mean": 0.8,
+          "coverage_std": 0.0,
+          "precision_mean": 0.6094,
+          "precision_std": 0.0
+        }
+      ],
+      "paired_first_vs_final": {
+        "seeds": [
+          42,
+          43,
+          44
+        ],
+        "delta_pp_mean": 0.81,
+        "delta_pp_std": 3.1333,
+        "paired_t_stat": 0.4459,
+        "paired_t_p": 0.6993,
+        "note": "n=3 seeds 配对 t 检验，统计功效有限，效应量以 Δpp 为主披露"
+      },
+      "standing_precision_trajectory": {
+        "round_1": {
+          "mean": 0.6923,
+          "std": 0.0
+        },
+        "round_2": {
+          "mean": 0.707,
+          "std": 0.0127
+        },
+        "round_3": {
+          "mean": 0.7196,
+          "std": 0.0237
+        },
+        "round_4": {
+          "mean": 0.7333,
+          "std": 0.0
+        },
+        "round_5": {
+          "mean": 0.7333,
+          "std": 0.0
+        },
+        "round_6": {
+          "mean": 0.7333,
+          "std": 0.0
+        }
+      },
+      "stop_reasons": [
+        "precision_drop",
+        "budget",
+        "converged"
+      ],
+      "tau_operating_by_seed": {
+        "42": 0.1103,
+        "43": 0.1103,
+        "44": 0.1103
+      }
+    }
+  },
+  "acceptance": {
+    "precision_improved_vs_round0": true,
+    "delta_pp_mean": 3.54,
+    "paired_t_p": 0.045,
+    "honest_note": "真值为物理先验伪标签共识（public_real_physics_prior），非人工标注"
+  }
+}

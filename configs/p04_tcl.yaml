@@ -1,0 +1,78 @@
+# P0.4 TCL 半监督自训练（伪标签迭代闭环）— W10 窗口
+# 口径: 公开真实层 - 物理先验伪标签（InterPet4D v1），metric_layer=public_real_physics_prior，禁止混池
+# 方法口径: docs/paper/method.md Algorithm 1 第 4-6 步 + §3.3.3
+#           （TCL 风格时序对比巩固为 stretch goal，不阻塞主线——W10 交接 §3 Step 1）
+# 输入: W8 伪标签池格式（p03 报告附录 A）+ 附录 B 工程清单:
+#       B-1 margin 校准先行 / B-2 standing 种子治理第一轮优先 / B-3 α=1.0 保持开启
+# 真值声明: 池精度评估真值 = 规则种子物理先验共识标签（非人工标注），
+#           该真值只用于评估，绝不进入训练回路（防泄漏协议）
+
+data:
+  seeds_dir: data/seeds/rule_seeds          # W6 产物（只读）
+  cache_dir_p03: data/processed/p03         # W8 特征缓存只读复用（指纹寻址，禁重抽 GPU）
+  pool_out_dir: data/processed/p04          # 清洗后伪标签池导出（gitignore 生成物区）
+
+filter:                   # W6 移交消费规则（与 P0.3 一致，强制）
+  conf_min: 0.8
+  min_duration_s: 0.5
+
+split:                    # 与 W8 完全一致（clip 级不相交切分，seed=42 防泄漏不许改）
+  eval_ratio: 0.3
+  split_seed: 42
+
+experiment:
+  run_seeds: [42, 43, 44]        # 统计协议: >=3 seeds mean±std
+
+  head:                    # Ω 轻量分类头（method §3.3.3 最小可行实现；Φ 冻结）
+    hidden_dim: 64         # >0 = MLP(in→hidden→C)；0 = 线性头
+    epochs: 150
+    lr: 0.001
+    weight_decay: 0.0001
+    batch_size: 128
+    device: cpu            # 主线零 GPU（特征已缓存），规避与 W4 定时任务撞卡
+
+  calibration:             # ===== B-1 margin 校准先行（κ 原始量级 <0.05 不可直接用）=====
+    method: softmax_temperature   # softmax(sim/T) 校准；off = 原始 margin（消融行）
+    target_median_prob_margin: 0.10
+    # ↑ 温度 T 在【锚点侧】二分标定：校准后 top1-top2 概率 margin 中位数 ≈ 目标。
+    #   锚点侧 = 训练种子自身，GT 无关、无评估泄漏。
+
+  tau_grid: [0.0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.4, 0.5]
+  # ↑ B-1 要求 τ 网格随校准重标定：校准后概率 margin ∈ [0,1]，网格随之迁移
+
+  tau_select_rule:         # ===== 操作点预注册（运行前写死，防事后择优）=====
+    rule: quantile         # 分位数锚定: τ* = κ/m_c 有效分数的 (1-target_coverage) 分位
+    target_coverage: 0.35
+    # 构造性保证第 0 轮覆盖率 ≈ 目标（非退化）；后续轮冻结同一 τ* 不重选（防漂移）
+
+  freq_alpha_default: 1.0  # ===== B-3 frequency-aware margin 保持开启 =====
+  freq_alpha_ablation: 0.0 # α=0 对照行保留
+
+  standing_treatment: consensus   # ===== B-2 standing 种子治理第一轮优先 =====
+    # none      : 不治理（消融行）
+    # consensus : 双路一致门——候选 standing 入池须 Ω 头 argmax == 重估原型 argmax
+    #             （两路均 GT 无关: 头来自种子∪池训练，原型来自种子∪池 class_mean 重估，
+    #              对应 method.md Algorithm 1 第 6 步 re-estimate P）
+    # subcluster: standing 候选内嵌子聚类（K=subcluster_k），簇内头预测主占比 < min_share 整簇剔除
+  subcluster_k: 14         # W8 K 扫描已示 K=14 受益
+  subcluster_min_share: 0.7
+
+  pool_universe: eval_side
+  # ↑ 池资格宇宙 = 评估侧段（与 W8 力学镜像: 种子=锚点侧 973，未标注提案=评估侧 457）
+  #   防泄漏协议不变式: 池恒 ⊆ 宇宙；「Ω 重分配全量段」保留为监控面（预测/变化率统计）
+
+  iteration:               # ===== 写死进 config（method 设计决策: 防确认偏差跨轮累积）=====
+    max_iters: 6                 # 迭代预算上限
+    converge_change_rate: 0.01   # 全量段预测变化率 < 1% → 分配稳定，停
+    precision_drop_patience: 2   # 连续 2 轮池精度(τ*)下降 → 停并标记确认偏差警报
+
+ablation_matrix:           # Step 3 消融（B-1 × B-2 × α；主配置在首行）
+  - {calib: on,  standing: consensus, alpha: 1.0}   # 主配置
+  - {calib: on,  standing: none,      alpha: 1.0}   # B-2 关
+  - {calib: off, standing: consensus, alpha: 1.0}   # B-1 关（原始 margin 直用过时 τ 网格见下）
+  - {calib: on,  standing: consensus, alpha: 0.0}   # α=0 对照（B-3 消融行）
+tau_grid_raw_margin: [0.0, 0.005, 0.01, 0.02, 0.03, 0.04, 0.05]
+# ↑ B-1 off 行专用网格（κ<0.05 量级，沿用 W8 原始标定区间）
+
+acceptance:
+  precision_must_not_degrade: true   # 交接 §5: 提升或如实报告不提升+根因分析
