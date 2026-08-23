@@ -133,7 +133,7 @@ def probe_model(cfg: dict, ckpt: Path, features_dir: Path,
             n_v = lat.shape[0]           # = V（N=M=1）
             z = lat.shape[1]
             t_total = lat.shape[2]
-            p = min(t_total // W, 40)
+            p = max(t_total // W, 2)     # 全序列 patch 池化（原生长度自适应）
             # (V, Z, T) -> patch 池化 (V, Z, P) -> 每 patch 一个 V*Z 向量
             lp = lat.reshape(n_v, z, p, W).mean(axis=3).transpose(2, 0, 1).reshape(p, -1)
             sim = _cosine_matrix(lp)
