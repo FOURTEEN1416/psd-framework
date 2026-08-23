@@ -13,6 +13,12 @@ frame_idx (T,)），输出种子段（类别 + 置信度 + 命中规则 ID）。
 
 类别体系（物理先验 7 类 + unknown，YAML 可配）：
 lying / sitting / standing / walking / running / rise_transition / jump
+
+设计取舍备案（供 P0.3 消费时知情）：
+- transition 优先级高于 gait：真跳跃的起跳/落地段会被标 rise_transition；
+- merge_segments 将 unknown 短段并入高置信邻段（正标签扩张语义）；
+- config["classes"] 键仅供脚本统计口径核对，引擎类别逻辑内聚于本模块
+  （单一 truth 在引擎，不在 YAML 类别表）。
 """
 from __future__ import annotations
 
@@ -83,7 +89,12 @@ def compute_joint_speeds(
 
 
 def torso_clearance_profile(kp: np.ndarray) -> np.ndarray:
-    """躯干离地廓线 (T,)：(荐部 z - 地面) / 体尺度，无量纲。"""
+    """躯干离地廓线 (T,)：(荐部 z - 地面) / 体尺度，无量纲。
+
+    注意：本公开辅助函数不做置信度掩码（与 _frame_features 内部口径的
+    差异：后者按 valid 掩码取值并插值）。仅供快速可视化/调试，
+    下游消费请走 classify_frames/generate_seeds 主链路。
+    """
     kp = np.asarray(kp, dtype=np.float64)
     ground = estimate_ground(kp)
     scale = _estimate_body_scale(kp)
@@ -122,6 +133,28 @@ def _masked_nanmean(arr2d: np.ndarray, valid: np.ndarray, axis: int) -> np.ndarr
     return np.asarray(out)
 
 
+def _interp_nan_time(arr: np.ndarray) -> np.ndarray:
+    """沿时间轴（axis 0）对每列做线性插值填充内部 NaN。
+
+    首尾 NaN 用最近有效值常值外推。全 NaN 列原样保留。
+    用途：平滑/差分前先填补数据缺口，避免"置零拖拽"在缺口邻域
+    制造虚假的高度骤降-回升对（审查缺陷 I-1）。
+    """
+    t_len = arr.shape[0]
+    if t_len < 2:
+        return arr
+    flat = arr.reshape(t_len, -1)
+    out = flat.copy()
+    idx = np.arange(t_len, dtype=np.float64)
+    for c in range(flat.shape[1]):
+        col = flat[:, c]
+        good = np.isfinite(col)
+        if not good.any() or good.all():
+            continue
+        out[:, c] = np.interp(idx, idx[good], col[good])
+    return out.reshape(arr.shape)
+
+
 def _smooth_along_time(arr: np.ndarray, window: int) -> np.ndarray:
     """沿时间轴的居中滑动平均（边缘复制填充），用于抑制逐帧抖动噪声。
 
@@ -156,20 +189,25 @@ def _frame_features(
     weight = np.asarray(weight, dtype=np.float64)
     valid = np.isfinite(kp).all(axis=2) & (weight > _WEIGHT_FLOOR)  # (T,24)
 
-    ground = estimate_ground(kp)
-    scale = _estimate_body_scale(kp)
-    kp_smooth = _smooth_along_time(np.where(np.isfinite(kp), kp, 0.0), smooth_window)
-    # NaN 帧平滑后仍视为无效（valid 掩码不因平滑改变）
+    # 缺口插值：内部 NaN 帧沿时间轴线性填充（首尾常值外推）。
+    # valid 掩码仍按原始数据——被填帧不产生标签，但其邻帧的平滑/差分
+    # 特征不再被"置零拖拽"污染（审查缺陷 I-1）。
+    kp_filled = _interp_nan_time(np.where(np.isfinite(kp), kp, np.nan))
+
+    ground = estimate_ground(kp_filled)
+    scale = _estimate_body_scale(kp_filled)
+    kp_smooth = _smooth_along_time(kp_filled, smooth_window)
     speeds = compute_joint_speeds(kp_smooth, frame_idx, nominal_fps, body_scale=scale)
 
     eps = 1e-6
     with np.errstate(all="ignore"):
-        clearance = (_masked_nanmean(kp[:, SMAL_GROUPS["withers"], 2].reshape(len(kp), -1),
+        # 帧级特征统一在插值后的 kp_filled 上取值（valid 掩码保持原始口径）
+        clearance = (_masked_nanmean(kp_filled[:, SMAL_GROUPS["withers"], 2].reshape(len(kp), -1),
                                      valid[:, SMAL_GROUPS["withers"]], 1) - ground) / scale
-        shoulder_z = _masked_nanmean(kp[:, SMAL_GROUPS["front_tops"], 2], valid[:, SMAL_GROUPS["front_tops"]], 1)
-        hip_z = _masked_nanmean(kp[:, SMAL_GROUPS["rear_tops"], 2], valid[:, SMAL_GROUPS["rear_tops"]], 1)
-        head_z = _masked_nanmean(kp[:, SMAL_GROUPS["head"], 2], valid[:, SMAL_GROUPS["head"]], 1)
-        paw_z_valid = np.where(valid[:, SMAL_GROUPS["paws"]], kp[:, SMAL_GROUPS["paws"], 2], np.nan)
+        shoulder_z = _masked_nanmean(kp_filled[:, SMAL_GROUPS["front_tops"], 2], valid[:, SMAL_GROUPS["front_tops"]], 1)
+        hip_z = _masked_nanmean(kp_filled[:, SMAL_GROUPS["rear_tops"], 2], valid[:, SMAL_GROUPS["rear_tops"]], 1)
+        head_z = _masked_nanmean(kp_filled[:, SMAL_GROUPS["head"], 2], valid[:, SMAL_GROUPS["head"]], 1)
+        paw_z_valid = np.where(valid[:, SMAL_GROUPS["paws"]], kp_filled[:, SMAL_GROUPS["paws"], 2], np.nan)
         # 跳跃判据 = 四爪"同时"离地 → 取有效爪的最低点（min），均值会被摆动腿抬高
         paw_min_raw = _safe_nanmin(paw_z_valid, axis=1)
         paw_air = (np.nan_to_num(paw_min_raw, nan=ground) - ground) / scale
@@ -182,10 +220,17 @@ def _frame_features(
     # 步态信号：质心水平速度（xz 平面，体尺度/秒）——比爪速稳，无摆腿周期伪迹
     n = len(kp)
     if n >= 2:
-        # 按关节轴平均（保留 xyz）：无效关节不参与质心；全无效帧记 0（frame_ok 会屏蔽）
-        kp_clean = np.where(valid[:, :, None], np.nan_to_num(kp, nan=0.0), 0.0)
-        centroid = kp_clean.sum(axis=1) / np.maximum(valid.sum(axis=1), 1)[:, None]  # (T,3)
-        c_smooth = _smooth_along_time(centroid, smooth_window)
+        # 固定躯干子集 {2,5,8,11,22}（报告 §2 实证长期稳定）：若按"当帧全部
+        # 有效关节"取均值，遮挡会使子集系统性变化 → 质心跳变 → 伪步态
+        # （审查缺陷 I-2）。子集关节缺失帧由时间插值补齐。
+        torso_idx = SMAL_GROUPS["front_tops"] + SMAL_GROUPS["rear_tops"] + SMAL_GROUPS["withers"]
+        sub_valid = valid[:, torso_idx]                       # (T,5)
+        sub_pts = np.where(sub_valid[:, :, None], kp_filled[:, torso_idx, :], 0.0)
+        cnt = sub_valid.sum(axis=1)
+        centroid_raw = sub_pts.sum(axis=1) / np.maximum(cnt, 1)[:, None]
+        centroid_raw[cnt == 0] = np.nan
+        centroid = _interp_nan_time(centroid_raw)             # (T,3)
+        c_smooth = _smooth_along_time(np.nan_to_num(centroid, nan=0.0), smooth_window)
         d_centroid = np.linalg.norm(np.diff(c_smooth[:, :2], axis=0), axis=1)
         didx_c = np.diff(np.asarray(frame_idx, dtype=np.float64))
         dt_c = np.maximum(didx_c, 1.0) / max(float(nominal_fps), 1e-6)
@@ -194,9 +239,11 @@ def _frame_features(
         centroid_speed = np.zeros(n)
 
     # 躯干高度变化率（体尺度/秒）：均匀 dt 近似即可满足规则粒度
+    # 先沿时间轴插值填平缺口帧（否则 nan_to_num(0) 会在缺口两端产生假梯度尖峰）
     if n >= 2:
         mean_dt = float(np.mean(np.maximum(np.diff(np.asarray(frame_idx, dtype=np.float64)), 1.0))) / max(float(nominal_fps), 1e-6)
-        d_clearance = np.gradient(np.nan_to_num(clearance, nan=0.0)) / max(mean_dt, eps)
+        clearance_filled = _interp_nan_time(np.where(np.isfinite(clearance), clearance, np.nan))
+        d_clearance = np.gradient(clearance_filled) / max(mean_dt, eps)
     else:
         d_clearance = np.zeros(n)
 
@@ -247,6 +294,7 @@ def classify_frames(
     rate_min = float(cfg_t.get("rate_min", 1.5))
     trans_window = int(cfg_t.get("window", 5))
     jump_air_min = float(cfg_j.get("min_air_clearance", 0.25))
+    jump_spike_over = float(cfg_j.get("spike_over_standing", 0.15))
 
     n = len(feat["clearance"])
 
@@ -273,8 +321,7 @@ def classify_frames(
 
         # 1) 跳跃：四爪同时明显离地(min-air)且躯干高于站立线+尖峰余量
         air_min = feat["paw_air"][t]
-        if air_min > jump_air_min and \
-           c > stand_min + float(cfg_j.get("spike_over_standing", 0.15)):
+        if air_min > jump_air_min and c > stand_min + jump_spike_over:
             labels[t] = "jump"
             conf[t] = min(1.0, 0.5 + 0.5 * min(air_min / max(jump_air_min * 2.0, 1e-6), 1.0))
             rule_ids[t] = ["jump_airborne"]

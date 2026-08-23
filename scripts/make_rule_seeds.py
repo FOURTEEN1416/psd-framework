@@ -64,6 +64,10 @@ def main(argv: list[str] | None = None) -> int:
     files = sorted(src_dir.glob("*.npz"))
     print(f"[1/3] 发现 {len(files)} 个 smal_npy clip")
 
+    # NPZ 字段宽度由内容派生，杜绝静默截断（U16/U64 教训：类名/规则联合串超宽即截）
+    label_w = max(max(len(c) for c in classes), len("unknown")) + 1
+    rule_w = 128
+
     summary_rows: list[dict] = []
     skipped: list[str] = []
     for i, path in enumerate(files, 1):
@@ -71,20 +75,24 @@ def main(argv: list[str] | None = None) -> int:
         if clip is None:
             skipped.append(path.stem)
             continue
+        # frame_idx 单调性守卫：非单调差分会产生负 dt → 负速度 → 步态漏判
+        if not np.all(np.diff(clip["frame_idx"].astype(np.float64)) >= 0):
+            print(f"  [跳过] {path.name}: frame_idx 非单调")
+            skipped.append(path.stem)
+            continue
         res = generate_seeds(clip["kp"], clip["weight"], clip["frame_idx"], cfg)
         labels = res["frame_labels"].astype(str)
 
         # 单 clip NPZ：帧级标签/置信度 + 种子段表
-        # rules 宽度 U128：全规则联合最长约 120 字符（U64 曾截断 standing_posture）
         seg_arr = np.array(
             [(s["start_frame"], s["end_frame"], s["label"], s["confidence"],
               "|".join(s["rule_ids"])) for s in res["segments"]],
-            dtype=[("start", "i8"), ("end", "i8"), ("label", "U16"),
-                   ("conf", "f4"), ("rules", "U128")],
+            dtype=[("start", "i8"), ("end", "i8"), ("label", f"U{label_w}"),
+                   ("conf", "f4"), ("rules", f"U{rule_w}")],
         )
         np.savez_compressed(
             seeds_dir / f"{path.stem}.npz",
-            frame_labels=labels.astype("U16"),
+            frame_labels=labels.astype(f"U{label_w}"),
             frame_confidence=res["frame_confidence"],
             segments=seg_arr,
             body_scale=np.float64(res["body_scale"]),
@@ -106,9 +114,9 @@ def main(argv: list[str] | None = None) -> int:
 
     print(f"[2/3] 有效 clip {len(summary_rows)}，跳过 {len(skipped)}")
 
-    # 汇总 JSON
+    # 汇总 JSON（config_echo 回显完整配置快照，保障学术复现溯源）
     agg = {
-        "config_echo": {"classes": classes, "nominal_fps": cfg.get("nominal_fps")},
+        "config_echo": cfg,
         "n_clips_total": len(files),
         "n_clips_valid": len(summary_rows),
         "skipped_clips": skipped,

@@ -91,12 +91,13 @@ DEFAULT_CONFIG = {
     "nominal_fps": FPS,
     "classes": ["lying", "sitting", "standing", "walking", "running",
                 "rise_transition", "jump"],
+    # 注: classes 键仅供统计口径核对；引擎判定逻辑内聚于 rule_seeds.py
     "speed": {"walk_min": 0.30, "run_min": 1.20},
     "posture": {"standing_min_clearance": 0.35, "lying_max_clearance": 0.18,
-                "sitting_max_hip_ratio": 0.55},
+                "sitting_max_hip_ratio": 0.55, "lying_composite_max": 0.75},
     "transition": {"rate_min": 1.5, "window": 5},
     "jump": {"min_air_clearance": 0.25, "spike_over_standing": 0.15},
-    "segment": {"min_duration_s": 0.3, "unknown_gap_fill": False},
+    "segment": {"min_duration_s": 0.3},
 }
 
 
@@ -138,7 +139,7 @@ def test_velocity_threshold_boundary_static_vs_walk():
     res_fast = classify_frames(kp_fast, w, fidx, DEFAULT_CONFIG)
     assert set(res_slow["labels"]) <= set(DEFAULT_CONFIG["classes"]) | {"unknown"}
     assert "walking" not in res_slow["labels"], "慢速漂移不应触发 walking"
-    # 0.9 m/s ≈ 1.8 体长单位/s，超过 run_min(0.60) —— 正确触发 running 步态规则
+    # 0.9 m/s ≈ 1.8 体长单位/s，超过 run_min(1.20) —— 正确触发 running 步态规则
     assert "running" in res_fast["labels"], "快速平移帧应触发跑步步态规则"
     assert not ({"walking", "running"} & set(res_slow["labels"])), \
         "慢速漂移不应进入任何步态类"
@@ -253,6 +254,42 @@ def test_partial_paw_lift_never_trigger_jump():
     res = classify_frames(kp, w, fidx, DEFAULT_CONFIG)
     assert "jump" not in set(res["labels"]), \
         f"双爪踩台静止被判为跳跃: {sum(1 for x in res['labels'] if x == 'jump')} 帧"
+
+
+# ---------- 用例 9/10：数据缺口伪迹回归（代码审查 I-1/I-2） ----------
+
+def test_nan_gap_produces_no_fake_transition():
+    """I-1 回归：静立犬中段 5 帧全 NaN，缺口邻域不得产生 rise_transition 段。
+
+    缺陷背景：NaN 置零先于平滑，缺口被拖向地面形成虚假高度骤降+回升对，
+    实测产出 conf=0.318 的 ['lie_down','rise_up'] 伪段（5 帧内物理上自相矛盾）。
+    """
+    kp, w, fidx = make_dog_pose(60, torso_h=0.50, shoulder_h=0.45, hip_h=0.38)
+    w_gap = w.copy()
+    kp_gap = kp.copy()
+    kp_gap[28:33] = np.nan          # 中段连续 5 帧全 NaN（遮挡/丢帧）
+    out = generate_seeds(kp_gap, w_gap, fidx, DEFAULT_CONFIG)
+    labels = [s["label"] for s in out["segments"]]
+    assert "rise_transition" not in labels, \
+        f"数据缺口邻域产生伪过渡段: {out['segments']}"
+    assert set(labels) <= {"standing"}, f"静立犬应全程站立: {labels}"
+
+
+def test_head_occlusion_no_fake_gait():
+    """I-2 回归：头簇持续失效（模拟遮挡）不得产生伪步态标签。
+
+    缺陷背景：质心用当帧有效关节子集计算，头簇失效使子集系统性变化，
+    静止犬质心跳变被误判 running。步态质心改用固定躯干子集后应恒静止。
+    """
+    n = 90
+    kp, w, fidx = make_dog_pose(n, torso_h=0.50, shoulder_h=0.45, hip_h=0.38)
+    w_occ = w.copy()
+    w_occ[30:, SMAL_GROUPS["head"]] = 0.0   # 第 30 帧起头簇全部零置信
+    res = classify_frames(kp, w_occ, fidx, DEFAULT_CONFIG)
+    gait = {"walking", "running"}
+    found = gait & set(res["labels"])
+    assert not found, f"头簇遮挡引发伪步态标签: {found}"
+    assert set(res["labels"]) <= {"standing", "unknown"}
 
 
 # ---------- 辅助函数单元行为 ----------
