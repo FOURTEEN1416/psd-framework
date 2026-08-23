@@ -1,0 +1,45 @@
+# W6 规则引擎粗标配置 — 物理层先验种子
+# 用途: scripts/make_rule_seeds.py --config configs/rule_seeds.yaml
+# 口径: InterPet4D smal_npy (kp_world (T,24,3))，物理先验 7 类 + unknown
+# 关节语义: 几何实测验证（见 reports/rule-seeds-2026-08-24.md §2），左右无关
+
+data:
+  smal_npy_dir: "D:/Desktop/k9-training-system/data/interpet4d/smal_npy"
+  output_dir: "data/seeds"          # 生成物，已 gitignore（/data/*）
+  qc_sample_n: 40                   # 质检抽样 clip 数（交接要求 ≥30）
+  qc_seed: 42
+
+nominal_fps: 30.0                   # 帧率口径（frame_idx 差分换算 dt 用）
+
+classes:
+  - lying            # 卧姿
+  - sitting          # 坐姿
+  - standing         # 站立
+  - walking          # 走
+  - running          # 跑
+  - rise_transition  # 起卧/卧下过渡事件
+  - jump             # 跳跃事件
+
+speed:
+  # 步态信号 = 质心水平速度（体尺度单位/秒）；阈值按全量 225 clip 实测分布标定
+  # （中位漂移 0.27，>0.3 占 46%，>1.2 占 ~12%，真跑 >1.5 仅 7%）
+  walk_min: 0.30
+  run_min: 1.20
+  smooth_window: 5      # 轨迹平滑窗（帧），抑制逐帧拟合抖动
+
+posture:
+  standing_min_clearance: 0.35   # 荐部离地(归一) ≥ 此值 → 站立候选
+  lying_max_clearance: 0.18      # 荐部离地 < 此值 → 卧姿硬判
+  lying_composite_max: 0.75      # 复合证据 clearance+0.5*head_norm < 此值 → 卧姿
+  sitting_max_hip_ratio: 0.55    # 髋/肩离地比 < 此值 → 坐姿
+
+transition:
+  rate_min: 1.5         # 躯干高度变化率阈值（体尺度/秒；>0.8 会命中 12% 帧，过敏感）
+  window: 5             # 尖峰帧前后膨胀窗（帧）
+
+jump:
+  min_air_clearance: 0.25   # 四爪最低点离地(归一)下限 —— min 语义：全爪腾空才算跳
+  spike_over_standing: 0.15 # 躯干需高于站立线多少才算跳跃尖峰
+
+segment:
+  min_duration_s: 0.3   # 种子段最短时长；短段并入置信度更高的邻段
