@@ -70,6 +70,7 @@
 *This experiment tests whether taxonomy evolution under decoupling costs less than full-pipeline retraining at matched accuracy.*
 - 成本度量 = 人工标注单元数 + 重训墙钟时间；非解耦基线对照：**[PENDING P0.5]**。
 - ⚠️ **Y′ 来源要求（v0.3）**：taxonomy 演化场景不得作者自造（防"稻草人演化"指控）——必须从真实业务依据推导（如 K9 业务评估标准变化记录）或采用可公开陈述的基准化协议，成稿需一段 Y′ 合理性论证。
+- ✅ **双贴合候选场景已预注册并获用户方向性认可（ADR 0002 v1.1，2026-08-24）**：业务动机取自 K9 系统真实报表粒度差——日常训练日报（粗粒度：合并步态类为 locomotion）vs 结业考核单（细粒度：jump 拆分 jump_up/jump_down）；可计算基础取自本仓物理先验 7 类。论文叙事闭环：§1 行业动机 → §3.4 形式化 → E6 实例，同源非自造。P0.5 前用户一句话最终定稿。
 - ⚠️ **matched accuracy 判据固定（v0.3）**：两侧使用相同训练预算与收敛判据（如固定 epoch + 验证集早停 patience 一致），禁止事后选择最优点制造有利对比。
 
 ## 4.4 对比研究（Comparison Studies）

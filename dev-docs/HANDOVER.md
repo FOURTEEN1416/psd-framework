@@ -100,6 +100,7 @@
 |------|---------|------|-------------|
 | **W4 重启** | `handovers/W7-p02-smq-rescue.md`（唯一任务书） | P0.2 SMQ 分割**救援**（诊断优先，双口径评估，切换需用户裁决） | 原 W4 白名单全部（`*smq*` 文件、psd/models+training、scripts/configs 的 p02 文件、reports/p02-*）；含 W4 未提交产物接管清单 |
 | **W8** | `handovers/W8-p03-jia-phaseA.md` | P0.3 Phase A 锚点学习+原型聚类（消费 W6 种子，与 SMQ 解耦） | `*jia*/*p03*` 新文件、reports/p03-*；禁触一切 smq 文件与 rule_seeds 实现 |
+| **W9** | `handovers/W9-ntu-repro.md` | NTU 复现验证：Phase A 数据获取+预处理（CPU，可立即开工）/ Phase B 复现训练（GPU 等 P0.2 释放） | `*ntu*` 新文件、reports/ntu-*；GPU 排程见 ADR 0002 v1.1 |
 | ~~W5~~ | `handovers/W5-p06-paper-draft.md` | ✅ 写作侧收官（四件套+增量二三文件+两轮评审），剩余为 P0 数据依赖 | `docs/paper/**` 保持只读待回填 |
 
 > 三项用户裁决已落档 `dev-docs/decisions/0002-user-rulings-ntu-synthetic-e6.md`：① NTU 验证纳入（前置=需获取 NTU60 骨架数据，P0.2 释放 GPU 后排程）；② 路径 a 合成数据缓议至 P0.5 前触发；③ E6 场景候选已预注册。
