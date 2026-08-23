@@ -1,6 +1,6 @@
 # 2. Related Work（英文初稿 · P0.6）
 
-> Owner: `docs/paper/related-work.md` · W5 窗口 2026-08-23 · 状态: 初稿 v0.1（经自审一轮，见文末审查记录）
+> Owner: `docs/paper/related-work.md` · W5 窗口 2026-08-23 · 状态: 初稿 v0.2（经两轮评审：自审一轮 + 五视角对抗评审，见文末审查记录）
 > 引用纪律: 全部条目溯源 `dev-docs/research/RESEARCH_LITERATURE.md`（17 篇池）与 `NOVELTY_CHECK_YAOQING_JIA.md`；题录不全者标 `[CITATION-NEEDED]`。
 > 写作规范: 主题式综合（禁逐篇罗列）；句均长 ≤25 词；被动语态慎用；每小节以差距句收尾。
 
@@ -26,7 +26,7 @@ Self-supervised representation learning for skeletons is mature in the human dom
 
 Two observations motivate our treatment of this literature. First, virtually all benchmarks, augmentations, and graph templates assume the human body plan; transferring these objectives to quadruped kinematics requires adapting joint topology, augmentation priors, and view construction. Second, pretraining and segmentation are studied separately, although a recognition system needs both: representations without proposals cannot localize behaviors, and proposals without semantics cannot name them. State-space backbones such as VideoMamba [ECCV 2024] and Mamba-MSQNet for animal action recognition [Ecological Informatics 2024; CITATION-NEEDED: full bibliographic record] offer efficiency alternatives but do not address label scarcity either.
 
-**Gap.** Self-supervised skeleton machinery exists almost exclusively for humans, is validated on human benchmarks, and is decoupled from unsupervised temporal decomposition. Animal-domain adaptation remains largely unexplored; our repository-scale survey found no published self-supervised animal-skeleton recognition pipeline [NOVELTY_CHECK_YAOQING_JIA.md, internal survey].
+**Gap.** Self-supervised skeleton machinery exists almost exclusively for humans, is validated on human benchmarks, and is decoupled from unsupervised temporal decomposition. Animal-domain adaptation remains largely unexplored; our repository-scale survey found no published self-supervised animal-skeleton recognition pipeline (systematic internal survey; to be migrated to supplementary material before submission).
 
 ## 2.3 Semi-Supervised, Few-Shot, and Pseudo-Label Learning
 
@@ -55,10 +55,10 @@ To the best of our knowledge, transferring the combination of seed-annotated anc
 |--------|------|
 | 主题式组织、无逐篇罗列 | ✅ 三小节均为"路线综述→代表工作→差距句"结构 |
 | 每小节差距句铺垫本文动机 | ✅ 2.1 固定标签集+重标注成本 → 2.2 人类域集中+预训练分割割裂 → 2.3 无锚点引导闭环 → 总 Gap 对应 C1/C2 |
-| 词数 | 正文约 900 词（≥800 达标） |
+| 词数 | 正文 1074 词（≥800 达标） |
 | 句长 ≤25 词为主、被动语态克制 | ✅ 抽查通过 |
 | 首次性主张带边界声明 | ✅ 显式写明内部调研 + Scholar 终审保留（对齐 W1 §5 边界声明） |
-| 引用全部有真实出处或显式 [CITATION-NEEDED] | ✅ 6 处 [CITATION-NEEDED] 均为池内缺题录项，无凭记忆生成条目 |
+| 引用全部有真实出处或显式 [CITATION-NEEDED] | ✅ 当前 9 处 [CITATION-NEEDED] 均显式标记，无凭记忆生成条目（v0.2 复核计数） |
 | Science 特稿引用措辞 | ✅ 用作产业背景 motivation，未当作研究证据 |
 | AI 腔检查 | ✅ 无 "delve/moreover/furthermore 堆砌"、无空泛开头 |
 
@@ -67,10 +67,11 @@ To the best of our knowledge, transferring the combination of seed-annotated anc
 2. （outline.md 同轮发现）❌→✅ §4 Method 节 "AimCLS" 笔误 → 已改 "AimCLR"。
 
 ### 待办（移交后续窗口）
-- [ ] 补全 6 处 [CITATION-NEEDED] 完整题录（arXiv 号 / DOI），来源：投稿前文献终审窗口
+- [ ] 补全 9 条待补题录（arXiv 号 / DOI；含内嵌标记项），来源：投稿前文献终审窗口
 - [ ] **补三个数据集原始论文题录**（InterPet4D / Animal Kingdom / APTv2）——PR 投稿硬要求，见 outline.md §6
+- [ ] **内部引用迁移**：正文 2 处 "(internal survey...)" 措辞在投稿时替换为 Supplementary Material 正式引用（内部报告整理为附录）；"[internal survey; arXiv/Google Scholar re-verification...]" 同规则处理
 - [ ] SMQ 与 AimCLR 的具体数字（79.18%/77.2%/75.3%）在投稿前对照原文复核一遍
-- [ ] 若 P0.2-P0.5 结论变化，回改 2.2/2.3 的差距句强度
+- [ ] 若 P0.2-P0.5 结论变化，回改 2.2/2.3 的差距句强度；C6 的 "≤20%" 措辞按 E4 实测收紧
 
 ## 修订历史
 
@@ -78,3 +79,4 @@ To the best of our knowledge, transferring the combination of seed-annotated anc
 |------|------|------|
 | v0.1 | 2026-08-23 | W5 窗口初稿：三小节 + 三近邻表 + 自审一轮 |
 | v0.2 | 2026-08-23 | 对抗评审加固：§2.2 补跨视角 SSL 谱系承认句（防"文献覆盖不全"指控）+ 总 Gap 改三缺口合成结构 + 待办增补数据集论文引用项 |
+| v0.3 | 2026-08-23 | 第二轮对抗评审：元数据一致性修复（状态行/词数/C-N 计数）+ 内部引用迁移策略入待办 |

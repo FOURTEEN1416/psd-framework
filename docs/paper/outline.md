@@ -9,7 +9,9 @@
 
 ## 0. 一句话贡献（One-Sentence Contribution）
 
-> We propose a physics–semantics decoupled framework for low-resource animal behavior recognition, which couples label-free skeleton-dynamics modeling (self-supervised pretraining plus unsupervised motion-word segmentation) with an anchor-guided cluster-and-pseudo-label pipeline transferred from image-domain few-shot recognition, so that evolving evaluation criteria require updating only a lightweight semantic layer instead of re-annotating and re-training the whole system.
+> We propose a physics–semantics decoupled framework for low-resource animal behavior recognition, which couples label-free skeleton-dynamics modeling (self-supervised pretraining plus unsupervised motion-word segmentation) with an anchor-guided cluster-and-pseudo-label pipeline transferred from image-domain few-shot recognition. The framework is designed so that evolving evaluation criteria can be absorbed by updating only a lightweight semantic layer instead of re-annotating and re-training the whole system.
+
+> ⚠️ 措辞纪律（v0.3）：此处用能力性主张 "is designed so that ... can be absorbed"——结果性动词 "require" 在 C1 证据落地前禁用（claim ledger 门禁）。
 
 **三支柱自检**（galaxy Narrative Principle）：
 - **The What**: 物理-语义解耦 + 骨架域小样本伪标签迁移（W1 核验：组合首次性初步成立）。
@@ -102,7 +104,7 @@
 
 | ID | 类型 | 内容 | 落点 | 状态 |
 |----|------|------|------|------|
-| fig1 | 框架总览图（hero） | 物理-语义双层架构 + 数据流 | §1 尾/§3.1 | 结构已在 method.md 文字化，绘图待排期 |
+| fig1 | 框架总览图（hero） | 物理-语义双层架构 + 数据流 | §1 尾（v0.3 定稿） | 结构已在 method.md 文字化，绘图待排期 |
 | fig2 | 架构细节图 | 锚点-聚类-伪标签迭代闭环 | §3.3 | 待画 |
 | fig3 | 定性可视化 | SMQ 分割边界 vs GT | §4.3 | ⏳ 待 P0.2 |
 | fig4 | 效率曲线 | 主动学习标注预算 vs 精度 | §4.3 | ⏳ 待 P0.5 |
@@ -131,7 +133,8 @@
 | §2.2 | AimCLR | AAAI 2022；repo Levigty/AimCLR（W1 核验在案） | ✅ 双源 |
 | §2.2 | AimCLR++ | Pattern Recognition 2024；repo Levigty/AimCLR-v2（W1 附带发现） | ✅ 双源 |
 | §2.2 | SMQ（Skeleton Motion Words） | ICCV 2025（arXiv 号待补） | ⚠️ [CITATION-NEEDED: arXiv ID] |
-| §2.2 | VideoMamba / Mamba-MSQNet | ECCV 2024 / Ecological Informatics 2024 | ✅ 池内 |
+| §2.2 | VideoMamba / Mamba-MSQNet | ECCV 2024 / Ecological Informatics 2024 | ⚠️ 池内有索引；Mamba-MSQNet 缺完整题录（RW 内嵌 [CITATION-NEEDED]） |
+| §2.2/§2.3 | 跨视角 SSL 代表工作 / Momentum-Contrastive Teacher (TIP 2025) / GRA | — | ❌ [CITATION-NEEDED]（RW 内嵌标记，随文献终审补齐） |
 | §2.3 | MAC-Learning | TPAMI 2022；repo 1xbq1/MAC-Learning | ✅ 双源 |
 | §2.3 | Skeleton-to-Image Encoding | arXiv 2603.05963 | ✅ 池内 |
 | §2.3 | TCL | CVPR 2021 | ⚠️ [CITATION-NEEDED: DOI/repo] |
@@ -164,6 +167,9 @@ Abstract 0.2 ｜ Intro 1.5 ｜ RW 1.5 ｜ Method 4 ｜ Experiments 3 ｜ Ablatio
 | R5 | 🟠 MAJOR | **数据集论文未引**：InterPet4D/AK/APTv2 引用缺失（PR 投稿硬要求） | 引用计划 §6 已补三条 [CITATION-NEEDED]；文献终审窗口必须补齐 | ⏳ 待终审 |
 | R6 | 🟡 MINOR | 统计严谨性质疑 | experiment-skeleton 已补统计协议节 | ✅ 协议已立 |
 | R7 | 🟡 MINOR | 数据许可与伦理声明（PR 投稿系统必填） | brief §8 许可终审项覆盖；投稿前补 Data Availability + Ethics 声明 | ⏳ 已跟踪 |
+| R8 | 🟠 MAJOR | **种子噪声放大**：规则引擎粗标带噪，伪标签迭代可能放大错误 | method §3.3.2 已立"高召回低精度先验"设计决策；消融表已加噪声注入实验行（10/20/30%） | ✅ 设计+验证已闭环 |
+| R9 | 🟠 MAJOR | **类别长尾分布**无应对表述——动物行为极不平衡是领域常识 | method §3.3.2 补 frequency-aware margin 设计决策；敏感性扫描加处理方式对比 | ✅ 已闭环 |
+| R10 | 🟠 MAJOR | **E6 演化场景真实性**：作者自造 Y′ 会被批稻草人 | E6 已加 Y′ 来源要求（真实业务依据或基准化协议）+ matched accuracy 判据固定条款 | ✅ 协议已立，Y′ 选型待 P0.5 前 |
 
 ### 8.2 PR 收录检查单映射
 
@@ -201,3 +207,4 @@ Abstract 0.2 ｜ Intro 1.5 ｜ RW 1.5 ｜ Method 4 ｜ Experiments 3 ｜ Ablatio
 |------|------|------|
 | v0.1 | 2026-08-23 | W5 窗口建纲：故事线 + C1-C8 矩阵 + 逐节规划 + 图表/引用计划 |
 | v0.2 | 2026-08-23 | 五视角对抗评审：新增 §8 风险登记册（R1-R7，含两条 CRITICAL）+ PR 收录检查单；引用计划补三个数据集论文 [CITATION-NEEDED]；章节重编号 |
+| v0.3 | 2026-08-23 | 第二轮对抗评审：§0 贡献句降级为能力性主张 + 风险登记册增 R8-R10（种子噪声/类别不平衡/E6 场景真实性）+ fig1 落点决策闭合；评审全程记录见 `review-log.md` |

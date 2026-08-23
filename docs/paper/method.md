@@ -25,7 +25,7 @@ The layers interact only through embeddings and proposals. This constraint is wh
 
 We adapt extreme-asymmetry contrastive pretraining [AimCLR, AAAI 2022; repo github.com/Levigty/AimCLR] to quadruped skeletons. Three adaptations matter. First, the joint graph is rebuilt for the target species topology rather than the human body plan; our current pipeline uses a 24-joint quadruped layout mapped into an NTU-compatible view via an identity correspondence plus one dead slot [P0.1 implementation detail]. Second, augmentation primitives are restricted to transformations that preserve quadruped plausibility. Third, the official weight initialization is deliberately skipped: we found that re-initializing all convolutional and linear weights to $\mathcal{N}(0, 0.02)$ collapses representations into a cone from which InfoNCE cannot escape on our data; skipping it restores normal convergence (diagnostic chain E1–E7 in `reports/p01-aimclr-2026-08-23.md`). We report this as a reproducibility note for practitioners reusing official code bases.
 
-*Evidence.* On InterPet4D (226 SMAL-fitted sequences; 225 valid after one all-NaN exclusion), pretraining yields kNN top-1 of **20.89% versus an 8.33% random baseline (2.51×)** under a 5-fold protocol. This probe uses file-embedded subject identity as a proxy task and measures representation discriminability, not behavior accuracy; the metric caliber is disclosed to avoid cross-caliber confusion [P0.1 report].
+*Evidence.* On InterPet4D (226 SMAL-fitted sequences; 225 valid after one all-NaN exclusion), pretraining yields kNN top-1 of **20.89% versus an 8.33% random baseline (2.51×)** under a 5-fold protocol. This probe uses file-embedded subject identity as a proxy task and measures representation discriminability, not behavior accuracy; the metric caliber is disclosed to avoid cross-caliber confusion. （数据 owner：本段数字与 experiment-skeleton.md §E1 同源，回填与修订以 E1 为唯一维护点，此处只引用不独立改数。）[P0.1 report]
 
 *[PENDING P0.x: extended training schedule results; AimCLR++ backbone comparison]*
 
@@ -62,7 +62,7 @@ Output: classifier Ω under taxonomy Y
 7: until proposal assignment stabilizes or iteration budget reached
 ```
 
-Design decisions fixed at this stage: confidence filtering uses prototype-margin scores; each iteration retrains only $\Omega$, never $\Phi$; the iteration budget guards against confirmation bias accumulating across rounds. *[PENDING P0.3: purity curves, sensitivity to $|S|$, $\tau$, K]*
+Design decisions fixed at this stage: confidence filtering uses prototype-margin scores; each iteration retrains only $\Omega$, never $\Phi$; the iteration budget guards against confirmation bias accumulating across rounds; and seed-noise amplification is bounded by treating rule-engine seeds as high-recall/low-precision priors—anchors initialized from noisy seeds are corrected by confidence-filtered cluster consensus and verified by the active-learning loop rather than trusted as ground truth. Class imbalance in animal behavior distributions (long-tail rare behaviors) is handled at the prototype level via frequency-aware margin thresholds rather than resampling; this choice is ablated in §5. *[PENDING P0.3: purity curves, sensitivity to $|S|$, $\tau$, K]*
 
 ### 3.3.3 Semi-Supervised Self-Training and Active Learning
 
