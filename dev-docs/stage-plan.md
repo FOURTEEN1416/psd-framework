@@ -1,6 +1,6 @@
 # Stage Plan — PSD-Framework
 
-> 状态: 🔄 执行中——P0.1 ✅ 达标 / P0.2 🔴 失败待救援（W7）/ P0.3 PhaseA 🔄 开工（W8）/ P0.6 论文写作侧 ✅ 清空待回填；详见 HANDOVER v1.4 §8
+> 状态: 🔄 执行中——P0.1 ✅ 达标 / P0.2 🔴 失败待救援（W7）/ P0.3 PhaseA ✅ 完成（W8）/ P0.6 论文写作侧 ✅ 清空待回填；详见 HANDOVER v1.4 §8
 > 详细背景: 调研资料见 `research/`（复制自 k9 仓库）；立项期完整版计划存档于 k9 仓库 `dev-docs/stages/data-unblocking.md`（已冻结）
 
 ## 1. P0 数据解阻（当前唯一主线，3-4 周）
@@ -25,7 +25,7 @@
 |--------|------|---------|---------|
 | ✅ P0.1 AimCLR 预训练 | 1 周 | 骨架编码器 + 预训练权重 + kNN top-1 显著超随机基线（4.5%） | `scripts/eval_aimclr.py --knn` + 报告归档（2026-08-23 达标：20.89% vs 8.33%，2.51×，见 `reports/p01-aimclr-2026-08-23.md`） |
 | 🔴 P0.2 SMQ 时序分割 | 1 周 | 分割模型 + episode 边界 IoU 评估 + 可视化 | `scripts/eval_smq_segmentation.py --iou`（**2026-08-24 复核：两轮评估 IoU 0.20 < 随机 0.43 未达标，转 W7 救援——`handovers/W7-p02-smq-rescue.md`**） |
-| 🔄 P0.3 姚青 JIA 迁移 🔥 | 1 周 | VFM 骨干适配 + 时序动作锚点 + 行为原型聚类 + 伪标签迭代 | 原型质量指标 + 伪标签精度曲线（**Phase A 锚点+聚类已开工 W8，消费 W6 规则种子、与 SMQ 解耦——`handovers/W8-p03-jia-phaseA.md`**） |
+| ✅ P0.3 姚青 JIA 迁移 🔥 | 1 周 | VFM 骨干适配 + 时序动作锚点 + 行为原型聚类 + 伪标签迭代 | 原型质量指标 + 伪标签精度曲线（**Phase A 完成 W8：纯度 0.534=随机基线 1.615×、噪声 30% 消融不崩，报告 `reports/p03-jia-phasea-2026-08-24.md`；Phase B 22 类映射待路径 a 合成数据**） |
 | P0.4 TCL 半监督增强 | 1 周 | 增强伪标签 | 对比 P0.3 伪标签精度提升 |
 | P0.5 骨干微调评估 | 1 周 | ST-GCN+BC / Mamba 微调 ≥85%（22 类） | 三层指标口径报告 |
 | ✅ P0.6 论文初稿（写作侧） | 并行 | Pattern Recognition 初稿框架 | 用户评审（2026-08-24 写作侧清空：四件套+增量二三文件+两轮对抗评审+风险登记册，`docs/paper/review-log.md`；数字回填待 P0.2-P0.5） |

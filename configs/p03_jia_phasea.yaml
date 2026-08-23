@@ -1,0 +1,35 @@
+# P0.3 姚青 JIA 迁移 Phase A — 锚点学习 + 原型聚类（W8 窗口）
+# 口径: 公开真实层 - 物理先验伪标签（InterPet4D v1），禁止与合成层混报
+# 方法口径: docs/paper/method.md §3.3 Algorithm 1 初始化版（迭代自训练属 P0.4）
+# 输入: W6 规则种子 data/seeds/rule_seeds/*.npz（只读）+ P0.1 冻结骨干（只读）
+
+data:
+  seeds_dir: data/seeds/rule_seeds
+  smal_npy_dir: "D:/Desktop/k9-training-system/data/interpet4d/smal_npy"
+  processed_dir: data/processed/p03     # 段 embedding 缓存（生成物，gitignore）
+
+backbone:
+  weights: runs/p01_aimclr_pretext/epoch120_model.pt   # Φ 冻结，全程不更新
+  target_t: 64            # 与 P0.1 导出口径一致
+  conf_threshold: 0.5     # to_ntu_view 低置信置零阈值（同 P0.1）
+
+filter:                   # W6 报告 §8 移交消费规则（强制）
+  conf_min: 0.8
+  min_duration_s: 0.5
+
+split:                    # clip 级不相交切分（防同 clip 相邻段泄漏）
+  eval_ratio: 0.3
+  split_seed: 42         # 全部扫描共用同一评估侧，保证曲线可比
+
+experiment:
+  run_seeds: [42, 43, 44]        # 统计协议: >=3 seeds 报 mean±std
+  tau_grid: [0.0, 0.02, 0.05, 0.1, 0.15, 0.2, 0.3]
+  freq_alpha_default: 1.0        # frequency-aware margin 默认开启（method §3.3.2）
+  freq_alpha_ablation: 0.0       # 关闭开关（消融行）
+  ratios: [0.25, 0.5, 0.75, 1.0] # 种子比例扫描 |S|
+  ks: [5, 7, 10, 14]             # 聚类数扫描（kmeans 初始化模式）
+  noise_rates: [0.0, 0.1, 0.2, 0.3]  # 种子噪声注入（风险登记册 R8 缓解项）
+  batch_size: 128
+
+acceptance:
+  purity_min_ratio_vs_random: 1.5   # 交接 §6 升级线：低于此值上报用户
