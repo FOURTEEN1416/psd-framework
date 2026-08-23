@@ -1,0 +1,46 @@
+# P0.2 E-B 实验：时间分辨率提升——唯一变量 patch_size 32→16
+# 假设（W7 冲刺预注册）：ep1 种子 GT 存在大量 15-27 帧短段，32 帧预测网格
+#   对其存在结构性 IoU 天花板（25帧段≈0.21）；官方本身按数据集调 patch
+#   （HuGaDB=60/LARa=50/BABEL=30），16 帧≈0.53s 与 W6 消费规则最短段 0.5s 对齐。
+# 其余全部继承 E-A（含 mse_loss_weight=1.0 修复）。
+# 成功目标（ADR-0003 预注册）：seeds mean IoU ≥0.45 或 ep1≥随机×1.3 且均值≥0.43。
+
+run_name: "p02_smq_eB"
+
+data_root: "D:/Desktop/k9-training-system/data/interpet4d/smal_npy"
+work_root: "data/processed/p02"
+
+in_channels: 3
+target_t: null
+num_joints: 24
+num_person: 1
+conf_threshold: 0.5
+
+filters: 128
+num_layers: 3
+latent_dim: 16
+num_actions: 16
+patch_size: 16       # ← E-B 唯一变量（E-A=32）
+decay: 0.5
+kmeans: true
+kmeans_metric: euclidean
+sampling_quantile: 0.5
+replacement_strategy: representative
+
+epochs: 30
+batch_size: 4
+ep_clips_train: 4
+lr: 5.0e-4
+commit_weight: 1.0
+mse_loss_weight: 1.0
+joint_distance_recons: true
+sample_rate: 1
+seed: 1538574472
+
+eval_episodes: 4
+ep_clips: 5
+eval_seed: 42
+min_seg_len: 16      # 与新网格对齐（评估时另扫 32 作对照）
+boundary_tol: 16     # 保持 ±0.53s 绝对容差不变，口径可比
+random_baseline_sims: 200
+vis_episodes: 2
