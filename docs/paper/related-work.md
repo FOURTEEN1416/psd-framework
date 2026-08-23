@@ -22,7 +22,7 @@ Sensor-based methods use accelerometers or IMUs. They capture coarse daily activ
 
 ## 2.2 Skeleton-Based Self-Supervised and Unsupervised Learning
 
-Self-supervised representation learning for skeletons is mature in the human domain. ST-GCN established graph convolutions over joint topologies [arXiv 1801.07455], and PoseConv3D recasts keypoints as heatmap volumes for 3D convolution [CVPR 2022; CITATION-NEEDED: DOI]. Among purely unsupervised objectives, AimCLR maximizes asymmetry across extreme augmented views with an InfoNCE queue and reports 79.18% on NTU60 [AAAI 2022; repo github.com/Levigty/AimCLR; evaluation protocol detail pending re-check against the original paper]; its journal extension AimCLR++ further improves NTU cross-subject accuracy to 77.2% [Pattern Recognition 2024; repo github.com/Levigty/AimCLR-v2]. For temporal structure, unsupervised segmentation methods quantize motion into discrete vocabularies; Skeleton Motion Words (SMQ) derives behavior-proposal boundaries from motion-word sequences [ICCV 2025; CITATION-NEEDED: arXiv ID].
+Self-supervised representation learning for skeletons is mature in the human domain. ST-GCN established graph convolutions over joint topologies [arXiv 1801.07455], and PoseConv3D recasts keypoints as heatmap volumes for 3D convolution [CVPR 2022; CITATION-NEEDED: DOI]. Among purely unsupervised objectives, AimCLR maximizes asymmetry across extreme augmented views with an InfoNCE queue and reports 79.18% on NTU60 [AAAI 2022; repo github.com/Levigty/AimCLR; evaluation protocol detail pending re-check against the original paper]; its journal extension AimCLR++ further improves NTU cross-subject accuracy to 77.2% [Pattern Recognition 2024; repo github.com/Levigty/AimCLR-v2]. Cross-view contrastive objectives form a parallel self-supervised family for skeletons [CITATION-NEEDED: representative cross-view works], and we treat the encoder choice as replaceable within our framework; AimCLR serves as the reference physics-layer instantiation rather than a load-bearing design commitment. For temporal structure, unsupervised segmentation methods quantize motion into discrete vocabularies; Skeleton Motion Words (SMQ) derives behavior-proposal boundaries from motion-word sequences [ICCV 2025; CITATION-NEEDED: arXiv ID].
 
 Two observations motivate our treatment of this literature. First, virtually all benchmarks, augmentations, and graph templates assume the human body plan; transferring these objectives to quadruped kinematics requires adapting joint topology, augmentation priors, and view construction. Second, pretraining and segmentation are studied separately, although a recognition system needs both: representations without proposals cannot localize behaviors, and proposals without semantics cannot name them. State-space backbones such as VideoMamba [ECCV 2024] and Mamba-MSQNet for animal action recognition [Ecological Informatics 2024; CITATION-NEEDED: full bibliographic record] offer efficiency alternatives but do not address label scarcity either.
 
@@ -45,7 +45,7 @@ Vision foundation models (VFMs) supply another route to low-shot recognition. Sk
 
 To the best of our knowledge, transferring the combination of seed-annotated anchor learning, prototype clustering, and iterated confidence-filtered pseudo-labeling to temporal-skeleton recognition has not been reported. Our claim of firstness rests on a systematic GitHub-scale survey covering ten query groups and fourteen candidate works with zero occupancy [internal survey; arXiv/Google Scholar re-verification is scheduled before submission]. We state this claim with that explicit boundary rather than as an absolute assertion.
 
-**Gap.** No existing method couples a label-free physics layer (self-supervised dynamics modeling plus unsupervised segmentation) with an anchor-guided semantic layer that grows from tens of seeds to a complete, revisable taxonomy. This coupling is precisely what evolving evaluation criteria demand, and it defines the contribution of this paper.
+**Gap.** Three absences compound across the three lines reviewed above. Animal behavior understanding offers no label-efficient path and no mechanism for taxonomy change (§2.1). Skeleton-based self-supervision supplies representation machinery that has never been adapted to quadruped data, and treats segmentation as a separate problem (§2.2). Semi-supervised learning supplies pseudo-label machinery whose components—seed-annotated anchors, prototype clustering, iterated confidence-filtered labeling—have never been assembled for temporal-skeleton recognition (§2.3). No existing method couples a label-free physics layer (self-supervised dynamics modeling plus unsupervised segmentation) with an anchor-guided semantic layer that grows from tens of seeds to a complete, revisable taxonomy. This coupling is precisely what evolving evaluation criteria demand, and it defines the contribution of this paper.
 
 ---
 
@@ -68,6 +68,7 @@ To the best of our knowledge, transferring the combination of seed-annotated anc
 
 ### 待办（移交后续窗口）
 - [ ] 补全 6 处 [CITATION-NEEDED] 完整题录（arXiv 号 / DOI），来源：投稿前文献终审窗口
+- [ ] **补三个数据集原始论文题录**（InterPet4D / Animal Kingdom / APTv2）——PR 投稿硬要求，见 outline.md §6
 - [ ] SMQ 与 AimCLR 的具体数字（79.18%/77.2%/75.3%）在投稿前对照原文复核一遍
 - [ ] 若 P0.2-P0.5 结论变化，回改 2.2/2.3 的差距句强度
 
@@ -76,3 +77,4 @@ To the best of our knowledge, transferring the combination of seed-annotated anc
 | 版本 | 日期 | 变更 |
 |------|------|------|
 | v0.1 | 2026-08-23 | W5 窗口初稿：三小节 + 三近邻表 + 自审一轮 |
+| v0.2 | 2026-08-23 | 对抗评审加固：§2.2 补跨视角 SSL 谱系承认句（防"文献覆盖不全"指控）+ 总 Gap 改三缺口合成结构 + 待办增补数据集论文引用项 |

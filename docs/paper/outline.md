@@ -136,8 +136,12 @@
 | §2.3 | Skeleton-to-Image Encoding | arXiv 2603.05963 | ✅ 池内 |
 | §2.3 | TCL | CVPR 2021 | ⚠️ [CITATION-NEEDED: DOI/repo] |
 | §2.3 | DINO（VFM 代表） | — | ❌ [CITATION-NEEDED]（池外） |
+| §4.1 | **InterPet4D 数据集论文** | — | ❌ [CITATION-NEEDED]（池外；用了数据集必须引出处，PR 硬要求） |
+| §4.1 | **Animal Kingdom 数据集论文** | — | ❌ [CITATION-NEEDED]（池外，同上） |
+| §4.1 | **APTv2 数据集论文** | — | ❌ [CITATION-NEEDED]（池外，同上） |
 
 > 铁律执行情况：池外或题录不全者一律 `[CITATION-NEEDED]` 并在文中显式标记；绝不凭记忆生成题录。
+> ⚠️ 数据集引用为收录硬门槛（v0.2 评审新增）：三个数据集的原始论文题录必须在文献终审窗口补齐，否则直接进 Major Revision。
 
 ---
 
@@ -147,7 +151,33 @@ Abstract 0.2 ｜ Intro 1.5 ｜ RW 1.5 ｜ Method 4 ｜ Experiments 3 ｜ Ablatio
 
 ---
 
-## 8. 本窗口完成度声明（诚实版）
+## 8. 审稿风险登记册与收录检查单（v0.2 新增，五视角对抗评审产物）
+
+### 8.1 风险登记册（按严重度排序；🔴 未消除前不投稿）
+
+| # | 级别 | 风险 | 缓解动作 | 状态 |
+|---|------|------|---------|------|
+| R1 | 🔴 CRITICAL | **行为级证据为零**：唯一实测数字是 dog-ID 代理探针，审稿人将质疑"承诺行为识别却无行为识别证据" | C3 措辞永久锁死在"表征区分度"层面；C4-C7 行为级主张全部显式挂 PENDING；P0.4/P0.5 是投稿硬前置 | ⏳ 待实验 |
+| R2 | 🔴 CRITICAL | **标题过度主张风险**：副句 "under Evolving Evaluation Criteria" 的唯一证据 E6 待做 | E6 设计已在 §3.4 形式化；预案：E6 若弱则降级标题为 "...for Low-Resource Animal Behavior Recognition"（投稿前用户裁决） | ⏳ 待实验 |
+| R3 | 🟠 MAJOR | **incremental 指控**："已知组件组合 + 换域 = 增量工作" | 解耦机制列第一贡献；method.md 补迁移非平凡性论证段；related-work.md 三近邻表量化差异 | ✅ 写作侧已加固 |
+| R4 | 🟠 MAJOR | **重实现正确性存疑**：AimCLR/SMQ/TCL 均为本仓适配实现，审稿人会要求验证实现等价性 | 对比研究增补 NTU 参照基准复现行（experiment-skeleton §4.4【需用户决策】） | ⏳ 用户决策 |
+| R5 | 🟠 MAJOR | **数据集论文未引**：InterPet4D/AK/APTv2 引用缺失（PR 投稿硬要求） | 引用计划 §6 已补三条 [CITATION-NEEDED]；文献终审窗口必须补齐 | ⏳ 待终审 |
+| R6 | 🟡 MINOR | 统计严谨性质疑 | experiment-skeleton 已补统计协议节 | ✅ 协议已立 |
+| R7 | 🟡 MINOR | 数据许可与伦理声明（PR 投稿系统必填） | brief §8 许可终审项覆盖；投稿前补 Data Availability + Ethics 声明 | ⏳ 已跟踪 |
+
+### 8.2 PR 收录检查单映射
+
+| PR 典型录用要件 | 本文现状 |
+|----------------|---------|
+| 方法论新颖性（非纯应用） | ✅ 解耦框架 + 迁移组合（W1 核验）；写作侧已防 incremental 指控 |
+| 广泛充分的实验 | ⏳ P0.2-P0.5 全部待做——**当前最大短板，投稿前置** |
+| 与 SOTA 对比 | ⏳ 对比研究骨架已建；NTU 复现行待用户决策 |
+| 统计严谨（误差棒+显著性检验） | ✅ 协议已立，待数据 |
+| 可复现性（代码/超参公开） | ✅ 一条命令复现链已有（P0.1 实测）；开源计划见定位文档 §6 |
+| 诚实局限声明 | ✅ Limitations 独立成段设计 |
+| 图表质量规范 | ✅ 规范节已立（白底/≤6色/色盲安全/矢量图） |
+
+## 9. 本窗口完成度声明（诚实版）
 
 - ✅ 本大纲（含 Claims-Evidence 矩阵、图表规划、引用计划）
 - ✅ `related-work.md` 英文初稿 ≥800 词（经 auto-review-loop 清单 + check-citations 清单自审一轮）
@@ -155,7 +185,7 @@ Abstract 0.2 ｜ Intro 1.5 ｜ RW 1.5 ｜ Method 4 ｜ Experiments 3 ｜ Ablatio
 - ✅ `experiment-skeleton.md` 三层口径骨架（含图表规范节）
 - 🚫 不做：实验数字填充（等 P0.2-P0.5）、Introduction 终稿、投稿格式排版
 
-## 9. 方法论适配记录（工具集 → PR 英文期刊裁剪）
+## 10. 方法论适配记录（工具集 → PR 英文期刊裁剪）
 
 | 工具集原规则 | 本仓适配 | 依据 |
 |------|------|------|
@@ -170,3 +200,4 @@ Abstract 0.2 ｜ Intro 1.5 ｜ RW 1.5 ｜ Method 4 ｜ Experiments 3 ｜ Ablatio
 | 版本 | 日期 | 变更 |
 |------|------|------|
 | v0.1 | 2026-08-23 | W5 窗口建纲：故事线 + C1-C8 矩阵 + 逐节规划 + 图表/引用计划 |
+| v0.2 | 2026-08-23 | 五视角对抗评审：新增 §8 风险登记册（R1-R7，含两条 CRITICAL）+ PR 收录检查单；引用计划补三个数据集论文 [CITATION-NEEDED]；章节重编号 |

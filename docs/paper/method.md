@@ -1,6 +1,7 @@
 # 3. Method（英文框架稿 · P0.6）
 
-> Owner: `docs/paper/method.md` · W5 窗口 2026-08-23 · 状态: 框架 v0.1——结构与可写部分已成文，**全部实验数字以 `[PENDING P0.x]` 占位**
+> Owner: `docs/paper/method.md` · W5 窗口 2026-08-23 · 状态: 框架 v0.2——结构与可写部分已成文，**全部实验数字以 `[PENDING P0.x]` 占位**
+> v0.2 对抗评审加固：§3.3 增迁移非平凡性论证段（防 incremental 指控）；§3.4 成本函数形式化（C_decoupled vs C_full @matched accuracy）。
 > 写作规范（galaxy Method 章）: 以可复现为标准；呈现最终设计决策；消融留给 §4-§5；超参列表化。
 
 ---
@@ -38,6 +39,8 @@ Continuous skeleton streams must be cut into behavior-proposal units before labe
 
 The semantic layer grows a complete taxonomy from the rule-engine seed set $S$, following the anchor–cluster–pseudo-label recipe transferred from image-domain few-shot recognition [W1 novelty survey; see §2.3].
 
+The transfer is not a drop-in replacement, and its non-triviality is a designed-in property rather than an incidental one. Three domain shifts require re-engineering rather than re-application: (i) anchors must be defined over *temporal segment embeddings* from a self-supervised physics encoder instead of image features, so anchor quality depends on representation adequacy (§3.2.1); (ii) prototype clustering operates on variable-length proposals delivered by unsupervised segmentation rather than fixed-size inputs, coupling label expansion quality to segmentation quality (§3.2.2); and (iii) confidence calibration must tolerate quadruped kinematics whose intra-class motion variance differs from both image textures and human locomotion. Each shift is validated separately in §4–§5 before the composed pipeline is evaluated.
+
 ### 3.3.1 Anchor Learning
 
 Rule-engine coarse labels over physical priors provide seed anchors $A = \{(e_i, y_i)\}$, where $e_i$ are physics-layer embeddings of seed segments. Anchors are learned as class-representative prototypes initialized from seed embeddings and refined during training. Unlike anchor-based contrastive objectives that treat anchors as sample pairs [MAC-Learning, TPAMI 2022], our anchors carry semantic identity and directly supervise cluster assignment.
@@ -67,14 +70,14 @@ Pseudo-labeled coverage is consolidated by temporal contrastive self-training in
 
 ## 3.4 Decoupling Mechanism
 
-We formalize an evaluation-criteria evolution as a taxonomy transition $\mathcal{Y} \to \mathcal{Y}'$ (splitting, merging, renaming, or adding behaviors). Under decoupling:
+We formalize an evaluation-criteria evolution as a taxonomy transition $\mathcal{Y} \to \mathcal{Y}'$ (splitting, merging, renaming, or adding behaviors). We define the transition cost as $C(\mathcal{Y} \to \mathcal{Y}') = $ human annotation units consumed plus wall-clock retraining time, measured at matched final accuracy. Under decoupling:
 
 1. the physics layer $\Phi$ and its pretrained parameters remain frozen;
 2. existing segment proposals are re-used—only their label assignments change;
 3. the semantic layer is rebuilt through §3.3 using seeds under $\mathcal{Y}'$;
-4. transition cost is measured in human annotation units plus wall-clock retraining time.
+4. the reported quantity is $C_{\text{decoupled}}(\mathcal{Y} \to \mathcal{Y}')$ versus $C_{\text{full}}(\mathcal{Y} \to \mathcal{Y}')$, where the full baseline retrains representation learning under $\mathcal{Y}'$.
 
-The non-decoupled baseline retrains the full pipeline under $\mathcal{Y}'$, including representation learning. We hypothesize that decoupled transition cost is strictly lower and that accuracy under $\mathcal{Y}'$ matches full retraining within noise. **[CLAIM NEEDS EVIDENCE → P0.5 experiment C1]**
+We hypothesize that $C_{\text{decoupled}} < C_{\text{full}}$ at matched accuracy, and that accuracy under $\mathcal{Y}'$ matches full retraining within noise. **[CLAIM NEEDS EVIDENCE → P0.5 experiment C1]**
 
 ---
 
@@ -103,3 +106,4 @@ The non-decoupled baseline retrains the full pipeline under $\mathcal{Y}'$, incl
 | 版本 | 日期 | 变更 |
 |------|------|------|
 | v0.1 | 2026-08-23 | W5 窗口框架稿：四小节结构 + 算法 1 伪代码 + 占位符体系 |
+| v0.2 | 2026-08-23 | 对抗评审加固：迁移非平凡性论证段 + 解耦成本函数形式化（matched accuracy 条件显式化） |

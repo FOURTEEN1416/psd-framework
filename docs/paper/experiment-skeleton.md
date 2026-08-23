@@ -1,6 +1,7 @@
 # 4-5. Experiments & Ablation 骨架（三层口径 · P0.6）
 
-> Owner: `docs/paper/experiment-skeleton.md` · W5 窗口 2026-08-23 · 状态: 骨架 v0.1——**全部数字 `[PENDING]` 占位，唯一例外为 P0.1 已归档实测值**
+> Owner: `docs/paper/experiment-skeleton.md` · W5 窗口 2026-08-23 · 状态: 骨架 v0.2——**全部数字 `[PENDING]` 占位，唯一例外为 P0.1 已归档实测值**
+> v0.2 对抗评审加固：统计协议节 + 数据集引用义务注记 + NTU 实现正确性验证行【需用户决策】+ E1 折间方差披露。
 > 规范来源: `analyze-results` 结果呈现规范 + galaxy 实验章要求（每个实验先声明支撑哪条 claim）+ AGENTS.md 三层口径铁律
 
 ---
@@ -27,12 +28,25 @@
 - 超参冻结表：见 `method.md` §超参与复现清单；未冻结项在数据到位前不得写入正文。
 - 复现性：一条命令复现序列已在 `reports/p01-aimclr-2026-08-23.md` §7 归档，投稿时整理为 appendix。
 
+### 统计协议（v0.2 新增，PR 统计严谨性要件）
+
+| 项 | 执行标准 |
+|----|---------|
+| 集中趋势与离散度 | 一律 mean±std（fold 级或 seed 级，注明来源）；禁止只报单次最优 |
+| 显著性检验 | 主表对比做 fold 级配对检验（正态性通过用配对 t 检验，否则 Wilcoxon 符号秩），报告 p 值；基线对照同规则 |
+| 多重比较 | 同表 ≥3 组对比时做校正（Holm-Bonferroni），注明校正方法 |
+| 效应量 | 倍率/Δ 与原始值并列；kNN 类探针附随机基线参照线 |
+| 异常值 | 显式列出并解释（如 P0.1 的全 NaN clip 剔除），禁止静默剔除 |
+| 折间方差披露 | E1 现有折间极差大（15.56%–26.67%），成稿必须讨论方差来源（序列数少、个体差异）而非隐藏 |
+
+> 数据集引用义务：§4.1 提及的 InterPet4D / Animal Kingdom / APTv2 必须引原始论文（outline §6 已挂三条 [CITATION-NEEDED]）。
+
 ## 4.3 主实验（Main Results）——逐实验声明 claim
 
 ### E1 物理层表征质量 → 支撑 C3
 *This experiment tests whether self-supervised pretraining on unlabeled quadruped skeletons yields discriminative dynamics representations.*
 - 口径：公开真实层（InterPet4D），dog-ID 代理探针（口径披露句随行）。
-- **已可填**：kNN top-1 **20.89% ± [PENDING std]** vs 随机 8.33%，倍率 **2.51×**（fold 明细：20.00/15.56/26.67/22.22/20.00）。来源：`reports/p01-knn-result.json`。
+- **已可填**：kNN top-1 **20.89% ± [PENDING std]** vs 随机 8.33%，倍率 **2.51×**（fold 明细：20.00/15.56/26.67/22.22/20.00；⚠️ 折间极差 11.1 个百分点，成稿须披露并归因于 225 序列的小样本方差）。来源：`reports/p01-knn-result.json`。
 - 对照行：projection-head 特征口径 12.89%（1.55×）——两口径并存披露，不择优单报。
 
 ### E2 无监督分割质量 → 支撑 C4
@@ -64,6 +78,7 @@
 | 分割策略 | 运动词量化 vs 滑动窗口 vs 均匀切分 | ⏳ 待 P0.2 |
 | 语义扩展 | 锚点聚类伪标签 vs 一致性正则 vs mean-teacher | ⏳ 待 P0.3/P0.4 |
 | 动物域参照 | ASBAR（PoseConv3D）/ BCST-GCN 式图卷积（可复现行） | ⏳ 视工程量裁剪，砍项需用户确认 |
+| **实现正确性验证**【需用户决策】 | 在 NTU60 子集上复现 AimCLR 原文参照成绩（79.18% 口径待核），证明本仓适配实现与官方等价后再用于动物域——重实现类论文的标配防线（风险登记册 R4） | ⏳ 工程量约半天 GPU 时，用户拍板是否纳入 P0 范围 |
 
 ## 5. 消融与分析（Ablation and Analysis）— tab3 占位
 
@@ -93,6 +108,7 @@
 
 - [ ] 所有 `[PENDING]` 数字待 P0.2-P0.5 报告归档后回填，回填时同步更新 outline.md 的 Claims-Evidence 矩阵状态
 - [ ] E4 对比研究"动物域参照行"若工程量超支，砍项决定须上报用户
+- [ ] **NTU 实现正确性验证行是否纳入 P0 范围——待用户决策（风险登记册 R4 的关键缓解项）**
 - [ ] 合成层规模登记待 K9 资产移植（`docs/assets-map.md` 流程）
 
 ## 修订历史
@@ -100,3 +116,4 @@
 | 版本 | 日期 | 变更 |
 |------|------|------|
 | v0.1 | 2026-08-23 | W5 窗口骨架：E1-E6 实验-claim 映射 + 三层协议 + 图表规范 |
+| v0.2 | 2026-08-23 | 对抗评审加固：统计协议（配对检验+多重校正）+ 折间方差披露 + NTU 验证行【需用户决策】+ 数据集引用义务 |
