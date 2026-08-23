@@ -34,6 +34,46 @@ def runs_to_segments(runs: list[tuple[int, int, int]], min_len: int = 1) -> list
     return [(s, e) for _, s, e in runs if e - s >= min_len]
 
 
+def merge_short_runs(
+    runs: list[tuple[int, int, int]], min_len: int
+) -> list[tuple[int, int, int]]:
+    """把短于 min_len 的 run 吸收进相邻更长的 run（合并语义，非丢弃）。
+
+    与 runs_to_segments 的丢弃式过滤互补：丢弃会在时间轴上留洞，
+    合并则保持覆盖连续。短 run 并入两侧中更长的邻居；两端只有单侧邻居。
+    """
+    if not runs:
+        return runs
+    runs = [list(r) for r in runs]
+    changed = True
+    while changed and len(runs) > 1:
+        changed = False
+        for i, r in enumerate(runs):
+            if r[2] - r[1] >= min_len:
+                continue
+            left = runs[i - 1] if i > 0 else None
+            right = runs[i + 1] if i + 1 < len(runs) else None
+            if left is None and right is None:
+                break
+            if right is None or (left is not None and
+                                 left[2] - left[1] >= right[2] - right[1]):
+                left[2] = r[2]                      # 并入左邻
+            else:
+                right[1] = r[1]                     # 并入右邻
+            runs.pop(i)
+            changed = True
+            break
+    return [tuple(r) for r in runs]
+
+
+def segmentation_from_indices_merged(
+    indices: list[int] | np.ndarray, min_len: int = 1
+) -> list[tuple[int, int]]:
+    """code 序列 → 预测分割段（短 run 合并进长邻居，不留洞）。"""
+    return runs_to_segments(merge_short_runs(indices_to_runs(indices), min_len),
+                            min_len=1)
+
+
 def segmentation_from_indices(
     indices: list[int] | np.ndarray, min_len: int = 1
 ) -> list[tuple[int, int]]:

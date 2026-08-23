@@ -38,6 +38,7 @@ from psd.training.segment_iou import (  # noqa: E402
     match_segments,
     random_baseline_mean_iou,
     segmentation_from_indices,
+    segmentation_from_indices_merged,
 )
 
 
@@ -53,6 +54,8 @@ def main() -> None:
     ap.add_argument("--seeds-dir", default="data/seeds/rule_seeds")
     ap.add_argument("--min-seg-len", type=int, default=None,
                     help="覆盖 config 的 min_seg_len（后处理敏感性扫描用，不影响训练）")
+    ap.add_argument("--short-run", choices=["drop", "merge"], default="drop",
+                    help="短 run 处理：drop=丢弃留洞(原行为) | merge=吸收进长邻居")
     ap.add_argument("--out", default="reports/p02-smq-iou.json")
     args = ap.parse_args()
     assert args.iou or args.vis, "至少指定 --iou 或 --vis"
@@ -99,7 +102,10 @@ def main() -> None:
         data = ep["data"]
         indices = seg.infer_indices(data, ckpt)
         min_len = args.min_seg_len if args.min_seg_len is not None else cfg["min_seg_len"]
-        pred = segmentation_from_indices(indices, min_len=min_len)
+        if args.short_run == "merge":
+            pred = segmentation_from_indices_merged(indices, min_len=min_len)
+        else:
+            pred = segmentation_from_indices(indices, min_len=min_len)
         if args.gt_protocol == "seeds":
             seed_gt = build_seed_gt_episode(REPO_ROOT / args.seeds_dir, feats_all, group)
             gt = [(s["start"], s["end"]) for s in seed_gt]
