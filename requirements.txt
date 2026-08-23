@@ -1,0 +1,13 @@
+# P0.1 运行环境（Python 3.12, RTX 5060 sm_120 → 必须 cu128 构建）
+# torch 系采用本地复制安装（K9 venv 同版本二进制），此处锁定版本口径：
+torch==2.11.0+cu128
+torchvision==0.26.0+cu128
+numpy>=2.0
+scipy>=1.14
+scikit-learn>=1.5
+h5py>=3.11
+tensorboardX>=2.6
+tensorboard>=2.17
+pyyaml>=6.0
+pillow>=10.0
+pytest>=8.0
