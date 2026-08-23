@@ -94,17 +94,17 @@
 
 ## 8. 下一步任务
 
-**当前三线并行（2026-08-23 晚起）**：
+**当前两线并行 + 一线收官（2026-08-24 换防）**：
 
 | 窗口 | 交接文档 | 任务 | 领地（互斥） |
 |------|---------|------|-------------|
-| W4 | `handovers/W4-p02-smq.md` | P0.2 SMQ 时序分割 | `*smq*` 文件 + psd/models/training |
-| W5 | `handovers/W5-p06-paper-draft.md` | P0.6 论文初稿启动 | 仅 `docs/paper/**`，零环境依赖 |
-| W6 | `handovers/W6-rule-seeds.md` | 规则引擎粗标（P0.3 锚点备料） | `rule_seeds` 前缀文件，起步用 InterPet4D 原生类别 |
+| **W7** | `handovers/W7-p02-smq-rescue.md` | P0.2 SMQ 分割**救援**（接管 W4：诊断优先，双口径评估，切换需用户裁决） | W4 原白名单全部（`*smq*` 文件、psd/models+training、scripts/configs 的 p02 文件、reports/p02-*）；含 W4 未提交产物接管清单 |
+| **W8** | `handovers/W8-p03-jia-phaseA.md` | P0.3 Phase A 锚点学习+原型聚类（消费 W6 种子，与 SMQ 解耦） | `*jia*/*p03*` 新文件、reports/p03-*；禁触一切 smq 文件与 rule_seeds 实现 |
+| ~~W5~~ | `handovers/W5-p06-paper-draft.md` | ✅ 写作侧收官（四件套+增量二三文件+两轮评审），剩余为 P0 数据依赖 | `docs/paper/**` 保持只读待回填 |
 
-> 并行纪律：各窗口只提交白名单内文件；stage-plan 编辑前重读最新内容做行级替换；`.venv` 归 W4 主用、他人只读 import；遇 git `index.lock` 等待重试。
+> 并行纪律：各窗口只提交白名单内文件；stage-plan 编辑前重读最新内容做行级替换；`.venv` 归实验窗口主用、他人只读 import；遇 git `index.lock` 等待重试。
 
-**已收官存档**：W1 创新核验 ✅ / W2 数据盘点 ✅ / W3→P0.1 达标 ✅（交接文档保留作过程证据：`W1-novelty-check.md` / `W2-data-inventory.md` / `W3-p01-bootstrap.md`）。
+**已收官存档**：W1 创新核验 ✅ / W2 数据盘点 ✅ / W3→P0.1 达标 ✅ / W4→P0.2 未达标转 W7 救援（交接文档保留：`W4-p02-smq.md`）/ **W6→规则种子完成 ✅（commit `aaa1e1c`，报告 `rule-seeds-2026-08-24.md`，P0.3 锚点备料就绪）** / **W5→论文写作侧清空 ✅（`be15708`..`6da4396`，评审记录 `docs/paper/review-log.md`）**。
 
 ## 9. 硬规则速查（完整版见 AGENTS.md）
 
@@ -123,6 +123,10 @@
 | 2026-08-23 | W2 窗口 | 数据深盘点：smal_npy 226✓ / AK 犬科实测 329≠声明338 / APTv2 实测 83,304≠声明242K → 溯源为规划期估计，K9 truth 已修正（`faaab28`）；DATA_LOCATIONS 回填 + brief §4 更新 |
 | 2026-08-23 | W3 窗口 | P0.1 全链：InterPet4D 加载器（TDD 9 passed）+ torch 2.11+cu128 锁定 + 修复表征坍缩（E1-E7 实验链）+ kNN 20.89% vs 随机 8.33%（2.51×达标）；AimCLR 已克隆 external/ |
 | 2026-08-23 | 歆歆（W1+收尾） | niais 目录补扫确认结论不变；统一收尾回写：PAPER_POSITIONING / brief §1§7§8 / stage-plan 前置#1 与头部状态 / HANDOVER v1.2。注：发现一处未提交越权编辑（PAPER_POSITIONING，内容正确已保留收录） |
+| 2026-08-24 | W6 窗口 | 规则引擎粗标完成：路径 b 前提证伪（用户裁定方案 3）+ SMAL 关节语义几何实测 + 物理先验 7 类规则族（TDD 11 passed，commit `aaa1e1c`）；全量 225 clip 种子落盘，帧占比 sitting 36.3%/walking 23.4%；移交 P0.3 消费规则（置信 ≥0.8、时长 ≥0.5s） |
+| 2026-08-24 | W4 窗口（进行中→转救援） | P0.2 两轮评估均失败：pred=单段[0,640]、IoU 0.20 < 随机 0.43、boundary F1=0；产物全部未提交 → 规划会话裁决转 W7 救援接管 |
+| 2026-08-24 | 歆歆（W5 论文线） | P0.6 四件套 + 增量二（introduction/conclusion-limitations/figure-specs）+ 两轮对抗评审 + 风险登记册 R1-R10 + 投稿就绪门；commits `be15708`..`6da4396`；写作侧清空待 P0 数据回填 |
+| 2026-08-24 | 歆歆（规划会话） | 全窗口复核（W4 失败态/W6 完成/W5 收官）→ 重规划：跨窗口协同洞察（种子伪 GT 救评估协议、P0.3 与 SMQ 解耦并行）→ 编制 W7/W8 交接文档 + HANDOVER v1.4 + stage-plan v1.2 |
 
 ## 11. 修订历史
 
@@ -132,3 +136,4 @@
 | v1.1 | 2026-08-23 | 任务路由改三窗口并行：handovers/ 白名单互斥边界 + 收尾回写约定 |
 | v1.2 | 2026-08-23 | 三窗口收官：§8 路由改为完成态 + P0.2 指向；会话历史补 W2/W3/收尾记录 |
 | v1.3 | 2026-08-23 | W3 补完收尾：§3 状态表/§4 环境基线同步实测事实（venv✅ P0.1✅ AimCLR✅ 核验✅）、§5 数据复核口径回填、§7 速查表增补 P0.1 kNN 与 AimCLR++ 候选 |
+| v1.4 | 2026-08-24 | 规划会话换防：§8 路由改 W7（P0.2 救援）/W8（P0.3 Phase A）两线并行，W5/W6 移交收官存档；§10 补 W6 完成、W4 转救援、W5 论文线、规划会话四条记录 |

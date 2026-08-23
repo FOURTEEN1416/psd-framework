@@ -1,6 +1,6 @@
 # Stage Plan — PSD-Framework
 
-> 状态: 🔄 执行中——P0.1 ✅ 达标（2026-08-23），P0.2-P0.6 ⏳ 待开工
+> 状态: 🔄 执行中——P0.1 ✅ 达标 / P0.2 🔴 失败待救援（W7）/ P0.3 PhaseA 🔄 开工（W8）/ P0.6 论文写作侧 ✅ 清空待回填；详见 HANDOVER v1.4 §8
 > 详细背景: 调研资料见 `research/`（复制自 k9 仓库）；立项期完整版计划存档于 k9 仓库 `dev-docs/stages/data-unblocking.md`（已冻结）
 
 ## 1. P0 数据解阻（当前唯一主线，3-4 周）
@@ -24,17 +24,17 @@
 | 子阶段 | 周期 | 关键交付 | 验证方式 |
 |--------|------|---------|---------|
 | ✅ P0.1 AimCLR 预训练 | 1 周 | 骨架编码器 + 预训练权重 + kNN top-1 显著超随机基线（4.5%） | `scripts/eval_aimclr.py --knn` + 报告归档（2026-08-23 达标：20.89% vs 8.33%，2.51×，见 `reports/p01-aimclr-2026-08-23.md`） |
-| P0.2 SMQ 时序分割 | 1 周 | 分割模型 + episode 边界 IoU 评估 + 可视化 | `scripts/eval_smq_segmentation.py --iou` |
-| P0.3 姚青 JIA 迁移 🔥 | 1 周 | VFM 骨干适配 + 时序动作锚点 + 22 类行为原型聚类 + 伪标签迭代 | 原型质量指标 + 伪标签精度曲线 |
+| 🔴 P0.2 SMQ 时序分割 | 1 周 | 分割模型 + episode 边界 IoU 评估 + 可视化 | `scripts/eval_smq_segmentation.py --iou`（**2026-08-24 复核：两轮评估 IoU 0.20 < 随机 0.43 未达标，转 W7 救援——`handovers/W7-p02-smq-rescue.md`**） |
+| 🔄 P0.3 姚青 JIA 迁移 🔥 | 1 周 | VFM 骨干适配 + 时序动作锚点 + 行为原型聚类 + 伪标签迭代 | 原型质量指标 + 伪标签精度曲线（**Phase A 锚点+聚类已开工 W8，消费 W6 规则种子、与 SMQ 解耦——`handovers/W8-p03-jia-phaseA.md`**） |
 | P0.4 TCL 半监督增强 | 1 周 | 增强伪标签 | 对比 P0.3 伪标签精度提升 |
 | P0.5 骨干微调评估 | 1 周 | ST-GCN+BC / Mamba 微调 ≥85%（22 类） | 三层指标口径报告 |
-| P0.6 论文初稿 | 并行 | Pattern Recognition 初稿 | 用户评审 |
+| ✅ P0.6 论文初稿（写作侧） | 并行 | Pattern Recognition 初稿框架 | 用户评审（2026-08-24 写作侧清空：四件套+增量二三文件+两轮对抗评审+风险登记册，`docs/paper/review-log.md`；数字回填待 P0.2-P0.5） |
 
 ### 启动前置（阻塞项）
 
 1. ✅ **姚青 JIA 创新性核验**（2026-08-23 W1 完成：GitHub 链 10 组查询 + 14 项候选排查零占坑，初步成立；投稿前 arXiv/Scholar 终审保留——见 `research/NOVELTY_CHECK_YAOQING_JIA.md`）
 2. ✅ 数据集磁盘路径盘点 → 建立 `docs/DATA_LOCATIONS.md`（2026-08-23 W2 数量级复核完成，实测差异见 `reports/data-inventory-2026-08-23.md`）
-3. 🔄 外部方法仓库克隆（`external/`：AimCLR / SMQ / TCL 官方实现）——AimCLR ✅ 已克隆（P0.1 使用）；SMQ / TCL ⏳ P0.2/P0.4 开工前执行
+3. 🔄 外部方法仓库克隆（`external/`：AimCLR / SMQ / TCL 官方实现）——AimCLR ✅（P0.1）；SMQ ✅ 已克隆（W4）；TCL ⏳ P0.4 开工前
 
 ## 2. 风险预案（继承自上游 stage-plan §5.1）
 
@@ -51,3 +51,4 @@
 |------|------|------|
 | v1.0 | 2026-08-23 | 建仓承接 P0 主线；全部子阶段未开工 |
 | v1.1 | 2026-08-23 | 收尾回写：三窗口完成——P0.1 ✅ 达标（kNN 20.89%, 2.51×）、姚青核验 ✅ 零占坑（W1）、数据盘点溯源闭环（W2）、外部克隆 AimCLR ✓（SMQ/TCL 待补）；头部状态与前置项同步 |
+| v1.2 | 2026-08-24 | 规划会话换防：P0.2 标注失败态转 W7 救援、P0.3 拆 Phase A 开工转 W8（与 SMQ 解耦消费 W6 种子）、P0.6 写作侧收官标注、前置#3 SMQ 克隆状态更新 |
