@@ -90,17 +90,13 @@
 | ≥85% | P0.5 微调验收线（22 类） | stage-plan |
 | 3-4 周 | P0 总周期 | stage-plan |
 
-## 8. 下一步任务（2026-08-23 起改为三窗口并行）
+## 8. 下一步任务
 
-**入口：`dev-docs/handovers/` 三份窗口交接文档，各窗口读对应文档即开工：**
+**三窗口并行已全部收官（2026-08-23）**：W1 创新核验 ✅ / W2 数据盘点 ✅ / W3 P0.1 达标 ✅。收尾回写已完成（PAPER_POSITIONING / brief / stage-plan 前置状态）。
 
-| 窗口 | 交接文档 | 任务 | 文件白名单（互斥） |
-|------|---------|------|-------------------|
-| W1 | `W1-novelty-check.md` | 🔬 姚青 JIA 创新性核验（GitHub-First） | 仅 `dev-docs/research/NOVELTY_CHECK_*.md` |
-| W2 | `W2-data-inventory.md` | 📂 数据数量级复核回填 | `DATA_LOCATIONS.md` + brief §4 + stage-plan 前置#2 |
-| W3 | `W3-p01-bootstrap.md` | 🚀 P0.1 AimCLR 预训练开工 | `psd/` `scripts/` `configs/` `external/` + stage-plan P0.1 行 |
+**当前主线 → P0.2 SMQ 时序分割**（见 `stage-plan.md` §1；开工前先克隆 SMQ 到 external/）。
 
-> 并行纪律：各窗口只提交白名单内文件；stage-plan 编辑前必须重读最新内容做精确行级替换；遇 git `index.lock` 等待重试。三窗口全部完成后由收尾会话统一回写其余 truth 文档（PAPER_POSITIONING「待核验」等）。
+> 历史路由表存档：W1=`handovers/W1-novelty-check.md`，W2=`handovers/W2-data-inventory.md`，W3=`handovers/W3-p01-bootstrap.md`（均已完成，交接文档保留作过程证据）。
 
 ## 9. 硬规则速查（完整版见 AGENTS.md）
 
@@ -116,6 +112,9 @@
 |------|------|------|
 | 2026-08-23 | 歆歆（拆分建仓） | 双仓拆分执行：truth 链 7 文件 + 调研复制 5 份 + 数据盘点 + Git 检查点（本仓 `a512daf` / K9 仓 `d295634`+`4690661`+`6455146`）；K9 侧同步宪法 v1.31 / stage-plan v1.12 / brief v2.4 / HANDOVER v1.5 |
 | 2026-08-23 | 歆歆（接管+W1） | 接管基线审计通过；三窗口并行改造：handovers/ 三份交接文档 + §8 路由更新；本窗口执行 W1 创新性核验 |
+| 2026-08-23 | W2 窗口 | 数据深盘点：smal_npy 226✓ / AK 犬科实测 329≠声明338 / APTv2 实测 83,304≠声明242K → 溯源为规划期估计，K9 truth 已修正（`faaab28`）；DATA_LOCATIONS 回填 + brief §4 更新 |
+| 2026-08-23 | W3 窗口 | P0.1 全链：InterPet4D 加载器（TDD 9 passed）+ torch 2.11+cu128 锁定 + 修复表征坍缩（E1-E7 实验链）+ kNN 20.89% vs 随机 8.33%（2.51×达标）；AimCLR 已克隆 external/ |
+| 2026-08-23 | 歆歆（W1+收尾） | niais 目录补扫确认结论不变；统一收尾回写：PAPER_POSITIONING / brief §1§7§8 / stage-plan 前置#1 与头部状态 / HANDOVER v1.2。注：发现一处未提交越权编辑（PAPER_POSITIONING，内容正确已保留收录） |
 
 ## 11. 修订历史
 
@@ -123,3 +122,4 @@
 |------|------|------|
 | v1.0 | 2026-08-23 | 建仓交接：项目身份/双仓边界/环境基线/数据盘点/任务路由 |
 | v1.1 | 2026-08-23 | 任务路由改三窗口并行：handovers/ 白名单互斥边界 + 收尾回写约定 |
+| v1.2 | 2026-08-23 | 三窗口收官：§8 路由改为完成态 + P0.2 指向；会话历史补 W2/W3/收尾记录 |

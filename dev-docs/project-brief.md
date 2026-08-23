@@ -13,7 +13,7 @@
 **论文目标**：
 - **Title**：A Physics-Semantics Decoupled Framework for Low-Resource Animal Behavior Recognition under Evolving Evaluation Criteria
 - **目标期刊**：Pattern Recognition（IF≈8）/ IJCV
-- **核心创新候选**：图像域小样本伪标签方法（姚青 JIA：VFM 骨干 + 锚点学习 + 聚类 + 伪标签）迁移到**时序骨架域**，结合 AimCLR（AAAI 2022）+ SMQ（ICCV 2025）+ TCL（CVPR 2021）；"首次"主张待 GitHub-First 检索核验
+- **核心创新候选**：图像域小样本伪标签方法（姚青 JIA：VFM 骨干 + 锚点学习 + 聚类 + 伪标签）迁移到**时序骨架域**，结合 AimCLR（AAAI 2022）+ SMQ（ICCV 2025）+ TCL（CVPR 2021）；"首次"主张经 GitHub-First 检索初步核验成立（`research/NOVELTY_CHECK_YAOQING_JIA.md`，投稿前 Scholar 终审保留）
 
 **方向五层图（2026-08-23 用户口径）**：
 
@@ -63,14 +63,14 @@
 
 | 里程碑 | 状态 | 周期 |
 |--------|------|------|
-| P0 数据解阻（P0.1-P0.6） | ⏳ 全部未开工 | 3-4 周 |
+| P0 数据解阻（P0.1 ✅ / P0.2-P0.6 ⏳） | 🔄 进行中（P0.1 于 2026-08-23 达标，见 `reports/p01-aimclr-2026-08-23.md`） | 3-4 周 |
 | 论文投稿 Pattern Recognition / IJCV | ⏳ 待 P0 | P0 后 4-6 周 |
 
 详见 `stage-plan.md`。
 
 ## 8. 待确认事项
 
-- ⏳ **姚青 JIA 创新性核验**（GitHub-First 调研，P0.3 设计前完成——若创新点被占坑需重新设计）
+- ✅ **姚青 JIA 创新性核验**（GitHub-First 初步通过：10 组查询 + 14 项候选零占坑，见 `dev-docs/research/NOVELTY_CHECK_YAOQING_JIA.md`；⚠️ 投稿前保留 arXiv/Scholar 人工终审项）
 - ✅ 数据集磁盘路径盘点（含数量级复核回填，见 `docs/DATA_LOCATIONS.md`）
 - ⏳ 开源许可终审（投稿前；当前暂随 CC BY-NC 4.0）
 
@@ -79,3 +79,5 @@
 | 版本 | 日期 | 变更 |
 |------|------|------|
 | v1.0 | 2026-08-23 | 从 k9-training-system 拆分独立建仓（用户决策），承接研究线 ①②③ |
+| v1.1 | 2026-08-23 | 三窗口并行收官回写：创新核验初步通过（W1）、数据实测差异溯源（W2）、P0.1 达标（W3） |
+| v1.1 | 2026-08-23 | 三窗口收尾回写：JIA 核验初步通过（§8）、P0.1 达标（§7 里程碑刷新）、数据口径实测修正（§4） |
