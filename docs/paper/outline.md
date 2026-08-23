@@ -163,7 +163,7 @@ Abstract 0.2 ｜ Intro 1.5 ｜ RW 1.5 ｜ Method 4 ｜ Experiments 3 ｜ Ablatio
 | R1 | 🔴 CRITICAL | **行为级证据为零**：唯一实测数字是 dog-ID 代理探针，审稿人将质疑"承诺行为识别却无行为识别证据" | C3 措辞永久锁死在"表征区分度"层面；C4-C7 行为级主张全部显式挂 PENDING；P0.4/P0.5 是投稿硬前置 | ⏳ 待实验 |
 | R2 | 🔴 CRITICAL | **标题过度主张风险**：副句 "under Evolving Evaluation Criteria" 的唯一证据 E6 待做 | E6 设计已在 §3.4 形式化；预案：E6 若弱则降级标题为 "...for Low-Resource Animal Behavior Recognition"（投稿前用户裁决） | ⏳ 待实验 |
 | R3 | 🟠 MAJOR | **incremental 指控**："已知组件组合 + 换域 = 增量工作" | 解耦机制列第一贡献；method.md 补迁移非平凡性论证段；related-work.md 三近邻表量化差异 | ✅ 写作侧已加固 |
-| R4 | 🟠 MAJOR | **重实现正确性存疑**：AimCLR/SMQ/TCL 均为本仓适配实现，审稿人会要求验证实现等价性 | 对比研究增补 NTU 参照基准复现行（experiment-skeleton §4.4【需用户决策】） | ⏳ 用户决策 |
+| R4 | 🟠 MAJOR | **重实现正确性存疑**：AimCLR/SMQ/TCL 均为本仓适配实现，审稿人会要求验证实现等价性 | ✅ 用户已批准纳入（ADR 0002）；⚠️ 前置=NTU60 骨架数据获取（本仓现无），P0.2 释放 GPU 后独立小窗口执行 | 📋 已批准待排程 |
 | R5 | 🟠 MAJOR | **数据集论文未引**：InterPet4D/AK/APTv2 引用缺失（PR 投稿硬要求） | 引用计划 §6 已补三条 [CITATION-NEEDED]；文献终审窗口必须补齐 | ⏳ 待终审 |
 | R6 | 🟡 MINOR | 统计严谨性质疑 | experiment-skeleton 已补统计协议节 | ✅ 协议已立 |
 | R7 | 🟡 MINOR | 数据许可与伦理声明（PR 投稿系统必填） | brief §8 许可终审项覆盖；投稿前补 Data Availability + Ethics 声明 | ⏳ 已跟踪 |
