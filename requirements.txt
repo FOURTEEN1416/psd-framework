@@ -11,3 +11,7 @@ tensorboard>=2.17
 pyyaml>=6.0
 pillow>=10.0
 pytest>=8.0
+# P0.2 SMQ 增量依赖（tslearn 为 external/SMQ 模块级硬依赖）
+tslearn>=0.6
+tqdm>=4.66
+matplotlib>=3.8

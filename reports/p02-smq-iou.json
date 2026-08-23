@@ -1,0 +1,197 @@
+{
+ "protocol": "concatenation-episode-IoU",
+ "metric_layer": "public-real(InterPet4D smal_npy)",
+ "ckpt": "D:\\Desktop\\psd-framework\\runs\\p02_smq\\models\\epoch-30.model",
+ "episodes": [
+  {
+   "id": 1,
+   "clips": [
+    "interpet_dog08_p17_take01_ego_001",
+    "interpet_dog06_p02_take01_ego_001",
+    "interpet_dog03_p02_take01_ego_001",
+    "interpet_dog09_p19_take01_ego_001",
+    "interpet_dog10_p07_take01_ego_001"
+   ],
+   "T": 640,
+   "gt_segments": [
+    [
+     0,
+     128
+    ],
+    [
+     128,
+     256
+    ],
+    [
+     256,
+     384
+    ],
+    [
+     384,
+     512
+    ],
+    [
+     512,
+     640
+    ]
+   ],
+   "pred_segments": [
+    [
+     0,
+     640
+    ]
+   ],
+   "mean_matched_iou": 0.2,
+   "seg_precision@0.5": 0.0,
+   "seg_recall@0.5": 0.0,
+   "boundary_f1": 0.0,
+   "boundary_p": 0.0,
+   "boundary_r": 0.0,
+   "random_baseline_iou": 0.4281
+  },
+  {
+   "id": 2,
+   "clips": [
+    "interpet_dog07_p07_take01_ego_001",
+    "interpet_dog12_p11_take01_ego_001",
+    "interpet_dog04_p02_take01_ego_001",
+    "interpet_dog05_p02_take02_ego_001",
+    "interpet_dog01_p01_take01_ego_001"
+   ],
+   "T": 640,
+   "gt_segments": [
+    [
+     0,
+     128
+    ],
+    [
+     128,
+     256
+    ],
+    [
+     256,
+     384
+    ],
+    [
+     384,
+     512
+    ],
+    [
+     512,
+     640
+    ]
+   ],
+   "pred_segments": [
+    [
+     0,
+     640
+    ]
+   ],
+   "mean_matched_iou": 0.2,
+   "seg_precision@0.5": 0.0,
+   "seg_recall@0.5": 0.0,
+   "boundary_f1": 0.0,
+   "boundary_p": 0.0,
+   "boundary_r": 0.0,
+   "random_baseline_iou": 0.4256
+  },
+  {
+   "id": 3,
+   "clips": [
+    "interpet_dog02_p04_take01_ego_001",
+    "interpet_dog11_p22_take01_ego_001",
+    "interpet_dog08_p17_take01_ego_002",
+    "interpet_dog06_p02_take01_ego_002",
+    "interpet_dog03_p02_take01_ego_002"
+   ],
+   "T": 640,
+   "gt_segments": [
+    [
+     0,
+     128
+    ],
+    [
+     128,
+     256
+    ],
+    [
+     256,
+     384
+    ],
+    [
+     384,
+     512
+    ],
+    [
+     512,
+     640
+    ]
+   ],
+   "pred_segments": [
+    [
+     0,
+     640
+    ]
+   ],
+   "mean_matched_iou": 0.2,
+   "seg_precision@0.5": 0.0,
+   "seg_recall@0.5": 0.0,
+   "boundary_f1": 0.0,
+   "boundary_p": 0.0,
+   "boundary_r": 0.0,
+   "random_baseline_iou": 0.3984
+  },
+  {
+   "id": 4,
+   "clips": [
+    "interpet_dog09_p19_take03_ego_001",
+    "interpet_dog10_p07_take01_ego_002",
+    "interpet_dog07_p07_take01_ego_002",
+    "interpet_dog12_p11_take01_ego_002",
+    "interpet_dog04_p02_take01_ego_002"
+   ],
+   "T": 640,
+   "gt_segments": [
+    [
+     0,
+     128
+    ],
+    [
+     128,
+     256
+    ],
+    [
+     256,
+     384
+    ],
+    [
+     384,
+     512
+    ],
+    [
+     512,
+     640
+    ]
+   ],
+   "pred_segments": [
+    [
+     0,
+     640
+    ]
+   ],
+   "mean_matched_iou": 0.2,
+   "seg_precision@0.5": 0.0,
+   "seg_recall@0.5": 0.0,
+   "boundary_f1": 0.0,
+   "boundary_p": 0.0,
+   "boundary_r": 0.0,
+   "random_baseline_iou": 0.4063
+  }
+ ],
+ "aggregate": {
+  "mean_matched_iou": 0.2,
+  "std": 0.0,
+  "boundary_f1_mean": 0.0,
+  "n_episodes": 4
+ }
+}

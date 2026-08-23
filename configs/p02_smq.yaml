@@ -1,0 +1,44 @@
+# P0.2 SMQ 时序分割实验配置（InterPet4D smal_npy → SMQ ICCV 2025）
+# 口径：公开真实层；IoU 协议 = 拼接式 episode（源 clip 区间为 GT 段）
+
+data_root: "D:/Desktop/k9-training-system/data/interpet4d/smal_npy"
+work_root: "data/processed/p02"
+
+# 输入视图（SMAL 原生 V=24，无需 NTU 死关节槽位）
+in_channels: 3
+target_t: null       # E-D 协议：null=保留原生帧长（重采样致 patch 同质化→码塌缩）
+num_joints: 24
+num_person: 1
+conf_threshold: 0.5
+
+# SMQ 模型（对齐官方 main.py 默认，BABEL 同为 C=3/M=1 参考）
+filters: 128         # num_f_maps
+num_layers: 3
+latent_dim: 16
+num_actions: 16      # codebook 大小 K（无 GT 可依，显式指定）
+patch_size: 32       # VQ 时间窗；target_t*ep_clips 需整除该值
+decay: 0.5
+kmeans: true         # E-C：KMeans 初始化铺开码本（探针证实 kaiming+representative 替换正反馈致码塌缩）
+kmeans_metric: euclidean
+sampling_quantile: 0.5
+replacement_strategy: representative
+
+# 训练（官方默认起点；E-D：原生全长 episode，batch 4 控显存）
+epochs: 30
+batch_size: 4
+ep_clips_train: 4    # 训练 episode 拼接数（原生长度 ≈2000+ 帧/条）
+lr: 5.0e-4
+commit_weight: 1.0
+mse_loss_weight: 0.001
+joint_distance_recons: true
+sample_rate: 1
+seed: 1538574472     # 沿用官方种子口径
+
+# 评估（拼接式 episode IoU 协议）
+eval_episodes: 4
+ep_clips: 5          # 每 episode 拼接 clip 数（不同狗）→ episode T=640
+eval_seed: 42        # eval clips 抽选种子（与训练集隔离）
+min_seg_len: 32      # 分割段最短长度（=patch_size）
+boundary_tol: 16     # 边界 F1 容差（±半 patch）
+random_baseline_sims: 200
+vis_episodes: 2      # 可视化样本数
