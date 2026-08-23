@@ -33,7 +33,7 @@
 ### 启动前置（阻塞项）
 
 1. ⏳ **姚青 JIA 创新性核验**（GitHub-First 调研）——若创新点已被占坑，P0.3 与论文框架需重新设计
-2. ⏳ 数据集磁盘路径盘点 → 建立 `docs/DATA_LOCATIONS.md`
+2. ✅ 数据集磁盘路径盘点 → 建立 `docs/DATA_LOCATIONS.md`（2026-08-23 W2 数量级复核完成，实测差异见 `reports/data-inventory-2026-08-23.md`）
 3. ⏳ 外部方法仓库克隆（`external/`：AimCLR / SMQ / TCL 官方实现）→ P0.1 开工时执行
 
 ## 2. 风险预案（继承自上游 stage-plan §5.1）
