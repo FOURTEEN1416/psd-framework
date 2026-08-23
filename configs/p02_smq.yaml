@@ -6,10 +6,11 @@ work_root: "data/processed/p02"
 
 # 输入视图（SMAL 原生 V=24，无需 NTU 死关节槽位）
 in_channels: 3
-target_t: null       # E-D 协议：null=保留原生帧长（重采样致 patch 同质化→码塌缩）
+target_t: 128        # E-G：回到 T=128 快速协议验证 exploratory 机制（E-D 已证原生不解决塌缩）
 num_joints: 24
 num_person: 1
 conf_threshold: 0.5
+norm_mode: frame     # E-H：逐帧质心+尺度归一（sequence 级会连同运动信号一起抹平→表征塌缩）
 
 # SMQ 模型（对齐官方 main.py 默认，BABEL 同为 C=3/M=1 参考）
 filters: 128         # num_f_maps
@@ -18,15 +19,15 @@ latent_dim: 16
 num_actions: 16      # codebook 大小 K（无 GT 可依，显式指定）
 patch_size: 32       # VQ 时间窗；target_t*ep_clips 需整除该值
 decay: 0.5
-kmeans: true         # E-C：KMeans 初始化铺开码本（探针证实 kaiming+representative 替换正反馈致码塌缩）
+kmeans: true         # KMeans 初始化铺开码本（E-C 起保持开启）
 kmeans_metric: euclidean
 sampling_quantile: 0.5
-replacement_strategy: representative
+replacement_strategy: exploratory  # E-G：死码从低覆盖区重播种（representative 克隆热门区致塌缩）
 
-# 训练（官方默认起点；E-D：原生全长 episode，batch 4 控显存）
+# 训练（官方默认起点；E-G：T=128 快速协议 + exploratory 替换）
 epochs: 30
-batch_size: 4
-ep_clips_train: 4    # 训练 episode 拼接数（原生长度 ≈2000+ 帧/条）
+batch_size: 12
+ep_clips_train: 4    # 训练 episode 拼接数 → T=512 → 16 patch/样本
 lr: 5.0e-4
 commit_weight: 1.0
 mse_loss_weight: 0.001
