@@ -1,0 +1,37 @@
+# P0.3 JIA 迁移 Phase B — 原型聚类结果 → ADR-0002 裁决② 22 类体系映射（W13 窗口）
+# 口径: 池作用于公开真实层（public_real_physics_prior）；
+#       映射精度在合成层以留出协议度量（唯一存在 22 类真值的层），三层分开汇报
+# 输入: W6 规则种子（只读）+ P0.1 冻结骨干 Φ（只读）+ 路径 a 合成 22 类骨架集（只读）
+# 输出: data/processed/p03_phaseB/ 伪标签池（gitignore）供 P0.5 消费
+
+data:
+  seeds_dir: data/seeds/rule_seeds
+  smal_npy_dir: "D:/Desktop/k9-training-system/data/interpet4d/smal_npy"
+  processed_dir: data/processed/p03     # Phase A 段 embedding 缓存（指纹寻址，只读复用）
+  synthetic_pkl: data/synthetic/syn_22class_100per_class_seed42.pkl   # 2200 样本
+  output_dir: data/processed/p03_phaseB
+
+backbone:
+  weights: runs/p01_aimclr_pretext/epoch120_model.pt   # Φ 冻结，全程不更新
+  target_t: 64            # 与 P0.1/Phase A 导出口径一致（合成 T=30 重采样对齐）
+  conf_threshold: 0.5     # to_ntu_view 低置信置零阈值（合成权重恒 1，不触发）
+
+filter:                   # 与 Phase A 完全一致的消费规则（保证段集合指纹命中缓存）
+  conf_min: 0.8
+  min_duration_s: 0.5
+
+split:                    # 与 Phase A 完全一致（锚点/评估侧划分复现）
+  eval_ratio: 0.3
+  split_seed: 42
+
+experiment:
+  batch_size: 256
+
+bridge:                    # W13-C1 方案 B 语义桥（ST-GCN+BC penultimate）
+  stgcnbc_ckpt: runs/p05_stgcn_bc_full/best.pt   # 只读消费 W12 产物
+  target_t: 30             # 与 W12 训练口径一致
+
+phaseb:
+  probe_seed: 42              # 合成集分层对半切种子（ref 建原型 / probe 验证）
+  heldout_acc_gate: 0.50      # 完成标准: 映射精度（vs 合成真标签）≥ 0.50
+  pool_min_distinct_classes: 6  # C1 验收门: 真实池分布 ≥6 类（防单类坍缩）
