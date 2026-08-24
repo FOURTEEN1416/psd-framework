@@ -1,7 +1,7 @@
 # PSD-Framework — 项目交接文档
 
-> **版本**: v2.0
-> **日期**: 2026-08-24
+> **版本**: v2.1
+> **日期**: 2026-08-25
 > **项目根目录**: `D:\Desktop\psd-framework`
 > **交接会话**: 歆歆（sliver-vibe-coding）于 2026-08-23 完成建仓拆分 + truth 链初始化 + 数据盘点；W11 于 2026-08-24 完成 P0.5 前置工程
 > **上游决策**: `D:\Desktop\k9-training-system\dev-docs\decisions\0013-research-repo-split.md`（ADR 0013）
@@ -111,7 +111,7 @@
 | **W20** | `handovers/W20-p05-public-real-partialclass.md` | 任务书就绪（公开真实层部分类路线从零重建；W16 证伪映射已清除），状态以其文件为准 | 以其任务书为准 |
 | **W21** | `handovers/W21-paper-experiments-honest-backfill.md` | 任务书就绪（E5/E6 过期占位诚实修正——W14 负结果如实入论文） | `docs/paper/experiment-skeleton.md`、`outline.md` 等，以其任务书为准 |
 | **W22** | `handovers/W22-paper-figures-fig3-fig4.md` | 任务书就绪（fig3 分割可视化 + fig4 AL 效率曲线负结果照画） | `docs/paper/figures/**`（fig1/2 勿动） |
-| **W23** | `handovers/W23-p05-al-warmstart.md` | ⏳ 待启动（**用户裁决 A2**：warm-start+加噪偏移产出 E5 正证据候选；诊断→预注册→TDD→短预算→GPU 移交五步门） | `psd/training/active_learning*`、`scripts/run_p05_al_*`、`configs/p05_al_*`、plans/reports 的 w23 文件 |
+| **W23** | `handovers/W23-p05-al-warmstart.md` | ✅ **五步门完成**（2026-08-25：Step1 诊断选定 noise_std=0.10（0.15/0.20"自信地错"退化淘汰）→ Step2 预注册落盘 → Step3 TDD 4 测试先行 `init_from_ckpt` → Step4 short 扫描归档（**负结果如实记录**：强域内打分器下随机仍 3/3 seeds 全线反超熵 4.2~5.0pp，E5 维持 PENDING；warm-start 协议层正收益基线 7.8%→82%）→ Step5 full 排队 W18 Q4（用户可叫停）；报告 `reports/w23-p05-al-warmstart-2026-08-25.md`；路线变更候选上报用户裁决） | 已收官（full 判读回填归 W23 报告 v-next 或协调窗） |
 | **W24** | `handovers/W24-collab-worktree.md` | ✅ **完成**（2026-08-25：建窗脚本含 -Remove 安全卸窗 / AGENTS §4 并行纪律六条 / 冒烟全绿 pytest 288+tiny 训练+Junction 链验证 / 裁决落档 ADR-0005 / 报告 `reports/w24-worktree-governance-2026-08-25.md`；ADR 编号因冲突自 0003 顺延）；新窗口一律 worktree 开工 | 已收官（机制归 AGENTS §4） |
 
 > ⏳ ~~用户待决一项：NTU 数据获取渠道~~ → **已决并完成（渠道 A，2026-08-24）**：数据就位校验通过。
@@ -146,6 +146,7 @@
 | 2026-08-24 | W14 窗口（歆歆协调） | P0.5 AL 效率实验：TDD 17 绿（采样器/增量运行器/真实池打分/饱和诊断）+ 短预算 6 轨迹全量扫描归档 + 负结果双向论证报告；登记并行窗口 4 次文件干扰与 .venv 启动器父子进程误判教训；full-budget config 待 GPU 一键复跑 |
 | 2026-08-24 | 歆歆（复核+裁决会话） | W14 交付全项复核通过（22 校验点+数学重算）；向用户呈递决策菜单，获两项裁决：**A2** warm-start 协议采纳→W23 建册；**B-full** worktree 隔离采纳→W24 建册；§8 补登 W18-W22 路由行消除路由盲区；发现并修复自身编辑造成的 W14 行截断事故（程序化校验表列数兜底） |
 | 2026-08-25 | W24 窗口（协作治理） | B-full 落地交付 D1-D5：建窗脚本（含 -Remove 安全卸窗）/ AGENTS §4 并行纪律六条 / 冒烟 pytest 288 绿 + tiny 训练 Junction 链验证 + runs 隔离证明 / ADR-0005 双裁决落档（编号自 0003 冲突顺延）；登记 git 裸删窗跟随 Junction 误伤 data/.gitkeep 事故并闭环固化脚本防呆 |
+| 2026-08-25 | W23 窗口（歆歆，wt/W23 worktree） | warm-start 五步门全过：Step1 诊断三档选 noise_std=0.10（0.15/0.20"自信地错"退化淘汰，证据 JSON 归档）；Step2 预注册先于实现提交；Step3 TDD 4 测试先行 init_from_ckpt（AL 套件 21 绿/全仓 292 绿）；Step4 short 扫描 6 轨迹归档——**负结果**：强域内打分器下随机仍 3/3 seeds 反超熵 4.2~5.0pp（W14 弱打分器假说证伪为非唯一根因），协议层正收益基线 7.8%→82%；Step5 full 排队 W18 Q4；路线变更候选（类间轮转熵 / E5 叙事改写）上报用户裁决 |
 
 ## 11. 修订历史
 
@@ -162,3 +163,4 @@
 | v1.8 | 2026-08-24 | W14 窗口完成 P0.5 AL 效率实验管线：§8 新增 W14 行（TDD 17 绿 / 短预算曲线归档 / 饱和负结果 / full config 备好）；§10 补执行记录；版本抬头更新至 v1.8 |
 | v1.9 | 2026-08-24 | 用户双裁决落地（歆歆协调会话）：**A2** warm-start+加噪偏移→建册 `W23-p05-al-warmstart.md`；**B-full** worktree 物理隔离→建册 `W24-collab-worktree.md`；§8 补登 W18-W22 路由行（此前仅存在任务书未入表）；§10 补记录 |
 | v2.0 | 2026-08-25 | W24 完成 B-full 机制落地：§8 W24 行改 ✅ 收官（脚本含 -Remove 防呆卸窗 / AGENTS §4 并行纪律 / 冒烟 288 绿+Junction 链验证 / ADR-0005 落档）；§10 补 W24 执行记录；版本抬头更新至 v2.0 |
+| v2.1 | 2026-08-25 | W23 完成 warm-start 五步门：§8 W23 行改 ✅ 收官（诊断选档 0.10 / 预注册 / TDD init_from_ckpt / short 负结果归档 + 协议层正收益 / full 排队 Q4 可叫停）；§10 补 W23 执行记录；版本抬头更新至 v2.1 |

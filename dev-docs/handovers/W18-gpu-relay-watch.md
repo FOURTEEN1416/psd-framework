@@ -13,6 +13,7 @@
 | Q3a | YOLO dog-pose 微调（24 点犬类权重） | `.venv\Scripts\python.exe scripts\train_yolo_dogpose.py --epochs 50 --batch 16`（~1h） | Q2 已完成；`D:\Desktop\datasets\dog-pose` 数据在位（8476 图已预下载核验）；产物 `runs/public_real_yolo_dogpose/train/weights/best.pt` |
 | Q3b | AK 犬科视频全量提点 | `.venv\Scripts\python.exe scripts\run_p05_public_real_pipeline.py --stage extract --weights runs/public_real_yolo_dogpose/train/weights/best.pt`（~10min） | Q3a 的 best.pt 存在；172 样本 manifest 在位 |
 | Q3c | ST-GCN+BC 公开真实层微调（4 类子集） | 按 `scripts/run_p05_public_real_pipeline.py` 微调 stage 执行（`--stage` 取值以脚本 `--help` 为准；backbone 冻结 + 4 类新 head，init `runs/p05_stgcn_bc_full/best.pt`） | Q3b 提点产物完整过 24 点防呆断言 |
+| Q4 | AL warm-start full-budget（W23） | `.venv\Scripts\python.exe scripts\run_p05_al_warmstart.py --config configs\p05_al_warmstart_full.yaml --fresh` | Q3c 已完成；config 内 RUNDATE 改为当日。⚠️ 短预算已出负结果（`reports/w23-p05-al-warmstart-2026-08-25.md`），本任务仅为方向稳定性终验，**启动前用户可叫停**；科学判读归 W23 报告回填 |
 
 **Q3 特别条款**（用户 2026-08-24 裁决 A 落地）：
 1. Q3a→Q3b→Q3c 内部严格串行，任一步失败即停止后续步骤、留证上报；
@@ -78,3 +79,4 @@ Get-CimInstance Win32_Process -Filter "Name='python.exe'" | Where-Object { $_.Co
 |------|------|------|
 | v1.0 | 2026-08-24 | 建册：两任务串行接力 + NaN/OOM 熔断条款 |
 | v1.1 | 2026-08-24 | 用户裁决 A：Q3a/Q3b/Q3c 并入队列（W20 C 路线三步接力），补 Q3 特别条款（内部串行+科学判读归 W20+失败禁改代码） |
+| v1.2 | 2026-08-25 | W23 依任务书 Step5 追加 Q4（AL warm-start full-budget 排队顺延；附短预算负结果提示与用户叫停权） |
