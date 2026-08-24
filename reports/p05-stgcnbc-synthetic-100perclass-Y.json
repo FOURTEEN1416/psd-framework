@@ -1,0 +1,58 @@
+{
+  "date": "2026-08-24T11:54:31",
+  "layer": "synthetic",
+  "config": {
+    "data": {
+      "synthetic_path": "data/synthetic/syn_22class_100per_class_seed42.pkl",
+      "T": 30,
+      "seed": 42,
+      "val_split": 0.2
+    },
+    "model": {
+      "in_channels": 3,
+      "num_classes": 22,
+      "base_channels": 64,
+      "num_stages": 10
+    },
+    "train": {
+      "lr": 0.001,
+      "weight_decay": 0.0001,
+      "epochs": 50,
+      "batch_size": 32,
+      "use_amp": true,
+      "device": "auto",
+      "early_stopping": true,
+      "patience": 15,
+      "output_dir": "runs/p05_stgcn_bc_full"
+    },
+    "evaluation": {
+      "synthetic_reference": 0.4697,
+      "random_baseline": 0.045,
+      "convergence_threshold": 0.135
+    }
+  },
+  "experiment": {
+    "samples_per_class": 100,
+    "taxonomy": "Y",
+    "num_classes": 22,
+    "total_samples": 2200,
+    "train_size": 1760,
+    "val_size": 440
+  },
+  "summary": {
+    "total_epochs_trained": 50,
+    "best_val_acc": 0.9727272727272728,
+    "best_epoch": 35,
+    "final_train_acc": 1.0,
+    "final_val_acc": 0.9659090909090909,
+    "device": "cuda",
+    "use_amp": true
+  },
+  "checks": {
+    "loss_monotonic_trend": true,
+    "val_acc_significant": true,
+    "no_nan": true
+  },
+  "all_pass": true,
+  "total_time_sec": 421.7
+}

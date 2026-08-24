@@ -1,0 +1,31 @@
+# P0.5 E6 双贴合分类体系实验 — Y′（粗粒度）配置
+# 口径: 合成层（synthetic）
+# 说明: standing + track → locomotion（合并为 1 类），共 21 类
+
+data:
+  synthetic_path: data/synthetic/syn_22class_100per_class_seed42.pkl
+  T: 30
+  seed: 42
+  val_split: 0.2
+  # Y′ 映射: stand(2)+track(8) → locomotion
+  taxonomy_variant: Y_prime
+
+model:
+  in_channels: 3
+  num_classes: 21        # Y′: 21 类
+  base_channels: 64
+  num_stages: 10
+
+train:
+  lr: 0.001
+  weight_decay: 0.0001
+  epochs: 50
+  batch_size: 32
+  use_amp: true
+  device: auto
+  early_stopping: true
+  patience: 15
+  output_dir: runs/p05_stgcn_bc_Yprime
+
+evaluation:
+  random_baseline: 0.0476  # 21 类随机猜测 ≈ 1/21
