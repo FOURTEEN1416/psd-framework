@@ -87,6 +87,31 @@ BEHAVIOR_SUBJECTS = {
     "scale": "IGP-B 服从", "search_blind": "IGP-A 追踪",
 }
 
+# ===== Y' 粗粒度分类体系（21 类：stand+track→locomotion）=====
+Y_PRIME_LABEL_NAMES = (
+    'sit',
+    'down',
+    'locomotion',
+    'heel',
+    'sit_up',
+    'stay',
+    'bark',
+    'bite',
+    'alert_sit',
+    'alert_down',
+    'apprehend',
+    'escort',
+    'obstacle',
+    'recall',
+    'watch',
+    'guard',
+    'release',
+    'retrieve',
+    'jump',
+    'scale',
+    'search_blind'
+)
+
 __all__ = [
     "NUM_KEYPOINTS", "WITHERS", "THROAT", "NOSE", "CHIN",
     "LEFT_EAR_BASE", "RIGHT_EAR_BASE", "LEFT_EAR_TIP", "RIGHT_EAR_TIP",
