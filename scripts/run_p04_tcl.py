@@ -105,17 +105,23 @@ def _calib_str(v) -> str:
 
 
 def cell_kwargs(cell: dict, cfg) -> dict:
-    """消融格 -> run_selftrain 关键字。calib off 行退回原型路自迭代（W8 κ 口径）。"""
+    """消融格 -> run_selftrain 关键字。calib off 行退回原型路自迭代（W8 κ 口径）。
+    支持 cell 级 target_coverage 覆盖（用于 α × τ 消融网格）。"""
     calib_on = _calib_str(cell["calib"]) == "on"
     grid_src = cfg["experiment"]
     tau_grid_key = "tau_grid" if calib_on else "tau_grid_raw_margin"
     if tau_grid_key not in grid_src:
         grid_src = cfg                              # 原始 margin 网格允许放根层级
+    #  cell 级 target_coverage 覆盖（优先使用 cell 自带，无则回退到配置默认）
+    tc = cell.get("target_coverage",
+                  cfg["experiment"]["tau_select_rule"]["target_coverage"])
     return dict(
         calib_method="softmax_temperature" if calib_on else "off",
         calib_target=float(cfg["experiment"]["calibration"]["target_median_prob_margin"]),
         tau_grid=[float(t) for t in grid_src[tau_grid_key]],
-        tau_select=dict(cfg["experiment"]["tau_select_rule"]),
+        tau_select=dict(
+            rule=cfg["experiment"]["tau_select_rule"]["rule"],
+            target_coverage=float(tc)),
         alpha=float(cell["alpha"]),
         standing_mode=str(cell["standing"]),
         subcluster_k=int(cfg["experiment"]["subcluster_k"]),
@@ -290,9 +296,11 @@ def main() -> None:
     main_runs: list[dict] | None = None
     for cell in ablation:
         calib_s = _calib_str(cell["calib"])
-        tag = f"{calib_s}_{cell['standing']}_a{cell['alpha']}"
+        # Include target_coverage in tag to avoid collision across τ-grid cells
+        tc = cell.get("target_coverage", cfg["experiment"]["tau_select_rule"]["target_coverage"])
+        tag = f"{calib_s}_{cell['standing']}_a{cell['alpha']}_tc{tc}"
         print(f"\n[cell] {tag}  (calib={calib_s}, standing={cell['standing']},"
-              f" α={cell['alpha']})")
+              f" α={cell['alpha']}, τ_cov={tc})")
         kw = cell_kwargs(cell, cfg)
         runs = []
         for seed in run_seeds:
@@ -314,27 +322,34 @@ def main() -> None:
         if tag == "on_consensus_a1.0":
             main_runs = runs   # 主配置 runs 复用（P0.5 移交池取 seed42）
 
-    # ---- P0.5 移交物：主配置 seed42 最终池（附录 A 格式 JSONL）
+# ---- P0.5 移交物：主配置 seed42 最终池（附录 A 格式 JSONL）
     pool_paths = []
     if not args.smoke and main_runs is not None:
-        r_main = next(r for r in main_runs if r["run_seed"] == 42)
-        final_round = f"iter{len(r_main['rounds']) - 1}"
-        pool_path = export_pool(
-            REPO_ROOT / cfg["data"]["pool_out_dir"],
-            universe_segs,
-            r_main, class_names, tag="main_consensus_a1.0", run_seed=42,
-            embedding_ref=eval_cache_name,
-            iteration_round=final_round)
-        pool_paths.append(str(pool_path))
-        results["handoff_p05"] = {
-            "pool_path": str(pool_path.relative_to(REPO_ROOT)),
-            "pool_size": int(len(r_main["final_pool_idx"])),
-            "universe_size": int(len(eval_segs)),
-            "label_source": f"p04_tcl_{final_round}_main_consensus_a1.0",
-            "note": "主配置(calib on/consensus/α=1) seed42 最终轮过筛池；"
-                    "真值口径仍为物理先验共识，P0.5 使用时应知悉",
-        }
-        print(f"\n[handoff] P0.5 移交池 -> {pool_path}")
+        # Find the main config cell: alpha=1.0 with target_coverage=0.35
+        main_tag = next((k for k in results["cells"].keys() if "a1.0" in k and "tc0.35" in k), None)
+        if main_tag is None:
+            # fallback: any tag with a1.0
+            main_tag = next((k for k in results["cells"].keys() if "a1.0" in k), None)
+        r_main = next((r for r in main_runs if r["run_seed"] == 42) if main_runs else [])
+        if main_tag and main_tag in results["cells"]:
+            r_main = next(r for r in main_runs if r["run_seed"] == 42)
+            final_round = f"iter{len(r_main['rounds']) - 1}"
+            pool_path = export_pool(
+                REPO_ROOT / cfg["data"]["pool_out_dir"],
+                universe_segs,
+                r_main, class_names, tag="main_consensus_a1.0", run_seed=42,
+                embedding_ref=eval_cache_name,
+                iteration_round=final_round)
+            pool_paths.append(str(pool_path.relative_to(REPO_ROOT)))
+            results["handoff_p05"] = {
+                "pool_path": str(pool_path.relative_to(REPO_ROOT)),
+                "pool_size": int(len(r_main["final_pool_idx"])),
+                "universe_size": int(len(eval_segs)),
+                "label_source": f"p04_tcl_{final_round}_main_consensus_a1.0",
+                "note": "主配置(calib on/consensus/α=1) seed42 最终轮过筛池；"
+                        "真值口径仍为物理先验共识，P0.5 使用时应知悉",
+            }
+            print(f"\n[handoff] P0.5 移交池 -> {pool_path}")
 
     # ---- 验收判定（W10 交接 §5: 提升或如实报告不提升+根因）
     main_cell = next((v for k, v in results["cells"].items()

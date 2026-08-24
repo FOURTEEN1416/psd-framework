@@ -67,10 +67,19 @@ experiment:
     precision_drop_patience: 2   # 连续 2 轮池精度(τ*)下降 → 停并标记确认偏差警报
 
 ablation_matrix:           # Step 3 消融（B-1 × B-2 × α；主配置在首行）
-  - {calib: on,  standing: consensus, alpha: 1.0}   # 主配置
-  - {calib: on,  standing: none,      alpha: 1.0}   # B-2 关
-  - {calib: off, standing: consensus, alpha: 1.0}   # B-1 关（原始 margin 直用过时 τ 网格见下）
-  - {calib: on,  standing: consensus, alpha: 0.0}   # α=0 对照（B-3 消融行）
+  # α × τ operating-point grid（calib=on, standing=consensus 固定，仅α与τ变化）
+  - {calib: on,  standing: consensus, alpha: 0.5, target_coverage: 0.25}
+  - {calib: on,  standing: consensus, alpha: 0.5, target_coverage: 0.35}
+  - {calib: on,  standing: consensus, alpha: 0.5, target_coverage: 0.50}
+  - {calib: on,  standing: consensus, alpha: 1.0, target_coverage: 0.25}
+  - {calib: on,  standing: consensus, alpha: 1.0, target_coverage: 0.35}   # 主配置基线
+  - {calib: on,  standing: consensus, alpha: 1.0, target_coverage: 0.50}
+  - {calib: on,  standing: consensus, alpha: 2.0, target_coverage: 0.25}
+  - {calib: on,  standing: consensus, alpha: 2.0, target_coverage: 0.35}
+  - {calib: on,  standing: consensus, alpha: 2.0, target_coverage: 0.50}
+  - {calib: on,  standing: none,      alpha: 1.0}   # B-2 关（对照）
+  - {calib: off, standing: consensus, alpha: 1.0}   # B-1 关（对照）
+  - {calib: on,  standing: consensus, alpha: 0.0}   # α=0 对照（B-3 消融行}
 tau_grid_raw_margin: [0.0, 0.005, 0.01, 0.02, 0.03, 0.04, 0.05]
 # ↑ B-1 off 行专用网格（κ<0.05 量级，沿用 W8 原始标定区间）
 
