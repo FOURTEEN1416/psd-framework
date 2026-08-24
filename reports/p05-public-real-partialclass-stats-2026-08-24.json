@@ -1,0 +1,174 @@
+{
+  "date": "2026-08-24",
+  "window": "W20",
+  "protocol": "AK 公开真实层部分类协议（12±2 类，df_action.xlsx index 真值）",
+  "canine_reproduction": {
+    "method": "W2 口径A: AR_metadata.xlsx list_animal ∩ 精确10物种",
+    "species_set": [
+      "African Painted Dog",
+      "Coyote",
+      "Desert Fox",
+      "Dholes",
+      "Dingo Dog",
+      "Dog",
+      "Fox",
+      "Jackal",
+      "Wild Dog",
+      "Wolf"
+    ],
+    "total_videos": 329,
+    "per_species": {
+      "Wolf": 142,
+      "Fox": 79,
+      "Wild Dog": 35,
+      "Dog": 31,
+      "Coyote": 18,
+      "Desert Fox": 12,
+      "Jackal": 8,
+      "Dingo Dog": 2,
+      "African Painted Dog": 1,
+      "Dholes": 1
+    },
+    "csv_frame_rows": {
+      "train": 24865,
+      "val": 9907,
+      "total": 34772
+    },
+    "csv_videos": {
+      "train": 231,
+      "val": 98
+    }
+  },
+  "primary_label_rule": "labels 列第一项（任务书 Step 1）",
+  "distribution": {
+    "sit": {
+      "primary_train": 6,
+      "primary_val": 1,
+      "anyhit_train": 6,
+      "anyhit_val": 1,
+      "strength": "strong",
+      "untrainable_lt10": true
+    },
+    "down": {
+      "primary_train": 0,
+      "primary_val": 0,
+      "anyhit_train": 0,
+      "anyhit_val": 0,
+      "strength": "strong",
+      "untrainable_lt10": true
+    },
+    "stand": {
+      "primary_train": 0,
+      "primary_val": 0,
+      "anyhit_train": 0,
+      "anyhit_val": 0,
+      "strength": "strong",
+      "untrainable_lt10": true
+    },
+    "stay": {
+      "primary_train": 18,
+      "primary_val": 8,
+      "anyhit_train": 34,
+      "anyhit_val": 8,
+      "strength": "medium",
+      "untrainable_lt10": false
+    },
+    "bark": {
+      "primary_train": 7,
+      "primary_val": 0,
+      "anyhit_train": 9,
+      "anyhit_val": 0,
+      "strength": "strong",
+      "untrainable_lt10": true
+    },
+    "bite": {
+      "primary_train": 2,
+      "primary_val": 1,
+      "anyhit_train": 6,
+      "anyhit_val": 4,
+      "strength": "strong",
+      "untrainable_lt10": true
+    },
+    "track": {
+      "primary_train": 25,
+      "primary_val": 12,
+      "anyhit_train": 29,
+      "anyhit_val": 17,
+      "strength": "weak",
+      "untrainable_lt10": false
+    },
+    "apprehend": {
+      "primary_train": 0,
+      "primary_val": 2,
+      "anyhit_train": 6,
+      "anyhit_val": 5,
+      "strength": "medium",
+      "untrainable_lt10": true
+    },
+    "watch": {
+      "primary_train": 40,
+      "primary_val": 9,
+      "anyhit_train": 63,
+      "anyhit_val": 16,
+      "strength": "medium",
+      "untrainable_lt10": false
+    },
+    "retrieve": {
+      "primary_train": 2,
+      "primary_val": 1,
+      "anyhit_train": 6,
+      "anyhit_val": 2,
+      "strength": "medium",
+      "untrainable_lt10": true
+    },
+    "jump": {
+      "primary_train": 8,
+      "primary_val": 5,
+      "anyhit_train": 23,
+      "anyhit_val": 10,
+      "strength": "strong",
+      "untrainable_lt10": true
+    },
+    "scale": {
+      "primary_train": 0,
+      "primary_val": 0,
+      "anyhit_train": 0,
+      "anyhit_val": 0,
+      "strength": "medium",
+      "untrainable_lt10": true
+    }
+  },
+  "primary_unmapped_videos": {
+    "train": 123,
+    "val": 59
+  },
+  "gate": {
+    "rule": "任一类 primary 视频 <10 或 val=0 → untrainable",
+    "untrainable_classes": [
+      "sit",
+      "down",
+      "stand",
+      "bark",
+      "bite",
+      "apprehend",
+      "retrieve",
+      "jump",
+      "scale"
+    ],
+    "trainable_class_count": 3
+  },
+  "pose_estimation_overlap_with_canine": 93,
+  "excluded_classes_reason": "K9 特有科目动作零覆盖 + obstacle 与 scale 同源合并",
+  "excluded_classes": [
+    "heel",
+    "sit_up",
+    "alert_sit",
+    "alert_down",
+    "escort",
+    "recall",
+    "guard",
+    "release",
+    "search_blind",
+    "obstacle"
+  ]
+}
