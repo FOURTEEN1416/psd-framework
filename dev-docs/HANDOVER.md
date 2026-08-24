@@ -1,6 +1,6 @@
 # PSD-Framework — 项目交接文档
 
-> **版本**: v1.8
+> **版本**: v1.9
 > **日期**: 2026-08-24
 > **项目根目录**: `D:\Desktop\psd-framework`
 > **交接会话**: 歆歆（sliver-vibe-coding）于 2026-08-23 完成建仓拆分 + truth 链初始化 + 数据盘点；W11 于 2026-08-24 完成 P0.5 前置工程
@@ -106,6 +106,13 @@
 | **W12** | `handovers/W12-p05-stgcnbc-full.md` | P0.5 骨干微调评估：扩量合成数据（100样本/类→2200总量）+ ST-GCN+BC 完整训练（早停50 epoch）+ E6 双贴合分类体系实验（Y=22类 / Y′=21类 locomotion合并）+ 样本量消融（20/50/100）+ 三层口径报告移交 W13 | `configs/p05_*`、`scripts/run_p05_*`、`psd/data/stgcn_bc_dataset.py`（仅追加扩量函数）、`psd/data/tests/test_stgcn_bc_dataset_scale.py`、`reports/w12-*`、`reports/p05-stgcnbc-synthetic-*.json`、DATA_LOCATIONS 合成层小节 |
 | ~~W5~~ | `handovers/W5-p06-paper-draft.md` | ✅ 写作侧收官，剩余为 P0 数据依赖 | `docs/paper/**` 保持只读待回填 |
 | **W14** | （无独立任务书，指令来自用户换防消息） | ✅ **P0.5 主动学习效率实验管线完成**（commit `6b9670e`：TDD 17 绿 / 合成层短预算曲线 JSON 含误差棒归档 reports/ / 真实池打分饱和诊断负结果 / full-budget config 待 GPU 一键复跑；报告 `reports/w14-p05-al-efficiency-2026-08-24.md`） | `psd/training/active_learning.py(+tests)`、`scripts/run_p05_al_efficiency.py`、`configs/p05_al_{short,full}.yaml`、`reports/w14-*`、`reports/p05-al-efficiency-*` |
+| **W18** | `handovers/W18-gpu-relay-watch.md` | 🔄 GPU 接力守望：Q1=AL 冷启动 full-budget 复跑（W14 产物）/ Q2=C1 解耦 full 档 / Q3a-c=公开真实层三步接力（裁决A）；30 分钟巡检严格串行，科学判读归各 owner 窗口 | `runs/*` 队列执行、巡检脚本；禁改代码与超参 |
+| **W19** | `handovers/W19-c1-decouple.py 同名 .md` | 任务书就绪（接管 W15 未完成草稿重做 C1 解耦成本），状态以其文件为准 | 以其任务书为准 |
+| **W20** | `handovers/W20-p05-public-real-partialclass.md` | 任务书就绪（公开真实层部分类路线从零重建；W16 证伪映射已清除），状态以其文件为准 | 以其任务书为准 |
+| **W21** | `handovers/W21-paper-experiments-honest-backfill.md` | 任务书就绪（E5/E6 过期占位诚实修正——W14 负结果如实入论文） | `docs/paper/experiment-skeleton.md`、`outline.md` 等，以其任务书为准 |
+| **W22** | `handovers/W22-paper-figures-fig3-fig4.md` | 任务书就绪（fig3 分割可视化 + fig4 AL 效率曲线负结果照画） | `docs/paper/figures/**`（fig1/2 勿动） |
+| **W23** | `handovers/W23-p05-al-warmstart.md` | ⏳ 待启动（**用户裁决 A2**：warm-start+加噪偏移产出 E5 正证据候选；诊断→预注册→TDD→短预算→GPU 移交五步门） | `psd/training/active_learning*`、`scripts/run_p05_al_*`、`configs/p05_al_*`、plans/reports 的 w23 文件 |
+| **W24** | `handovers/W24-collab-worktree.md` | ⏳ 待启动（**用户裁决 B-full**：每窗口 worktree 物理隔离落地；建窗脚本+AGENTS 纪律增补+冒烟+ADR 落档）；建议先于 W23 执行 | `scripts/new_window_worktree.ps1`、AGENTS.md 并行纪律节、dev-docs/decisions/0003 新增、reports/w24-* |
 
 > ⏳ ~~用户待决一项：NTU 数据获取渠道~~ → **已决并完成（渠道 A，2026-08-24）**：数据就位校验通过。
 > 三项用户裁决已落档 `dev-docs/decisions/0002-user-rulings-ntu-synthetic-e6.md`：① NTU 验证纳入（两相推进中）；② 路径 a 合成数据选移植重建（P0.5 前执行）；③ E6 双贴合场景方向确认。
@@ -137,6 +144,7 @@
 | 2026-08-24 | 歆歆（规划会话） | 全窗口复核（W4 失败态/W6 完成/W5 收官）→ 重规划：跨窗口协同洞察（种子伪 GT 救评估协议、P0.3 与 SMQ 解耦并行）→ 编制 W7/W8 交接文档 + HANDOVER v1.4 + stage-plan v1.2 |
 | 2026-08-24 | 歆歆（验收复核+W11 规划） | W10-P0.4 全量复核通过（116 测试复跑 / 全量实验逐格复现 / 移交池哈希一致；B+ 收口零代码改动）；新发现：`docs/assets-map.md` 从未落盘（truth 断链）、E-C 结果 JSON 未收编；编制 W11 前置工程交接文档 + HANDOVER v1.5 + stage-plan 同步 |
 | 2026-08-24 | W14 窗口（歆歆协调） | P0.5 AL 效率实验：TDD 17 绿（采样器/增量运行器/真实池打分/饱和诊断）+ 短预算 6 轨迹全量扫描归档 + 负结果双向论证报告；登记并行窗口 4 次文件干扰与 .venv 启动器父子进程误判教训；full-budget config 待 GPU 一键复跑 |
+| 2026-08-24 | 歆歆（复核+裁决会话） | W14 交付全项复核通过（22 校验点+数学重算）；向用户呈递决策菜单，获两项裁决：**A2** warm-start 协议采纳→W23 建册；**B-full** worktree 隔离采纳→W24 建册；§8 补登 W18-W22 路由行消除路由盲区；发现并修复自身编辑造成的 W14 行截断事故（程序化校验表列数兜底） |
 
 ## 11. 修订历史
 
@@ -151,3 +159,4 @@
 | v1.6 | 2026-08-24 | W11 窗口完成 P0.5 前置工程：§8 W11 行改 ✅ 完成（commit `580460f`，assets-map 补链 + 合成 22 类骨架集 440 样本 + ST-GCN+BC 进仓 + 冒烟 val_acc=18.2%）；§10 补 W11 执行记录；版本抬头更新至 v1.6 |
 | v1.7 | 2026-08-24 | W12 窗口规划：§8 新增 W12 行（P0.5 骨干微调评估：扩量+完整训练+E6双贴合+消融）；阶段计划同步；版本抬头更新至 v1.7 |
 | v1.8 | 2026-08-24 | W14 窗口完成 P0.5 AL 效率实验管线：§8 新增 W14 行（TDD 17 绿 / 短预算曲线归档 / 饱和负结果 / full config 备好）；§10 补执行记录；版本抬头更新至 v1.8 |
+| v1.9 | 2026-08-24 | 用户双裁决落地（歆歆协调会话）：**A2** warm-start+加噪偏移→建册 `W23-p05-al-warmstart.md`；**B-full** worktree 物理隔离→建册 `W24-collab-worktree.md`；§8 补登 W18-W22 路由行（此前仅存在任务书未入表）；§10 补记录 |
