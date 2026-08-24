@@ -1,5 +1,5 @@
 {
-  "date": "2026-08-24T12:52:17",
+  "date": "2026-08-24T17:13:56",
   "layer": "synthetic",
   "config": {
     "data": {
@@ -41,9 +41,9 @@
   "summary": {
     "total_epochs_trained": 50,
     "best_val_acc": 0.9681818181818181,
-    "best_epoch": 20,
+    "best_epoch": 18,
     "final_train_acc": 1.0,
-    "final_val_acc": 0.9613636363636363,
+    "final_val_acc": 0.9545454545454546,
     "device": "cuda",
     "use_amp": true,
     "ckpt_path": "D:\\Desktop\\psd-framework\\runs\\p05_stgcn_bc_Yprime\\best.pt",
@@ -55,5 +55,5 @@
     "no_nan": true
   },
   "all_pass": true,
-  "total_time_sec": 301.8
+  "total_time_sec": 1543.7
 }
