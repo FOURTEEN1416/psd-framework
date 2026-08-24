@@ -18,7 +18,18 @@
 6. **跨仓边界**：只允许文档指针指向 k9-training-system，禁止跨仓 import；代码复用走 `docs/assets-map.md` 显式移植
 7. Conventional Commits 中文描述；代码注释语言跟随用户最新消息
 
-## 3. Owner Map
+## 4. 并行纪律（多窗口 worktree 协议，2026-08-25 增补）
+
+> 背景：W14 曾发生并行窗口共用主检出、4 次覆盖已提交文件的事故；2026-08-24 用户裁决 **B-full（每窗口 git worktree 物理隔离）**，W24 交付机制。本节为所有新窗口的强制协议。
+
+1. **新窗口一律 worktree 开工**：开工前执行 `pwsh scripts/new_window_worktree.ps1 -Name <窗口名>`，此后一切读写只在自己的 `..\psd-framework-<窗口名>` 内进行；分支命名 `wt/<窗口名>`
+2. **主检出只做协调合并**：`D:\Desktop\psd-framework` 保留给歆歆协调与 merge 收编用途，不在其中开新的实验窗口；跨窗产物收编一律显式 `git merge --no-ff wt/<窗口名>`
+3. **提交仍在各自 wt 分支**：产物落盘即提交；白名单制度在 worktree 内照旧执行——只提交任务书白名单内文件，精确 `git add`，禁用 `git add .`
+4. **data/ 共享即同盘写入**：worktree 的 data/ 经 Junction 指向主仓 data/（gitignore 生成物不随 git 走）；各窗口生成物必须带窗口前缀或唯一 seed，冲突时以后提交者重命名为准
+5. **runs/ 各窗独立**：上游 checkpoint 由建窗脚本按清单复制；禁止写入他窗 runs 子目录
+6. **Python 解释器统一用主仓绝对路径** `.venv` 不复制：`D:\Desktop\psd-framework\.venv\Scripts\python.exe`（cwd 置于本 worktree 内即可正确 import psd）
+
+## 5. Owner Map
 
 | 模块 | 路径 |
 |------|------|
@@ -31,8 +42,9 @@
 | 决策记录 | `dev-docs/decisions/` |
 | 评估报告 | `reports/` |
 
-## 4. 修订历史
+## 6. 修订历史
 
 | 版本 | 日期 | 变更 |
 |------|------|------|
 | v1.0 | 2026-08-23 | 建仓初始化，继承上游硬规则（GitHub-First / truth 单一性 / 三层口径） |
+| v1.1 | 2026-08-25 | W24 增补 §4 并行纪律（B-full worktree 协议六条），Owner Map 顺延为 §5 |
