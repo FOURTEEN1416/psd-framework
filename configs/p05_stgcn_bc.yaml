@@ -1,33 +1,34 @@
-# P0.5 ST-GCN+BC 合成层冒烟训练配置（W11 窗口）
-# 口径: 合成层（synthetic）
-# 用途: Step 3 冒烟验证收敛方向（不追求 ≥85% 达标线——那属 W12）
+# P0.5 ST-GCN+BC 训练配置（W11 冒烟）
+# 对照 K9 仓默认：lr=1e-3, batch=32, epochs=100, early_stopping_patience=20
 
-data:
-  synthetic_path: data/synthetic/syn_22class_20per_class_seed42.pkl
-  samples_per_class: 20
-  T: 30
-  seed: 42
-  val_split: 0.2
+run_name: "p05_stgcn_bc"
+work_root: "data/processed/p05"
 
-model:
-  in_channels: 3
-  num_classes: 22
-  base_channels: 64
-  num_stages: 10
+# 数据（合成层）
+samples_per_class: 50    # 冒烟用 50；W12 达标实验扩到 200+
+T: 30
+noise_std: 0.05
+seed: 42
 
-train:
-  lr: 0.001
-  weight_decay: 0.0001
-  epochs: 30          # 冒烟短训
-  batch_size: 32
-  use_amp: true
-  device: auto
-  early_stopping: false
-  patience: 999       # 禁用（短训不需要早停）
-  output_dir: runs/p05_stgcn_bc
-  smq_skip: true      # 跳过 SMQ 依赖（本配置不使用）
+# 模型
+in_channels: 3
+num_classes: 22
+base_channels: 64
+num_stages: 10
+boundary_weight: 0.3
 
-smoke_criteria:
-  loss_monotonic_trend: true   # loss 单调下降趋势可见
-  val_acc_vs_random_baseline: 0.10  # ≥10% vs 随机基线 4.5%（非达标线，仅方向验证）
-  no_nan: true                # 无 NaN 检查
+# 训练
+lr: 1.0e-3
+weight_decay: 1.0e-4
+batch_size: 32
+epochs: 50               # 冒烟 50 轮足够验证收敛方向
+val_interval: 1
+save_interval: 5
+lr_scheduler: "cosine"
+warmup_epochs: 5
+early_stopping: true
+patience: 15
+use_amp: true
+device: "auto"
+grad_clip: 1.0
+output_dir: "runs/p05_stgcn_bc"
