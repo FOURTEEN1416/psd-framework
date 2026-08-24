@@ -22,7 +22,7 @@ W16 的序数映射假设「AK 标签值 1-22 按索引对齐 PSD 类」**已被
 | PSD 类 | AK 动作 (index) | 强度 |
 |--------|----------------|------|
 | sit | Sitting (108) | 强 |
-| down | Lying Down (70), Lying on its side (73) | 强 |
+| down | Lying Down (70), Lying on its side (74) | 强 |
 | stand | Standing (116) | 强 |
 | stay | Keeping still (68) | 中 |
 | bark | Barking (3) | 强 |
@@ -31,7 +31,7 @@ W16 的序数映射假设「AK 标签值 1-22 按索引对齐 PSD 类」**已被
 | apprehend | Attacking (1) | 中 |
 | retrieve | Carrying In Mouth (13) | 中 |
 | scale | Climbing (16)（obstacle 与 scale 同源，二选一或合并披露） | 中 |
-| jump | Jumping (15) | 强 |
+| jump | Jumping (67) | 强 |
 | track | Exploring (45) / Chasing (14) | 弱 |
 | heel / sit_up / alert_sit / alert_down / escort / recall / guard / release / search_blind | 无等价物（K9 特有） | ❌ 零覆盖 |
 
