@@ -34,3 +34,4 @@
   mean_matched_iou=0.4577 boundary_f1=0.3425 n_episodes=4 protocol=seed-pseudo-gt-episode-IoU
   >>> 判读: 达到冲刺成功线 0.45 ✅（晨会可讨论收口）
 [heartbeat] 08-24 14:52 无新产出
+[heartbeat] 08-24 16:52 无新产出
