@@ -1,0 +1,53 @@
+# P0.5-AL warm-start 实验 — full-budget 版（W23 窗口，待 W18 GPU 接力队列执行）
+#
+# 一键复跑（由 W18 看护窗口按队列执行，W23 本窗不自抢卡）:
+#   .venv\Scripts\python.exe scripts\run_p05_al_warmstart.py --config configs/p05_al_warmstart_full.yaml --fresh
+#
+# 与 short 版差异: epochs 50→120、patience 25、device auto(GPU)、AMP 开启。
+# 其余协议参数（偏移数据种子/噪声档、预算、seeds、策略、warm ckpt）与 short 完全一致保证可比性。
+# ⚠️ 复跑时把 output.report_json 的 RUNDATE 替换为当日日期。
+
+experiment:
+  name: p05_al_warmstart_full
+  layer: synthetic
+  budgets: [20, 50, 100, 200]
+  seeds: [42, 43, 44]
+  strategies: [entropy, random]
+  uncertainty_method: softmax_entropy
+
+warmstart:
+  ckpt: runs/p05_stgcn_bc_full/best.pt
+
+pool:
+  samples_per_class: 10
+  T: 30
+  noise_std: 0.10
+  seed: 20263
+
+val:
+  samples_per_class: 15
+  T: 30
+  noise_std: 0.10
+  seed: 20264
+
+model:
+  in_channels: 3
+  num_classes: 22
+  base_channels: 64
+  num_stages: 10
+
+train:
+  lr: 0.001
+  weight_decay: 0.0001
+  epochs: 120               # full-budget 完整收敛预算（short=50）
+  batch_size: 32
+  warmup_epochs: 5
+  early_stopping: true
+  patience: 25
+  use_amp: true             # GPU 混合精度
+  device: auto              # NTU 长训释放后自动用 GPU
+  output_dir: runs/p05_al_warmstart/full
+
+output:
+  report_json: reports/p05-al-efficiency-warmstart-full-RUNDATE.json
+  state_dir: runs/p05_al_warmstart/state_full

@@ -1,0 +1,104 @@
+{
+  "meta": {
+    "date": "2026-08-25T00:28:06",
+    "window": "W23",
+    "git_sha": "d7231a8",
+    "layer": "synthetic",
+    "layer_note": "合成层口径：GT oracle 来自合成生成器标签（AGENTS.md 三层铁律）；结论不得外推至公开真实层或真实 K9 层",
+    "preregistration": "docs/superpowers/plans/2026-08-25-w23-warmstart-al.md",
+    "protocol": {
+      "design": "配对增量式 AL（warm-start 版）：同 seed 两臂共享随机初始核(b=4)，增量由各臂策略以上一累计预算的**域内微调模型**打分选择；每预算点从 best.pt 加载权重微调（优化器全新构建）",
+      "scorer_rule": "熵打分器 = 上一累计预算的域内微调模型，禁止原始 best.pt 直接跨域打分",
+      "comparability": "与 W14 冷启动曲线绝对数值不可直接互比（分布 0.10 vs 0.05、数据实例均不同）；仅允许定性方向性对比",
+      "uncertainty_method": "softmax_entropy",
+      "curve_metric": "best_val_acc（22 类 top-1，固定 GT 验证集 n=22）",
+      "error_bars": "mean±std across 1 seeds"
+    },
+    "data_fingerprints": {
+      "pool_gen": {
+        "samples_per_class": 2,
+        "T": 30,
+        "noise_std": 0.1,
+        "seed": 20263
+      },
+      "val_gen": {
+        "samples_per_class": 1,
+        "T": 30,
+        "noise_std": 0.1,
+        "seed": 20264
+      },
+      "diagnosis_selected_noise_std": 0.1
+    },
+    "warm_init": {
+      "source": "tiny 随机权重（冒烟专用，架构匹配）",
+      "optimizer_state_loaded": false
+    },
+    "model": {
+      "in_channels": 3,
+      "num_classes": 22,
+      "base_channels": 8,
+      "num_stages": 2
+    },
+    "train": {
+      "lr": 0.001,
+      "weight_decay": 0.0001,
+      "epochs": 2,
+      "batch_size": 32,
+      "warmup_epochs": 5,
+      "early_stopping": false,
+      "patience": 25,
+      "use_amp": false,
+      "device": "cpu",
+      "output_dir": "runs/_tmp_al_smoke"
+    },
+    "total_time_sec": 4.2
+  },
+  "curves": {
+    "entropy": {
+      "4": {
+        "mean": 0.045454545454545456,
+        "std": 0.0,
+        "per_seed": {
+          "42": 0.045454545454545456
+        }
+      },
+      "8": {
+        "mean": 0.045454545454545456,
+        "std": 0.0,
+        "per_seed": {
+          "42": 0.045454545454545456
+        }
+      }
+    },
+    "random": {
+      "4": {
+        "mean": 0.045454545454545456,
+        "std": 0.0,
+        "per_seed": {
+          "42": 0.045454545454545456
+        }
+      },
+      "8": {
+        "mean": 0.045454545454545456,
+        "std": 0.0,
+        "per_seed": {
+          "42": 0.045454545454545456
+        }
+      }
+    }
+  },
+  "curves_per_seed": {
+    "entropy": {
+      "42": {
+        "4": 0.045454545454545456,
+        "8": 0.045454545454545456
+      }
+    },
+    "random": {
+      "42": {
+        "4": 0.045454545454545456,
+        "8": 0.045454545454545456
+      }
+    }
+  }
+}

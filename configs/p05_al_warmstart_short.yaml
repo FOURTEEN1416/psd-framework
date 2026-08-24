@@ -1,0 +1,52 @@
+# P0.5-AL warm-start 实验 — 50 epoch 短预算版（W23 窗口，GPU 被 NTU 长训占用期间 CPU 执行）
+#
+# 运行:
+#   .venv\Scripts\python.exe scripts\run_p05_al_warmstart.py --config configs/p05_al_warmstart_short.yaml
+#
+# 协议: 预注册 docs/superpowers/plans/2026-08-25-w23-warmstart-al.md（Step2 已落盘，禁止运行时更改）
+# 数据: 偏移域 noise_std=0.10（W23 Step1 诊断三档中唯一带内且未饱和档），池 s20263 / 验证 s20264
+
+experiment:
+  name: p05_al_warmstart_short
+  layer: synthetic          # 三层口径: 合成层（AGENTS.md 硬规则 3）
+  budgets: [20, 50, 100, 200]
+  seeds: [42, 43, 44]
+  strategies: [entropy, random]
+  uncertainty_method: softmax_entropy
+
+warmstart:
+  ckpt: runs/p05_stgcn_bc_full/best.pt   # 每预算点的初始化先验
+
+pool:
+  samples_per_class: 10     # 22×10 = 220 ≥ 预算上限 200
+  T: 30
+  noise_std: 0.10           # Step1 诊断选定（0.15/0.20 触发"自信地错"退化被淘汰）
+  seed: 20263               # 避开 W14(20261/20262) 与 W12(seed42)
+
+val:
+  samples_per_class: 15     # 22×15 = 330 固定 GT 验证集
+  T: 30
+  noise_std: 0.10
+  seed: 20264
+
+model:
+  in_channels: 3
+  num_classes: 22
+  base_channels: 64
+  num_stages: 10
+
+train:
+  lr: 0.001                 # 与 W14 相同——预注册承诺不引入新超参（含更低微调学习率）
+  weight_decay: 0.0001
+  epochs: 50                # 短预算（任务书指定）；full 版 120
+  batch_size: 32            # 小样本轮自动 min(32, n_train) 防 drop_last 空 loader
+  warmup_epochs: 5
+  early_stopping: false
+  patience: 25
+  use_amp: false
+  device: cpu               # GPU 被占用；full 版改 auto
+  output_dir: runs/p05_al_warmstart/short
+
+output:
+  report_json: reports/p05-al-efficiency-warmstart-short-2026-08-25.json
+  state_dir: runs/p05_al_warmstart/state_short
