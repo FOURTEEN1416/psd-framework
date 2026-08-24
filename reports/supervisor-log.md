@@ -33,3 +33,4 @@
 ## [08-24 12:52:22] 新产出: p02-smq-iou-eC-seeds-recheck.json (mtime 12:50)
   mean_matched_iou=0.4577 boundary_f1=0.3425 n_episodes=4 protocol=seed-pseudo-gt-episode-IoU
   >>> 判读: 达到冲刺成功线 0.45 ✅（晨会可讨论收口）
+[heartbeat] 08-24 14:52 无新产出
