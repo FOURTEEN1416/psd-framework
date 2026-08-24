@@ -65,8 +65,40 @@
 以下全部 ✅ 才允许进入投稿流程：
 - [ ] P0.2-P0.5 数字归档且回填四件套（R1 解除）
 - [ ] E6 结论支撑标题副句，或用户批准标题降级（R2 解除）
-- [ ] 10 处 [CITATION-NEEDED] + 3 个数据集题录全部补齐（R5 解除）
+- [x] 题录补齐：W17 终审 11 条完全解决 + 3 条缩窄为作者列表级，三数据集题录齐备（**R5 解除**；残余 3 处作者列表待 Scholar 终审并入下一项）
 - [ ] Scholar/arXiv 人工终审完成并回写核验文档（W1 边界声明解除）
 - [ ] 内部引用迁移至 Supplementary Material 完成
 - [ ] Data Availability + Ethics + 许可终审声明就位（R7 解除）
 - [ ] NTU 复现行完成或用户书面豁免（R4 解除）
+
+---
+
+## W17 文献终审记录（2026-08-24）
+
+> 工具链合规：全程 GitHub MCP / arXiv API / 本地文献池与本地数据目录溯源，零 WebSearch（AGENTS.md 硬规则 1）✓
+
+### 完全解决（11 条，均有官方渠道背书）
+
+| 条目 | 题录要点 | 溯源渠道 |
+|------|---------|---------|
+| InterPet4D | Peng/Song/Liao/Kitani/Koike/Wu, @dataset 2026, HF ohicarip/interpet4d, CC BY-NC 4.0 | 本地数据集目录自带官方 BibTeX |
+| Animal Kingdom | Ng et al., CVPR 2022 pp.19023-19034, arXiv 2204.08129 | 官方仓 SUTDCV/Animal-Kingdom README BibTeX |
+| APTv2 | Yang/Deng/Xu/Zhang, arXiv 2312.15612；谱系源头 APT-36K NeurIPS 2022 | 官方仓 ViTAE-Transformer/APTv2 README BibTeX |
+| SMQ | Gökay/Spurio/Bach/Gall, ICCV 2025 pp.12101-12111, arXiv 2508.04513 | external/SMQ 官方仓自带 BibTeX |
+| TCL | Singh et al., CVPR 2021, arXiv 2102.02751（项目页 cvir.github.io/TCL）；官方无代码与 reports/p04 结论一致 | arXiv API（comment 字段 "Accepted in CVPR 2021"） |
+| DINO | Caron et al., ICCV 2021, arXiv 2104.14294 | 官方仓 facebookresearch/dino BibTeX |
+| PoseC3D | Duan et al., CVPR 2022 Oral, arXiv 2104.13586 | arXiv API id_list 精确查询 |
+| 层次化犬行为 | Miyai/Kubo/Saito/Ohno/Kikusui/Nagasawa/Ikeda，NeurIPS **2025 Workshop AI for Animal Communication**，OpenReview EDeOoWN4PT——⚠️ 是 Workshop 论文非主会，正文措辞已按 workshop 书写 | OpenReview 缓存 JSON（Yeping-Hu/ai-workshop-tracker） |
+| CrosSCLR | "3D Human Action Representation Learning via Cross-View Consistency Pursuit", CVPR 2021 | 官方仓 LinguoLi/CrosSCLR（72★） |
+| Mamba-MSQNet | Fazzari/Romano/Falchi/Stefanini, Ecological Informatics 2024 art.102955；池内出处标注经核验正确；另发现同组 MetroAgriFor 2024 会议版线索 | 官方仓 edofazza/mamba-msqnet README 指定引用 |
+| Science 特稿 | Grimm, D., Science news feature（池内已有完整信息，正文标记直接替换） | RESEARCH_LITERATURE.md §1.2 |
+
+### 缩窄保留（3 条，题名/期刊/链接双源锁定，仅缺作者列表+DOI）
+
+YOLO-PetX（IEEE CEECT 2025，全题名经 GitHub 全局代码检索锁定）、Momentum Contrastive Teacher for Semi-Supervised Skeleton Action Recognition（IEEE TIP，Xplore 10820022）、GRA: Graph Representation Alignment for Semi-Supervised Action Recognition（IEEE TNNLS，Xplore 10398229，awesome 目录 TNNLS 分区）。三者均为无公开代码的期刊/会议论文，GitHub 工具链结构性盲区 → 归入投稿前 Scholar 人工终审。
+
+### 终审中的诚实修正
+
+1. ❌→✅ 排除 TCLR 假阳性：arXiv 2101.07974（Dave et al., CVIU 2022）数字 82%/69.9% 与池内「82.7%@10%」不符、venue 不符——不能冒名顶替，最终经标题精确检索锁定真身 arXiv 2102.02751。
+2. ⚠️ AK 会议年份澄清：官方 README 证实为 CVPR **2022**（规划期口误记忆为 2024 的风险已消除）。
+3. ⚠️ 层次化犬行为论文降级表述：主会 → Workshop（OpenReview venue_id 为准）。

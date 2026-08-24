@@ -39,7 +39,7 @@
 | 异常值 | 显式列出并解释（如 P0.1 的全 NaN clip 剔除），禁止静默剔除 |
 | 折间方差披露 | E1 现有折间极差大（15.56%–26.67%），成稿必须讨论方差来源（序列数少、个体差异）而非隐藏 |
 
-> 数据集引用义务：§4.1 提及的 InterPet4D / Animal Kingdom / APTv2 必须引原始论文（outline §6 已挂三条 [CITATION-NEEDED]）。
+> 数据集引用义务：§4.1 提及的 InterPet4D / Animal Kingdom / APTv2 必须引原始论文——✅ 已于 W17 文献终审补齐官方题录（见 outline §6：Peng et al. 2026 dataset / Ng et al. CVPR 2022 / Yang et al. arXiv 2312.15612）。
 
 ## 4.3 主实验（Main Results）——逐实验声明 claim
 

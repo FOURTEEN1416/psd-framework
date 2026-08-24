@@ -17,7 +17,7 @@ Behavior recognition in animals underpins welfare monitoring and working-dog tra
 
 ### Para 1 — Hook（产业痛点，禁泛化开场）
 
-Training a working dog costs more than USD 12,000, and more than half of candidates fail to graduate [CITATION-NEEDED: Science feature]. Behind these numbers sits a measurement problem: organizations that breed and train dogs still rely on subjective human scoring of behavior. Automated behavior recognition would make training decisions objective and comparable across evaluators. The same need extends to livestock welfare monitoring, veterinary research, and pet behavior analysis.
+Training a working dog costs more than USD 12,000, and more than half of candidates fail to graduate [Grimm, Science feature]. Behind these numbers sits a measurement problem: organizations that breed and train dogs still rely on subjective human scoring of behavior. Automated behavior recognition would make training decisions objective and comparable across evaluators. The same need extends to livestock welfare monitoring, veterinary research, and pet behavior analysis.
 
 ### Para 2 — 为什么难（三重叠加困难）
 
@@ -55,7 +55,7 @@ Across three data calibers, PSD reaches **[RESULT-4: 22 类主精度]** using [R
 | 首次性主张带边界声明 | ✅ 贡献点 2 显式标注 |
 | 数字纪律 | ✅ 仅 P0.1 已归档数字实写，其余 [PENDING]/[RESULT-x] 占位 |
 | 与 outline 故事线一致 | ✅ 六段一一对应 Narrative Arc 五拍 |
-| 引用纪律 | ✅ Science 特稿标 CITATION-NEEDED（新闻特稿措辞） |
+| 引用纪律 | ✅ Science 特稿引用已补全（Grimm, Science feature；新闻特稿措辞，W17 终审） |
 
 ## 待办
 - [ ] P0 数据落地后：回填 RESULT-2~6，删除 [PENDING] 标记，升级为终稿候选

@@ -31,7 +31,7 @@ We adapt extreme-asymmetry contrastive pretraining [AimCLR, AAAI 2022; repo gith
 
 ### 3.2.2 Unsupervised Temporal Segmentation
 
-Continuous skeleton streams must be cut into behavior-proposal units before labeling. We adopt motion-word quantization [SMQ, ICCV 2025; CITATION-NEEDED: arXiv ID]: local motion patterns are quantized into a discrete vocabulary, and segment boundaries are proposed where the quantized sequence changes regime.
+Continuous skeleton streams must be cut into behavior-proposal units before labeling. We adopt motion-word quantization [SMQ, Gökay et al., ICCV 2025, arXiv 2508.04513]: local motion patterns are quantized into a discrete vocabulary, and segment boundaries are proposed where the quantized sequence changes regime.
 
 *Evidence placeholder.* Segmentation quality is measured by boundary IoU against held-out annotations, compared against a sliding-window baseline: **[PENDING P0.2]**.
 
@@ -66,7 +66,7 @@ Design decisions fixed at this stage: confidence filtering uses prototype-margin
 
 ### 3.3.3 Semi-Supervised Self-Training and Active Learning
 
-Pseudo-labeled coverage is consolidated by temporal contrastive self-training in the spirit of TCL [CVPR 2021; CITATION-NEEDED: DOI/repo], which reported 82.7% accuracy using 10% of labels against an 88.6% fully supervised reference on human benchmarks. An uncertainty-sampling active learner then selects the most ambiguous proposals for human annotation within a budget of 100–200 clips, closing the loop between automatic expansion and human verification. *[PENDING P0.4/P0.5: three-tier main results; efficiency curve vs random sampling; 22-class target ≥85%]*
+Pseudo-labeled coverage is consolidated by temporal contrastive self-training in the spirit of TCL [Singh et al., CVPR 2021, arXiv 2102.02751], which reported 82.7% accuracy using 10% of labels against an 88.6% fully supervised reference on human benchmarks. An uncertainty-sampling active learner then selects the most ambiguous proposals for human annotation within a budget of 100–200 clips, closing the loop between automatic expansion and human verification. *[PENDING P0.4/P0.5: three-tier main results; efficiency curve vs random sampling; 22-class target ≥85%]*
 
 ## 3.4 Decoupling Mechanism
 
@@ -99,7 +99,7 @@ We hypothesize that $C_{\text{decoupled}} < C_{\text{full}}$ at matched accuracy
 | 消融内容不混入 Method | ✅ 敏感性全部指向 §4/§5 |
 | 主张与证据分离 | ✅ 全部 `[PENDING P0.x]` 占位；解耦收益句标 `[CLAIM NEEDS EVIDENCE]` |
 | 口径诚实 | ✅ dog-ID 代理探针口径披露；坍缩事故写成复现性注记而非隐藏 |
-| 引用纪律 | ✅ 池内条目带出处标识；SMQ/TCL 标 [CITATION-NEEDED] |
+| 引用纪律 | ✅ 池内条目带出处标识；SMQ/TCL 已于 W17 终审补全（arXiv 2508.04513 / 2102.02751）；TCL 数字 82.7%/88.6% 投稿前对照原文复核 |
 
 ## 修订历史
 

@@ -118,33 +118,34 @@
 
 ## 6. 引用计划（Citation Plan，逐节）
 
-| 章节 | 引用条目（均溯源 `dev-docs/research/RESEARCH_LITERATURE.md` 17 篇池 / `NOVELTY_CHECK_YAOQING_JIA.md`） | 出处标识 | 验证状态 |
+| 章节 | 引用条目（溯源 `dev-docs/research/RESEARCH_LITERATURE.md` / `NOVELTY_CHECK_YAOQING_JIA.md` / 官方仓 / arXiv API） | 出处标识 | 验证状态 |
 |------|------|------|------|
-| §1 Intro | 工作犬产业背景（Science 特稿） | science.org/content/article/can-science-build-better-working-dog | ✅ 池内（注意：新闻特稿，正文措辞用 report/feature 而非 study） |
+| §1 Intro | 工作犬产业背景（Science 特稿） | Grimm, D., "Can science build a better working dog?", Science news feature, science.org/content/article/can-science-build-better-working-dog（2026-02） | ✅ 池内题录齐备（新闻特稿，正文措辞用 report/feature 而非 study） |
 | §1 Intro | IMU+ML 工作犬姿势评估（部署佐证） | PLOS ONE 2023, PMC10284380 | ✅ 池内 |
 | §2.1 | TP-CanineNet | MDPI Animals 2025（无代码） | ✅ 池内 |
 | §2.1 | BCST-GCN | DOI 10.3389/fvets.2026.1782396 | ✅ 池内 |
-| §2.1 | ASBAR | github.com/MitchFuchs/asbar（eLife 2024） | ✅ 池内 |
-| §2.1 | 层次化犬行为（单目 3D 姿态） | NeurIPS 2025（具体条目名待补全） | ⚠️ 池内有索引、缺完整题录 → 补全前标 [CITATION-NEEDED] |
+| §2.1 | ASBAR | github.com/MitchFuchs/asbar（eLife 2024） | ✅ 双源 |
+| §2.1 | 层次化犬行为（单目 3D 姿态） | Miyai, Kubo, Saito, Ohno, Kikusui, Nagasawa, Ikeda, "Hierarchical Representation Learning of Dog Behavior via Single-View 3D Pose Estimation", **NeurIPS 2025 Workshop on AI for Animal Communication**, OpenReview EDeOoWN4PT | ✅ 已补全（W17 终审；⚠️ 系 Workshop 论文非主会，正文措辞已按 workshop 书写） |
 | §2.1 | DeepLabCut / SLEAP | DOI 10.1038/s41593-018-0209-y / 10.1038/s41592-022-01426-1 | ✅ 池内 |
-| §2.1 | YOLO-PetX | IEEE CEECT 2025 | ✅ 池内（会议论文，题录待补全） |
+| §2.1 | YOLO-PetX | 全题名 "YOLO-PetX: Enhanced YOLO-Based Recognition of Abnormal Dog Behaviors in Intelligent Pet Care Applications"，IEEE CEECT 2025（Xplore 上线 2026-02，经 GitHub 全局检索锁定） | ⚠️ 题名/会议双源锁定；作者列表与 DOI 无法经允许渠道获得 → 正文缩窄标记 `[CITATION-NEEDED: authors+DOI]`，Scholar 终审补 |
 | §2.2 | ST-GCN | arXiv 1801.07455（AAAI 2018） | ✅ 池内 |
-| §2.2 | PoseC3D | CVPR 2022, OpenMMLab | ✅ 池内（DOI 待补） |
+| §2.2 | PoseC3D | Duan, Zhao, Chen, Lin, Dai, "Revisiting Skeleton-based Action Recognition", CVPR 2022 Oral, arXiv 2104.13586 | ✅ 已补全（arXiv API 核验，含作者名单） |
 | §2.2 | AimCLR | AAAI 2022；repo Levigty/AimCLR（W1 核验在案） | ✅ 双源 |
 | §2.2 | AimCLR++ | Pattern Recognition 2024；repo Levigty/AimCLR-v2（W1 附带发现） | ✅ 双源 |
-| §2.2 | SMQ（Skeleton Motion Words） | ICCV 2025（arXiv 号待补） | ⚠️ [CITATION-NEEDED: arXiv ID] |
-| §2.2 | VideoMamba / Mamba-MSQNet | ECCV 2024 / Ecological Informatics 2024 | ⚠️ 池内有索引；Mamba-MSQNet 缺完整题录（RW 内嵌 [CITATION-NEEDED]） |
-| §2.2/§2.3 | 跨视角 SSL 代表工作 / Momentum-Contrastive Teacher (TIP 2025) / GRA | — | ❌ [CITATION-NEEDED]（RW 内嵌标记，随文献终审补齐） |
+| §2.2 | SMQ（Skeleton Motion Words） | Gökay, Spurio, Bach, Gall, "Skeleton Motion Words for Unsupervised Skeleton-Based Temporal Action Segmentation", ICCV 2025, pp.12101-12111, arXiv 2508.04513 | ✅ 已补全（external/SMQ 官方仓自带 BibTeX） |
+| §2.2 | VideoMamba / Mamba-MSQNet | VideoMamba ECCV 2024；Mamba-MSQNet = Fazzari, Romano, Falchi, Stefanini, "Selective State Models Are What You Need for Animal Action Recognition", Ecological Informatics 2024, art.102955（官方代码仓 edofazza/mamba-msqnet README 指定引用） | ✅ 已补全（官方 BibTeX；池内出处标注经核验正确，另存 MetroAgriFor 2024 会议版线索） |
+| §2.2/§2.3 | Momentum Contrastive Teacher (TIP) / GRA | 全题名分别锁定："Momentum Contrastive Teacher for Semi-Supervised Skeleton Action Recognition" IEEE TIP（Xplore 10820022）；"GRA: Graph Representation Alignment for Semi-Supervised Action Recognition" IEEE TNNLS（Xplore 10398229）——均经 firework8/Awesome-Skeleton-based-Action-Recognition 目录回溯验证 | ⚠️ 题名/期刊/链接双源锁定；作者列表待 Scholar 终审 → 正文缩窄标记 `[CITATION-NEEDED: author list]` |
+| §2.3 | TCL | Singh, Chakraborty, Varshney, Panda, Feris, Saenko, Das, "Semi-Supervised Action Recognition with Temporal Contrastive Learning", CVPR 2021, arXiv 2102.02751（项目页 cvir.github.io/TCL；官方无公开代码，与 reports/p04-tcl-2026-08-24.md 结论一致） | ✅ 已补全（arXiv API 核验含作者名单；82.7%/88.6% 数字投稿前对照原文复核，已入 RW 待办） |
+| §2.3 | 跨视角 SSL 代表工作 | CrosSCLR: "3D Human Action Representation Learning via Cross-View Consistency Pursuit", CVPR 2021, 官方仓 LinguoLi/CrosSCLR（72★） | ✅ 双源（官方仓 + awesome 目录）；作者名单投稿期以原文为准复核 |
 | §2.3 | MAC-Learning | TPAMI 2022；repo 1xbq1/MAC-Learning | ✅ 双源 |
 | §2.3 | Skeleton-to-Image Encoding | arXiv 2603.05963 | ✅ 池内 |
-| §2.3 | TCL | CVPR 2021 | ⚠️ [CITATION-NEEDED: DOI/repo] |
-| §2.3 | DINO（VFM 代表） | — | ❌ [CITATION-NEEDED]（池外） |
-| §4.1 | **InterPet4D 数据集论文** | — | ❌ [CITATION-NEEDED]（池外；用了数据集必须引出处，PR 硬要求） |
-| §4.1 | **Animal Kingdom 数据集论文** | — | ❌ [CITATION-NEEDED]（池外，同上） |
-| §4.1 | **APTv2 数据集论文** | — | ❌ [CITATION-NEEDED]（池外，同上） |
+| §2.3 | DINO（VFM 代表） | Caron et al., "Emerging Properties in Self-Supervised Vision Transformers", ICCV 2021, arXiv 2104.14294, repo facebookresearch/dino | ✅ 已补全（官方仓 BibTeX） |
+| §4.1 | **InterPet4D 数据集论文** | Peng, Song, Liao, Kitani, Koike, Wu, *InterPet4D: A Multimodal Ego-Centric Dataset of Human–Pet Interactions*, v1, 2026, huggingface.co/datasets/ohicarip/interpet4d（@dataset 条目，CC BY-NC 4.0） | ✅ 已补全（本地数据集目录自带官方 BibTeX；该数据集尚无同行评审论文，引数据集本体即满足 PR 引用要求） |
+| §4.1 | **Animal Kingdom 数据集论文** | Ng, Ong, Zheng, Ni, Yeo, Liu, "Animal Kingdom: A Large and Diverse Dataset for Animal Behavior Understanding", CVPR 2022, pp.19023-19034, arXiv 2204.08129 | ✅ 已补全（官方仓 SUTDCV/Animal-Kingdom 自带 BibTeX） |
+| §4.1 | **APTv2 数据集论文** | Yang, Deng, Xu, Zhang, "APTv2: Benchmarking Animal Pose Estimation and Tracking with a Large-scale Dataset and Beyond", arXiv 2312.15612（NeurIPS 2022 APT-36K 基准的扩展；官方仓 ViTAE-Transformer/APTv2） | ✅ 已补全（官方仓自带 BibTeX；如需完整谱系可加引 APT-36K NeurIPS 2022 原始论文） |
 
-> 铁律执行情况：池外或题录不全者一律 `[CITATION-NEEDED]` 并在文中显式标记；绝不凭记忆生成题录。
-> ⚠️ 数据集引用为收录硬门槛（v0.2 评审新增）：三个数据集的原始论文题录必须在文献终审窗口补齐，否则直接进 Major Revision。
+> 铁律执行情况：池外或题录不全者一律 `[CITATION-NEEDED]` 并在文中显式标记；绝不凭记忆生成题录。W17 文献终审（2026-08-24）：11 条完全解决（全部有官方仓 BibTeX / arXiv API 元数据背书），3 条缩窄为作者列表级待补项。
+> ⚠️ 数据集引用硬门槛（R5）已于 W17 解除：三条数据集题录均取自官方渠道自带 BibTeX。
 
 ---
 
@@ -164,7 +165,7 @@ Abstract 0.2 ｜ Intro 1.5 ｜ RW 1.5 ｜ Method 4 ｜ Experiments 3 ｜ Ablatio
 | R2 | 🔴 CRITICAL | **标题过度主张风险**：副句 "under Evolving Evaluation Criteria" 的唯一证据 E6 待做 | E6 设计已在 §3.4 形式化；预案：E6 若弱则降级标题为 "...for Low-Resource Animal Behavior Recognition"（投稿前用户裁决） | ⏳ 待实验 |
 | R3 | 🟠 MAJOR | **incremental 指控**："已知组件组合 + 换域 = 增量工作" | 解耦机制列第一贡献；method.md 补迁移非平凡性论证段；related-work.md 三近邻表量化差异 | ✅ 写作侧已加固 |
 | R4 | 🟠 MAJOR | **重实现正确性存疑**：AimCLR/SMQ/TCL 均为本仓适配实现，审稿人会要求验证实现等价性 | ✅ 用户已批准纳入（ADR 0002）；⚠️ 前置=NTU60 骨架数据获取（本仓现无），P0.2 释放 GPU 后独立小窗口执行 | 📋 已批准待排程 |
-| R5 | 🟠 MAJOR | **数据集论文未引**：InterPet4D/AK/APTv2 引用缺失（PR 投稿硬要求） | 引用计划 §6 已补三条 [CITATION-NEEDED]；文献终审窗口必须补齐 | ⏳ 待终审 |
+| R5 | 🟠 MAJOR | **数据集论文未引**：InterPet4D/AK/APTv2 引用缺失（PR 投稿硬要求） | 引用计划 §6 已补三条 [CITATION-NEEDED]；文献终审窗口必须补齐 | ✅ W17 已解除（2026-08-24，三条题录取自官方渠道自带 BibTeX） |
 | R6 | 🟡 MINOR | 统计严谨性质疑 | experiment-skeleton 已补统计协议节 | ✅ 协议已立 |
 | R7 | 🟡 MINOR | 数据许可与伦理声明（PR 投稿系统必填） | brief §8 许可终审项覆盖；投稿前补 Data Availability + Ethics 声明 | ⏳ 已跟踪 |
 | R8 | 🟠 MAJOR | **种子噪声放大**：规则引擎粗标带噪，伪标签迭代可能放大错误 | method §3.3.2 已立"高召回低精度先验"设计决策；消融表已加噪声注入实验行（10/20/30%） | ✅ 设计+验证已闭环 |
@@ -210,3 +211,4 @@ Abstract 0.2 ｜ Intro 1.5 ｜ RW 1.5 ｜ Method 4 ｜ Experiments 3 ｜ Ablatio
 | v0.2 | 2026-08-23 | 五视角对抗评审：新增 §8 风险登记册（R1-R7，含两条 CRITICAL）+ PR 收录检查单；引用计划补三个数据集论文 [CITATION-NEEDED]；章节重编号 |
 | v0.3 | 2026-08-23 | 第二轮对抗评审：§0 贡献句降级为能力性主张 + 风险登记册增 R8-R10（种子噪声/类别不平衡/E6 场景真实性）+ fig1 落点决策闭合；评审全程记录见 `review-log.md` |
 | v0.4 | 2026-08-23 | 增量二：Abstract/Introduction/Conclusion-Limitations 占位初稿（introduction.md / conclusion-limitations.md）+ fig1/fig2 绘制规格（figure-specs.md）；§4/§5/§9 状态同步。W5 写作侧可做项至此清空，剩余全部为 P0 数据依赖 |
+| v0.5 | 2026-08-24 | W17 文献终审：§6 全表 11 条题录完全解决（三数据集/SMQ/TCL/DINO/PoseC3D/犬行为 workshop/CrosSCLR/Mamba-MSQNet/Science 特稿），3 条缩窄为作者列表级待补（YOLO-PetX/TIP Teacher/GRA）；R5 解除；正文内嵌标记同步（related-work/introduction/method）；溯源记录见 review-log.md 终审节 |
