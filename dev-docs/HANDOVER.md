@@ -1,9 +1,9 @@
 # PSD-Framework — 项目交接文档
 
-> **版本**: v1.0
-> **日期**: 2026-08-23
+> **版本**: v1.6
+> **日期**: 2026-08-24
 > **项目根目录**: `D:\Desktop\psd-framework`
-> **交接会话**: 歆歆（sliver-vibe-coding）于 2026-08-23 完成建仓拆分 + truth 链初始化 + 数据盘点
+> **交接会话**: 歆歆（sliver-vibe-coding）于 2026-08-23 完成建仓拆分 + truth 链初始化 + 数据盘点；W11 于 2026-08-24 完成 P0.5 前置工程
 > **上游决策**: `D:\Desktop\k9-training-system\dev-docs\decisions\0013-research-repo-split.md`（ADR 0013）
 
 ---
@@ -103,7 +103,7 @@
 | ~~W7~~（原 W4 重启） | `handovers/W7-p02-smq-rescue.md` | ✅ **救援+冲刺达标**：根因=官方超参致编码器码塌缩，mse_loss_weight→1.0 修复；种子伪 GT 口径 IoU 0.409 → 冲刺 E-B vm6 **0.476** / 过夜 E-C K=8 **0.4577±0.0488**（均 ≥ 预注册 0.45）。⚠️ `reports/p02-smq-iou-eC-seeds.json` 尚未提交，E-C 定稿收编归 W4 owner 收尾 | 原 W4 白名单；窗口锁 `reports/p02-window-lock.md` |
 | **W9** | `handovers/W9-ntu-repro.md` | Phase A ✅ **全部完成**（协议核实 + 数据已就位并校验通过，见 `reports/ntu-phasea-2026-08-24.md` v1.1；用户经 GKD 加速器走通渠道 A）；Phase B 复现训练**GPU 已解禁可排程**（P0.2 冲刺收官释放显卡；错峰默认=夜间长训练，与 W11 白天冒烟互斥让行） | `*ntu*` 文件、reports/ntu-* |
 | ~~W10~~ | `handovers/W10-p04-tcl.md` | ✅ **完成且经复核确认**（2026-08-24 复核会话：commit `4f04ad4` 边界合规、pytest 116 绿新鲜复跑、全量实验重跑逐格复现、移交池哈希一致；B+ 收口不改代码——iter3 池 191 条为交付物，r1 早停池为可选替代见报告 §5①/§8） | 已收官 |
-| **W11（新）** | `handovers/W11-p05-prep.md` | P0.5 前置工程：assets-map 补链（⚠️ 阻断发现：该文件从未落盘但被三处 truth 引用）+ 合成数据生成器移植重建 22 类骨架集（ADR-0002 裁决②触发点已到）+ ST-GCN+BC 栈进仓 + 合成层冒烟；微调达标实验留后续窗口 | `docs/assets-map.md`、`psd/data/*synth*`、`psd/models/**`、`psd/training/*stgcn*`、scripts/configs 的 p05 文件、reports/w11-*、DATA_LOCATIONS 合成层小节 |
+| **W11** | `handovers/W11-p05-prep.md` | ✅ **前置工程完成**（commit `580460f`）：assets-map 补链 + 合成 22 类骨架集 440 样本/3.80 MB + ST-GCN+BC 进仓（43 TDD 测绿）+ 冒烟 val_acc=18.2%≥10% 全通过；移交 W12 消费 | `docs/assets-map.md`、`psd/data/*synth*`、`psd/models/**`、`psd/training/*stgcn*`、scripts/configs 的 p05 文件、reports/w11-*、DATA_LOCATIONS 合成层小节 |
 | ~~W5~~ | `handovers/W5-p06-paper-draft.md` | ✅ 写作侧收官，剩余为 P0 数据依赖 | `docs/paper/**` 保持只读待回填 |
 
 > ⏳ ~~用户待决一项：NTU 数据获取渠道~~ → **已决并完成（渠道 A，2026-08-24）**：数据就位校验通过。
@@ -146,3 +146,4 @@
 | v1.3 | 2026-08-23 | W3 补完收尾：§3 状态表/§4 环境基线同步实测事实（venv✅ P0.1✅ AimCLR✅ 核验✅）、§5 数据复核口径回填、§7 速查表增补 P0.1 kNN 与 AimCLR++ 候选 |
 | v1.4 | 2026-08-24 | 规划会话换防：§8 路由改 W7（P0.2 救援）/W8（P0.3 Phase A）两线并行，W5/W6 移交收官存档；§10 补 W6 完成、W4 转救援、W5 论文线、规划会话四条记录 |
 | v1.5 | 2026-08-24 | 复核会话换防：§8 路由更新——W10 收官（经复核确认）/ W7 冲刺达标（E-C 待定稿收编）/ W9-B GPU 解禁 / **新增 W11 P0.5 前置工程**；§10 补验收复核记录；阻断发现登记（assets-map 缺失） |
+| v1.6 | 2026-08-24 | W11 窗口完成 P0.5 前置工程：§8 W11 行改 ✅ 完成（commit `580460f`，assets-map 补链 + 合成 22 类骨架集 440 样本 + ST-GCN+BC 进仓 + 冒烟 val_acc=18.2%）；§10 补 W11 执行记录；版本抬头更新至 v1.6 |
