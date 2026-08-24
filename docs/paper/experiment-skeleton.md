@@ -71,6 +71,7 @@
 - ⚠️ **C7 claim 处置 [PENDING-用户措辞裁决]，本骨架不擅自定稿**。候选方向二选一：
   1. 降级为"探索性发现"写入 §5 分析节（保留负结果的科学叙事价值 + 冷启动打分器局限讨论）；
   2. 从贡献列表移出（Introduction 贡献 bullet 4 相应缩窄为 C5-C6）。
+  - 联动注记（2026-08-24 深夜）：用户已裁决 A2 授权 warm-start 协议实验建册 `dev-docs/handovers/W23-p05-al-warmstart.md`——正证据候选可能由 W23 产生；**但论文措辞裁决独立未决**，W23 产证后仍需用户对①/②拍板方可回填。
 
 ### E6 解耦切换成本 → 支撑 C1
 *This experiment tests whether taxonomy evolution under decoupling costs less than full-pipeline retraining at matched accuracy.*

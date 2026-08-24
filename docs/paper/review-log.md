@@ -124,6 +124,7 @@ YOLO-PetX（IEEE CEECT 2025，全题名经 GitHub 全局代码检索锁定）、
 
 - **C7 措辞 [PENDING-用户措辞裁决]**：①降级"探索性发现"写入 §5 分析节；②移出贡献列表。W21 未定稿任何 C7 表述。
 - 关联待办联动：C7 裁决后 RESULT-7 语义、Introduction 贡献 bullet 4、rebuttal 预案需一并收口。
+- 并行事实登记（本窗执行期间）：协调会话落档用户双裁决（commit `9511d3a`）——A2 warm-start 建册 W23（E5 正证据候选来源，禁触 docs/paper）、B-full worktree 隔离建册 W24；**C7 论文措辞裁决不受 A2 影响，仍独立待用户**。
 
 ### 完成标准自查（任务书 §5）
 
