@@ -1,0 +1,65 @@
+# W9 Phase B — AimCLR NTU60 xsub 复现预训练（公开基准层口径，禁止与合成/真实 K9 混报）
+# 数据: data/ntu60_frame50（Phase A 官方预处理成品，8/8 结构校验通过，
+#       见 reports/ntu-phasea-2026-08-24.md v1.1：xsub 40,091+16,487=56,578 样本）
+# 改编自 external/AimCLR/config/ntu60/pretext/pretext_aimclr_xsub_joint.yaml。
+# 与官方配置的差异清单（复现审计用）:
+#   1. 仅 work_dir/data_path/label_path/device 本机路径与单卡适配
+#   2. batch_size=128 / base_lr=0.1 保持官方原值（2026-08-24 冒烟实测：显存增量
+#      ~5.4GB、0.86s/iter@共卡，独占时可行；如日后需与他窗共卡，降 bs64/lr0.05
+#      并在此记录偏差）
+#   3. 模型结构、增强、优化器、mining 超参与官方逐项一致
+
+work_dir: runs/ntu_phaseB/joint_pretext
+
+# feeder —— 官方 Feeder_triple 三视角增强，消费 mmap npy
+train_feeder: feeder.ntu_feeder.Feeder_triple
+train_feeder_args:
+  data_path: data/ntu60_frame50/xsub/train_position.npy
+  label_path: data/ntu60_frame50/xsub/train_label.pkl
+  shear_amplitude: 0.5
+  temperal_padding_ratio: 6
+  mmap: True
+
+# model —— 官方 AimCLR + ST-GCN 编码器（NTU graph V=25），超参与官方逐项一致
+model: net.aimclr.AimCLR
+model_args:
+  base_encoder: net.st_gcn.Model
+  pretrain: True
+  feature_dim: 128
+  queue_size: 32768       # 官方 NTU60 口径原样保留（56k 训练样本足够支撑）
+  momentum: 0.999
+  Temperature: 0.07
+  mlp: True
+  in_channels: 3
+  hidden_channels: 16     # 1/4 x 标准 ST-GCN 通道（官方值）
+  hidden_dim: 256
+  num_class: 60
+  dropout: 0.5
+  graph_args:
+    layout: 'ntu-rgb+d'
+    strategy: 'spatial'
+  edge_importance_weighting: True
+
+# optim —— 官方 SGD 配方原值（保真口径）
+nesterov: False
+weight_decay: 1e-4
+base_lr: 0.1
+optimizer: SGD
+step: [250]
+
+# training —— 单卡适配；epoch 数保持官方 300
+device: [0]
+batch_size: 128
+test_batch_size: 128
+num_epoch: 300
+start_epoch: 0
+stream: 'joint'
+
+# nearest neighbor mining —— 官方口径
+topk: 1
+mining_epoch: 150
+
+# log
+save_interval: 5
+eval_interval: -1
+print_log: True
