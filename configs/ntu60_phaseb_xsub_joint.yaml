@@ -7,7 +7,10 @@
 #   2. batch_size=128 / base_lr=0.1 保持官方原值（2026-08-24 冒烟实测：显存增量
 #      ~5.4GB、0.86s/iter@共卡，独占时可行；如日后需与他窗共卡，降 bs64/lr0.05
 #      并在此记录偏差）
-#   3. 模型结构、增强、优化器、mining 超参与官方逐项一致
+#   3. num_worker 4→0：Windows spawn 子进程 pickle 传输间歇性失败
+#      （popen_spawn_win32 [Errno 22]/pickle truncated，2026-08-24 两次复现；
+#      冒烟同配置曾通过，属环境级非确定性）。归零后稳定，速度代价 ~18%（1.03 vs 0.86 s/iter）
+#   4. 模型结构、增强、优化器、mining 超参与官方逐项一致
 
 work_dir: runs/ntu_phaseB/joint_pretext
 
@@ -54,6 +57,7 @@ test_batch_size: 128
 num_epoch: 300
 start_epoch: 0
 stream: 'joint'
+num_worker: 0           # 见头注差异#3：Windows spawn 故障规避
 
 # nearest neighbor mining —— 官方口径
 topk: 1
