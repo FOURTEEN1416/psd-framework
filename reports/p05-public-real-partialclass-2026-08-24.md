@@ -111,16 +111,52 @@ df_action.xlsx 有 `S/N` 与 `index` 双编号列。逐行 pandas 核验发现 �
 
 ---
 
-## 4. 公开真实层微调评估路线对比（训练段冻结，待用户裁决）
+## 4. 公开真实层微调评估路线对比（~~冻结~~ → 用户已裁决 C 路线）
 
-| | 方案 B：登记结构性不可行 | 方案 C：mp4 自提取骨架管线 | 方案 A：申请官方 PE 标注 |
+> **裁决记录（2026-08-24 晚, 用户拍板）**：
+> ① 骨架路线 = **C 自提取**；② 门禁口径 = **宽松 4 类**（jump 入列）。
+> 样本判定随之统一为 R2(first-mapped-hit)——若维持绝对主标签规则, jump train 将为 0 个可用视频, 违背裁决意图。
+
+| | 方案 B：登记结构性不可行 | 方案 C：mp4 自提取骨架管线（✅ 已裁决采纳） | 方案 A：申请官方 PE 标注 |
 |---|---|---|---|
 | 做法 | tab2 中间列改报 P0.1 kNN 探针数字（20.89%，dog-ID 代理先例）+ 本报告样本量/零覆盖披露 | 211 个犬科 mp4 → 抽帧 → 动物姿态模型（如 ViTPose/RTMPose-AK 版）提 23 点 → 时序序列喂 ST-GCN 微调（3 类子集） | 表单申请官方 MPII JSON 后评估 |
 | 得到什么 | 诚实的负结果+披露，tab2 完整闭环，今天收尾 | 真实微调数字（3±1 类子集），新增可复用提点管线资产 | 合成层拓扑可比的 23 点静态标注 |
 | 代价/风险 | 公开真实层无微调数字，论文该列弱化 | 新增重依赖（mmpose 等）、跨窗口工作量、23 点 vs 合成层 24 点拓扑需重设计 graph、3 类子集数字单薄易被审稿人质疑 cherry-pick | 标注仍是 ~4.6 帧/视频静态帧，构不成时序序列，大概率同样走不通 |
 | 时间 | 0（已完成 95%） | 约 2-3 个窗口（环境+提点+对齐+训练） | 申请周期不可控 + 同样撞时序障碍 |
 
-**推荐：方案 B 为主、方案 C 列为后续可选增强。**理由：方案 C 的科学前提（时序骨架微调）在 AK 上只能支撑 3±1 个类，投入 2-3 个窗口换一个单薄数字，性价比低且有 cherry-pick 审稿风险；方案 B 用已建立的 P0.1 子集口径先例 + 本报告的结构性原因披露，学术上站得住且立即闭环。最终决定权交给用户。
+### 4.1 C 路线选型定案（GitHub-First 调研后）
+
+| 维度 | ✅ YOLO11-pose + dog-pose 微调 | DeepLabCut SuperAnimal | AP-10K HRNet |
+|------|------------------------------|------------------------|--------------|
+| 拓扑 | **24 点原生=K9Graph 零投影**（dog-pose.yaml 与 assets-map §2 逐名逐序一致, 含 withers/throat） | 泛四足拓扑需投影 | 23 点通用动物需投影 |
+| 依赖 | pip ultralytics 纯 torch ✓ | DLC 重依赖(GUI/wx) | mmcv Windows 编译地狱 |
+| 域匹配 | 犬类专用(StanfordExtra) | 泛四足 | 泛动物 |
+| 权重 | COCO 迁移自训(~1h GPU)+数据已预下载(8476 图) | DLC 服务器下载 | Google Drive 不稳定 |
+
+反方质疑与缓解：COCO→dog 迁移效果存疑 → 训练后目检+置信度过滤兜底；AK 野生视角域差 → 失败帧率如实披露；AGPL-3 学术使用合规。
+
+### 4.2 C 路线第一阶段完成证据（2026-08-24 晚, commit `76a29b2`）
+
+| 项 | 结果 |
+|----|------|
+| 选型调研 | GitHub 工具链三路对比定案 ultralytics（社区无现成狗姿态权重, 0 命中） |
+| 管线 TDD | `psd/data/ak_pose_extract.py` + 测试 **19 绿**（R2 规则/抽帧/多实例/插值组装/tar 补抽; TDD 红灯当场抓获测试自身误用 index 15=Chirping 当 Jumping 的笔误） |
+| 样本清单(R2/4类) | **172 视频 = train 123 / val 49**（stay 27 / track 46 / watch 72 / jump 27） |
+| video.tar.gz 补抽 | 缺失 77 个视频流式补抽 **77/77 零失败**, 缓存 runs/public_real_video_cache/ |
+| 端到端冒烟 | COCO 权重 CPU 冒烟通过; 并暴露 17 点人体拓扑污染风险 → 已加 **24 点防呆 fail-fast** |
+| dog-pose 数据 | 已预下载解压 D:\Desktop\datasets\dog-pose（8476 图=6773+1703 ✓） |
+| 全仓回归 | pytest **288 passed** |
+
+### 4.3 待 GPU 接力队列（排队纪律: NTU PID 35208 结束且显存 <2GB 后串行执行）
+
+```
+① python scripts/train_yolo_dogpose.py --epochs 50 --batch 16     # ~1h, 产出 24 点犬类权重
+② python scripts/run_p05_public_real_pipeline.py --stage extract \
+     --weights runs/public_real_yolo_dogpose/train/weights/best.pt # ~10min, 全量提点
+③ ST-GCN+BC 微调(backbone 冻结+4类新 head, init runs/p05_stgcn_bc_full/best.pt)
+   → reports/p05-public-real-partialclass-result-<日期>.json
+```
+看护归属待用户指定（本窗继续等待 / 交 W18 GPU 看护窗口扩队列 / 手动触发）。
 
 ---
 
@@ -139,3 +175,4 @@ df_action.xlsx 有 `S/N` 与 `index` 双编号列。逐行 pandas 核验发现 �
 |------|------|------|
 | v1.0 | 2026-08-24 | 前置检查结论 + 映射重建 + 门禁统计 + 路线裁决请求 |
 | v1.1 | 2026-08-24 | 复核会话补强：门禁解释分歧披露（§3.1）+ PE 犬科帧数分布实证（93 视频 max=13 帧、0 个达 T=30，强化 §1.4 结论）+ 双路实现交叉验证记录 |
+| v2.0 | 2026-08-24 | 用户裁决 C 路线+宽松 4 类：选型定案（§4.1）+ 管线第一阶段完成证据（§4.2）+ GPU 接力队列（§4.3）；样本判定统一 R2 |
