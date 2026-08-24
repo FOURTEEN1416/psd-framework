@@ -1,11 +1,11 @@
 {
-  "date": "2026-08-24T14:25:42",
+  "date": "2026-08-24T14:59:17",
   "plan": {
     "encoder": "aimclr"
   },
   "config_echo": {
     "synthetic_pkl": "data/synthetic/syn_22class_100per_class_seed42.pkl",
-    "bridge_ckpt": "runs/p03_phaseb_bridge/best.pt",
+    "bridge_ckpt": "runs/p05_stgcn_bc_full/best.pt",
     "filter": {
       "conf_min": 0.8,
       "min_duration_s": 0.5
@@ -66,8 +66,8 @@
     "distinct_classes_gate": 6,
     "distribution_pass_gate": true,
     "pool_label_distribution_top8": {
-      "guard": 312,
-      "release": 249,
+      "guard": 313,
+      "release": 247,
       "sit": 128,
       "bite": 114,
       "heel": 101,

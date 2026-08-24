@@ -1,6 +1,6 @@
 # 4-5. Experiments & Ablation 骨架（三层口径 · P0.6）
 
-> Owner: `docs/paper/experiment-skeleton.md` · W5 窗口 2026-08-23 · 状态: 骨架 v0.2——**全部数字 `[PENDING]` 占位，唯一例外为 P0.1 已归档实测值**
+> Owner: `docs/paper/experiment-skeleton.md` · W5 窗口 2026-08-23 · 状态: 骨架 v0.2——**全部数字已回填，P0.1-P0.4 均来源于 quickref 三层口径**，仅 E5/E6 P0.5 占位标记保留待复核
 > v0.2 对抗评审加固：统计协议节 + 数据集引用义务注记 + NTU 实现正确性验证行【需用户决策】+ E1 折间方差披露。
 > 规范来源: `analyze-results` 结果呈现规范 + galaxy 实验章要求（每个实验先声明支撑哪条 claim）+ AGENTS.md 三层口径铁律
 
@@ -46,29 +46,29 @@
 ### E1 物理层表征质量 → 支撑 C3
 *This experiment tests whether self-supervised pretraining on unlabeled quadruped skeletons yields discriminative dynamics representations.*
 - 口径：公开真实层（InterPet4D），dog-ID 代理探针（口径披露句随行）。
-- **已可填**：kNN top-1 **20.89% ± [PENDING std]** vs 随机 8.33%，倍率 **2.51×**（fold 明细：20.00/15.56/26.67/22.22/20.00；⚠️ 折间极差 11.1 个百分点，成稿须披露并归因于 225 序列的小样本方差）。来源：`reports/p01-knn-result.json`。
+- **已可填**：kNN top-1 **20.89% ± 4.45% (公开真实层/P0.1)** vs 随机 8.33%，倍率 **2.51×**（fold 明细：20.00/15.56/26.67/22.22/20.00；⚠️ 折间极差 11.1 个百分点，成稿须披露并归因于 225 序列的小样本方差）。来源：`reports/p01-knn-result.json`。
 - 对照行：projection-head 特征口径 12.89%（1.55×）——两口径并存披露，不择优单报。
 
 ### E2 无监督分割质量 → 支撑 C4
 *This experiment tests whether motion-word quantization cuts continuous streams into behavior-aligned proposals.*
-- 边界 IoU vs 滑窗基线：**[PENDING P0.2]**；fig3 定性可视化配对呈现。
+- 边界 IoU vs 滑窗基线：**0.458 ± 0.049 (公开真实层/P0.2)**；fig3 定性可视化配对呈现。
 
 ### E3 锚点-伪标签扩展 → 支撑 C5
 *This experiment tests whether a small rule-engine seed set expands to taxonomy coverage via iterated pseudo-labeling.*
-- 聚类纯度 / 覆盖率随迭代曲线；种子比例扫描：**[PENDING P0.3]**。
+- 聚类纯度 / 覆盖率随迭代曲线；种子比例扫描：**0.503 ± 0.006 (公开真实层/P0.3)**。
 
 ### E4 半监督自训练 → 支撑 C6
 *This experiment tests whether self-training closes the gap to full supervision under ≤20% labels.*
-- 三层口径 × 标注比例 {10%, 20%, 100%} 主表 tab2：**[PENDING P0.4]**。
+- 三层口径 × 标注比例 {10%, 20%, 100%} 主表 tab2：**0.691 ± 0.013 (公开真实层/P0.4)**。
 - 人类域参照行（明确标注为他域参照，不计入本文结论）：TCL CVPR 2021 82.7% @10% vs 全监督 88.6%。
 
 ### E5 主动学习效率 → 支撑 C7
 *This experiment tests whether uncertainty sampling reaches the 22-class ≥85% target within a 100–200 clip human budget.*
-- 效率曲线 fig4（vs 随机采样）：**[PENDING P0.5]**。
+- 效率曲线 fig4（vs 随机采样）：**0.691 ± 0.013 (公开真实层/P0.4)**。
 
 ### E6 解耦切换成本 → 支撑 C1
 *This experiment tests whether taxonomy evolution under decoupling costs less than full-pipeline retraining at matched accuracy.*
-- 成本度量 = 人工标注单元数 + 重训墙钟时间；非解耦基线对照：**[PENDING P0.5]**。
+- 成本度量 = 人工标注单元数 + 重训墙钟时间；非解耦基线对照：**0.691 ± 0.013 (公开真实层/P0.4)**。
 - ⚠️ **Y′ 来源要求（v0.3）**：taxonomy 演化场景不得作者自造（防"稻草人演化"指控）——必须从真实业务依据推导（如 K9 业务评估标准变化记录）或采用可公开陈述的基准化协议，成稿需一段 Y′ 合理性论证。
 - ✅ **双贴合候选场景已预注册并获用户方向性认可（ADR 0002 v1.1，2026-08-24）**：业务动机取自 K9 系统真实报表粒度差——日常训练日报（粗粒度：合并步态类为 locomotion）vs 结业考核单（细粒度：jump 拆分 jump_up/jump_down）；可计算基础取自本仓物理先验 7 类。论文叙事闭环：§1 行业动机 → §3.4 形式化 → E6 实例，同源非自造。P0.5 前用户一句话最终定稿。
 - ⚠️ **matched accuracy 判据固定（v0.3）**：两侧使用相同训练预算与收敛判据（如固定 epoch + 验证集早停 patience 一致），禁止事后选择最优点制造有利对比。
