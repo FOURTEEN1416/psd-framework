@@ -32,10 +32,10 @@
 
 | 数据集 | 根路径 | 实测数量 | 关键结构 | 主用途 |
 |--------|--------|---------|---------|--------|
-| **22 类合成骨架集** | `data/synthetic/syn_22class_20per_class_seed42.pkl` | **440 样本**（22 类 × 20 样本/类），3.80 MB | `.pkl` 格式：`keypoints (T=30, 24, 3)` / `label (0-21)` / `label_name` / `boundary (T,)`；元数据见 `_manifest.json` | P0.5 ST-GCN+BC 冒烟训练；P0.3 Phase B 类别映射输入 |
+| **22 类合成骨架集** | `data/synthetic/synthetic_22class_T30_n50.pkl` | **1100 样本**（22 类 × 50 样本/类），9.8 MB | `.pkl` 格式：`keypoints (T=30, 24, 3)` / `label (0-21)` / `label_name` / `boundary (T,)`；元数据见 `_manifest.json` | P0.5 ST-GCN+BC 冒烟训练；P0.3 Phase B 类别映射输入 |
 
-> 复现命令：`.venv/Scripts/python.exe scripts/gen_synth_22class.py`
-> 权威 22 类清单：`docs/assets-map.md` 附录（禁止另抄一份）
+> 复现命令：`.venv/Scripts/python.exe -c "from psd.data.synth_stgcn import make_synthetic_dataset, save_synthetic_dataset; save_synthetic_dataset(make_synthetic_dataset(samples_per_class=50, T=30, noise_std=0.05, seed=42), 'data/synthetic/synthetic_22class_T30_n50.pkl')"`
+> 权威 22 类清单：`docs/assets-map.md` §1（禁止另抄一份）
 
 ## 5. 回填记录
 
