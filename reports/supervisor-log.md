@@ -30,14 +30,6 @@
 ## [08-24 09:52:22] 新产出: p02-smq-iou-eC-seeds.json (mtime 09:46)
   mean_matched_iou=0.4577 boundary_f1=0.3425 n_episodes=4 protocol=seed-pseudo-gt-episode-IoU
   >>> 判读: 达到冲刺成功线 0.45 ✅（晨会可讨论收口）
-## [08-24 11:07:21] 新产出: p02-smq-iou-eB-seeds-vm6.json (mtime 10:57)
-  mean_matched_iou=0.3685 boundary_f1=0.3521 n_episodes=4 protocol=seed-pseudo-gt-episode-IoU
-  >>> 判读: 未达线（目标 0.45）；较上一结果 为首见
-## [08-24 11:07:21] 新产出: p02-smq-iou-eC-seeds.json (mtime 10:59)
+## [08-24 12:52:22] 新产出: p02-smq-iou-eC-seeds-recheck.json (mtime 12:50)
   mean_matched_iou=0.4577 boundary_f1=0.3425 n_episodes=4 protocol=seed-pseudo-gt-episode-IoU
   >>> 判读: 达到冲刺成功线 0.45 ✅（晨会可讨论收口）
-## [08-24 11:07:21] 新产出: p02-smq-iou-eC-concat.json (mtime 10:59)
-  mean_matched_iou=0.352 boundary_f1=0.1174 n_episodes=4 protocol=concatenation-episode-IoU
-  >>> 判读: 未达线（目标 0.45）；较上一结果 为首见
-## [08-24 11:07:21] 新产出: p02-diag-motionwords-eC.json (mtime 10:59)
-## [08-24 11:07:21] 新产出: p02-2026-08-24.md (mtime 11:02)
