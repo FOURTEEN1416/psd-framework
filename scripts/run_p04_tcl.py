@@ -294,6 +294,15 @@ def main() -> None:
 
     # ---- Step 1+2+3: 消融矩阵 × seeds
     main_runs: list[dict] | None = None
+
+    def _is_main_cell(cell: dict, tc_val) -> bool:
+        """主配置谓词: calib on / standing consensus / α=1.0 / τ_cov=0.35。
+        参数化匹配，避免 tag 字符串脆弱比较（复核修复 2026-08-24）。"""
+        return _calib_str(cell["calib"]) == "on" \
+            and str(cell["standing"]) == "consensus" \
+            and float(cell["alpha"]) == 1.0 \
+            and float(tc_val) == 0.35
+
     for cell in ablation:
         calib_s = _calib_str(cell["calib"])
         # Include target_coverage in tag to avoid collision across τ-grid cells
@@ -319,41 +328,34 @@ def main() -> None:
             print(f"  seed{seed}: τ*={r['tau_operating']:.3f} "
                   f"精度轨迹 [{traj}] 停止={r['stop_reason']}")
         results["cells"][tag] = aggregate_cell(runs)
-        if tag == "on_consensus_a1.0":
+        if _is_main_cell(cell, tc):
             main_runs = runs   # 主配置 runs 复用（P0.5 移交池取 seed42）
 
 # ---- P0.5 移交物：主配置 seed42 最终池（附录 A 格式 JSONL）
     pool_paths = []
     if not args.smoke and main_runs is not None:
-        # Find the main config cell: alpha=1.0 with target_coverage=0.35
-        main_tag = next((k for k in results["cells"].keys() if "a1.0" in k and "tc0.35" in k), None)
-        if main_tag is None:
-            # fallback: any tag with a1.0
-            main_tag = next((k for k in results["cells"].keys() if "a1.0" in k), None)
-        r_main = next((r for r in main_runs if r["run_seed"] == 42) if main_runs else [])
-        if main_tag and main_tag in results["cells"]:
-            r_main = next(r for r in main_runs if r["run_seed"] == 42)
-            final_round = f"iter{len(r_main['rounds']) - 1}"
-            pool_path = export_pool(
-                REPO_ROOT / cfg["data"]["pool_out_dir"],
-                universe_segs,
-                r_main, class_names, tag="main_consensus_a1.0", run_seed=42,
-                embedding_ref=eval_cache_name,
-                iteration_round=final_round)
-            pool_paths.append(str(pool_path.relative_to(REPO_ROOT)))
-            results["handoff_p05"] = {
-                "pool_path": str(pool_path.relative_to(REPO_ROOT)),
-                "pool_size": int(len(r_main["final_pool_idx"])),
-                "universe_size": int(len(eval_segs)),
-                "label_source": f"p04_tcl_{final_round}_main_consensus_a1.0",
-                "note": "主配置(calib on/consensus/α=1) seed42 最终轮过筛池；"
-                        "真值口径仍为物理先验共识，P0.5 使用时应知悉",
-            }
-            print(f"\n[handoff] P0.5 移交池 -> {pool_path}")
+        r_main = next(r for r in main_runs if r["run_seed"] == 42)
+        final_round = f"iter{len(r_main['rounds']) - 1}"
+        pool_path = export_pool(
+            REPO_ROOT / cfg["data"]["pool_out_dir"],
+            universe_segs,
+            r_main, class_names, tag="main_consensus_a1.0", run_seed=42,
+            embedding_ref=eval_cache_name,
+            iteration_round=final_round)
+        pool_paths.append(str(pool_path.relative_to(REPO_ROOT)))
+        results["handoff_p05"] = {
+            "pool_path": str(pool_path.relative_to(REPO_ROOT)),
+            "pool_size": int(len(r_main["final_pool_idx"])),
+            "universe_size": int(len(eval_segs)),
+            "label_source": f"p04_tcl_{final_round}_main_consensus_a1.0",
+            "note": "主配置(calib on/consensus/α=1/τ_cov=0.35) seed42 最终轮过筛池；"
+                    "真值口径仍为物理先验共识，P0.5 使用时应知悉",
+        }
+        print(f"\n[handoff] P0.5 移交池 -> {pool_path}")
 
     # ---- 验收判定（W10 交接 §5: 提升或如实报告不提升+根因）
-    main_cell = next((v for k, v in results["cells"].items()
-                      if k == "on_consensus_a1.0"), None)
+    # 直接由主配置 runs 聚合（与 main_runs 同源，不依赖 tag 字符串解析）
+    main_cell = aggregate_cell(main_runs) if main_runs is not None else None
     if main_cell and main_cell["paired_first_vs_final"]:
         pf = main_cell["paired_first_vs_final"]
         results["acceptance"] = {

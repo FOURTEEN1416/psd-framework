@@ -1,5 +1,5 @@
 {
-  "date": "2026-08-24T15:09:34",
+  "date": "2026-08-24T15:39:14",
   "metric_layer": "public_real_physics_prior",
   "config_echo": {
     "filter": {
@@ -1407,5 +1407,11 @@
         "44": 0.1103
       }
     }
+  },
+  "acceptance": {
+    "precision_improved_vs_round0": true,
+    "delta_pp_mean": 3.54,
+    "paired_t_p": 0.045,
+    "honest_note": "真值为物理先验伪标签共识（public_real_physics_prior），非人工标注"
   }
 }
