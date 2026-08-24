@@ -48,6 +48,7 @@ VIDEO_TAR = VIDEO_DIR.parent / "video.tar.gz"
 CACHE_DIR = REPO / "runs" / "public_real_video_cache"
 OUT_DIR = REPO / "runs" / "public_real_dataset"
 MANIFEST_JSON = OUT_DIR / "partialclass4_manifest.json"
+EXTRACT_QUALITY_JSON = OUT_DIR / "partialclass4_extract_quality.json"  # 与 manifest 分文件, 防覆盖
 DATASET_PKL = OUT_DIR / "partialclass4_T30.pkl"
 
 CANINE_SPECIES = {
@@ -91,14 +92,12 @@ def build_manifest() -> tuple[list[dict], dict]:
     meta = pd.read_excel(META)
     mask = meta["list_animal"].apply(lambda c: bool(parse_species(c) & CANINE_SPECIES))
     canine_ids = set(meta.loc[mask, "video_id"].astype(str))
-    split_of = dict(zip(meta["video_id"].astype(str), meta["type"].astype(str)))
 
     tr_seq, va_seq = scan_video_labels(TRAIN_CSV), scan_video_labels(VAL_CSV)
     local_mp4 = {p.stem for p in VIDEO_DIR.glob("*.mp4")}
 
     samples = select_samples(
         video_labels_by_split={"train": tr_seq, "val": va_seq},
-        split_of=split_of,
         canine_ids=canine_ids,
         local_mp4_ids=local_mp4,
     )
@@ -233,11 +232,12 @@ def stage_extract(weights: str, limit: int | None = None) -> None:
     with open(DATASET_PKL, "wb") as f:
         pickle.dump(dataset, f)
     dist = Counter((d["split"], d["psd_class"]) for d in dataset)
-    MANIFEST_JSON.write_text(json.dumps({
+    EXTRACT_QUALITY_JSON.write_text(json.dumps({
         "weights": weights, "n_samples": len(dataset),
         "distribution": {f"{a}/{b}": c for (a, b), c in sorted(dist.items())},
         "quality": quality}, ensure_ascii=False, indent=2, default=str), encoding="utf-8")
     print(f"[done] 样本 {len(dataset)} → {DATASET_PKL}")
+    print(f"[done] 质量统计 → {EXTRACT_QUALITY_JSON} (manifest 保持不动)")
 
 
 def main():

@@ -74,7 +74,6 @@ def first_mapped_label(label_seq: List[str], allowed: Optional[set] = None) -> O
 
 def select_samples(
     video_labels_by_split: Dict[str, Dict[str, List[str]]],
-    split_of: Dict[str, str],
     canine_ids: set,
     local_mp4_ids: set,
 ) -> List[dict]:
@@ -82,8 +81,7 @@ def select_samples(
 
     Args:
         video_labels_by_split: {split: {video_id: [ak_index_str, ...]}}，
-            来自 train.csv / val.csv 的视频级保序标签序列。
-        split_of: video_id -> 'train' | 'val'（AR_metadata type 列）。
+            来自 train.csv / val.csv 的视频级保序标签序列; split 归属即由本参数键决定。
         canine_ids: 犬科视频集合（W2 口径A）。
         local_mp4_ids: 已解压本地 mp4 的 video_id 集合。
 

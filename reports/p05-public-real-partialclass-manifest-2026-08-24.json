@@ -1,21 +1,34 @@
 {
-  "weights": "yolo11s-pose.pt",
-  "n_samples": 1,
-  "distribution": {
-    "train/watch": 1
+  "gate_classes": [
+    "stay",
+    "track",
+    "watch",
+    "jump"
+  ],
+  "clip_t": 30,
+  "build_info": {
+    "canine_total": 329,
+    "local_mp4_total": 211,
+    "samples": {
+      "train": 123,
+      "val": 49
+    },
+    "classes": {
+      "watch": 72,
+      "track": 46,
+      "stay": 27,
+      "jump": 27
+    }
   },
-  "quality": [
+  "missing_after_tar": [],
+  "samples": [
     {
       "video_id": "ADSTNDAL",
       "split": "train",
       "psd_class": "watch",
       "class_idx": 2,
       "source": "tar",
-      "video_path": "D:\\Desktop\\psd-framework\\runs\\public_real_video_cache\\ADSTNDAL.mp4",
-      "status": "ok",
-      "n_interpolated": 21,
-      "no_detect": 21,
-      "low_conf": 0
+      "video_path": "D:\\Desktop\\psd-framework\\runs\\public_real_video_cache\\ADSTNDAL.mp4"
     },
     {
       "video_id": "AHSAPCNX",
@@ -23,8 +36,7 @@
       "psd_class": "track",
       "class_idx": 1,
       "source": "mp4",
-      "video_path": "D:\\Desktop\\k9-training-system\\data\\animal_kingdom\\action_recognition\\dataset\\video\\AHSAPCNX.mp4",
-      "status": "all_missing"
+      "video_path": "D:\\Desktop\\k9-training-system\\data\\animal_kingdom\\action_recognition\\dataset\\video\\AHSAPCNX.mp4"
     },
     {
       "video_id": "AIFSREBY",
@@ -32,8 +44,1359 @@
       "psd_class": "stay",
       "class_idx": 0,
       "source": "tar",
-      "video_path": "D:\\Desktop\\psd-framework\\runs\\public_real_video_cache\\AIFSREBY.mp4",
-      "status": "all_missing"
+      "video_path": "D:\\Desktop\\psd-framework\\runs\\public_real_video_cache\\AIFSREBY.mp4"
+    },
+    {
+      "video_id": "AKYIXRSU",
+      "split": "train",
+      "psd_class": "watch",
+      "class_idx": 2,
+      "source": "mp4",
+      "video_path": "D:\\Desktop\\k9-training-system\\data\\animal_kingdom\\action_recognition\\dataset\\video\\AKYIXRSU.mp4"
+    },
+    {
+      "video_id": "AOZRGCNX",
+      "split": "train",
+      "psd_class": "watch",
+      "class_idx": 2,
+      "source": "mp4",
+      "video_path": "D:\\Desktop\\k9-training-system\\data\\animal_kingdom\\action_recognition\\dataset\\video\\AOZRGCNX.mp4"
+    },
+    {
+      "video_id": "AWJEUGCS",
+      "split": "train",
+      "psd_class": "watch",
+      "class_idx": 2,
+      "source": "mp4",
+      "video_path": "D:\\Desktop\\k9-training-system\\data\\animal_kingdom\\action_recognition\\dataset\\video\\AWJEUGCS.mp4"
+    },
+    {
+      "video_id": "BIUQBRAC",
+      "split": "train",
+      "psd_class": "jump",
+      "class_idx": 3,
+      "source": "tar",
+      "video_path": "D:\\Desktop\\psd-framework\\runs\\public_real_video_cache\\BIUQBRAC.mp4"
+    },
+    {
+      "video_id": "BLUIEDSN",
+      "split": "train",
+      "psd_class": "track",
+      "class_idx": 1,
+      "source": "mp4",
+      "video_path": "D:\\Desktop\\k9-training-system\\data\\animal_kingdom\\action_recognition\\dataset\\video\\BLUIEDSN.mp4"
+    },
+    {
+      "video_id": "BLUYUTEK",
+      "split": "train",
+      "psd_class": "watch",
+      "class_idx": 2,
+      "source": "mp4",
+      "video_path": "D:\\Desktop\\k9-training-system\\data\\animal_kingdom\\action_recognition\\dataset\\video\\BLUYUTEK.mp4"
+    },
+    {
+      "video_id": "BWAOGRSU",
+      "split": "train",
+      "psd_class": "watch",
+      "class_idx": 2,
+      "source": "mp4",
+      "video_path": "D:\\Desktop\\k9-training-system\\data\\animal_kingdom\\action_recognition\\dataset\\video\\BWAOGRSU.mp4"
+    },
+    {
+      "video_id": "BZFOLEZZ",
+      "split": "train",
+      "psd_class": "watch",
+      "class_idx": 2,
+      "source": "tar",
+      "video_path": "D:\\Desktop\\psd-framework\\runs\\public_real_video_cache\\BZFOLEZZ.mp4"
+    },
+    {
+      "video_id": "CALITDAL",
+      "split": "train",
+      "psd_class": "watch",
+      "class_idx": 2,
+      "source": "tar",
+      "video_path": "D:\\Desktop\\psd-framework\\runs\\public_real_video_cache\\CALITDAL.mp4"
+    },
+    {
+      "video_id": "CAZTCEBY",
+      "split": "train",
+      "psd_class": "watch",
+      "class_idx": 2,
+      "source": "tar",
+      "video_path": "D:\\Desktop\\psd-framework\\runs\\public_real_video_cache\\CAZTCEBY.mp4"
+    },
+    {
+      "video_id": "CCMUSEZZ",
+      "split": "train",
+      "psd_class": "watch",
+      "class_idx": 2,
+      "source": "tar",
+      "video_path": "D:\\Desktop\\psd-framework\\runs\\public_real_video_cache\\CCMUSEZZ.mp4"
+    },
+    {
+      "video_id": "CJOCVEBY",
+      "split": "train",
+      "psd_class": "watch",
+      "class_idx": 2,
+      "source": "tar",
+      "video_path": "D:\\Desktop\\psd-framework\\runs\\public_real_video_cache\\CJOCVEBY.mp4"
+    },
+    {
+      "video_id": "CKFVZXGD",
+      "split": "train",
+      "psd_class": "watch",
+      "class_idx": 2,
+      "source": "mp4",
+      "video_path": "D:\\Desktop\\k9-training-system\\data\\animal_kingdom\\action_recognition\\dataset\\video\\CKFVZXGD.mp4"
+    },
+    {
+      "video_id": "CMNHHDAL",
+      "split": "train",
+      "psd_class": "watch",
+      "class_idx": 2,
+      "source": "tar",
+      "video_path": "D:\\Desktop\\psd-framework\\runs\\public_real_video_cache\\CMNHHDAL.mp4"
+    },
+    {
+      "video_id": "CPOBLXGD",
+      "split": "train",
+      "psd_class": "watch",
+      "class_idx": 2,
+      "source": "tar",
+      "video_path": "D:\\Desktop\\psd-framework\\runs\\public_real_video_cache\\CPOBLXGD.mp4"
+    },
+    {
+      "video_id": "CUFGUGCS",
+      "split": "train",
+      "psd_class": "watch",
+      "class_idx": 2,
+      "source": "mp4",
+      "video_path": "D:\\Desktop\\k9-training-system\\data\\animal_kingdom\\action_recognition\\dataset\\video\\CUFGUGCS.mp4"
+    },
+    {
+      "video_id": "CUWYXCNX",
+      "split": "train",
+      "psd_class": "track",
+      "class_idx": 1,
+      "source": "mp4",
+      "video_path": "D:\\Desktop\\k9-training-system\\data\\animal_kingdom\\action_recognition\\dataset\\video\\CUWYXCNX.mp4"
+    },
+    {
+      "video_id": "CZVTXFGA",
+      "split": "train",
+      "psd_class": "jump",
+      "class_idx": 3,
+      "source": "mp4",
+      "video_path": "D:\\Desktop\\k9-training-system\\data\\animal_kingdom\\action_recognition\\dataset\\video\\CZVTXFGA.mp4"
+    },
+    {
+      "video_id": "DDDSHDAL",
+      "split": "train",
+      "psd_class": "stay",
+      "class_idx": 0,
+      "source": "tar",
+      "video_path": "D:\\Desktop\\psd-framework\\runs\\public_real_video_cache\\DDDSHDAL.mp4"
+    },
+    {
+      "video_id": "DHLCLRSU",
+      "split": "train",
+      "psd_class": "watch",
+      "class_idx": 2,
+      "source": "mp4",
+      "video_path": "D:\\Desktop\\k9-training-system\\data\\animal_kingdom\\action_recognition\\dataset\\video\\DHLCLRSU.mp4"
+    },
+    {
+      "video_id": "DHOIVDSN",
+      "split": "train",
+      "psd_class": "track",
+      "class_idx": 1,
+      "source": "mp4",
+      "video_path": "D:\\Desktop\\k9-training-system\\data\\animal_kingdom\\action_recognition\\dataset\\video\\DHOIVDSN.mp4"
+    },
+    {
+      "video_id": "DNXYSEZZ",
+      "split": "train",
+      "psd_class": "watch",
+      "class_idx": 2,
+      "source": "tar",
+      "video_path": "D:\\Desktop\\psd-framework\\runs\\public_real_video_cache\\DNXYSEZZ.mp4"
+    },
+    {
+      "video_id": "DXNNORSU",
+      "split": "train",
+      "psd_class": "watch",
+      "class_idx": 2,
+      "source": "mp4",
+      "video_path": "D:\\Desktop\\k9-training-system\\data\\animal_kingdom\\action_recognition\\dataset\\video\\DXNNORSU.mp4"
+    },
+    {
+      "video_id": "EGJVKDSN",
+      "split": "train",
+      "psd_class": "track",
+      "class_idx": 1,
+      "source": "tar",
+      "video_path": "D:\\Desktop\\psd-framework\\runs\\public_real_video_cache\\EGJVKDSN.mp4"
+    },
+    {
+      "video_id": "EGVFHCNX",
+      "split": "train",
+      "psd_class": "track",
+      "class_idx": 1,
+      "source": "mp4",
+      "video_path": "D:\\Desktop\\k9-training-system\\data\\animal_kingdom\\action_recognition\\dataset\\video\\EGVFHCNX.mp4"
+    },
+    {
+      "video_id": "EHXIFXGD",
+      "split": "train",
+      "psd_class": "watch",
+      "class_idx": 2,
+      "source": "mp4",
+      "video_path": "D:\\Desktop\\k9-training-system\\data\\animal_kingdom\\action_recognition\\dataset\\video\\EHXIFXGD.mp4"
+    },
+    {
+      "video_id": "ENJUYDAL",
+      "split": "train",
+      "psd_class": "stay",
+      "class_idx": 0,
+      "source": "tar",
+      "video_path": "D:\\Desktop\\psd-framework\\runs\\public_real_video_cache\\ENJUYDAL.mp4"
+    },
+    {
+      "video_id": "FDOHSRAC",
+      "split": "train",
+      "psd_class": "watch",
+      "class_idx": 2,
+      "source": "tar",
+      "video_path": "D:\\Desktop\\psd-framework\\runs\\public_real_video_cache\\FDOHSRAC.mp4"
+    },
+    {
+      "video_id": "FWPNCDSN",
+      "split": "train",
+      "psd_class": "track",
+      "class_idx": 1,
+      "source": "mp4",
+      "video_path": "D:\\Desktop\\k9-training-system\\data\\animal_kingdom\\action_recognition\\dataset\\video\\FWPNCDSN.mp4"
+    },
+    {
+      "video_id": "GIVJGXGD",
+      "split": "train",
+      "psd_class": "watch",
+      "class_idx": 2,
+      "source": "tar",
+      "video_path": "D:\\Desktop\\psd-framework\\runs\\public_real_video_cache\\GIVJGXGD.mp4"
+    },
+    {
+      "video_id": "GNBCOCNX",
+      "split": "train",
+      "psd_class": "watch",
+      "class_idx": 2,
+      "source": "mp4",
+      "video_path": "D:\\Desktop\\k9-training-system\\data\\animal_kingdom\\action_recognition\\dataset\\video\\GNBCOCNX.mp4"
+    },
+    {
+      "video_id": "GWRPTXDO",
+      "split": "train",
+      "psd_class": "watch",
+      "class_idx": 2,
+      "source": "mp4",
+      "video_path": "D:\\Desktop\\k9-training-system\\data\\animal_kingdom\\action_recognition\\dataset\\video\\GWRPTXDO.mp4"
+    },
+    {
+      "video_id": "HCOWMEBY",
+      "split": "train",
+      "psd_class": "watch",
+      "class_idx": 2,
+      "source": "tar",
+      "video_path": "D:\\Desktop\\psd-framework\\runs\\public_real_video_cache\\HCOWMEBY.mp4"
+    },
+    {
+      "video_id": "HGLXJCNX",
+      "split": "train",
+      "psd_class": "track",
+      "class_idx": 1,
+      "source": "mp4",
+      "video_path": "D:\\Desktop\\k9-training-system\\data\\animal_kingdom\\action_recognition\\dataset\\video\\HGLXJCNX.mp4"
+    },
+    {
+      "video_id": "HHDLXDPR",
+      "split": "train",
+      "psd_class": "watch",
+      "class_idx": 2,
+      "source": "tar",
+      "video_path": "D:\\Desktop\\psd-framework\\runs\\public_real_video_cache\\HHDLXDPR.mp4"
+    },
+    {
+      "video_id": "HPRSIXDO",
+      "split": "train",
+      "psd_class": "track",
+      "class_idx": 1,
+      "source": "mp4",
+      "video_path": "D:\\Desktop\\k9-training-system\\data\\animal_kingdom\\action_recognition\\dataset\\video\\HPRSIXDO.mp4"
+    },
+    {
+      "video_id": "IBPHICNX",
+      "split": "train",
+      "psd_class": "track",
+      "class_idx": 1,
+      "source": "mp4",
+      "video_path": "D:\\Desktop\\k9-training-system\\data\\animal_kingdom\\action_recognition\\dataset\\video\\IBPHICNX.mp4"
+    },
+    {
+      "video_id": "IJTCHRSU",
+      "split": "train",
+      "psd_class": "watch",
+      "class_idx": 2,
+      "source": "mp4",
+      "video_path": "D:\\Desktop\\k9-training-system\\data\\animal_kingdom\\action_recognition\\dataset\\video\\IJTCHRSU.mp4"
+    },
+    {
+      "video_id": "IMRAXCNX",
+      "split": "train",
+      "psd_class": "watch",
+      "class_idx": 2,
+      "source": "mp4",
+      "video_path": "D:\\Desktop\\k9-training-system\\data\\animal_kingdom\\action_recognition\\dataset\\video\\IMRAXCNX.mp4"
+    },
+    {
+      "video_id": "IUJRJRSU",
+      "split": "train",
+      "psd_class": "track",
+      "class_idx": 1,
+      "source": "mp4",
+      "video_path": "D:\\Desktop\\k9-training-system\\data\\animal_kingdom\\action_recognition\\dataset\\video\\IUJRJRSU.mp4"
+    },
+    {
+      "video_id": "IUZEQEBY",
+      "split": "train",
+      "psd_class": "stay",
+      "class_idx": 0,
+      "source": "tar",
+      "video_path": "D:\\Desktop\\psd-framework\\runs\\public_real_video_cache\\IUZEQEBY.mp4"
+    },
+    {
+      "video_id": "IXJLIXGD",
+      "split": "train",
+      "psd_class": "watch",
+      "class_idx": 2,
+      "source": "mp4",
+      "video_path": "D:\\Desktop\\k9-training-system\\data\\animal_kingdom\\action_recognition\\dataset\\video\\IXJLIXGD.mp4"
+    },
+    {
+      "video_id": "JBRQKDAL",
+      "split": "train",
+      "psd_class": "stay",
+      "class_idx": 0,
+      "source": "tar",
+      "video_path": "D:\\Desktop\\psd-framework\\runs\\public_real_video_cache\\JBRQKDAL.mp4"
+    },
+    {
+      "video_id": "JCKOVEBY",
+      "split": "train",
+      "psd_class": "track",
+      "class_idx": 1,
+      "source": "tar",
+      "video_path": "D:\\Desktop\\psd-framework\\runs\\public_real_video_cache\\JCKOVEBY.mp4"
+    },
+    {
+      "video_id": "JDJMHRAC",
+      "split": "train",
+      "psd_class": "jump",
+      "class_idx": 3,
+      "source": "tar",
+      "video_path": "D:\\Desktop\\psd-framework\\runs\\public_real_video_cache\\JDJMHRAC.mp4"
+    },
+    {
+      "video_id": "JFPCUGCS",
+      "split": "train",
+      "psd_class": "watch",
+      "class_idx": 2,
+      "source": "mp4",
+      "video_path": "D:\\Desktop\\k9-training-system\\data\\animal_kingdom\\action_recognition\\dataset\\video\\JFPCUGCS.mp4"
+    },
+    {
+      "video_id": "JLQYOXGD",
+      "split": "train",
+      "psd_class": "watch",
+      "class_idx": 2,
+      "source": "mp4",
+      "video_path": "D:\\Desktop\\k9-training-system\\data\\animal_kingdom\\action_recognition\\dataset\\video\\JLQYOXGD.mp4"
+    },
+    {
+      "video_id": "JMBYQEBY",
+      "split": "train",
+      "psd_class": "stay",
+      "class_idx": 0,
+      "source": "tar",
+      "video_path": "D:\\Desktop\\psd-framework\\runs\\public_real_video_cache\\JMBYQEBY.mp4"
+    },
+    {
+      "video_id": "JOABNRAC",
+      "split": "train",
+      "psd_class": "watch",
+      "class_idx": 2,
+      "source": "tar",
+      "video_path": "D:\\Desktop\\psd-framework\\runs\\public_real_video_cache\\JOABNRAC.mp4"
+    },
+    {
+      "video_id": "JOTYIRSU",
+      "split": "train",
+      "psd_class": "track",
+      "class_idx": 1,
+      "source": "mp4",
+      "video_path": "D:\\Desktop\\k9-training-system\\data\\animal_kingdom\\action_recognition\\dataset\\video\\JOTYIRSU.mp4"
+    },
+    {
+      "video_id": "JQNJBEBY",
+      "split": "train",
+      "psd_class": "track",
+      "class_idx": 1,
+      "source": "tar",
+      "video_path": "D:\\Desktop\\psd-framework\\runs\\public_real_video_cache\\JQNJBEBY.mp4"
+    },
+    {
+      "video_id": "JVSXIEBY",
+      "split": "train",
+      "psd_class": "jump",
+      "class_idx": 3,
+      "source": "tar",
+      "video_path": "D:\\Desktop\\psd-framework\\runs\\public_real_video_cache\\JVSXIEBY.mp4"
+    },
+    {
+      "video_id": "KACVEDAL",
+      "split": "train",
+      "psd_class": "watch",
+      "class_idx": 2,
+      "source": "tar",
+      "video_path": "D:\\Desktop\\psd-framework\\runs\\public_real_video_cache\\KACVEDAL.mp4"
+    },
+    {
+      "video_id": "KIANSCNX",
+      "split": "train",
+      "psd_class": "watch",
+      "class_idx": 2,
+      "source": "mp4",
+      "video_path": "D:\\Desktop\\k9-training-system\\data\\animal_kingdom\\action_recognition\\dataset\\video\\KIANSCNX.mp4"
+    },
+    {
+      "video_id": "KIZGQEBY",
+      "split": "train",
+      "psd_class": "stay",
+      "class_idx": 0,
+      "source": "tar",
+      "video_path": "D:\\Desktop\\psd-framework\\runs\\public_real_video_cache\\KIZGQEBY.mp4"
+    },
+    {
+      "video_id": "KUZYPXGD",
+      "split": "train",
+      "psd_class": "watch",
+      "class_idx": 2,
+      "source": "mp4",
+      "video_path": "D:\\Desktop\\k9-training-system\\data\\animal_kingdom\\action_recognition\\dataset\\video\\KUZYPXGD.mp4"
+    },
+    {
+      "video_id": "KYTBXEBY",
+      "split": "train",
+      "psd_class": "stay",
+      "class_idx": 0,
+      "source": "tar",
+      "video_path": "D:\\Desktop\\psd-framework\\runs\\public_real_video_cache\\KYTBXEBY.mp4"
+    },
+    {
+      "video_id": "LAJALDAL",
+      "split": "train",
+      "psd_class": "stay",
+      "class_idx": 0,
+      "source": "tar",
+      "video_path": "D:\\Desktop\\psd-framework\\runs\\public_real_video_cache\\LAJALDAL.mp4"
+    },
+    {
+      "video_id": "LFMVECNX",
+      "split": "train",
+      "psd_class": "track",
+      "class_idx": 1,
+      "source": "mp4",
+      "video_path": "D:\\Desktop\\k9-training-system\\data\\animal_kingdom\\action_recognition\\dataset\\video\\LFMVECNX.mp4"
+    },
+    {
+      "video_id": "LGOBKRSU",
+      "split": "train",
+      "psd_class": "track",
+      "class_idx": 1,
+      "source": "mp4",
+      "video_path": "D:\\Desktop\\k9-training-system\\data\\animal_kingdom\\action_recognition\\dataset\\video\\LGOBKRSU.mp4"
+    },
+    {
+      "video_id": "LGYJLCNX",
+      "split": "train",
+      "psd_class": "watch",
+      "class_idx": 2,
+      "source": "mp4",
+      "video_path": "D:\\Desktop\\k9-training-system\\data\\animal_kingdom\\action_recognition\\dataset\\video\\LGYJLCNX.mp4"
+    },
+    {
+      "video_id": "LNKQREBY",
+      "split": "train",
+      "psd_class": "jump",
+      "class_idx": 3,
+      "source": "tar",
+      "video_path": "D:\\Desktop\\psd-framework\\runs\\public_real_video_cache\\LNKQREBY.mp4"
+    },
+    {
+      "video_id": "LWCFLRSU",
+      "split": "train",
+      "psd_class": "stay",
+      "class_idx": 0,
+      "source": "mp4",
+      "video_path": "D:\\Desktop\\k9-training-system\\data\\animal_kingdom\\action_recognition\\dataset\\video\\LWCFLRSU.mp4"
+    },
+    {
+      "video_id": "LWSQVRAC",
+      "split": "train",
+      "psd_class": "jump",
+      "class_idx": 3,
+      "source": "tar",
+      "video_path": "D:\\Desktop\\psd-framework\\runs\\public_real_video_cache\\LWSQVRAC.mp4"
+    },
+    {
+      "video_id": "LXWUWEBY",
+      "split": "train",
+      "psd_class": "jump",
+      "class_idx": 3,
+      "source": "tar",
+      "video_path": "D:\\Desktop\\psd-framework\\runs\\public_real_video_cache\\LXWUWEBY.mp4"
+    },
+    {
+      "video_id": "MGBSOFGA",
+      "split": "train",
+      "psd_class": "track",
+      "class_idx": 1,
+      "source": "mp4",
+      "video_path": "D:\\Desktop\\k9-training-system\\data\\animal_kingdom\\action_recognition\\dataset\\video\\MGBSOFGA.mp4"
+    },
+    {
+      "video_id": "MHMKQEZZ",
+      "split": "train",
+      "psd_class": "watch",
+      "class_idx": 2,
+      "source": "tar",
+      "video_path": "D:\\Desktop\\psd-framework\\runs\\public_real_video_cache\\MHMKQEZZ.mp4"
+    },
+    {
+      "video_id": "MUMHBEZZ",
+      "split": "train",
+      "psd_class": "watch",
+      "class_idx": 2,
+      "source": "tar",
+      "video_path": "D:\\Desktop\\psd-framework\\runs\\public_real_video_cache\\MUMHBEZZ.mp4"
+    },
+    {
+      "video_id": "NJNBFRSU",
+      "split": "train",
+      "psd_class": "track",
+      "class_idx": 1,
+      "source": "mp4",
+      "video_path": "D:\\Desktop\\k9-training-system\\data\\animal_kingdom\\action_recognition\\dataset\\video\\NJNBFRSU.mp4"
+    },
+    {
+      "video_id": "NTYBLRSU",
+      "split": "train",
+      "psd_class": "watch",
+      "class_idx": 2,
+      "source": "mp4",
+      "video_path": "D:\\Desktop\\k9-training-system\\data\\animal_kingdom\\action_recognition\\dataset\\video\\NTYBLRSU.mp4"
+    },
+    {
+      "video_id": "OLAMJEBY",
+      "split": "train",
+      "psd_class": "jump",
+      "class_idx": 3,
+      "source": "tar",
+      "video_path": "D:\\Desktop\\psd-framework\\runs\\public_real_video_cache\\OLAMJEBY.mp4"
+    },
+    {
+      "video_id": "ONNMKRSU",
+      "split": "train",
+      "psd_class": "track",
+      "class_idx": 1,
+      "source": "mp4",
+      "video_path": "D:\\Desktop\\k9-training-system\\data\\animal_kingdom\\action_recognition\\dataset\\video\\ONNMKRSU.mp4"
+    },
+    {
+      "video_id": "ORBGIGCS",
+      "split": "train",
+      "psd_class": "stay",
+      "class_idx": 0,
+      "source": "mp4",
+      "video_path": "D:\\Desktop\\k9-training-system\\data\\animal_kingdom\\action_recognition\\dataset\\video\\ORBGIGCS.mp4"
+    },
+    {
+      "video_id": "OTNOKXDO",
+      "split": "train",
+      "psd_class": "jump",
+      "class_idx": 3,
+      "source": "mp4",
+      "video_path": "D:\\Desktop\\k9-training-system\\data\\animal_kingdom\\action_recognition\\dataset\\video\\OTNOKXDO.mp4"
+    },
+    {
+      "video_id": "PBXOORSU",
+      "split": "train",
+      "psd_class": "watch",
+      "class_idx": 2,
+      "source": "mp4",
+      "video_path": "D:\\Desktop\\k9-training-system\\data\\animal_kingdom\\action_recognition\\dataset\\video\\PBXOORSU.mp4"
+    },
+    {
+      "video_id": "PDJTSRSU",
+      "split": "train",
+      "psd_class": "watch",
+      "class_idx": 2,
+      "source": "mp4",
+      "video_path": "D:\\Desktop\\k9-training-system\\data\\animal_kingdom\\action_recognition\\dataset\\video\\PDJTSRSU.mp4"
+    },
+    {
+      "video_id": "PFNOTDPR",
+      "split": "train",
+      "psd_class": "watch",
+      "class_idx": 2,
+      "source": "tar",
+      "video_path": "D:\\Desktop\\psd-framework\\runs\\public_real_video_cache\\PFNOTDPR.mp4"
+    },
+    {
+      "video_id": "PIXKTRAC",
+      "split": "train",
+      "psd_class": "watch",
+      "class_idx": 2,
+      "source": "tar",
+      "video_path": "D:\\Desktop\\psd-framework\\runs\\public_real_video_cache\\PIXKTRAC.mp4"
+    },
+    {
+      "video_id": "PODPPRAC",
+      "split": "train",
+      "psd_class": "jump",
+      "class_idx": 3,
+      "source": "tar",
+      "video_path": "D:\\Desktop\\psd-framework\\runs\\public_real_video_cache\\PODPPRAC.mp4"
+    },
+    {
+      "video_id": "PRXWIXGD",
+      "split": "train",
+      "psd_class": "jump",
+      "class_idx": 3,
+      "source": "mp4",
+      "video_path": "D:\\Desktop\\k9-training-system\\data\\animal_kingdom\\action_recognition\\dataset\\video\\PRXWIXGD.mp4"
+    },
+    {
+      "video_id": "QARHHEBY",
+      "split": "train",
+      "psd_class": "jump",
+      "class_idx": 3,
+      "source": "tar",
+      "video_path": "D:\\Desktop\\psd-framework\\runs\\public_real_video_cache\\QARHHEBY.mp4"
+    },
+    {
+      "video_id": "QFMMRXGD",
+      "split": "train",
+      "psd_class": "track",
+      "class_idx": 1,
+      "source": "mp4",
+      "video_path": "D:\\Desktop\\k9-training-system\\data\\animal_kingdom\\action_recognition\\dataset\\video\\QFMMRXGD.mp4"
+    },
+    {
+      "video_id": "QFSQWEBY",
+      "split": "train",
+      "psd_class": "watch",
+      "class_idx": 2,
+      "source": "tar",
+      "video_path": "D:\\Desktop\\psd-framework\\runs\\public_real_video_cache\\QFSQWEBY.mp4"
+    },
+    {
+      "video_id": "QFXYXRSU",
+      "split": "train",
+      "psd_class": "stay",
+      "class_idx": 0,
+      "source": "mp4",
+      "video_path": "D:\\Desktop\\k9-training-system\\data\\animal_kingdom\\action_recognition\\dataset\\video\\QFXYXRSU.mp4"
+    },
+    {
+      "video_id": "QNTULRSU",
+      "split": "train",
+      "psd_class": "track",
+      "class_idx": 1,
+      "source": "mp4",
+      "video_path": "D:\\Desktop\\k9-training-system\\data\\animal_kingdom\\action_recognition\\dataset\\video\\QNTULRSU.mp4"
+    },
+    {
+      "video_id": "QWSWMDAL",
+      "split": "train",
+      "psd_class": "stay",
+      "class_idx": 0,
+      "source": "tar",
+      "video_path": "D:\\Desktop\\psd-framework\\runs\\public_real_video_cache\\QWSWMDAL.mp4"
+    },
+    {
+      "video_id": "RDKFYEBY",
+      "split": "train",
+      "psd_class": "jump",
+      "class_idx": 3,
+      "source": "tar",
+      "video_path": "D:\\Desktop\\psd-framework\\runs\\public_real_video_cache\\RDKFYEBY.mp4"
+    },
+    {
+      "video_id": "RKMYMRSU",
+      "split": "train",
+      "psd_class": "watch",
+      "class_idx": 2,
+      "source": "mp4",
+      "video_path": "D:\\Desktop\\k9-training-system\\data\\animal_kingdom\\action_recognition\\dataset\\video\\RKMYMRSU.mp4"
+    },
+    {
+      "video_id": "SBJJCRAC",
+      "split": "train",
+      "psd_class": "watch",
+      "class_idx": 2,
+      "source": "tar",
+      "video_path": "D:\\Desktop\\psd-framework\\runs\\public_real_video_cache\\SBJJCRAC.mp4"
+    },
+    {
+      "video_id": "SBPPARSU",
+      "split": "train",
+      "psd_class": "track",
+      "class_idx": 1,
+      "source": "mp4",
+      "video_path": "D:\\Desktop\\k9-training-system\\data\\animal_kingdom\\action_recognition\\dataset\\video\\SBPPARSU.mp4"
+    },
+    {
+      "video_id": "SCAYVXGD",
+      "split": "train",
+      "psd_class": "watch",
+      "class_idx": 2,
+      "source": "mp4",
+      "video_path": "D:\\Desktop\\k9-training-system\\data\\animal_kingdom\\action_recognition\\dataset\\video\\SCAYVXGD.mp4"
+    },
+    {
+      "video_id": "SMANYVMP",
+      "split": "train",
+      "psd_class": "watch",
+      "class_idx": 2,
+      "source": "tar",
+      "video_path": "D:\\Desktop\\psd-framework\\runs\\public_real_video_cache\\SMANYVMP.mp4"
+    },
+    {
+      "video_id": "SMLRJXGD",
+      "split": "train",
+      "psd_class": "stay",
+      "class_idx": 0,
+      "source": "mp4",
+      "video_path": "D:\\Desktop\\k9-training-system\\data\\animal_kingdom\\action_recognition\\dataset\\video\\SMLRJXGD.mp4"
+    },
+    {
+      "video_id": "SOTFAFGA",
+      "split": "train",
+      "psd_class": "track",
+      "class_idx": 1,
+      "source": "mp4",
+      "video_path": "D:\\Desktop\\k9-training-system\\data\\animal_kingdom\\action_recognition\\dataset\\video\\SOTFAFGA.mp4"
+    },
+    {
+      "video_id": "SVNPCCNX",
+      "split": "train",
+      "psd_class": "track",
+      "class_idx": 1,
+      "source": "mp4",
+      "video_path": "D:\\Desktop\\k9-training-system\\data\\animal_kingdom\\action_recognition\\dataset\\video\\SVNPCCNX.mp4"
+    },
+    {
+      "video_id": "TBOWDRAC",
+      "split": "train",
+      "psd_class": "jump",
+      "class_idx": 3,
+      "source": "tar",
+      "video_path": "D:\\Desktop\\psd-framework\\runs\\public_real_video_cache\\TBOWDRAC.mp4"
+    },
+    {
+      "video_id": "TDRLECNX",
+      "split": "train",
+      "psd_class": "watch",
+      "class_idx": 2,
+      "source": "mp4",
+      "video_path": "D:\\Desktop\\k9-training-system\\data\\animal_kingdom\\action_recognition\\dataset\\video\\TDRLECNX.mp4"
+    },
+    {
+      "video_id": "TLYNPEZZ",
+      "split": "train",
+      "psd_class": "watch",
+      "class_idx": 2,
+      "source": "tar",
+      "video_path": "D:\\Desktop\\psd-framework\\runs\\public_real_video_cache\\TLYNPEZZ.mp4"
+    },
+    {
+      "video_id": "TMLYPEBY",
+      "split": "train",
+      "psd_class": "watch",
+      "class_idx": 2,
+      "source": "tar",
+      "video_path": "D:\\Desktop\\psd-framework\\runs\\public_real_video_cache\\TMLYPEBY.mp4"
+    },
+    {
+      "video_id": "TZGKUDAL",
+      "split": "train",
+      "psd_class": "stay",
+      "class_idx": 0,
+      "source": "tar",
+      "video_path": "D:\\Desktop\\psd-framework\\runs\\public_real_video_cache\\TZGKUDAL.mp4"
+    },
+    {
+      "video_id": "UDYINDAL",
+      "split": "train",
+      "psd_class": "watch",
+      "class_idx": 2,
+      "source": "tar",
+      "video_path": "D:\\Desktop\\psd-framework\\runs\\public_real_video_cache\\UDYINDAL.mp4"
+    },
+    {
+      "video_id": "UHTDGCNX",
+      "split": "train",
+      "psd_class": "watch",
+      "class_idx": 2,
+      "source": "mp4",
+      "video_path": "D:\\Desktop\\k9-training-system\\data\\animal_kingdom\\action_recognition\\dataset\\video\\UHTDGCNX.mp4"
+    },
+    {
+      "video_id": "UOUAKEBY",
+      "split": "train",
+      "psd_class": "stay",
+      "class_idx": 0,
+      "source": "tar",
+      "video_path": "D:\\Desktop\\psd-framework\\runs\\public_real_video_cache\\UOUAKEBY.mp4"
+    },
+    {
+      "video_id": "UTSETVMP",
+      "split": "train",
+      "psd_class": "watch",
+      "class_idx": 2,
+      "source": "tar",
+      "video_path": "D:\\Desktop\\psd-framework\\runs\\public_real_video_cache\\UTSETVMP.mp4"
+    },
+    {
+      "video_id": "UVFVODAL",
+      "split": "train",
+      "psd_class": "watch",
+      "class_idx": 2,
+      "source": "tar",
+      "video_path": "D:\\Desktop\\psd-framework\\runs\\public_real_video_cache\\UVFVODAL.mp4"
+    },
+    {
+      "video_id": "VEMEECNX",
+      "split": "train",
+      "psd_class": "stay",
+      "class_idx": 0,
+      "source": "mp4",
+      "video_path": "D:\\Desktop\\k9-training-system\\data\\animal_kingdom\\action_recognition\\dataset\\video\\VEMEECNX.mp4"
+    },
+    {
+      "video_id": "VUJUSRAC",
+      "split": "train",
+      "psd_class": "jump",
+      "class_idx": 3,
+      "source": "tar",
+      "video_path": "D:\\Desktop\\psd-framework\\runs\\public_real_video_cache\\VUJUSRAC.mp4"
+    },
+    {
+      "video_id": "WOPPQEBY",
+      "split": "train",
+      "psd_class": "stay",
+      "class_idx": 0,
+      "source": "tar",
+      "video_path": "D:\\Desktop\\psd-framework\\runs\\public_real_video_cache\\WOPPQEBY.mp4"
+    },
+    {
+      "video_id": "WRIULVMP",
+      "split": "train",
+      "psd_class": "watch",
+      "class_idx": 2,
+      "source": "tar",
+      "video_path": "D:\\Desktop\\psd-framework\\runs\\public_real_video_cache\\WRIULVMP.mp4"
+    },
+    {
+      "video_id": "WYVCEDSN",
+      "split": "train",
+      "psd_class": "track",
+      "class_idx": 1,
+      "source": "mp4",
+      "video_path": "D:\\Desktop\\k9-training-system\\data\\animal_kingdom\\action_recognition\\dataset\\video\\WYVCEDSN.mp4"
+    },
+    {
+      "video_id": "WZUIAXGD",
+      "split": "train",
+      "psd_class": "watch",
+      "class_idx": 2,
+      "source": "mp4",
+      "video_path": "D:\\Desktop\\k9-training-system\\data\\animal_kingdom\\action_recognition\\dataset\\video\\WZUIAXGD.mp4"
+    },
+    {
+      "video_id": "XAKUOXGD",
+      "split": "train",
+      "psd_class": "jump",
+      "class_idx": 3,
+      "source": "mp4",
+      "video_path": "D:\\Desktop\\k9-training-system\\data\\animal_kingdom\\action_recognition\\dataset\\video\\XAKUOXGD.mp4"
+    },
+    {
+      "video_id": "XGZSSRSU",
+      "split": "train",
+      "psd_class": "track",
+      "class_idx": 1,
+      "source": "mp4",
+      "video_path": "D:\\Desktop\\k9-training-system\\data\\animal_kingdom\\action_recognition\\dataset\\video\\XGZSSRSU.mp4"
+    },
+    {
+      "video_id": "XSUBUCNX",
+      "split": "train",
+      "psd_class": "track",
+      "class_idx": 1,
+      "source": "mp4",
+      "video_path": "D:\\Desktop\\k9-training-system\\data\\animal_kingdom\\action_recognition\\dataset\\video\\XSUBUCNX.mp4"
+    },
+    {
+      "video_id": "XTNNWDSN",
+      "split": "train",
+      "psd_class": "track",
+      "class_idx": 1,
+      "source": "mp4",
+      "video_path": "D:\\Desktop\\k9-training-system\\data\\animal_kingdom\\action_recognition\\dataset\\video\\XTNNWDSN.mp4"
+    },
+    {
+      "video_id": "YSWGBGCS",
+      "split": "train",
+      "psd_class": "stay",
+      "class_idx": 0,
+      "source": "mp4",
+      "video_path": "D:\\Desktop\\k9-training-system\\data\\animal_kingdom\\action_recognition\\dataset\\video\\YSWGBGCS.mp4"
+    },
+    {
+      "video_id": "ZABYMFGA",
+      "split": "train",
+      "psd_class": "jump",
+      "class_idx": 3,
+      "source": "mp4",
+      "video_path": "D:\\Desktop\\k9-training-system\\data\\animal_kingdom\\action_recognition\\dataset\\video\\ZABYMFGA.mp4"
+    },
+    {
+      "video_id": "ZDQCJDSN",
+      "split": "train",
+      "psd_class": "track",
+      "class_idx": 1,
+      "source": "mp4",
+      "video_path": "D:\\Desktop\\k9-training-system\\data\\animal_kingdom\\action_recognition\\dataset\\video\\ZDQCJDSN.mp4"
+    },
+    {
+      "video_id": "ZORHUDSN",
+      "split": "train",
+      "psd_class": "jump",
+      "class_idx": 3,
+      "source": "tar",
+      "video_path": "D:\\Desktop\\psd-framework\\runs\\public_real_video_cache\\ZORHUDSN.mp4"
+    },
+    {
+      "video_id": "ZOXWLEBY",
+      "split": "train",
+      "psd_class": "watch",
+      "class_idx": 2,
+      "source": "tar",
+      "video_path": "D:\\Desktop\\psd-framework\\runs\\public_real_video_cache\\ZOXWLEBY.mp4"
+    },
+    {
+      "video_id": "AGILRCNX",
+      "split": "val",
+      "psd_class": "watch",
+      "class_idx": 2,
+      "source": "mp4",
+      "video_path": "D:\\Desktop\\k9-training-system\\data\\animal_kingdom\\action_recognition\\dataset\\video\\AGILRCNX.mp4"
+    },
+    {
+      "video_id": "AVFJUXDO",
+      "split": "val",
+      "psd_class": "watch",
+      "class_idx": 2,
+      "source": "mp4",
+      "video_path": "D:\\Desktop\\k9-training-system\\data\\animal_kingdom\\action_recognition\\dataset\\video\\AVFJUXDO.mp4"
+    },
+    {
+      "video_id": "BFBBMEBY",
+      "split": "val",
+      "psd_class": "watch",
+      "class_idx": 2,
+      "source": "tar",
+      "video_path": "D:\\Desktop\\psd-framework\\runs\\public_real_video_cache\\BFBBMEBY.mp4"
+    },
+    {
+      "video_id": "BLMFGFGA",
+      "split": "val",
+      "psd_class": "track",
+      "class_idx": 1,
+      "source": "mp4",
+      "video_path": "D:\\Desktop\\k9-training-system\\data\\animal_kingdom\\action_recognition\\dataset\\video\\BLMFGFGA.mp4"
+    },
+    {
+      "video_id": "BXDRVEBY",
+      "split": "val",
+      "psd_class": "watch",
+      "class_idx": 2,
+      "source": "tar",
+      "video_path": "D:\\Desktop\\psd-framework\\runs\\public_real_video_cache\\BXDRVEBY.mp4"
+    },
+    {
+      "video_id": "CDUOEEBY",
+      "split": "val",
+      "psd_class": "jump",
+      "class_idx": 3,
+      "source": "tar",
+      "video_path": "D:\\Desktop\\psd-framework\\runs\\public_real_video_cache\\CDUOEEBY.mp4"
+    },
+    {
+      "video_id": "CSHALXDO",
+      "split": "val",
+      "psd_class": "watch",
+      "class_idx": 2,
+      "source": "mp4",
+      "video_path": "D:\\Desktop\\k9-training-system\\data\\animal_kingdom\\action_recognition\\dataset\\video\\CSHALXDO.mp4"
+    },
+    {
+      "video_id": "CWUSGFGA",
+      "split": "val",
+      "psd_class": "jump",
+      "class_idx": 3,
+      "source": "mp4",
+      "video_path": "D:\\Desktop\\k9-training-system\\data\\animal_kingdom\\action_recognition\\dataset\\video\\CWUSGFGA.mp4"
+    },
+    {
+      "video_id": "DWOLCXDO",
+      "split": "val",
+      "psd_class": "track",
+      "class_idx": 1,
+      "source": "mp4",
+      "video_path": "D:\\Desktop\\k9-training-system\\data\\animal_kingdom\\action_recognition\\dataset\\video\\DWOLCXDO.mp4"
+    },
+    {
+      "video_id": "ETOKQXGD",
+      "split": "val",
+      "psd_class": "track",
+      "class_idx": 1,
+      "source": "mp4",
+      "video_path": "D:\\Desktop\\k9-training-system\\data\\animal_kingdom\\action_recognition\\dataset\\video\\ETOKQXGD.mp4"
+    },
+    {
+      "video_id": "ETTESEBY",
+      "split": "val",
+      "psd_class": "jump",
+      "class_idx": 3,
+      "source": "tar",
+      "video_path": "D:\\Desktop\\psd-framework\\runs\\public_real_video_cache\\ETTESEBY.mp4"
+    },
+    {
+      "video_id": "FJLSEEBY",
+      "split": "val",
+      "psd_class": "watch",
+      "class_idx": 2,
+      "source": "tar",
+      "video_path": "D:\\Desktop\\psd-framework\\runs\\public_real_video_cache\\FJLSEEBY.mp4"
+    },
+    {
+      "video_id": "FUNCGCNX",
+      "split": "val",
+      "psd_class": "track",
+      "class_idx": 1,
+      "source": "mp4",
+      "video_path": "D:\\Desktop\\k9-training-system\\data\\animal_kingdom\\action_recognition\\dataset\\video\\FUNCGCNX.mp4"
+    },
+    {
+      "video_id": "HANCMEBY",
+      "split": "val",
+      "psd_class": "stay",
+      "class_idx": 0,
+      "source": "tar",
+      "video_path": "D:\\Desktop\\psd-framework\\runs\\public_real_video_cache\\HANCMEBY.mp4"
+    },
+    {
+      "video_id": "HGHBGCNX",
+      "split": "val",
+      "psd_class": "track",
+      "class_idx": 1,
+      "source": "mp4",
+      "video_path": "D:\\Desktop\\k9-training-system\\data\\animal_kingdom\\action_recognition\\dataset\\video\\HGHBGCNX.mp4"
+    },
+    {
+      "video_id": "JBJDFDSN",
+      "split": "val",
+      "psd_class": "jump",
+      "class_idx": 3,
+      "source": "tar",
+      "video_path": "D:\\Desktop\\psd-framework\\runs\\public_real_video_cache\\JBJDFDSN.mp4"
+    },
+    {
+      "video_id": "JTVLCEBY",
+      "split": "val",
+      "psd_class": "stay",
+      "class_idx": 0,
+      "source": "tar",
+      "video_path": "D:\\Desktop\\psd-framework\\runs\\public_real_video_cache\\JTVLCEBY.mp4"
+    },
+    {
+      "video_id": "KIWAPCNX",
+      "split": "val",
+      "psd_class": "watch",
+      "class_idx": 2,
+      "source": "mp4",
+      "video_path": "D:\\Desktop\\k9-training-system\\data\\animal_kingdom\\action_recognition\\dataset\\video\\KIWAPCNX.mp4"
+    },
+    {
+      "video_id": "KYABVCNX",
+      "split": "val",
+      "psd_class": "track",
+      "class_idx": 1,
+      "source": "mp4",
+      "video_path": "D:\\Desktop\\k9-training-system\\data\\animal_kingdom\\action_recognition\\dataset\\video\\KYABVCNX.mp4"
+    },
+    {
+      "video_id": "LDNDOCNX",
+      "split": "val",
+      "psd_class": "track",
+      "class_idx": 1,
+      "source": "mp4",
+      "video_path": "D:\\Desktop\\k9-training-system\\data\\animal_kingdom\\action_recognition\\dataset\\video\\LDNDOCNX.mp4"
+    },
+    {
+      "video_id": "LHCTQCNX",
+      "split": "val",
+      "psd_class": "watch",
+      "class_idx": 2,
+      "source": "mp4",
+      "video_path": "D:\\Desktop\\k9-training-system\\data\\animal_kingdom\\action_recognition\\dataset\\video\\LHCTQCNX.mp4"
+    },
+    {
+      "video_id": "LIXLSFGA",
+      "split": "val",
+      "psd_class": "jump",
+      "class_idx": 3,
+      "source": "mp4",
+      "video_path": "D:\\Desktop\\k9-training-system\\data\\animal_kingdom\\action_recognition\\dataset\\video\\LIXLSFGA.mp4"
+    },
+    {
+      "video_id": "LQKLZEBY",
+      "split": "val",
+      "psd_class": "watch",
+      "class_idx": 2,
+      "source": "tar",
+      "video_path": "D:\\Desktop\\psd-framework\\runs\\public_real_video_cache\\LQKLZEBY.mp4"
+    },
+    {
+      "video_id": "MTVJCEBY",
+      "split": "val",
+      "psd_class": "watch",
+      "class_idx": 2,
+      "source": "tar",
+      "video_path": "D:\\Desktop\\psd-framework\\runs\\public_real_video_cache\\MTVJCEBY.mp4"
+    },
+    {
+      "video_id": "OQFUJDSN",
+      "split": "val",
+      "psd_class": "stay",
+      "class_idx": 0,
+      "source": "tar",
+      "video_path": "D:\\Desktop\\psd-framework\\runs\\public_real_video_cache\\OQFUJDSN.mp4"
+    },
+    {
+      "video_id": "PEPZMXDO",
+      "split": "val",
+      "psd_class": "jump",
+      "class_idx": 3,
+      "source": "mp4",
+      "video_path": "D:\\Desktop\\k9-training-system\\data\\animal_kingdom\\action_recognition\\dataset\\video\\PEPZMXDO.mp4"
+    },
+    {
+      "video_id": "PRJHLDSN",
+      "split": "val",
+      "psd_class": "track",
+      "class_idx": 1,
+      "source": "mp4",
+      "video_path": "D:\\Desktop\\k9-training-system\\data\\animal_kingdom\\action_recognition\\dataset\\video\\PRJHLDSN.mp4"
+    },
+    {
+      "video_id": "RGVOECNX",
+      "split": "val",
+      "psd_class": "watch",
+      "class_idx": 2,
+      "source": "mp4",
+      "video_path": "D:\\Desktop\\k9-training-system\\data\\animal_kingdom\\action_recognition\\dataset\\video\\RGVOECNX.mp4"
+    },
+    {
+      "video_id": "RKCNXCNX",
+      "split": "val",
+      "psd_class": "track",
+      "class_idx": 1,
+      "source": "mp4",
+      "video_path": "D:\\Desktop\\k9-training-system\\data\\animal_kingdom\\action_recognition\\dataset\\video\\RKCNXCNX.mp4"
+    },
+    {
+      "video_id": "RZDUWEZZ",
+      "split": "val",
+      "psd_class": "track",
+      "class_idx": 1,
+      "source": "tar",
+      "video_path": "D:\\Desktop\\psd-framework\\runs\\public_real_video_cache\\RZDUWEZZ.mp4"
+    },
+    {
+      "video_id": "SKCIHXDO",
+      "split": "val",
+      "psd_class": "track",
+      "class_idx": 1,
+      "source": "mp4",
+      "video_path": "D:\\Desktop\\k9-training-system\\data\\animal_kingdom\\action_recognition\\dataset\\video\\SKCIHXDO.mp4"
+    },
+    {
+      "video_id": "TEJCGEBY",
+      "split": "val",
+      "psd_class": "jump",
+      "class_idx": 3,
+      "source": "tar",
+      "video_path": "D:\\Desktop\\psd-framework\\runs\\public_real_video_cache\\TEJCGEBY.mp4"
+    },
+    {
+      "video_id": "TMNGGDSN",
+      "split": "val",
+      "psd_class": "track",
+      "class_idx": 1,
+      "source": "tar",
+      "video_path": "D:\\Desktop\\psd-framework\\runs\\public_real_video_cache\\TMNGGDSN.mp4"
+    },
+    {
+      "video_id": "TQDZOEBY",
+      "split": "val",
+      "psd_class": "stay",
+      "class_idx": 0,
+      "source": "tar",
+      "video_path": "D:\\Desktop\\psd-framework\\runs\\public_real_video_cache\\TQDZOEBY.mp4"
+    },
+    {
+      "video_id": "TUBJVCNX",
+      "split": "val",
+      "psd_class": "watch",
+      "class_idx": 2,
+      "source": "mp4",
+      "video_path": "D:\\Desktop\\k9-training-system\\data\\animal_kingdom\\action_recognition\\dataset\\video\\TUBJVCNX.mp4"
+    },
+    {
+      "video_id": "TVAUKXGD",
+      "split": "val",
+      "psd_class": "track",
+      "class_idx": 1,
+      "source": "mp4",
+      "video_path": "D:\\Desktop\\k9-training-system\\data\\animal_kingdom\\action_recognition\\dataset\\video\\TVAUKXGD.mp4"
+    },
+    {
+      "video_id": "UOYWOCNX",
+      "split": "val",
+      "psd_class": "track",
+      "class_idx": 1,
+      "source": "mp4",
+      "video_path": "D:\\Desktop\\k9-training-system\\data\\animal_kingdom\\action_recognition\\dataset\\video\\UOYWOCNX.mp4"
+    },
+    {
+      "video_id": "WALEWCNX",
+      "split": "val",
+      "psd_class": "track",
+      "class_idx": 1,
+      "source": "mp4",
+      "video_path": "D:\\Desktop\\k9-training-system\\data\\animal_kingdom\\action_recognition\\dataset\\video\\WALEWCNX.mp4"
+    },
+    {
+      "video_id": "WDQOPDSN",
+      "split": "val",
+      "psd_class": "stay",
+      "class_idx": 0,
+      "source": "tar",
+      "video_path": "D:\\Desktop\\psd-framework\\runs\\public_real_video_cache\\WDQOPDSN.mp4"
+    },
+    {
+      "video_id": "WKPGVEBY",
+      "split": "val",
+      "psd_class": "stay",
+      "class_idx": 0,
+      "source": "tar",
+      "video_path": "D:\\Desktop\\psd-framework\\runs\\public_real_video_cache\\WKPGVEBY.mp4"
+    },
+    {
+      "video_id": "WSXYDFGA",
+      "split": "val",
+      "psd_class": "watch",
+      "class_idx": 2,
+      "source": "mp4",
+      "video_path": "D:\\Desktop\\k9-training-system\\data\\animal_kingdom\\action_recognition\\dataset\\video\\WSXYDFGA.mp4"
+    },
+    {
+      "video_id": "XERHCDSN",
+      "split": "val",
+      "psd_class": "stay",
+      "class_idx": 0,
+      "source": "mp4",
+      "video_path": "D:\\Desktop\\k9-training-system\\data\\animal_kingdom\\action_recognition\\dataset\\video\\XERHCDSN.mp4"
+    },
+    {
+      "video_id": "XFIZXCNX",
+      "split": "val",
+      "psd_class": "track",
+      "class_idx": 1,
+      "source": "mp4",
+      "video_path": "D:\\Desktop\\k9-training-system\\data\\animal_kingdom\\action_recognition\\dataset\\video\\XFIZXCNX.mp4"
+    },
+    {
+      "video_id": "XVKTPCNX",
+      "split": "val",
+      "psd_class": "track",
+      "class_idx": 1,
+      "source": "mp4",
+      "video_path": "D:\\Desktop\\k9-training-system\\data\\animal_kingdom\\action_recognition\\dataset\\video\\XVKTPCNX.mp4"
+    },
+    {
+      "video_id": "XXQDLEBY",
+      "split": "val",
+      "psd_class": "stay",
+      "class_idx": 0,
+      "source": "tar",
+      "video_path": "D:\\Desktop\\psd-framework\\runs\\public_real_video_cache\\XXQDLEBY.mp4"
+    },
+    {
+      "video_id": "XYNMICNX",
+      "split": "val",
+      "psd_class": "watch",
+      "class_idx": 2,
+      "source": "mp4",
+      "video_path": "D:\\Desktop\\k9-training-system\\data\\animal_kingdom\\action_recognition\\dataset\\video\\XYNMICNX.mp4"
+    },
+    {
+      "video_id": "ZGPRSEBY",
+      "split": "val",
+      "psd_class": "jump",
+      "class_idx": 3,
+      "source": "tar",
+      "video_path": "D:\\Desktop\\psd-framework\\runs\\public_real_video_cache\\ZGPRSEBY.mp4"
+    },
+    {
+      "video_id": "ZMWNVCNX",
+      "split": "val",
+      "psd_class": "watch",
+      "class_idx": 2,
+      "source": "mp4",
+      "video_path": "D:\\Desktop\\k9-training-system\\data\\animal_kingdom\\action_recognition\\dataset\\video\\ZMWNVCNX.mp4"
+    },
+    {
+      "video_id": "ZPTIZXDO",
+      "split": "val",
+      "psd_class": "jump",
+      "class_idx": 3,
+      "source": "mp4",
+      "video_path": "D:\\Desktop\\k9-training-system\\data\\animal_kingdom\\action_recognition\\dataset\\video\\ZPTIZXDO.mp4"
     }
   ]
 }

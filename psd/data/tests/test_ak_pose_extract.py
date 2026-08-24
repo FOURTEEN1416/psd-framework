@@ -66,7 +66,6 @@ class TestSelectSamples:
         local_mp4 = {"AAAA", "BBBB"}  # DDDD 缺 mp4 → source=tar
         samples = select_samples(
             video_labels_by_split={"train": video_labels},
-            split_of={v: "train" for v in canine},
             canine_ids=canine,
             local_mp4_ids=local_mp4,
         )
@@ -80,7 +79,6 @@ class TestSelectSamples:
     def test_val_split_respected(self):
         samples = select_samples(
             video_labels_by_split={"train": {}, "val": {"VVVV": ["67"]}},  # 67=Jumping（15=Chirping 陷阱勿用）
-            split_of={"VVVV": "val"},
             canine_ids={"VVVV"},
             local_mp4_ids=set(),
         )
