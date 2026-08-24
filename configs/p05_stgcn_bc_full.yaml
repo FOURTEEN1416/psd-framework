@@ -21,7 +21,7 @@ train:
   batch_size: 32
   use_amp: true
   device: auto
-  early_stopping: true
+  early_stopping: false
   patience: 15
   output_dir: runs/p05_stgcn_bc_full
 
