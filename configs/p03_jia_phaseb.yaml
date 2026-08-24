@@ -28,8 +28,8 @@ experiment:
   batch_size: 256
 
 bridge:                    # W13-C1 方案 B 语义桥（ST-GCN+BC penultimate）
-  stgcnbc_ckpt: runs/p05_stgcn_bc_full/best.pt   # 只读消费 W12 产物
-  target_t: 30             # 与 W12 训练口径一致
+  stgcnbc_ckpt: runs/p05_stgcn_bc_full/best.pt   # W13-C1 方案 B 主攻 checkpoint，val_acc 96.4%（只读加载），sha256 见 runs/p05_stgcn_bc_full
+  target_t: 30             # 与训练口径一致
 
 phaseb:
   probe_seed: 42              # 合成集分层对半切种子（ref 建原型 / probe 验证）
