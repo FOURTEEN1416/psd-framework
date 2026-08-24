@@ -1,6 +1,6 @@
 # PSD-Framework — 项目交接文档
 
-> **版本**: v1.7
+> **版本**: v1.8
 > **日期**: 2026-08-24
 > **项目根目录**: `D:\Desktop\psd-framework`
 > **交接会话**: 歆歆（sliver-vibe-coding）于 2026-08-23 完成建仓拆分 + truth 链初始化 + 数据盘点；W11 于 2026-08-24 完成 P0.5 前置工程
@@ -105,6 +105,7 @@
 | ~~W10~~ | `handovers/W10-p04-tcl.md` | ✅ **完成且经复核确认**（2026-08-24 复核会话：commit `4f04ad4` 边界合规、pytest 116 绿新鲜复跑、全量实验重跑逐格复现、移交池哈希一致；B+ 收口不改代码——iter3 池 191 条为交付物，r1 早停池为可选替代见报告 §5①/§8） | 已收官 |
 | **W12** | `handovers/W12-p05-stgcnbc-full.md` | P0.5 骨干微调评估：扩量合成数据（100样本/类→2200总量）+ ST-GCN+BC 完整训练（早停50 epoch）+ E6 双贴合分类体系实验（Y=22类 / Y′=21类 locomotion合并）+ 样本量消融（20/50/100）+ 三层口径报告移交 W13 | `configs/p05_*`、`scripts/run_p05_*`、`psd/data/stgcn_bc_dataset.py`（仅追加扩量函数）、`psd/data/tests/test_stgcn_bc_dataset_scale.py`、`reports/w12-*`、`reports/p05-stgcnbc-synthetic-*.json`、DATA_LOCATIONS 合成层小节 |
 | ~~W5~~ | `handovers/W5-p06-paper-draft.md` | ✅ 写作侧收官，剩余为 P0 数据依赖 | `docs/paper/**` 保持只读待回填 |
+| **W14** | （无独立任务书，指令来自用户换防消息） | ✅ **P0.5 主动学习效率实验管线完成**（commit `6b9670e`：TDD 17 绿 / 合成层短预算曲线 JSON 含误差棒归档 reports/ / 真实池打分饱和诊断负结果 / full-budget config 待 GPU 一键复跑；报告 `reports/w14-p05-al-efficiency-2026-08-24.md`） | `psd/training/active_learning.py(+tests)`、`scripts/run_p05_al_efficiency.py`、`configs/p05_al_{short,full}.yaml`、`reports/w14-*`、`reports/p05-al-efficiency-*` |
 
 > ⏳ ~~用户待决一项：NTU 数据获取渠道~~ → **已决并完成（渠道 A，2026-08-24）**：数据就位校验通过。
 > 三项用户裁决已落档 `dev-docs/decisions/0002-user-rulings-ntu-synthetic-e6.md`：① NTU 验证纳入（两相推进中）；② 路径 a 合成数据选移植重建（P0.5 前执行）；③ E6 双贴合场景方向确认。
@@ -135,6 +136,7 @@
 | 2026-08-24 | 歆歆（W5 论文线） | P0.6 四件套 + 增量二（introduction/conclusion-limitations/figure-specs）+ 两轮对抗评审 + 风险登记册 R1-R10 + 投稿就绪门；commits `be15708`..`6da4396`；写作侧清空待 P0 数据回填 |
 | 2026-08-24 | 歆歆（规划会话） | 全窗口复核（W4 失败态/W6 完成/W5 收官）→ 重规划：跨窗口协同洞察（种子伪 GT 救评估协议、P0.3 与 SMQ 解耦并行）→ 编制 W7/W8 交接文档 + HANDOVER v1.4 + stage-plan v1.2 |
 | 2026-08-24 | 歆歆（验收复核+W11 规划） | W10-P0.4 全量复核通过（116 测试复跑 / 全量实验逐格复现 / 移交池哈希一致；B+ 收口零代码改动）；新发现：`docs/assets-map.md` 从未落盘（truth 断链）、E-C 结果 JSON 未收编；编制 W11 前置工程交接文档 + HANDOVER v1.5 + stage-plan 同步 |
+| 2026-08-24 | W14 窗口（歆歆协调） | P0.5 AL 效率实验：TDD 17 绿（采样器/增量运行器/真实池打分/饱和诊断）+ 短预算 6 轨迹全量扫描归档 + 负结果双向论证报告；登记并行窗口 4 次文件干扰与 .venv 启动器父子进程误判教训；full-budget config 待 GPU 一键复跑 |
 
 ## 11. 修订历史
 
@@ -148,3 +150,4 @@
 | v1.5 | 2026-08-24 | 复核会话换防：§8 路由更新——W10 收官（经复核确认）/ W7 冲刺达标（E-C 待定稿收编）/ W9-B GPU 解禁 / **新增 W11 P0.5 前置工程**；§10 补验收复核记录；阻断发现登记（assets-map 缺失） |
 | v1.6 | 2026-08-24 | W11 窗口完成 P0.5 前置工程：§8 W11 行改 ✅ 完成（commit `580460f`，assets-map 补链 + 合成 22 类骨架集 440 样本 + ST-GCN+BC 进仓 + 冒烟 val_acc=18.2%）；§10 补 W11 执行记录；版本抬头更新至 v1.6 |
 | v1.7 | 2026-08-24 | W12 窗口规划：§8 新增 W12 行（P0.5 骨干微调评估：扩量+完整训练+E6双贴合+消融）；阶段计划同步；版本抬头更新至 v1.7 |
+| v1.8 | 2026-08-24 | W14 窗口完成 P0.5 AL 效率实验管线：§8 新增 W14 行（TDD 17 绿 / 短预算曲线归档 / 饱和负结果 / full config 备好）；§10 补执行记录；版本抬头更新至 v1.8 |
