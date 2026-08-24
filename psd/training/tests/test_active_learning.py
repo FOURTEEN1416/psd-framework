@@ -240,3 +240,144 @@ class TestSaturationDiagnostics:
         assert isinstance(result["entropy_degenerate"], bool)
         # 一致性: 退化标志 ⇔ 池最大熵 < 1e-3
         assert result["entropy_degenerate"] == (result["entropy_stats"]["max"] < 1e-3)
+
+
+# ---------------------------------------------------------------------------
+# W23 窗口: warm-start 协议（预注册 docs/superpowers/plans/2026-08-25-w23-warmstart-al.md）
+# 三断言: ① warm 初始化在每个预算点生效 ② 偏移数据管线确定且实质偏移 ③ 打分器域内微调非原始 ckpt
+# ---------------------------------------------------------------------------
+
+def _tiny_warm_runner(init_ckpt=None, budgets=(4, 8)):
+    """warm-start 用 tiny 运行器工厂（模型架构与 W14 tiny 测试一致）。"""
+    from psd.models.stgcn_bc import build_stgcn_bc
+    from psd.training.active_learning import ALSimulationRunner
+    from psd.training.train_stgcn_bc import TrainConfig
+    pool, val = _tiny_pool_and_val()
+    model_fn = lambda: build_stgcn_bc(in_channels=3, num_classes=22, base_channels=8, num_stages=2)
+    cfg = TrainConfig(
+        epochs=2, batch_size=16, use_amp=False, device="cpu",
+        warmup_epochs=0, early_stopping=False, save_interval=1000,
+        output_dir="runs/_tmp_al_test",
+    )
+    return ALSimulationRunner(
+        build_model=model_fn, pool_samples=pool, val_samples=val,
+        train_config=cfg, budgets=budgets, init_from_ckpt=init_ckpt,
+    )
+
+
+class TestWarmStartProtocolW23:
+    def test_warm_init_loaded_at_every_stage(self, monkeypatch):
+        """每个预算点的模型在 trainer.fit() 前权重 == init_from_ckpt（逐张量相等）。"""
+        import torch
+        import psd.training.active_learning as al_mod
+        from psd.models.stgcn_bc import build_stgcn_bc
+
+        torch.manual_seed(777)
+        warm_sd = {k: v.detach().clone() for k, v in
+                   build_stgcn_bc(in_channels=3, num_classes=22, base_channels=8, num_stages=2).state_dict().items()}
+
+        captured = []
+
+        from psd.training.train_stgcn_bc import STGCNBCTrainer as RealTrainer
+
+        class SpyTrainer(RealTrainer):
+            def __init__(self, *a, **kw):
+                super().__init__(*a, **kw)
+                captured.append({k: v.detach().clone() for k, v in self.model.state_dict().items()})
+
+        monkeypatch.setattr(al_mod, "STGCNBCTrainer", SpyTrainer)
+
+        r = _tiny_warm_runner(init_ckpt=warm_sd)
+        r.run_trajectory(strategy="random", seed=42)
+
+        assert len(captured) == len(r.budgets), "每个预算点都应经过一次 trainer 构建"
+        for i, snap in enumerate(captured):
+            assert set(snap.keys()) == set(warm_sd.keys())
+            for k in warm_sd:
+                assert torch.equal(snap[k], warm_sd[k]), \
+                    f"阶段 {i} 张量 {k} 未从 init_from_ckpt 起步（warm 初始化失效）"
+
+    def test_cold_path_unaffected_without_init(self, monkeypatch):
+        """不传 init_from_ckpt 时保持冷启动行为（回归保护）。"""
+        import torch
+        import psd.training.active_learning as al_mod
+        from psd.training.train_stgcn_bc import STGCNBCTrainer as RealTrainer
+
+        captured = []
+
+        class SpyTrainer(RealTrainer):
+            def __init__(self, *a, **kw):
+                super().__init__(*a, **kw)
+                captured.append({k: v.detach().clone() for k, v in self.model.state_dict().items()})
+
+        monkeypatch.setattr(al_mod, "STGCNBCTrainer", SpyTrainer)
+        # 复刻 _fit_stage 的置种顺序: manual_seed(seed*1000+budgets[0]) 后再 build_model
+        from psd.models.stgcn_bc import build_stgcn_bc
+        torch.manual_seed(42 * 1000 + 4)  # seed=42, 首预算点 b=4
+        m = build_stgcn_bc(in_channels=3, num_classes=22, base_channels=8, num_stages=2)
+        expected_first = {k: v.detach().clone() for k, v in m.state_dict().items()}
+        r = _tiny_warm_runner(init_ckpt=None)
+        r.run_trajectory(strategy="random", seed=42)
+        # 冷启动: 第一阶段权重应等于该种子序列下的随机初始化
+        for k in expected_first:
+            assert torch.equal(captured[0][k], expected_first[k])
+
+    def test_scorer_is_in_domain_finetuned_not_raw_ckpt(self, monkeypatch):
+        """熵打分所用模型权重必须 ≠ 原始 init_from_ckpt（禁止原始 best.pt 直接跨域打分）。"""
+        import torch
+        import numpy as np
+        import psd.training.active_learning as al_mod
+        from psd.models.stgcn_bc import build_stgcn_bc
+
+        torch.manual_seed(888)
+        warm_sd = {k: v.detach().clone() for k, v in
+                   build_stgcn_bc(in_channels=3, num_classes=22, base_channels=8, num_stages=2).state_dict().items()}
+
+        scorer_states = []
+        real_predict_probs = al_mod.predict_probs
+
+        def spy_predict_probs(model, samples, **kw):
+            scorer_states.append({k: v.detach().clone() for k, v in model.state_dict().items()})
+            return real_predict_probs(model, samples, **kw)
+
+        monkeypatch.setattr(al_mod, "predict_probs", spy_predict_probs)
+
+        r = _tiny_warm_runner(init_ckpt=warm_sd)
+        r.run_trajectory(strategy="entropy", seed=42)
+
+        assert len(scorer_states) >= 1, "增量阶段至少发生一次池打分"
+        for i, snap in enumerate(scorer_states):
+            max_diff = max(float((snap[k] - warm_sd[k]).abs().max()) for k in warm_sd)
+            assert max_diff > 0.0, \
+                f"第 {i} 次打分的模型权重与原始 ckpt 完全相同——违反 scorer 域内性规则"
+
+    def test_offset_dataset_pipeline_deterministic_and_shifted(self):
+        """偏移数据管线: 同种子确定性复现；noise 0.10 与 0.05 数据实质不同；类别均衡。"""
+        from collections import Counter
+        from psd.data.synth_stgcn import make_synthetic_dataset, ALL_BEHAVIORS_22
+
+        pool_a = make_synthetic_dataset(samples_per_class=2, T=10, noise_std=0.10, seed=20263)
+        pool_b = make_synthetic_dataset(samples_per_class=2, T=10, noise_std=0.10, seed=20263)
+        val_set = make_synthetic_dataset(samples_per_class=1, T=10, noise_std=0.10, seed=20264)
+        pool_ref05 = make_synthetic_dataset(samples_per_class=2, T=10, noise_std=0.05, seed=20263)
+
+        # 形状与有限性
+        assert pool_a[0]["keypoints"].shape == (10, 24, 3)
+        assert all(np.isfinite(s["keypoints"]).all() for s in pool_a + val_set)
+
+        # 确定性: 同种子两次生成逐元素相等
+        for sa, sb in zip(pool_a, pool_b):
+            assert np.array_equal(sa["keypoints"], sb["keypoints"])
+
+        # 实质偏移: 同种子不同噪声档数据不同
+        diff_any = any(not np.array_equal(sa["keypoints"], sr["keypoints"])
+                       for sa, sr in zip(pool_a, pool_ref05))
+        assert diff_any, "noise_std=0.10 与 0.05 生成结果相同——偏移未生效"
+
+        # 类别均衡: 22 类各 spc 条
+        cnt = Counter(s["label"] for s in pool_a)
+        assert sorted(cnt.keys()) == list(range(len(ALL_BEHAVIORS_22)))
+        assert all(v == 2 for v in cnt.values())
+
+        # 池/验证实例隔离: 不同 seed 数据不同
+        assert not np.array_equal(pool_a[0]["keypoints"], val_set[0]["keypoints"])

@@ -171,13 +171,23 @@ class ALSimulationRunner:
         train_config: TrainConfig,
         budgets: Sequence[int],
         device: str = "cpu",
+        init_from_ckpt: Optional[Dict] = None,
     ):
+        """warm-start 扩展（W23 预注册协议）:
+
+        Args:
+            init_from_ckpt: 可选 state_dict；提供时**每个预算点**的模型在 trainer.fit()
+                前加载该权重（从同一外部先验起步，差异只来自各自标注集）；
+                None 时保持 W14 冷启动行为（随机初始化）。优化器状态不随 ckpt 加载
+                （全量训练收敛态动量对小样本微调是噪声源），AdamW 全新构建。
+        """
         self.build_model = build_model
         self.pool = pool_samples
         self.val = val_samples
         self.template_cfg = train_config
         self.budgets = sorted(int(b) for b in budgets)
         self.device = device
+        self.init_from_ckpt = init_from_ckpt
         self._selections: Dict[int, List[int]] = {}
         if self.budgets and self.budgets[0] > len(pool_samples):
             raise ValueError("最小预算超过池容量")
@@ -241,7 +251,11 @@ class ALSimulationRunner:
         init_seed: int,
         subdir: Optional[str] = None,
     ) -> Tuple[float, "torch.nn.Module"]:
-        """给定标注 id 冷启动重训，返回 (best_val_acc, model)。"""
+        """给定标注 id 训练一阶段，返回 (best_val_acc, model)。
+
+        warm-start（init_from_ckpt 提供时）: 加载先验权重后再 fit（W23 协议）;
+        冷启动（默认）: 固定初始化种子随机起步（W14 协议）。
+        """
         torch.manual_seed(init_seed)
         samples = [self.pool[i] for i in sample_ids]
 
@@ -251,6 +265,8 @@ class ALSimulationRunner:
             output_dir=str(Path(self.template_cfg.output_dir) / subdir) if subdir else self.template_cfg.output_dir,
         )
         model = self.build_model()
+        if self.init_from_ckpt is not None:
+            model.load_state_dict(self.init_from_ckpt)
         trainer = STGCNBCTrainer(model, samples, self.val, config=cfg)
         summary = trainer.fit()
         return float(summary["best_val_acc"]), model
