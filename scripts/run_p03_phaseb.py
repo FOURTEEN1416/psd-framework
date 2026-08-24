@@ -165,7 +165,17 @@ def main() -> None:
                 batch_size=batch_size)
         print("[step2] AimCLR 冻结 Φ 桥（方案 A 消融）")
 
-    samples = load_pyskl_pickle(str(REPO_ROOT / cfg["data"]["synthetic_pkl"]))
+    # 合成数据源：与桥训练严格同分布的现生成样本（2026-08-24 实测：仓内 pkl 与
+    # 当前生成器输出不一致——diff std 0.146，标签一致但关键点漂移；桥按现生成
+    # 分布训练，故此处必须同源。pkl 过期问题已在报告中登记待跨窗处置）
+    from psd.data.synth_stgcn import make_synthetic_dataset
+    samples = make_synthetic_dataset(
+        samples_per_class=int(cfg["data"].get("synthetic_samples_per_class", 100)),
+        T=int(cfg["bridge"]["target_t"]),
+        noise_std=float(cfg["data"].get("synthetic_noise_std", 0.05)),
+        seed=int(cfg["data"].get("synthetic_seed", cfg["split"]["split_seed"])))
+
+    print(f"[step2] 合成数据源=make_synthetic_dataset 现生成（{len(samples)} 样本，与桥同分布）")
     syn_emb = embed_syn(samples)
     syn_labels = np.array([str(s["label_name"]) for s in samples])
     print(f"[step2] 合成特征 {syn_emb.shape} | 真实段特征抽取中…")
