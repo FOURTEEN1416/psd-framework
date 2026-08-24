@@ -1,0 +1,39 @@
+{
+  "weights": "yolo11s-pose.pt",
+  "n_samples": 1,
+  "distribution": {
+    "train/watch": 1
+  },
+  "quality": [
+    {
+      "video_id": "ADSTNDAL",
+      "split": "train",
+      "psd_class": "watch",
+      "class_idx": 2,
+      "source": "tar",
+      "video_path": "D:\\Desktop\\psd-framework\\runs\\public_real_video_cache\\ADSTNDAL.mp4",
+      "status": "ok",
+      "n_interpolated": 21,
+      "no_detect": 21,
+      "low_conf": 0
+    },
+    {
+      "video_id": "AHSAPCNX",
+      "split": "train",
+      "psd_class": "track",
+      "class_idx": 1,
+      "source": "mp4",
+      "video_path": "D:\\Desktop\\k9-training-system\\data\\animal_kingdom\\action_recognition\\dataset\\video\\AHSAPCNX.mp4",
+      "status": "all_missing"
+    },
+    {
+      "video_id": "AIFSREBY",
+      "split": "train",
+      "psd_class": "stay",
+      "class_idx": 0,
+      "source": "tar",
+      "video_path": "D:\\Desktop\\psd-framework\\runs\\public_real_video_cache\\AIFSREBY.mp4",
+      "status": "all_missing"
+    }
+  ]
+}

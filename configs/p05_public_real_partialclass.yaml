@@ -1,30 +1,46 @@
-# W20 P0.5 公开真实层部分类协议配置
-# 协议: AK 犬科 → PSD 可诚实映射子集（df_action.xlsx index 真值）
-# 门禁依据: reports/p05-public-real-partialclass-stats-2026-08-24.json
-#   主标签规则下仅 3 类过 <10 视频门禁; 其余 9 类 untrainable（详见报告 §3）
-# ⚠️ 骨架前置检查结论: 本地无 AK 关键点标注（报告 §1），训练段待用户路线裁决后激活
+# W20 P0.5 公开真实层部分类协议配置（v2 — 用户裁决后 C 路线版）
+#
+# 裁决记录（2026-08-24, 用户拍板）:
+#   ① 骨架路线 = C: 犬科 mp4 自提取（YOLO11-pose + dog-pose 微调权重, 24 点 K9Graph 同拓扑）
+#   ② 门禁口径 = 宽松: train+val 合计 ≥10 视频 → 可训练类 jump/stay/track/watch (4 类)
+#   ③ 样本判定 = R2(first-mapped-hit): 标签序列中首个属于可训练 4 类的动作
 protocol: public_real_partialclass
-version: w20-v1_2026-08-24
+version: w20-v2_c_route_2026-08-24
+
 data:
   dataset: animal_kingdom_canine
   annotation_root: D:\Desktop\k9-training-system\data\animal_kingdom\action_recognition\annotation
   metadata_xlsx: D:\Desktop\k9-training-system\data\animal_kingdom\action_recognition\AR_metadata.xlsx
-  canine_filter: w2-caliber-A          # list_animal ∩ 精确10物种 = 329 视频 (train 231 / val 98)
-  primary_label_rule: labels_first_item # 多标签取首（任务书 Step 1）
+  video_dir: D:\Desktop\k9-training-system\data\animal_kingdom\action_recognition\dataset\video
+  video_tar_gz: D:\Desktop\k9-training-system\data\animal_kingdom\action_recognition\dataset\video.tar.gz
+  canine_filter: w2-caliber-A            # list_animal ∩ 精确10物种 = 329 视频
+
 mapping:
-  module: psd.data.ak_mapping           # 权威映射模块（TDD 31 绿）
-  truth_source: df_action.xlsx index 列 # rescue-plan §0 有 2 处 S/N 列笔误已修正(73→74, 15→67)
-  mapped_psd_classes: [stay, track, watch]   # 过门禁的可训练子集（主标签口径）
-  trainable_class_count: 3
+  module: psd.data.ak_mapping            # 权威映射（df_action.xlsx index 真值）
+  truth_source: df_action.xlsx index 列
   full_mapped_pool_12: [sit, down, stand, stay, bark, bite, track, apprehend, watch, retrieve, jump, scale]
+  gate_classes: [stay, track, watch, jump]   # 宽松门禁可训练 4 类（assets-map 相对顺序 → idx 0..3）
+  trainable_class_count: 4
   excluded_classes: [heel, sit_up, alert_sit, alert_down, escort, recall, guard, release, search_blind, obstacle]
-  gate_rule: 任一类 train 视频 <10 或 val=0 → untrainable
-model:
-  backbone_init: runs/p05_stgcn_bc_full/best.pt   # Y 预训练权重（head 因类数不同新建——解耦设计用例）
-  num_joints: 24                        # K9Graph；若走自提取路线需重设计拓扑（见报告 §4 方案C）
+
+skeleton_route:
+  route: C_self_extract                  # 用户裁决 C 路线
+  pose_model: yolo11s-pose               # ultralytics; dog-pose 微调
+  pose_topo: k9graph24                   # dog-pose.yaml 24 点与 assets-map §2 逐名逐序一致(零投影)
+  finetune_data: dog-pose                # D:\Desktop\datasets\dog-pose (8476 图已预下载)
+  finetune_cmd: python scripts/train_yolo_dogpose.py --epochs 50 --batch 16
+  pose_weights: runs/public_real_yolo_dogpose/train/weights/best.pt
+  pipeline_cmd: python scripts/run_p05_public_real_pipeline.py --stage extract --weights <best.pt>
+  clip_t: 30
+  manifest: runs/public_real_dataset/partialclass4_manifest.json
+  dataset_pkl: runs/public_real_dataset/partialclass4_T30.pkl
+
 training:
-  status: pending_user_ruling_on_skeleton_route   # 训练段冻结，等待骨架路线裁决
-  gpu_queue_discipline: NTU Phase B 占卡期间不启动
+  init_from: runs/p05_stgcn_bc_full/best.pt   # Y 预训练 backbone; head 新建(4类)
+  freeze_backbone: true
+  gpu_gate: NTU Phase B(PID 35208)结束后启动; nvidia-smi 显存 <2GB 方可开训
+  status: queued_gpu_relay               # 排队等 GPU 接力(W18 看护窗口或本窗夜间错峰)
+
 report:
   stats_json: reports/p05-public-real-partialclass-stats-2026-08-24.json
   report_md: reports/p05-public-real-partialclass-2026-08-24.md
