@@ -147,10 +147,10 @@ class SMQSegmenter:
 def merge_codebook_inplace(seg: "SMQSegmenter", target_k: int) -> dict:
     """推理期码本合并（只改内存，不动 checkpoint 文件）。
 
-    把 K 个码字按均值向量余弦相似度贪心合并到 target_k 个"超码"：
-    被合并双方的 embedding 行写成完全相同的加权均值向量——由于距离
-    并列时 torch.argmax 恒取更低索引，冗余行自然不再被选中，
-    运动词序列因此变长（抗碎片化）。评估专用：eval 分支无 EMA 更新。
+    把 K 个码字按均值向量余弦相似度贪心合并到 target_k 个"超码"。
+    合并后关键兜底：每个死码行填充 1e6 常数，使任何输入到死码的欧氏距离
+    （≈√(patch×1e12) 量级）远大于到存活码的距离（O(10) 量级），
+    torch.argmax 绝对不可能选中死码——不依赖 CUDA 平局行为，完全确定。
     """
     import torch
     import torch.nn.functional as F
@@ -176,11 +176,16 @@ def merge_codebook_inplace(seg: "SMQSegmenter", target_k: int) -> dict:
         merged_emb = (emb[i] * w_i + emb[j] * w_j) / max(w_i + w_j, 1e-6)
         merged_mean = (means[i] * w_i + means[j] * w_j) / max(w_i + w_j, 1e-6)
         emb[i] = merged_emb
-        emb[j] = merged_emb.clone()      # 必须逐位相同以触发 argmax 平局规则
         means[i] = merged_mean
         weights[i] = w_i + w_j
         alive.remove(j)
 
+    # 死码行填大常数，argmax 永远选不到（与 CUDA 平局行为解耦）
+    DEAD_VAL = 1e6
+    for dead in range(k_total):
+        if dead not in alive:
+            emb[dead].fill_(DEAD_VAL)
     vq._embedding.data.copy_(emb.to(vq._embedding.dtype))
+
     return {"k_before": k_total, "k_after": len(alive),
             "surviving": sorted(alive)}
