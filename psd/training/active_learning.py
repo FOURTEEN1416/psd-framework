@@ -116,6 +116,17 @@ def predict_probs(
         batch_size: 批大小
         device: 推理设备
     """
+    return softmax_np(predict_logits(model, samples, batch_size=batch_size, device=device))
+
+
+@torch.no_grad()
+def predict_logits(
+    model,
+    samples: Sequence[Dict],
+    batch_size: int = 64,
+    device: str = "cpu",
+) -> np.ndarray:
+    """样本列表 → (N, C) 原始 logits（饱和诊断用）。"""
     model = model.to(device).eval()
     out: List[np.ndarray] = []
     for s in range(0, len(samples), batch_size):
@@ -125,11 +136,17 @@ def predict_probs(
             else torch.from_numpy(np.asarray(x["keypoints"], dtype=np.float32))
             for x in chunk
         ]).to(device)
-        probs = model(kpts)[0].softmax(dim=-1)
-        out.append(probs.cpu().numpy())
+        out.append(model(kpts)[0].cpu().numpy())
     if not out:
         raise ValueError("samples 为空，无法推理")
     return np.concatenate(out, axis=0).astype(np.float64)
+
+
+def softmax_np(logits: np.ndarray) -> np.ndarray:
+    """数值稳定 softmax（沿最后一维）。"""
+    z = logits - logits.max(axis=-1, keepdims=True)
+    e = np.exp(z)
+    return e / e.sum(axis=-1, keepdims=True)
 
 
 # ---------------------------------------------------------------------------
@@ -314,11 +331,22 @@ def score_real_pool(
         feats.append(x)
         metas.append(e)
 
-    probs = predict_probs(
+    logits = predict_logits(
         model, [{"keypoints": f} for f in feats],
         batch_size=batch_size, device=device,
     )
+    probs = softmax_np(logits)
     scores = entropy_scores(probs)
+
+    # 饱和诊断（负结果显式登记，禁止静默）：top1-top2 边际与熵退化标志
+    top2 = np.sort(logits, axis=-1)[:, ::-1]
+    margins = top2[:, 0] - top2[:, 1]
+    margin_stats = {
+        "mean": float(margins.mean()),
+        "min": float(margins.min()),
+        "max": float(margins.max()),
+    }
+    entropy_degenerate = bool(scores.max() < 1e-3)
 
     order = np.argsort(-scores, kind="stable")
     ranked_ids = [str(metas[i].get("clip_id", i)) for i in order]
@@ -345,6 +373,8 @@ def score_real_pool(
         "n_scored": len(feats),
         "n_skipped": n_skipped,
         "entropy_stats": stats,
+        "logit_margin_stats": margin_stats,
+        "entropy_degenerate": entropy_degenerate,
         "ranked_ids": ranked_ids,
         "ranked_records": ranked_records,
         "topk": topk,

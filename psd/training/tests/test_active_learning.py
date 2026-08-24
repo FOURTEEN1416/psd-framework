@@ -223,3 +223,20 @@ class TestScoreRealPool:
         loader = make_clip_loader(str(tmp_path))
         d = loader("interpet_dog09_p19_take03_ego_001")
         assert d["kp_world"].shape == (35, 24, 3)
+
+class TestSaturationDiagnostics:
+    def test_score_real_pool_reports_margins_and_degeneracy(self):
+        """输出含 logit 边际统计与熵退化标志（负结果显式登记）。"""
+        from psd.models.stgcn_bc import build_stgcn_bc
+        from psd.training.active_learning import score_real_pool
+        entries = [{"clip_id": f"c{i}", "start_frame": 0, "end_frame": 20} for i in range(2)]
+        loader = lambda cid: {"kp_world": _fake_kp(40, seed=len(cid))}
+        result = score_real_pool(entries, loader,
+                                 build_stgcn_bc(in_channels=3, num_classes=22, base_channels=8, num_stages=2),
+                                 budgets=[1], device="cpu")
+        ms = result["logit_margin_stats"]
+        for k in ("mean", "min", "max"):
+            assert isinstance(ms[k], float)
+        assert isinstance(result["entropy_degenerate"], bool)
+        # 一致性: 退化标志 ⇔ 池最大熵 < 1e-3
+        assert result["entropy_degenerate"] == (result["entropy_stats"]["max"] < 1e-3)
