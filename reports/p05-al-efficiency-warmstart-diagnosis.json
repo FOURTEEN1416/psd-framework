@@ -1,0 +1,121 @@
+{
+  "meta": {
+    "date": "2026-08-25T00:15:05",
+    "window": "W23",
+    "step": "Step1 diagnosis (task book v1.0)",
+    "git_sha": "e423d8b",
+    "device": "cpu",
+    "ckpt": "runs\\p05_stgcn_bc_full\\best.pt",
+    "ckpt_sha256_note": "哈希未记录则说明文件在诊断后未被复算——本字段由下方 sha256 提供",
+    "model_cfg": {
+      "in_channels": 3,
+      "num_classes": 22,
+      "base_channels": 64,
+      "num_stages": 10
+    },
+    "data_gen": {
+      "pool": {
+        "samples_per_class": 10,
+        "T": 30,
+        "seed": 20263
+      },
+      "val": {
+        "samples_per_class": 15,
+        "T": 30,
+        "seed": 20264
+      },
+      "noise_levels": [
+        0.1,
+        0.15,
+        0.2
+      ]
+    },
+    "criteria": {
+      "select": "val_acc ∈ [0.4, 0.7] 且 margin_mean(val,pool) < 10.0",
+      "fuse": "全档 val_acc > 0.85 或全档饱和"
+    },
+    "total_time_sec": 11.3
+  },
+  "rows": [
+    {
+      "noise_std": 0.1,
+      "val": {
+        "n": 330,
+        "val_acc": 0.4121212121212121,
+        "logit_margin_stats": {
+          "mean": 3.310251073403792,
+          "min": 0.003923177719116211,
+          "max": 21.037347316741943
+        }
+      },
+      "pool": {
+        "n": 220,
+        "val_acc": 0.4090909090909091,
+        "logit_margin_stats": {
+          "mean": 3.3726167071949353,
+          "min": 0.0018271207809448242,
+          "max": 21.471710920333862
+        }
+      },
+      "acc_in_band": true,
+      "unsaturated_val": true,
+      "unsaturated_pool": true,
+      "eligible": true
+    },
+    {
+      "noise_std": 0.15,
+      "val": {
+        "n": 330,
+        "val_acc": 0.08484848484848485,
+        "logit_margin_stats": {
+          "mean": 12.94237014163624,
+          "min": 0.2728910446166992,
+          "max": 35.95407772064209
+        }
+      },
+      "pool": {
+        "n": 220,
+        "val_acc": 0.08636363636363636,
+        "logit_margin_stats": {
+          "mean": 12.823513813452287,
+          "min": 0.04876518249511719,
+          "max": 33.346099853515625
+        }
+      },
+      "acc_in_band": false,
+      "unsaturated_val": false,
+      "unsaturated_pool": false,
+      "eligible": false
+    },
+    {
+      "noise_std": 0.2,
+      "val": {
+        "n": 330,
+        "val_acc": 0.045454545454545456,
+        "logit_margin_stats": {
+          "mean": 27.484192284670744,
+          "min": 8.139555931091309,
+          "max": 53.51053810119629
+        }
+      },
+      "pool": {
+        "n": 220,
+        "val_acc": 0.045454545454545456,
+        "logit_margin_stats": {
+          "mean": 27.444603789936412,
+          "min": 7.9912519454956055,
+          "max": 51.60463905334473
+        }
+      },
+      "acc_in_band": false,
+      "unsaturated_val": false,
+      "unsaturated_pool": false,
+      "eligible": false
+    }
+  ],
+  "verdict": {
+    "status": "SELECT",
+    "selected_noise_std": 0.1,
+    "reason": "唯一满足选档判据的档位"
+  }
+}
