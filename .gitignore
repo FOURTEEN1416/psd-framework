@@ -10,6 +10,9 @@ venv/
 .idea/
 .vscode/
 
+# 工具日志（防 add -A 误卷入——2026-08-24 b1a4323 事故教训）
+.playwright-mcp/
+
 # 大文件目录（占位 .gitkeep 保留，内容不入库）
 /data/*
 !/data/.gitkeep
