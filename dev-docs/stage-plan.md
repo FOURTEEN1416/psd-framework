@@ -1,6 +1,6 @@
 # Stage Plan — PSD-Framework
 
-> 状态: 🔄 执行中——P0.1 ✅ 达标 / P0.2 ✅ 救援达标（W7）/ P0.3 PhaseA ✅ 完成（W8）/ P0.6 论文写作侧 ✅ 清空待回填；详见 HANDOVER v1.4 §8
+> 状态: 🔄 执行中——P0.1 ✅ / P0.2 ✅ 救援+冲刺达标（W7，E-C 定稿收尾中）/ P0.3 PhaseA ✅（W8）/ **P0.4 ✅ 完成并经复核确认（W10）** / P0.5 前置工程已排程 W11 / P0.6 写作侧 ✅ 清空待回填；详见 HANDOVER v1.5 §8
 > 详细背景: 调研资料见 `research/`（复制自 k9 仓库）；立项期完整版计划存档于 k9 仓库 `dev-docs/stages/data-unblocking.md`（已冻结）
 
 ## 1. P0 数据解阻（当前唯一主线，3-4 周）
@@ -24,17 +24,18 @@
 | 子阶段 | 周期 | 关键交付 | 验证方式 |
 |--------|------|---------|---------|
 | ✅ P0.1 AimCLR 预训练 | 1 周 | 骨架编码器 + 预训练权重 + kNN top-1 显著超随机基线（4.5%） | `scripts/eval_aimclr.py --knn` + 报告归档（2026-08-23 达标：20.89% vs 8.33%，2.51×，见 `reports/p01-aimclr-2026-08-23.md`） |
-| ✅ P0.2 SMQ 时序分割 | 1 周 | 分割模型 + episode 边界 IoU 评估 + 可视化 | `scripts/eval_smq_segmentation.py --iou`（**2026-08-24 W7 救援+冲刺达标：根因=官方超参致编码器码塌缩，mse_loss_weight→1.0 修复；冲刺 patch16+推理期码本合并达种子伪 GT 口径 IoU 0.476 vs 随机 ~0.35（4/4 episode 超基线，预注册目标 ≥0.45 达成）；主口径=种子伪 GT（ADR-0003），拼接口径进局限性；E-C(K=8 端到端) 过夜验证中，报告 `reports/p02-2026-08-24.md`**） |
+| ✅ P0.2 SMQ 时序分割 | 1 周 | 分割模型 + episode 边界 IoU 评估 + 可视化 | `scripts/eval_smq_segmentation.py --iou`（**2026-08-24 W7 救援+冲刺达标：根因=官方超参致编码器码塌缩，mse_loss_weight→1.0 修复；E-C 端到端 K=8 训练版种子伪 GT 口径 IoU 0.4577 vs 随机 ~0.300（1.53×），4/4 episode 全超基线，预注册目标 ≥0.45 达成；推理期码本合并发现 CUDA argmax 平局 bug（已修复，死码填 1e6），修正后 vm6 消融仅 0.369 反证端到端训练更优；主口径=种子伪 GT（ADR-0003），拼接口径进局限性讨论；报告 `reports/p02-2026-08-24.md`**） |
 | ✅ P0.3 姚青 JIA 迁移 🔥 | 1 周 | VFM 骨干适配 + 时序动作锚点 + 行为原型聚类 + 伪标签迭代 | 原型质量指标 + 伪标签精度曲线（**Phase A 完成 W8：纯度 0.534=随机基线 1.615×、噪声 30% 消融不崩，报告 `reports/p03-jia-phasea-2026-08-24.md`；Phase B 22 类映射待路径 a 合成数据**） |
 | ✅ P0.4 TCL 半监督增强 | 1 周 | 增强伪标签 | 对比 P0.3 伪标签精度提升（**2026-08-24 W10 完成：迭代自训练闭环，池精度峰值 0.6913 较 r0 基线 0.5125 提升 1.35×（保守首末配对 +10.69pp p=0.03）；standing 双路一致门消融 +5.73pp；B-1 校准必要性实证；TDD 116 绿零 GPU；报告 `reports/p04-tcl-2026-08-24.md`，P0.5 移交池已落盘**） |
-| P0.5 骨干微调评估 | 1 周 | ST-GCN+BC / Mamba 微调 ≥85%（22 类） | 三层指标口径报告 |
+| P0.5 骨干微调评估 | 1 周 | ST-GCN+BC / Mamba 微调 ≥85%（22 类） | 三层指标口径报告（**前置工程 W11 执行中**：assets-map 补链 + 合成数据 22 类重建 + ST-GCN+BC 进仓，`handovers/W11-p05-prep.md`；微调实验待其交付后开窗） |
 | ✅ P0.6 论文初稿（写作侧） | 并行 | Pattern Recognition 初稿框架 | 用户评审（2026-08-24 写作侧清空：四件套+增量二三文件+两轮对抗评审+风险登记册，`docs/paper/review-log.md`；数字回填待 P0.2-P0.5） |
 
 ### 启动前置（阻塞项）
 
 1. ✅ **姚青 JIA 创新性核验**（2026-08-23 W1 完成：GitHub 链 10 组查询 + 14 项候选排查零占坑，初步成立；投稿前 arXiv/Scholar 终审保留——见 `research/NOVELTY_CHECK_YAOQING_JIA.md`）
 2. ✅ 数据集磁盘路径盘点 → 建立 `docs/DATA_LOCATIONS.md`（2026-08-23 W2 数量级复核完成，实测差异见 `reports/data-inventory-2026-08-23.md`）
-3. 🔄 外部方法仓库克隆（`external/`：AimCLR / SMQ / TCL 官方实现）——AimCLR ✅（P0.1）；SMQ ✅ 已克隆（W4）；TCL ⏳ P0.4 开工前
+3. ✅ 外部方法仓库克隆（`external/`：AimCLR / SMQ / TCL 官方实现）——AimCLR ✅（P0.1）；SMQ ✅ 已克隆（W4）；TCL ❌ 官方实现经 GitHub-First 多角度检索确认不可得（CVPR 2021 无公开代码），P0.4 以 Ω 头迭代闭环等效交付（`reports/p04-tcl-2026-08-24.md` §6，method.md 引用标记归论文窗口处理）
+4. 🔄 **P0.5 前置工程（ADR-0002 裁决②触发点已到）**：assets-map 补链 + 合成数据生成器移植重建 22 类骨架集 + ST-GCN+BC 进仓——任务书 `handovers/W11-p05-prep.md`
 
 ## 2. 风险预案（继承自上游 stage-plan §5.1）
 
