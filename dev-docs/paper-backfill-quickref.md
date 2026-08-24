@@ -12,11 +12,11 @@
 
 | 实验 ID | 口径 | 指标 | 数值 | 随机基线 | 倍率 | 来源 | 论文 skeleton 行 |
 |---------|------|------|------|---------|------|------|-----------------|
-| E1 | ST-GCN+BC / 22类 / 100样本/类 | val_acc | **97.3%** | 4.5% | 21.6× | `reports/p05-stgcnbc-synthetic-100perclass-Y.json` | [PENDING] |
-| E2 | ST-GCN+BC / 21类(E6-Y') / 100样本/类 | val_acc | **95.9%** | 4.76% | 20.1× | `reports/p05-stgcnbc-synthetic-100perclass-Yprime.json` | [PENDING] |
+| E1 | ST-GCN+BC / 22类 / 100样本/类 | val_acc | **97.3%** | 4.5% | 21.6× | `reports/p05-stgcnbc-synthetic-100perclass-Y.json` | 复核 **96.4%**（08-24 重跑 · 早停 ep31/best ep16 · 21.4×） |
+| E2 | ST-GCN+BC / 21类(E6-Y') / 100样本/类 | val_acc | **95.9%** | 4.76% | 20.1× | `reports/p05-stgcnbc-synthetic-100perclass-Yprime.json` | 复核 **95.7%**（08-24 重跑 · 早停 ep30/best ep15） |
 | E3 | ST-GCN+BC / 22类 / 50样本/类 | val_acc | 95.0% | 4.5% | 21.1× | `reports/p05-stgcnbc-synthetic-50perclass-Y.json` | (消融) |
 | E4 | ST-GCN+BC / 22类 / 20样本/类 | val_acc | 77.3% | 4.5% | 17.2× | `reports/p05-stgcnbc-synthetic-20perclass-Y.json` | (消融) |
-| E-C | SMQ / 端到端 K=8 / 种子伪GT | mean_matched_iou | **0.458 ± 0.049** | ~0.30 | 1.53× | `reports/p02-smq-iou-eC-seeds.json` | [PENDING] |
+| E-C | SMQ / 端到端 K=8 / 种子伪GT | mean_matched_iou | **0.458 ± 0.049** | ~0.30 | 1.53× | `reports/p02-smq-iou-eC-seeds.json` | 复核 **0.458 ± 0.049**（08-24 重跑 · F1=0.343 · `reports/p02-smq-iou-eC-seeds-recheck.json`） |
 | E-A | SMQ / mse=1.0 修复基线 / 种子伪GT | mean_matched_iou | 0.409 | ~0.30 | 1.36× | `reports/p02-smq-iou-eA-seeds.json` | (历史) |
 
 ### 公开真实层（Public-Real Layer）
@@ -30,6 +30,10 @@
 | P0.4 | TCL / 保守首末配对检验 | Δpool_precision | **+10.69 ± 3.28 pp** (p=0.030) | — | — | 同上 | (统计) |
 
 > ⚠️ 口径披露要求：每个数字必须标注"合成层/公开真实层"，禁止跨层混排表格。
+>
+> 🔁 **复核约定（2026-08-24）**：P0.2 / P0.5 已按下方「回填命令序列」当次重跑；「论文 skeleton 行」列标注『复核』的为重跑新鲜值，「数值」列保留首跑数字作对照。E1/E2 的来源报告文件已被重跑覆写（seed=42 固定，±0.9pp 内差异为 GPU 非确定性波动）；E-C 首跑报告保留不动，新鲜值落 `-recheck.json`。结论均不变：E1 96.4%、E2 95.7% 远超随机基线×3 判据线；E-C 与首跑逐位一致。
+>
+> 🛡️ 运维注记：首份 E-C recheck 文件（12:30 写入）曾被并行执行体删除（疑似 12:37 计划任务 `\OpenCode\psd-overnight-supervisor` 实例偏离任务书），已确定性重跑再生并立即入库。建议晨会核查该计划任务与并行窗口的写权限边界。
 
 ---
 
@@ -87,4 +91,4 @@ E6 双贴合: stand(2)+track(8)→locomotion，21 类
 
 ---
 
-*编制: 歆歆 2026-08-24 · 依据: 各 P0 报告 + ADR-0004 走法 A*
+*编制: 歆歆 2026-08-24 · 依据: 各 P0 报告 + ADR-0004 走法 A · 复核回填: 歆歆 2026-08-24（P0.2/P0.5 当次重跑，证据见 reports/）*

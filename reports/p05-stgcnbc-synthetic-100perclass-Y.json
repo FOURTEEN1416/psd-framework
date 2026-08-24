@@ -1,5 +1,5 @@
 {
-  "date": "2026-08-24T11:54:31",
+  "date": "2026-08-24T12:36:19",
   "layer": "synthetic",
   "config": {
     "data": {
@@ -40,13 +40,15 @@
     "val_size": 440
   },
   "summary": {
-    "total_epochs_trained": 50,
-    "best_val_acc": 0.9727272727272728,
-    "best_epoch": 35,
-    "final_train_acc": 1.0,
-    "final_val_acc": 0.9659090909090909,
+    "total_epochs_trained": 31,
+    "best_val_acc": 0.9636363636363636,
+    "best_epoch": 16,
+    "final_train_acc": 0.9965909090909091,
+    "final_val_acc": 0.9568181818181818,
     "device": "cuda",
-    "use_amp": true
+    "use_amp": true,
+    "ckpt_path": "D:\\Desktop\\psd-framework\\runs\\p05_stgcn_bc_full\\best.pt",
+    "early_stopping_effective": true
   },
   "checks": {
     "loss_monotonic_trend": true,
@@ -54,5 +56,5 @@
     "no_nan": true
   },
   "all_pass": true,
-  "total_time_sec": 421.7
+  "total_time_sec": 260.1
 }
