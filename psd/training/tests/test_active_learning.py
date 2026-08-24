@@ -139,3 +139,87 @@ class TestALSimulationRunner:
         r = self._make_runner()
         with pytest.raises(ValueError):
             r.run_trajectory(strategy="mc_dropout", seed=1)
+
+# ---------------------------------------------------------------------------
+# Task 4: P0.4 真实池熵打分（best.pt 迁移代理，公开真实层口径）
+# ---------------------------------------------------------------------------
+
+def _fake_kp(n_frames: int, seed: int = 0) -> np.ndarray:
+    rng = np.random.default_rng(seed)
+    return rng.normal(0.5, 0.1, size=(n_frames, 24, 3)).astype(np.float32)
+
+
+class TestClipSegmentToStgcnInput:
+    def test_shape_T30(self):
+        from psd.training.active_learning import clip_segment_to_stgcn_input
+        kp = _fake_kp(1041)
+        seg = clip_segment_to_stgcn_input(kp, start=175, end=196, T=30)
+        assert seg.shape == (30, 24, 3)
+        assert np.isfinite(seg).all()
+
+    def test_endpoints_preserved_after_resize(self):
+        """重采样保端点：输出首末帧 = 切片段首末帧的逐帧归一化结果。"""
+        from psd.training.active_learning import clip_segment_to_stgcn_input, _framewise_normalize
+        kp = _fake_kp(100, seed=3)
+        seg = clip_segment_to_stgcn_input(kp, start=10, end=40, T=15)
+        expect_first = _framewise_normalize(kp[10:40])[None][0][0]  # 归一后首帧
+        expect_last = _framewise_normalize(kp[10:40])[-1]
+        assert np.allclose(seg[0], expect_first, atol=1e-5)
+        assert np.allclose(seg[-1], expect_last, atol=1e-5)
+
+    def test_nan_segment_raises(self):
+        from psd.training.active_learning import clip_segment_to_stgcn_input
+        kp = _fake_kp(50)
+        kp[20:25] = np.nan
+        with pytest.raises(ValueError):
+            clip_segment_to_stgcn_input(kp, start=18, end=30, T=10)
+
+
+class TestScoreRealPool:
+    def _tiny_model(self):
+        from psd.models.stgcn_bc import build_stgcn_bc
+        return build_stgcn_bc(in_channels=3, num_classes=22, base_channels=8, num_stages=2)
+
+    def test_output_schema_and_ranking(self):
+        from psd.training.active_learning import score_real_pool
+        pool_entries = [
+            {"clip_id": f"interpet_dog01_p01_take02_ego_00{i}", "start_frame": 0, "end_frame": 30,
+             "pseudo_label": "standing", "kappa_margin": 0.3}
+            for i in range(1, 4)
+        ]
+        loader = lambda clip_id: {"kp_world": _fake_kp(60, seed=len(clip_id))}
+        result = score_real_pool(pool_entries, loader, self._tiny_model(), budgets=[2, 5], device="cpu")
+        assert result["n_scored"] == 3
+        assert len(result["ranked_ids"]) == 3
+        assert set(result["topk"].keys()) == {"2", "5"}
+        assert len(result["topk"]["2"]) == 2
+        # topk 应为 ranked 前缀
+        assert result["topk"]["2"] == result["ranked_ids"][:2]
+        for k in ("mean", "std", "min", "max", "q25", "q50", "q75"):
+            assert k in result["entropy_stats"]
+
+    def test_nan_entry_skipped_counted(self):
+        from psd.training.active_learning import score_real_pool
+        pool_entries = [
+            {"clip_id": "clip_ok", "start_frame": 0, "end_frame": 20},
+            {"clip_id": "clip_bad", "start_frame": 0, "end_frame": 20},
+        ]
+        def loader(clip_id):
+            kp = _fake_kp(40)
+            if clip_id == "clip_bad":
+                kp[5:10] = np.nan
+            return {"kp_world": kp}
+        result = score_real_pool(pool_entries, loader, self._tiny_model(), budgets=[1], device="cpu")
+        assert result["n_scored"] == 1
+        assert result["n_skipped"] == 1
+
+    def test_production_loader_resolves_npz_path(self, tmp_path):
+        """生产 loader 按 {clip_id}.npz 约定解析路径。"""
+        from psd.training.active_learning import make_clip_loader
+        kp = _fake_kp(35)
+        np.savez(tmp_path / "interpet_dog09_p19_take03_ego_001.npz",
+                 kp_world=kp, kp_weight=np.ones((35, 24), dtype=np.float32),
+                 frame_idx=np.arange(35, dtype=np.int32))
+        loader = make_clip_loader(str(tmp_path))
+        d = loader("interpet_dog09_p19_take03_ego_001")
+        assert d["kp_world"].shape == (35, 24, 3)

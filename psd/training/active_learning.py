@@ -27,11 +27,16 @@ from typing import Callable, Dict, List, Optional, Sequence, Set, Tuple
 import numpy as np
 import torch
 
+from psd.data.interpet4d import resample_to_fixed_t
+from psd.data.smq_input import _normalize_framewise
 from psd.training.train_stgcn_bc import STGCNBCTrainer, TrainConfig
 
 logger = logging.getLogger(__name__)
 
 _EPS = 1e-12
+
+# 归一化复用 P0.2 owner 实现（smq_input），本模块仅重导出别名，不重复实现
+_framewise_normalize = _normalize_framewise
 
 
 # ---------------------------------------------------------------------------
@@ -242,3 +247,105 @@ class ALSimulationRunner:
         """仅返回精度的训练阶段便捷接口。"""
         acc, _ = self._fit_stage(sample_ids, init_seed=init_seed, subdir=subdir)
         return acc
+
+
+# ---------------------------------------------------------------------------
+# P0.4 真实池熵打分（best.pt 迁移代理排序；公开真实层口径）
+# ---------------------------------------------------------------------------
+
+def clip_segment_to_stgcn_input(
+    kp_world: np.ndarray,
+    start: int,
+    end: int,
+    T: int = 30,
+) -> np.ndarray:
+    """原始 clip 骨架切片 → ST-GCN 输入 (T,24,3).
+
+    链路: 切 [start,end) → 逐帧归一化（复用 P0.2 owner 实现）→ 重采样 T 帧。
+    NaN 段显式抛错（由上层决定跳过并计数，禁止静默）。
+    """
+    seg = np.asarray(kp_world, dtype=np.float32)[int(start) : int(end)]
+    if seg.shape[0] == 0:
+        raise ValueError(f"空片段 [{start},{end})")
+    if not np.isfinite(seg).all():
+        raise ValueError(f"片段 [{start},{end}) 含非有限值")
+    seg = _framewise_normalize(seg)
+    return resample_to_fixed_t(seg, target_t=T)
+
+
+def make_clip_loader(smal_npy_dir: str | Path) -> Callable[[str], Dict]:
+    """生产用 loader 工厂：按 {smal_npy_dir}/{clip_id}.npz 约定解析。"""
+    from psd.data.interpet4d import load_clip
+
+    root = Path(smal_npy_dir)
+
+    def _load(clip_id: str) -> Dict:
+        return load_clip(root / f"{clip_id}.npz")
+
+    return _load
+
+
+def score_real_pool(
+    pool_entries: List[Dict],
+    load_clip_fn: Callable[[str], Dict],
+    model,
+    budgets: Sequence[int],
+    T: int = 30,
+    device: str = "cpu",
+    batch_size: int = 32,
+) -> Dict:
+    """对 P0.4 移交池做熵打分，产出排序清单与分布统计。
+
+    口径声明: 合成域迁移模型的不确定性代理排序，供人工标注优先级参考；
+    不产生也不得作为精度数字汇报（公开真实层无 22 类行为 GT）。
+    NaN 片段跳过并计数（n_skipped 显式登记，不静默剔除）。
+    """
+    feats: List[np.ndarray] = []
+    metas: List[Dict] = []
+    n_skipped = 0
+    for e in pool_entries:
+        try:
+            kp = load_clip_fn(e["clip_id"])["kp_world"]
+            x = clip_segment_to_stgcn_input(kp, e["start_frame"], e["end_frame"], T=T)
+        except (ValueError, FileNotFoundError, KeyError) as exc:
+            n_skipped += 1
+            logger.warning("[pool] 跳过 %s: %s", e.get("clip_id"), exc)
+            continue
+        feats.append(x)
+        metas.append(e)
+
+    probs = predict_probs(
+        model, [{"keypoints": f} for f in feats],
+        batch_size=batch_size, device=device,
+    )
+    scores = entropy_scores(probs)
+
+    order = np.argsort(-scores, kind="stable")
+    ranked_ids = [str(metas[i].get("clip_id", i)) for i in order]
+    ranked_records = [
+        {
+            "clip_id": str(metas[i].get("clip_id", i)),
+            "entropy": float(scores[i]),
+            "pseudo_label": metas[i].get("pseudo_label"),
+            "kappa_margin": metas[i].get("kappa_margin"),
+        }
+        for i in order
+    ]
+    topk = {str(int(b)): ranked_ids[: min(int(b), len(ranked_ids))] for b in budgets}
+    stats = {
+        "mean": float(scores.mean()),
+        "std": float(scores.std()),
+        "min": float(scores.min()),
+        "max": float(scores.max()),
+        "q25": float(np.percentile(scores, 25)),
+        "q50": float(np.percentile(scores, 50)),
+        "q75": float(np.percentile(scores, 75)),
+    }
+    return {
+        "n_scored": len(feats),
+        "n_skipped": n_skipped,
+        "entropy_stats": stats,
+        "ranked_ids": ranked_ids,
+        "ranked_records": ranked_records,
+        "topk": topk,
+    }
