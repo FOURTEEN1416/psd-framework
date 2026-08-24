@@ -126,6 +126,19 @@ YOLO-PetX（IEEE CEECT 2025，全题名经 GitHub 全局代码检索锁定）、
 - 关联待办联动：C7 裁决后 RESULT-7 语义、Introduction 贡献 bullet 4、rebuttal 预案需一并收口。
 - 并行事实登记（本窗执行期间）：协调会话落档用户双裁决（commit `9511d3a`）——A2 warm-start 建册 W23（E5 正证据候选来源，禁触 docs/paper）、B-full worktree 隔离建册 W24；**C7 论文措辞裁决不受 A2 影响，仍独立待用户**。
 
+### 裁决落地追加（2026-08-25 · 同窗）
+
+用户对 C7 措辞拍板**选项①**（歆歆推荐被采纳）：降级"探索性发现"写入 §5 分析节。
+
+| 文件 | 变更 |
+|------|------|
+| experiment-skeleton.md v0.6 | E5 标题/目的句/处置块改裁决记录；效率主张正文与摘要禁用；升级通道注明（W23 warm-start 或 full-budget 正证据 + 用户再裁）；tab3 AL 行标 C7↓；fig4 落点迁 §5 |
+| outline.md v0.7 | 矩阵 C7 行标 🔻 降级（落点 →§5）；§3 故事线 #4 与 §4.1 Intro 贡献 bullet 4 计划缩窄（主动学习转探索性发现）；摘要 [RESULT-3] 原"标注预算节省比"失据标记待重选源（候选：SMQ IoU 1.53× / 伪标签 +17.9pp / C1 墙钟 ≥3×）；R11 ✅ 缓解落地 |
+| conclusion-limitations.md v0.3 | 结论模板删除"100–200 片段预算内达标"句式（RESULT-7 改指语义层精度）；L5 rebuttal 更新为裁决①表述 |
+
+> Introduction.md 本体属 W21 禁触领地（等 Q3 数字统一终稿窗口处理），bullet 4 与摘要 [RESULT-3] 的实际改写已在 outline 计划层登记，由终稿窗口执行。
+> 升级条款：W23 或冷启动 full-budget 若产出 E5 正证据，须经用户再裁方可恢复 C7 主张地位——禁止窗口自行升级。
+
 ### 完成标准自查（任务书 §5）
 
 - [x] 全文检索无 `0.691 ± 0.013` 冒充 E5/E6 残留（E4 行为合法数字保留）

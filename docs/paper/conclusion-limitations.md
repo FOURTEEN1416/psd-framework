@@ -7,7 +7,7 @@
 
 ## 6.1 Conclusion（模板段，数字占位）
 
-We presented PSD, a physics–semantics decoupled framework for low-resource animal behavior recognition. PSD separates how skeletons move from what behaviors are called: a label-free physics layer provides self-supervised dynamics representations and unsupervised behavior proposals, while a lightweight semantic layer grows rule-engine seeds into full taxonomy coverage through anchor-guided clustering, iterated pseudo-labeling, and active learning. Experiments across three data calibers showed that pretraining alone yields discriminable dynamics representations (**2.51×** random baseline), that the full pipeline reaches **[RESULT-7]** on 22-class recognition within a 100–200 clip budget, and that taxonomy transitions are absorbed at **[RESULT-8]** of the full-retraining cost at matched accuracy. Beyond animal behavior, the decoupling pattern—frozen physics, revisable semantics—applies to any recognition task whose evaluation criteria evolve with operational practice.
+We presented PSD, a physics–semantics decoupled framework for low-resource animal behavior recognition. PSD separates how skeletons move from what behaviors are called: a label-free physics layer provides self-supervised dynamics representations and unsupervised behavior proposals, while a lightweight semantic layer grows rule-engine seeds into full taxonomy coverage through anchor-guided clustering, iterated pseudo-labeling, and active learning. Experiments across three data calibers showed that pretraining alone yields discriminable dynamics representations (**2.51×** random baseline), that the semantic layer attains **[RESULT-7]** on 22-class recognition, and that taxonomy transitions are absorbed at **[RESULT-8]** of the full-retraining cost at matched accuracy. Beyond animal behavior, the decoupling pattern—frozen physics, revisable semantics—applies to any recognition task whose evaluation criteria evolve with operational practice.
 
 ## 6.2 Limitations（独立成段，先发制人）
 
@@ -25,7 +25,7 @@ Six limitations bound our claims.
 > 2 → 物理层按物种族训练（trained once per species family），架构本身跨族可复用；
 > 3 → 首次性主张措辞已带边界（"to the best of our knowledge"），非绝对断言；
 > 4 → 消费级算力可行性恰是低资源叙事的佐证，非缺陷。
-> 5 → 负结果按诚实原则先发制人如实呈现；不确定性采样的经典前提（较强打分器 + 域内校准）缺失反而强化 100–200 片段预算叙事（先标注→校准打分器→再选样）；C7 最终措辞待用户裁决，warm-start 协议变更属预注册修正另开窗口；
+> 5 → 负结果按诚实原则先发制人如实呈现（C7 已按用户裁决①降级为探索性发现，2026-08-25）；不确定性采样的经典前提（较强打分器 + 域内校准）缺失反而强化渐进式标注叙事（先标注→校准打分器→再选样）；W23 warm-start 正证据候选保留经用户再裁的升级通道；
 > 6 → 结构性约束显式披露而非隐藏；自提取管线沉淀为可复用资产；公开真实层相关主张全部限定在 4 类子集口径内，禁止升格。
 
 ## 自审记录
@@ -37,8 +37,8 @@ Six limitations bound our claims.
 | 与风险登记册一致 | ✅ L1↔R1、L3↔W1 边界声明、L4↔HANDOVER §4、L5↔R11/W14 报告、L6↔W20 报告结构约束披露 |
 
 ## 待办
-- [ ] RESULT-7/8 回填后收口终稿（RESULT-7 语义随 C7 用户裁决联动）
-- [ ] C7 措辞用户裁决落地后同步本文件结论段与 rebuttal 预案
+- [x] C7 措辞用户裁决落地并同步本文件（2026-08-25，选项①：降级探索性发现）
+- [ ] RESULT-7/8 回填后收口终稿（RESULT-7 语义已随裁决①改为语义层精度，不含预算主张）
 
 ## 修订历史
 
@@ -46,3 +46,4 @@ Six limitations bound our claims.
 |------|------|------|
 | v0.1 | 2026-08-23 | W5 增量二：结论模板 + 四条 Limitations 及 rebuttal 预案 |
 | v0.2 | 2026-08-24 | W21 诚实刷新：新增 L5（冷启动弱打分器场景不确定性采样无优势 + softmax 跨域饱和诊断 100.9 vs ≈10.8）与 L6（AK 公开真实层结构约束：宽松门禁 4/12 类 + PE ≈4.6 帧/视频，自提取管线为缓解方案待 Q3 接力）；rebuttal 预案同步扩至 6 条 |
+| v0.3 | 2026-08-25 | 用户裁决 C7 选项①落地：结论模板删除"100–200 片段预算内达标"句式（RESULT-7 改指语义层精度）；L5 rebuttal 更新为裁决①表述并注明升级通道 |
