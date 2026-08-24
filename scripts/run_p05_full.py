@@ -57,7 +57,6 @@ Y_PRIME_NUM_CLASSES = 21
 # 原始 22 类 index → Y' 类 index 映射
 # 0=sit,1=down,2=stand,3=heel,4=sit_up,5=stay,6=bark,7=bite,8=track,...
 _Y_TO_YP_MAP: dict = {}
-_y_idx = 0
 for name in ALL_BEHAVIORS_22:
     if name in ("stand", "track"):
         _Y_TO_YP_MAP[name] = 2  # → locomotion
@@ -83,6 +82,8 @@ def main() -> None:
     ap.add_argument("--config", default="configs/p05_stgcn_bc_full.yaml")
     ap.add_argument("--samples-per-class", type=int, default=None,
                     help="覆盖 config 的 samples_per_class（用于消融）")
+    ap.add_argument("--no-early-stopping", action="store_true",
+                    help="禁用早停，跑满 config epochs（等预算对比用）")
     args = ap.parse_args()
 
     with open(REPO_ROOT / args.config, encoding="utf-8") as f:
@@ -101,7 +102,6 @@ def main() -> None:
         label_names = Y_PRIME_LABEL_NAMES
         print("[e6] 使用 Y' 粗粒度分类体系（21 类：stand+track→locomotion）")
     else:
-        num_classes = Y_LABEL_NAMES.__len__()  # 22
         num_classes = len(Y_LABEL_NAMES)
         label_names = Y_LABEL_NAMES
         print(f"[e6] 使用 Y 细粒度分类体系（{num_classes} 类）")
@@ -139,7 +139,14 @@ def main() -> None:
     total_params = sum(p.numel() for p in model.parameters())
     print(f"[model] params={total_params:,}, num_classes={num_classes}")
 
-    # 训练配置
+    # 训练配置（消融覆盖时给独立 output_dir，避免 history/ckpt 相互覆盖）
+    output_dir = train_cfg["output_dir"]
+    if args.samples_per_class is not None:
+        output_dir = f"{output_dir}_n{args.samples_per_class}"
+    if args.no_early_stopping or not train_cfg.get("early_stopping", True):
+        effective_es = False
+    else:
+        effective_es = True
     tc = TrainConfig(
         lr=train_cfg["lr"],
         weight_decay=train_cfg["weight_decay"],
@@ -147,12 +154,16 @@ def main() -> None:
         batch_size=train_cfg.get("batch_size", 32),
         use_amp=train_cfg.get("use_amp", True),
         device=train_cfg.get("device", "auto"),
-        early_stopping=train_cfg.get("early_stopping", True),
+        early_stopping=effective_es,
         patience=train_cfg.get("patience", 15),
-        output_dir=str(REPO_ROOT / train_cfg["output_dir"]),
+        output_dir=str(REPO_ROOT / output_dir),
     )
     trainer = STGCNBCTrainer(model, train_samples, val_samples, config=tc)
     summary = trainer.fit()
+    # 补充 checkpoint 路径进摘要（trainer.fit 不返回该字段）
+    best_ckpt = Path(tc.output_dir) / "best.pt"
+    summary["ckpt_path"] = str(best_ckpt) if best_ckpt.exists() else "N/A"
+    summary["early_stopping_effective"] = effective_es
 
     # 打印结果
     taxonomy_label = "Y' 粗粒度(21类)" if taxonomy_variant == "Y_prime" else "Y 细粒度(22类)"
