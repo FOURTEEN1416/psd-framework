@@ -1,0 +1,33 @@
+# P0.5 ST-GCN+BC 合成层冒烟训练配置（W11 窗口）
+# 口径: 合成层（synthetic）
+# 用途: Step 3 冒烟验证收敛方向（不追求 ≥85% 达标线——那属 W12）
+
+data:
+  synthetic_path: data/synthetic/syn_22class_20per_class_seed42.pkl
+  samples_per_class: 20
+  T: 30
+  seed: 42
+  val_split: 0.2
+
+model:
+  in_channels: 3
+  num_classes: 22
+  base_channels: 64
+  num_stages: 10
+
+train:
+  lr: 0.001
+  weight_decay: 0.0001
+  epochs: 30          # 冒烟短训
+  batch_size: 32
+  use_amp: true
+  device: auto
+  early_stopping: false
+  patience: 999       # 禁用（短训不需要早停）
+  output_dir: runs/p05_stgcn_bc
+  smq_skip: true      # 跳过 SMQ 依赖（本配置不使用）
+
+smoke_criteria:
+  loss_monotonic_trend: true   # loss 单调下降趋势可见
+  val_acc_vs_random_baseline: 0.10  # ≥10% vs 随机基线 4.5%（非达标线，仅方向验证）
+  no_nan: true                # 无 NaN 检查
