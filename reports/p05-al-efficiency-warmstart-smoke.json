@@ -1,8 +1,8 @@
 {
   "meta": {
-    "date": "2026-08-25T00:28:06",
+    "date": "2026-08-25T00:37:06",
     "window": "W23",
-    "git_sha": "d7231a8",
+    "git_sha": "1dee91e",
     "layer": "synthetic",
     "layer_note": "合成层口径：GT oracle 来自合成生成器标签（AGENTS.md 三层铁律）；结论不得外推至公开真实层或真实 K9 层",
     "preregistration": "docs/superpowers/plans/2026-08-25-w23-warmstart-al.md",
@@ -51,7 +51,7 @@
       "device": "cpu",
       "output_dir": "runs/_tmp_al_smoke"
     },
-    "total_time_sec": 4.2
+    "total_time_sec": 0.2
   },
   "curves": {
     "entropy": {
