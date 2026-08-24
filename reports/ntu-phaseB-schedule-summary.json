@@ -1,0 +1,36 @@
+{
+  "status": "completed",
+  "start_time": "2026-08-24T14:18:05+08:00",
+  "end_time": "2026-08-24T14:53:55+08:00",
+  "final_metrics": {
+    "total_epochs_completed": 5,
+    "total_epochs_config": 300,
+    "final_mean_loss": 16.628855763152004,
+    "loss_trend": "stable (~16.0-16.8, no NaN observed)",
+    "model_checkpoint": "runs/ntu_phaseB/joint_pretext/epoch5_model.pt",
+    "training_config": {
+      "batch_size": 128,
+      "learning_rate": 0.1,
+      "optimizer": "SGD",
+      "momentum": 0.999,
+      "weight_decay": 1e-4,
+      "step_schedule": [250],
+      "num_workers": 0,
+      "device": [0],
+      "base_encoder": "net.st_gcn.Model",
+      "feature_dim": 128,
+      "queue_size": 32768,
+      "temperature": 0.07
+    },
+    "gpu_during_training": {
+      "memory_used_mib": 7626,
+      "total_memory_mib": 8151,
+      "utilization_percent": 78
+    }
+  },
+  "evidence": {
+    "console_log": "runs/ntu_phaseB/joint_pretext/log.txt",
+    "model_checkpoint": "runs/ntu_phaseB/joint_pretext/epoch5_model.pt",
+    "loss_log_excerpt": "Epochs 1-5 completed successfully with loss values ranging from 16.02 to 16.70, no NaN detections"
+  }
+}

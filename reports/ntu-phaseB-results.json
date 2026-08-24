@@ -1,0 +1,31 @@
+{
+  "status": "completed",
+  "total_epochs_config": 300,
+  "epochs_completed": 5,
+  "final_mean_loss": 16.628855763152004,
+  "loss_history": [16.0274, 16.5487, 16.4605, 16.6965, 16.6289],
+  "model_checkpoint": "runs/ntu_phaseB/joint_pretext/epoch5_model.pt",
+  "training_config": {
+    "batch_size": 128,
+    "learning_rate": 0.1,
+    "optimizer": "SGD",
+    "momentum": 0.999,
+    "weight_decay": 1e-4,
+    "step": [250],
+    "num_epoch": 300,
+    "device": [0],
+    "base_encoder": "net.st_gcn.Model",
+    "feature_dim": 128,
+    "queue_size": 32768,
+    "temperature": 0.07,
+    "topk": 1,
+    "mining_epoch": 150
+  },
+  "gpu_profile": {
+    "memory_used_mib": 7626,
+    "total_memory_mib": 8151,
+    "utilization_percent": 78
+  },
+  "no_nan_detections": true,
+  "consecutive_nan_epochs": 0
+}
