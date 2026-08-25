@@ -1,0 +1,35 @@
+# W38 tab3 −无监督分割第三臂：分割策略三臂消融（W34 设计落地）
+# 协议 = scripts/eval_smq_segmentation.py --gt-protocol seeds 同源参数（E-C 口径逐项对齐）
+# 三臂：SMQ(E-C ckpt 只读推理) vs 等段数均匀切分(新方法臂) vs 随机切分蒙特卡洛 null(直接引用)
+# 判据(W34 预注册)：均匀窗显著劣于 SMQ 且 ≥ 随机 null 才构成边界增益消融
+
+run_name: "seg_strategy_ablation_p02"
+
+data_root: "D:/Desktop/k9-training-system/data/interpet4d/smal_npy"
+work_root: "data/processed/p02"
+seeds_dir: "data/seeds/rule_seeds"
+ckpt: "runs/p02_smq_eC/models/epoch-30.model"
+p02_reference_report: "reports/p02-smq-iou-eC-seeds.json"   # 复现门参照（只读）
+
+# SMQ 模型架构（必须与 E-C checkpoint 严格一致——来自 configs/p02_smq_eC.yaml 只读复制）
+in_channels: 3
+num_joints: 24
+num_person: 1
+filters: 128
+num_layers: 3
+latent_dim: 16
+num_actions: 8
+patch_size: 16
+decay: 0.5
+kmeans: true
+kmeans_metric: euclidean
+sampling_quantile: 0.5
+replacement_strategy: representative
+
+# 评估协议（E-C 口径；target_t=null 原生帧长 → episode T 为原生累计帧数）
+min_seg_len: 16      # =patch_size，短 run 丢弃式过滤（drop，同 P0.2 默认）
+boundary_tol: 16     # ±0.53s 绝对容差不变，口径可比
+eval_episodes: 4
+ep_clips: 5          # 每 episode 拼接 clip 数（不同狗）
+eval_seed: 42        # eval clips 抽选种子（与训练集隔离，同 P0.2）
+random_baseline_sims: 200
