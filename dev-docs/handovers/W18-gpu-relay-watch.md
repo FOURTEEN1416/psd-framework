@@ -12,7 +12,7 @@
 | Q2 | C1 解耦成本 full 档 | `.venv\Scripts\python.exe scripts\run_c1_decouple.py --n-per-class 100` + 完整 epochs 参数 | **W19 已提交可运行版本且 TDD 全绿**（若 W19 未完成则跳过并登记） |
 | Q3a | YOLO dog-pose 微调（24 点犬类权重） | `.venv\Scripts\python.exe scripts\train_yolo_dogpose.py --epochs 50 --batch 16`（~1h） | Q2 已完成；`D:\Desktop\datasets\dog-pose` 数据在位（8476 图已预下载核验）；产物 `runs/public_real_yolo_dogpose/train/weights/best.pt` |
 | Q3b | AK 犬科视频全量提点 | `.venv\Scripts\python.exe scripts\run_p05_public_real_pipeline.py --stage extract --weights runs/public_real_yolo_dogpose/train/weights/best.pt`（~10min） | Q3a 的 best.pt 存在；172 样本 manifest 在位 |
-| Q3c | ST-GCN+BC 公开真实层微调（4 类子集） | 按 `scripts/run_p05_public_real_pipeline.py` 微调 stage 执行（`--stage` 取值以脚本 `--help` 为准；backbone 冻结 + 4 类新 head，init `runs/p05_stgcn_bc_full/best.pt`） | Q3b 提点产物完整过 24 点防呆断言 |
+| Q3c | ST-GCN+BC 公开真实层微调（4 类子集） | `.venv\Scripts\python.exe scripts\run_p05_public_real_finetune.py --pkl runs\public_real_dataset\partialclass4_T30.pkl --init runs\p05_stgcn_bc_full\best.pt --output-json reports\p05-public-real-partialclass-result-2026-08-25.json`（Q3c 执行件已由协调者补齐：commit `606ef94`，TDD 4 绿/全仓 296 绿） | Q3b 提点产物完整过 24 点防呆断言 |
 | ~~Q4~~ | ~~warm-start full-budget 方向稳定性终验~~ | —— | ❌ **已取消（用户裁决 2026-08-25 晨："叫停省时"）**：E5 叙事已换轨 warm-start 可用性（裁决 A），短档双执行逐字节一致已足够支撑叙事；full 档如未来需要由新任务书重启 |
 | Q4 | AL warm-start full-budget（W23） | `.venv\Scripts\python.exe scripts\run_p05_al_warmstart.py --config configs\p05_al_warmstart_full.yaml --fresh` | Q3c 已完成；config 内 RUNDATE 改为当日。⚠️ 短预算已出负结果（`reports/w23-p05-al-warmstart-2026-08-25.md`），本任务仅为方向稳定性终验，**启动前用户可叫停**；科学判读归 W23 报告回填 |
 

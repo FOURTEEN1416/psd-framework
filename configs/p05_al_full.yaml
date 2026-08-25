@@ -52,5 +52,5 @@ pool_scoring:
   ckpt: runs/p05_stgcn_bc_full/best.pt
 
 output:
-  report_json: reports/p05-al-efficiency-full-2026-08-24.json
+  report_json: reports/p05-al-efficiency-full-2026-08-25.json
   state_dir: runs/p05_al_efficiency/state_full
