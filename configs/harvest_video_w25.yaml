@@ -1,0 +1,70 @@
+# ============================================================
+# C1/W25 公开视频主动抓取管线配置
+# 领地: scripts/harvest_*, runs/data_campaign/video/, configs/harvest_*
+# 收敛契约: dev-docs/handovers/DATA-CAMPAIGN-plan.md §0 格式 A
+# 全程 CPU/网络; 禁触 GPU 队列(relay Q1-Q3c)
+# ============================================================
+
+channel: video                    # runs/data_campaign/<channel>/
+out_root: runs/data_campaign/video
+
+target_fragments: 500             # 起步目标(任务书 ≥500)
+safety_margin: 50                 # 提前停机余量(实际停于 target+margin)
+
+platforms:
+  bilibili:
+    enabled: true
+    proxy: null                   # 国内站直连
+    guest_cookies: true           # 412 反爬对策: 先访问首页取 buvid3
+  youtube:
+    enabled: true
+    proxy: "http://127.0.0.1:17890"   # 实测系统代理(W25 门禁 2026-08-25)
+
+http_user_agent: >-
+  Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36
+  (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36
+
+search:
+  results_per_query: 15           # 每查询平台搜索候选上限(flat 提取)
+  download_per_query: 10          # 每查询实下载视频数上限
+  queries:
+    # ---- 中文族(B 站主用) ----
+    - {kw: "马里努阿犬 训练",      lang: zh}
+    - {kw: "IGP 训练 犬",          lang: zh}
+    - {kw: "护卫犬 训练",          lang: zh}
+    - {kw: "警犬 训练",            lang: zh}
+    - {kw: "工作犬 训练",          lang: zh}
+    - {kw: "服从性 比赛 狗",       lang: zh}
+    # ---- 英文族(YouTube 主用, B 站亦可命中搬运) ----
+    - {kw: "IGP dog training",        lang: en}
+    - {kw: "Schutzhund training",     lang: en}
+    - {kw: "Belgian Malinois training", lang: en}
+    - {kw: "K9 police dog training",  lang: en}
+    - {kw: "protection dog training", lang: en}
+    - {kw: "dog obedience trial",     lang: en}
+  platform_pref:                  # 语言→平台优先(另一平台作补充池)
+    zh: [bilibili, youtube]
+    en: [youtube, bilibili]
+
+source_filters:                   # 源视频门槛(省带宽/CPU)
+  min_duration_s: 20
+  max_duration_s: 900             # 15min 封顶
+  min_height: 240                 # 分辨率下限
+
+split:
+  scene_threshold: 0.30           # ffmpeg scene 得分切点
+  min_scene_gap_s: 1.0            # 相邻切点最小间隔(去抖)
+  max_len_s: 30                   # 契约硬上限
+  min_len_s: 1.5                  # 碎片丢弃线
+  encode: {height: 360, crf: 26, preset: veryfast, drop_audio: true}
+
+filter:                           # YOLO COCO 犬类出现率粗筛(CPU 推理)
+  weights: yolo11n.pt             # COCO 80 类检测权重(dog=class 16)
+  device: cpu                     # 铁律: 不碰 GPU
+  conf: 0.25
+  frames_per_fragment: 4          # 均匀抽帧数 K
+  min_dog_rate: 0.5               # K 帧中含犬帧占比阈值
+
+manifest:
+  license_note: "research-use only; public platform content accessed via yt-dlp respecting ToS; no redistribution"
+  species_note: "canis familiaris (working-dog training footage; COCO-dog coarse filter)"
