@@ -77,8 +77,45 @@ checkpoint 就绪（epoch300_model.pt），预注册线 ≥77.18%；GPU 排 rela
 
 **疑点**: P0.2 报告已含"SMQ vs 滑窗基线"对照（0.458 vs 基线）——tab3 该行可能**已有数据可填**而非需新实验。任务：核查 P0.2 报告对照表是否构成"分割策略消融"证据，可填则填（W34 顺路），不可用则给出所需新实验设计。
 
+## W38 tab3 末行实验：均匀滑窗第三臂（CPU 立即可跑，W34 设计落地）
+
+**背景**: W34 排查定案——P0.2 对照系"等段数随机切分 null（蒙特卡洛）"而非滑窗方法臂，全仓无滑窗臂，tab3 −无监督分割行维持 PENDING；W34 已入册最小新实验设计。
+**任务**:
+1. 按设计实现均匀滑窗分割臂（复用 eval_smq_segmentation.py 评估协议，seeds 规范对齐）
+2. 三臂对照: SMQ 运动词量化 vs 均匀滑窗 vs 随机切分 null——同 episode 同协议
+3. 产出: reports/p02-seg-strategy-ablation-<日期>.json/md + tab3 该行回填素材（交协调者或 W36 一并入表）
+**领地**: scripts/seg_strategy_ablation.py(新)、configs/seg_ablation_*、reports/p02-seg-strategy-*
+**禁触**: 既有 p02 报告与 SMQ 代码本体（只读复用）
+
+## W39 W31 full 档执行：−自监督预训练消融（GPU 排 W33 线性评估之后）
+
+**背景**: W31 已交付脚本+TDD+CPU 冒烟（strict 加载打通）；本窗只负责 full 档执行与判读。
+**任务**:
+1. 监控 W33 线性评估完成（reports/ntu-phaseB-lineareval-*.json 出现）后占卡
+2. 跑 scripts/run_ablation_pretrain.py full 档（两臂×3 seeds×完整预算）
+3. 判读回填: tab3 −自监督预训练行素材 + 报告 reports/ablation-pretrain-<日期>.md
+**领地**: runs/ablation_pretrain_*、reports/ablation-pretrain-*
+**禁触**: W31 脚本本体（只读执行）
+
+## W40 数据飞轮效力验证：扩展池微调第二轮（GPU 排 W39 之后）
+
+**背景**: 数据五路战役的终极追问——飞轮真的转得动吗？44.90%（仅 AK 172 片段）在扩展池加持下能否提升？这是"数据飞轮持续供数"主张的首个直接实验证据。
+**任务**:
+1. 基于 W30/W35 统一池（9844 条五源）构造增强训练集：APTv2 503 轨迹（几何/预训练用途，deferred 标签不进监督）+ DogSet 运动学先验按 W30 判例入对应用途槽位
+2. 两轮对照: round1（现 44.90% 配置原样复跑）vs round2（+扩展池增强），同 seed 同协议
+3. 产出: reports/p05-public-real-round2-<日期>.json/md——提升则飞轮主张获直接实证；不提升则如实记录并分析域差瓶颈
+**领地**: configs/public_real_round2_*、runs/public_real_round2_*、reports/p05-public-real-round2-*
+**禁触**: 统一池组装器（只读消费）、AK 原始 pkl
+
+## W36 论文终稿回填（触发窗：W33 数字落地后开）
+
+**触发**: reports/ntu-phaseB-lineareval-*.json 出现即可开（预计数小时内）
+**任务**: experiment-skeleton 全部剩余占位符终填（R4 数字/tab3 W38-W39 素材择时）+ Introduction/Abstract DRAFT 合并定稿 + 全文数字对账（用 W32 索引表） + Limitations 终稿（含 44.90% 类不平衡/20-24 有效监督/AL 负结果三件套）
+**领地**: docs/paper/**（全开）
+
 ## 修订历史
 | 版本 | 日期 | 变更 |
 |------|------|------|
 | v1.0 | 2026-08-25 | 三窗规划立项 |
 | v1.1 | 2026-08-25 晚 | 增补 W33-W37：NTU 线性评估/C1 full 回写/片段提点接力/终稿回填/tab3 末行排查 |
+| v1.2 | 2026-08-25 深夜 | 增补 W38-W40 三窗（tab3 滑窗臂/预训练消融执行/飞轮效力验证）+ W36 触发条件更新 |
