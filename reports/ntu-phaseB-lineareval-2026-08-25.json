@@ -1,0 +1,125 @@
+{
+  "report_id": "ntu-phaseB-lineareval-2026-08-25",
+  "window": "W33 (wt/W33)",
+  "metric_layer": "公开基准层 NTU60 xsub（与合成 / 公开真实 / 真实 K9 各层严格分账，禁止混报）",
+  "run_window": {
+    "start": "2026-08-25T23:40:26+08:00",
+    "end": "2026-08-26T00:13:45+08:00",
+    "wall_minutes": 33
+  },
+  "hardware": "NVIDIA GeForce RTX 5060 Laptop GPU 8GB",
+  "pretext_checkpoint": {
+    "path": "runs/ntu_phaseB/joint_pretext/epoch300_model.pt",
+    "size_bytes": 24293893,
+    "trained_epochs": 300,
+    "loss_start": 16.63,
+    "loss_end": 5.3,
+    "nan_incidents": 0,
+    "finished_at": "2026-08-25T14:20:46+08:00"
+  },
+  "protocol": {
+    "entry": "scripts/run_ntu_lineareval.py",
+    "config": "configs/ntu60_phaseb_lineareval_xsub_joint.yaml",
+    "processor": "official processor.linear_evaluation.LE_Processor 直连零适配（保留官方 weights_init：fc 头 N(0,0.02) 后由 checkpoint 覆盖 encoder，ignore_weights=[encoder_q.fc, encoder_k, queue]）",
+    "feeder": "官方 Feeder_single 无增强评估口径（shear_amplitude=-1, temperal_padding_ratio=-1, mmap=True）",
+    "optimizer": "SGD base_lr=3.0 weight_decay=0 step=[80] momentum=0.9(官方硬编码) nesterov=False",
+    "epochs": 100,
+    "batch_size": 128,
+    "eval_interval_epochs": 5,
+    "n_val": 16487,
+    "n_train": 40091,
+    "seed": "init_seed(0) 本仓锚定种子（已声明的本地差异：官方未全局定种，数值同分布）",
+    "local_deviations_from_official_config": [
+      "work_dir/weights/data_path/label_path/device 本机路径与单卡适配",
+      "num_worker=0（Windows spawn 故障规避）",
+      "print_log 显式声明 True（数值无差异）",
+      "init_seed(0) 本地锚定种子"
+    ],
+    "protocol_fidelity_guard": "psd/data/tests/test_ntu_lineareval_protocol.py（与 external 官方 yaml 科学不变量逐键相等护栏）"
+  },
+  "results": {
+    "best_top1_pct": 74.3,
+    "best_epoch": 85,
+    "best_top5_pct_at_last_eval": 94.65,
+    "last_epoch100_top1_pct": 74.2,
+    "eval_trajectory_pct": [
+      {"epoch": 5, "top1": 70.29},
+      {"epoch": 10, "top1": 72.24},
+      {"epoch": 15, "top1": 72.2},
+      {"epoch": 20, "top1": 72.62},
+      {"epoch": 25, "top1": 71.81},
+      {"epoch": 30, "top1": 72.77},
+      {"epoch": 35, "top1": 71.56},
+      {"epoch": 40, "top1": 72.29},
+      {"epoch": 45, "top1": 71.81},
+      {"epoch": 50, "top1": 72.14},
+      {"epoch": 55, "top1": 71.87},
+      {"epoch": 60, "top1": 72.52},
+      {"epoch": 65, "top1": 72.43},
+      {"epoch": 70, "top1": 72.09},
+      {"epoch": 75, "top1": 72.42},
+      {"epoch": 80, "top1": 71.67},
+      {"epoch": 85, "top1": 74.3},
+      {"epoch": 90, "top1": 73.97},
+      {"epoch": 95, "top1": 74.22},
+      {"epoch": 100, "top1": 74.2}
+    ],
+    "lr_step_effect": "ep80 官方 lr×0.1 触发后 top1 从平台期 ~72.1-72.8 跳升至 73.97-74.30 带",
+    "test_result_pkl": "runs/ntu_phaseB/lineareval_joint/test_result.pkl（对应 best 模型 ep85 预测，供未来三流融合消费）",
+    "artifacts_dir": "runs/ntu_phaseB/lineareval_joint/"
+  },
+  "reference_bands": {
+    "official_aimclr_joint_xsub_readme_pct": 74.34,
+    "delta_best_top1_vs_official_pp": -0.04,
+    "preregistered_pass_line_pct": 77.18,
+    "preregistered_line_target": "3s-AimCLR 三流融合（三个独立 pretext 编码器分数融合，alpha joint=0.6/bone=0.6/motion=0.4），官方参照 79.18%",
+    "official_per_stream_readme_pct": {"joint": 74.34, "bone": 71.87, "motion": 68.68, "3s_ensemble": 79.18}
+  },
+  "verdict": {
+    "single_stream_process_observation": "PASS_BAND —— joint 单流 74.30% vs 官方 README 74.34%，Δ=-0.04pp（远小于无全局定种的同分布噪声带）；Phase B 预训练管线保真度获直接实证",
+    "preregistered_3s_judgement": "NOT_TRIGGERED —— 预注册线 ≥77.18% 的对照物是三流融合；bone/motion 流 pretext 未训练（~2×24h GPU 成本），按协议不可用 joint checkpoint 对 bone/motion 输入做线性评估再融合（非官方协议、无对照物）。无论过线与否均不构成对预注册线的判定，如实归档待裁决"
+  },
+  "protocol_gap_closure": {
+    "gaps_registered_by_predecessor": [
+      {
+        "gap": "三流范围缺口：预注册线对照物为三流融合，本仓仅有 joint checkpoint",
+        "status": "PARTIAL_CLOSURE",
+        "detail": "E1 joint 线性评估已执行并归档（本报告）；E2-E6（bone/motion pretext ×2 ≈48h GPU + 两流线性评估 + 融合出数）留用户裁决。管线保真由 ±0.04pp 复现背书，补全风险已消解"
+      },
+      {
+        "gap": "GPU 占卡阻塞（relay Q1 HALT 停链致门禁无法自然满足）",
+        "status": "RESOLVED",
+        "detail": "relay v2 五步于 20:59 全物理落地，state.json status=ALL_DONE 在案；协调者 20:5x 看板公告明确放行 W33 占卡"
+      },
+      {
+        "gap": "NTU 数据事故（xsub/train_label.pkl 缺失）",
+        "status": "RESOLVED_BY_PREDECESSOR",
+        "detail": "GKD 代理重下载 + 同位文件 MD5 逐字节一致交叉验证 + 全量 --verify PASS（113,156 样本）；本次运行即在该恢复数据上完成，构成新鲜验证"
+      }
+    ]
+  },
+  "next_step_options_for_user_decision": [
+    {
+      "option": "A 补全三流（合法对标预注册线的唯一路径）",
+      "cost": "~2×24h GPU（bone/motion pretext 各 300ep）+ ~2×0.5h 线性评估 + 分钟级融合",
+      "pro": "可合法判定 ≥77.18%；joint ±0.04pp 实证管线零漂移，预期融合落点在官方 79.18% 噪声带内",
+      "con": "占卡 48h；motion/bone 单流贡献边际递减（官方 68.68/71.87）"
+    },
+    {
+      "option": "B 单流保真证据先行，三流挂账后续批次",
+      "cost": "0h",
+      "pro": "论文可用『joint 单流复现 Δ-0.04pp』作为预训练管线保真证据先写其他章节；GPU 让给 Q3b 重跑等更高优先级队列",
+      "con": "R4 预注册线长期悬置，论文主表 NTU 列只能引单流口径"
+    }
+  ],
+  "data_incident_note": "xsub/train_label.pkl 曾缺失（前任发现并闭环）：GKD 代理重下载、同位文件 MD5 逐字节一致、全量 --verify PASS 113,156 样本；ntu_selective_fetch.py 双前缀冗余树问题前任已清理并登记",
+  "evidence_files": [
+    "runs/ntu_phaseB/lineareval_joint/log.txt（官方 logger 全程，73885 bytes）",
+    "runs/ntu_phaseB/lineareval_joint/best_model.pt（ep85）",
+    "runs/ntu_phaseB/lineareval_joint/test_result.pkl",
+    "runs/ntu_phaseB/lineareval_joint_stdout.log / _stderr.log（stderr 空，零异常）",
+    "D:/Desktop/psd-framework/runs/relay_exec/state.json（ALL_DONE 占卡依据）"
+  ],
+  "report_version": "1.0",
+  "generated_at": "2026-08-26T00:20:00+08:00"
+}

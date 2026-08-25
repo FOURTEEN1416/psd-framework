@@ -1,0 +1,65 @@
+# W33 — AimCLR NTU60 xsub 线性评估（motion 流，公开基准层口径，禁止与合成/真实 K9 混报）
+# 改编自 external/AimCLR/config/ntu60/linear_eval/linear_eval_aimclr_xsub_motion.yaml
+# 协议保真由 psd/data/tests/test_ntu_lineareval_protocol.py 护栏锁定：
+#   与官方逐键相等（除下方声明的本机适配差异），官方超参被静默改动即测试红。
+# 本机适配差异清单（复现审计用）:
+#   1. work_dir/weights/data_path/label_path/device 本机路径与单卡适配
+#   2. num_worker 0（Windows spawn 故障规避，同 ntu60_phaseb_xsub_motion.yaml 差异#3）
+#   3. print_log: True 显式声明（官方默认即 True，数值无差异）
+# 判据: 三流融合 ≥77.18%（预注册线=README 79.18% −2pp）；单流对照 README joint 74.34%
+work_dir: runs/ntu_phaseB/lineareval_motion
+
+weights: runs/ntu_phaseB/motion_pretext/epoch300_model.pt
+ignore_weights: [encoder_q.fc, encoder_k, queue]
+
+# feeder —— 官方 Feeder_single 无增强评估口径（shear/padding=-1 关闭增强）
+train_feeder: feeder.ntu_feeder.Feeder_single
+train_feeder_args:
+  data_path: data/ntu60_frame50/xsub/train_position.npy
+  label_path: data/ntu60_frame50/xsub/train_label.pkl
+  shear_amplitude: -1
+  temperal_padding_ratio: -1
+  mmap: True
+
+test_feeder: feeder.ntu_feeder.Feeder_single
+test_feeder_args:
+  data_path: data/ntu60_frame50/xsub/val_position.npy
+  label_path: data/ntu60_frame50/xsub/val_label.pkl
+  shear_amplitude: -1
+  temperal_padding_ratio: -1
+  mmap: True
+
+# model —— pretrain=False: encoder_q.fc 成为 60 类线性分类头（FC+softmax，encoder 冻结）
+model: net.aimclr.AimCLR
+model_args:
+  base_encoder: net.st_gcn.Model
+  pretrain: False
+  in_channels: 3
+  hidden_channels: 16
+  hidden_dim: 256
+  num_class: 60
+  dropout: 0.5
+  graph_args:
+    layout: 'ntu-rgb+d'
+    strategy: 'spatial'
+  edge_importance_weighting: True
+
+# optim —— 官方线性评估配方原值
+nesterov: False
+weight_decay: 0.0
+base_lr: 3.
+optimizer: SGD
+step: [80]
+
+# training —— 单卡适配
+device: [0]
+batch_size: 128
+test_batch_size: 128
+num_epoch: 100
+stream: 'motion'
+num_worker: 0
+
+# log
+save_interval: -1
+eval_interval: 5
+print_log: True
