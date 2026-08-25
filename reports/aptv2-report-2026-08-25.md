@@ -149,3 +149,23 @@ APTv2 不并入 dog-pose 静态池处置方案（它有真序列）。合流点�
 | `runs/data_campaign/aptv2/*.json` | 同上两 JSON 的运行时落点（`/runs/*` 已 gitignore，可再生，不入库） |
 
 > 注：`runs/data_campaign/aptv2/` 为任务书领地内的运行时落盘位；因 `.gitignore #19 /runs/*` 不随 git 走，提交以 `reports/` 快照为准，truth = 脚本重跑输出。
+
+## 13. 移交节：后续①已执行——Format B 序列池建成（同日追加）
+
+用户裁决"推进最优解"后，§7 选项 a（T=15 直接抽取）已落地为可复跑管线：
+
+- **抽取器**: `scripts/mine_aptv2_extract_sequences.py`（CPU-only，确定性排序，K9 零写入）
+- **产物**: `runs/data_campaign/aptv2/sequences/canidae/*.pkl` 共 **503 条 T=15 × V=17 × C=3** 序列
+  - 按种: dog 203 / fox 167 / wolf 133；按 split: train 356 / val 68 / test 79（无跨 split 混合轨迹）
+  - 契约字段齐备: `{keypoints, topology_name, V, fps_or_sampling, source, split}` + 物种/帧号/图像尺寸溯源
+  - 置信通道: v-flag {0,2} → {0.0,1.0}（映射已在每条 source 元数据内注明）
+  - 平均可见关节占比 0.6953；163 个短段如实登记未静默丢弃（段长直方图见 manifest）
+- **索引**: `runs/data_campaign/aptv2/sequences/_manifest.json`（含逐文件 sha256）
+
+**新鲜验证证据链**:
+1. schema 全扫 503/503 零违规（键集/形状/(15,17,3)/c3∈{0,1}）
+2. 随机抽检 3 条（seed42）逐元素对回源 COCO JSON：xy 全等 + v 映射全等
+3. 复跑确定性：manifest SHA256 前后一致
+4. pytest 296 passed；K9 仓 git status 空
+
+**下游消费提示**：本池为公开真实层关键点监督资产，拓扑 `aptv2_quadruped_17kp` 与主管线（smal 24-kp / 合成 24-kp）不同构——接入 warm-start 前须经 assets-map 关节映射移植；T=15 与主管线 T=30 的适配按 §7 选项表执行。

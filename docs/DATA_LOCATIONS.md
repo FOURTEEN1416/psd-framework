@@ -29,6 +29,7 @@
 - **判定**: **15 帧微序列池**（非静态池）：轨迹段内连续帧对 99.8%，但跨度被 ~15 帧窗口截断，canidae 无 ≥16 连续帧轨迹
 - **canidae 规模**（公开真实层）: dog+fox+wolf = 11,410 标注 / 4,676 标注帧 / 326 序列组 / 646 轨迹
 - **证据指针**: 报告 `reports/aptv2-report-2026-08-25.md`；可入库清单 `reports/aptv2-canidae-manifest-2026-08-25.json`；机读盘点 `reports/aptv2-inventory-summary-2026-08-25.json`；脚本 `scripts/mine_aptv2_inventory.py`（运行时落盘 `runs/data_campaign/aptv2/`，gitignore 可再生）
+- **Format B 序列池（后续①已建）**: `runs/data_campaign/aptv2/sequences/canidae/` **503 条 T=15×V=17×C=3** .pkl（dog 203/fox 167/wolf 133；train 356/val 68/test 79），索引 `sequences/_manifest.json`；抽取器 `scripts/mine_aptv2_extract_sequences.py` 复跑可再生；拓扑 `aptv2_quadruped_17kp` 接入主管线前需 assets-map 映射
 
 ## 3. 待补充数据源
 
