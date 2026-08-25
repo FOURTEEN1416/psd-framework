@@ -1,0 +1,32 @@
+# W39 低资源梯度档消融 — samples_per_class=5
+# 用户裁决(2026-08-26): tab3 −自监督预训练行低资源梯度实验, 检验预训练优势是否随资源减少而拉开
+# 与 full 档(configs/ablation_pretrain.yaml)唯一差异: 样本量 100→5 + device 强制 CPU(W33 bone pretext 占卡让行, 2026-08-26 00:45 起)
+# 其余参数(lr/epochs/seeds/arms/T/data_seed/切分)严格保持等预算协议
+
+data:
+  samples_per_class: 5      # ×22 类 = 110 样本(train 88 / val 22)
+  T: 30
+  seed: 42
+  val_split: 0.2
+
+pretrained:
+  ckpt: runs/p01_aimclr_pretext/epoch120_model.pt
+
+model:
+  num_classes: 22
+  boundary_weight: 0.3
+
+train:
+  lr: 0.001
+  weight_decay: 0.0001
+  epochs: 50
+  batch_size: 32
+  warmup_epochs: 5
+  device: "cpu"             # GPU 让行 W33 bone pretext(~24h); 两臂同 device 对照公平
+  early_stopping: false
+  patience: 15
+  output_dir: runs/w39_ablation_grad_spc5
+
+ablation:
+  arms: [scratch, warm]
+  seeds: [0, 1, 2]

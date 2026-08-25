@@ -1,0 +1,119 @@
+{
+  "date": "2026-08-26T01:06:49",
+  "window": "W31",
+  "task": "tab3 补残之一：−自监督预训练消融（scratch vs warm-init）",
+  "metric_layer": "synthetic",
+  "init_provenance_layer": "public_real",
+  "config_path": "configs/ablation_pretrain_grad_spc10.yaml",
+  "runs": [
+    {
+      "arm": "scratch",
+      "seed": 0,
+      "best_val_acc": 0.6136363636363636,
+      "best_epoch": 45,
+      "epochs_trained": 50,
+      "final_train_acc": 0.7,
+      "device": "cpu",
+      "train_size": 176,
+      "val_size": 44,
+      "output_dir": "D:\\Desktop\\psd-framework-W39\\runs\\w39_ablation_grad_spc10\\scratch_seed0",
+      "ckpt_path": "D:\\Desktop\\psd-framework-W39\\runs\\w39_ablation_grad_spc10\\scratch_seed0\\best.pt"
+    },
+    {
+      "arm": "scratch",
+      "seed": 1,
+      "best_val_acc": 0.7954545454545454,
+      "best_epoch": 32,
+      "epochs_trained": 50,
+      "final_train_acc": 0.85625,
+      "device": "cpu",
+      "train_size": 176,
+      "val_size": 44,
+      "output_dir": "D:\\Desktop\\psd-framework-W39\\runs\\w39_ablation_grad_spc10\\scratch_seed1",
+      "ckpt_path": "D:\\Desktop\\psd-framework-W39\\runs\\w39_ablation_grad_spc10\\scratch_seed1\\best.pt"
+    },
+    {
+      "arm": "scratch",
+      "seed": 2,
+      "best_val_acc": 0.7727272727272727,
+      "best_epoch": 36,
+      "epochs_trained": 50,
+      "final_train_acc": 0.94375,
+      "device": "cpu",
+      "train_size": 176,
+      "val_size": 44,
+      "output_dir": "D:\\Desktop\\psd-framework-W39\\runs\\w39_ablation_grad_spc10\\scratch_seed2",
+      "ckpt_path": "D:\\Desktop\\psd-framework-W39\\runs\\w39_ablation_grad_spc10\\scratch_seed2\\best.pt"
+    },
+    {
+      "arm": "warm",
+      "seed": 0,
+      "best_val_acc": 0.8409090909090909,
+      "best_epoch": 24,
+      "epochs_trained": 50,
+      "final_train_acc": 0.75,
+      "device": "cpu",
+      "train_size": 176,
+      "val_size": 44,
+      "output_dir": "D:\\Desktop\\psd-framework-W39\\runs\\w39_ablation_grad_spc10\\warm_seed0",
+      "ckpt_path": "D:\\Desktop\\psd-framework-W39\\runs\\w39_ablation_grad_spc10\\warm_seed0\\best.pt"
+    },
+    {
+      "arm": "warm",
+      "seed": 1,
+      "best_val_acc": 0.7954545454545454,
+      "best_epoch": 30,
+      "epochs_trained": 50,
+      "final_train_acc": 0.84375,
+      "device": "cpu",
+      "train_size": 176,
+      "val_size": 44,
+      "output_dir": "D:\\Desktop\\psd-framework-W39\\runs\\w39_ablation_grad_spc10\\warm_seed1",
+      "ckpt_path": "D:\\Desktop\\psd-framework-W39\\runs\\w39_ablation_grad_spc10\\warm_seed1\\best.pt"
+    },
+    {
+      "arm": "warm",
+      "seed": 2,
+      "best_val_acc": 0.8409090909090909,
+      "best_epoch": 28,
+      "epochs_trained": 50,
+      "final_train_acc": 0.93125,
+      "device": "cpu",
+      "train_size": 176,
+      "val_size": 44,
+      "output_dir": "D:\\Desktop\\psd-framework-W39\\runs\\w39_ablation_grad_spc10\\warm_seed2",
+      "ckpt_path": "D:\\Desktop\\psd-framework-W39\\runs\\w39_ablation_grad_spc10\\warm_seed2\\best.pt"
+    }
+  ],
+  "aggregate": {
+    "scratch": {
+      "best_val_acc_mean": 0.727273,
+      "best_val_acc_std": 0.080887,
+      "n_seeds": 3,
+      "per_seed": [
+        0.6136363636363636,
+        0.7954545454545454,
+        0.7727272727272727
+      ]
+    },
+    "warm": {
+      "best_val_acc_mean": 0.825758,
+      "best_val_acc_std": 0.021427,
+      "n_seeds": 3,
+      "per_seed": [
+        0.8409090909090909,
+        0.7954545454545454,
+        0.8409090909090909
+      ]
+    }
+  },
+  "data": {
+    "samples_per_class": 10,
+    "T": 30,
+    "data_seed": 42,
+    "val_split": 0.2,
+    "train_size": 176,
+    "val_size": 44,
+    "caliber": "synthetic"
+  }
+}
