@@ -1,24 +1,15 @@
 # Abstract + 1. Introduction（英文占位初稿 · P0.6 增量二）
 
-> Owner: `docs/paper/introduction.md` · W5 窗口 2026-08-23 · 状态: 初稿 v0.1——**结构成文，实验数字以 `[RESULT-x]` 占位；终稿等 P0.2-P0.5 数据回填**（交接文档"Introduction 终稿不做"边界不破）
+> Owner: `docs/paper/introduction.md` · W5 窗口 2026-08-23 · 状态: **终稿候选 v0.3（2026-08-25 W36 合并定稿）**——W32 四处 C7 换轨 DRAFT 注释块已复核合并并删除注释本体；[RESULT-1/2/3] 已按归档数字终填（来源见文末对账节）；[PENDING P0.2] 已填；Para 6 三占位符按三层口径重写为诚实版
 > 写作规范: 五句摘要公式（Farquhar）+ Intro 六段式（hook→难点→缺口→方案→贡献→预览）；句均长 ≤25 词；无套话开头。
 
 ---
 
 ## Abstract（占位初稿 ~200 词）
 
-Behavior recognition in animals underpins welfare monitoring and working-dog training, yet behavior annotation is scarce and evaluation criteria evolve with operational needs. Existing recognition pipelines couple representation learning to a fixed label set, so every taxonomy change forces re-annotation and retraining. We propose PSD, a physics–semantics decoupled framework that separates *how skeletons move* from *what behaviors are called*. A label-free physics layer combines self-supervised pretraining with unsupervised motion-word segmentation; a lightweight semantic layer expands rule-engine seeds into full taxonomy coverage through anchor-guided prototype clustering with iterated confidence-filtered pseudo-labeling, consolidated by semi-supervised self-training and made usable at small annotation budgets by warm-started semantic-layer initialization. On public real animal-skeleton data, pretraining alone yields kNN top-1 of **20.89% versus an 8.33% random baseline (2.51×)** [RESULT-1]; the full pipeline reaches **[RESULT-2]** on 22-class behavior classification using only 100–200 annotated clips, and absorbs a taxonomy transition at **≥3× lower retraining cost** than full-pipeline retraining (conservative bound, synthetic-tier benchmark) [RESULT-3]. These results indicate that decoupling turns evolving evaluation criteria from a re-annotation burden into a routine semantic-layer update.
+Behavior recognition in animals underpins welfare monitoring and working-dog training, yet behavior annotation is scarce and evaluation criteria evolve with operational needs. Existing recognition pipelines couple representation learning to a fixed label set, so every taxonomy change forces re-annotation and retraining. We propose PSD, a physics–semantics decoupled framework that separates *how skeletons move* from *what behaviors are called*. A label-free physics layer combines self-supervised pretraining with unsupervised motion-word segmentation; a lightweight semantic layer expands rule-engine seeds into full taxonomy coverage through anchor-guided prototype clustering with iterated confidence-filtered pseudo-labeling, consolidated by semi-supervised self-training and made usable at small annotation budgets by warm-started semantic-layer initialization. On public real animal-skeleton data, pretraining alone yields kNN top-1 of **20.89% versus an 8.33% random baseline (2.51×)**; the warm-started semantic layer reaches **82.0% top-1 on 22 classes from only 20 labeled clips** (synthetic-offset benchmark); and a taxonomy transition is absorbed at **≥3× lower retraining cost** than full-pipeline retraining (conservative bound, synthetic-tier benchmark). These results indicate that decoupling turns evolving evaluation criteria from a re-annotation burden into a routine semantic-layer update.
 
-<!-- [DRAFT-W32-C7-pivot · 依据 ADR-0006 + experiment-skeleton v0.6 E5 换轨块 · 待终稿窗口复核合并]
-     本段 C7 相关改动两处（其余句未动）：
-     ① 方法尾句：uncertainty-based active learning → warm-started semantic-layer initialization（效率主张正文/摘要禁用，ADR-0006 裁决 1）
-     ② [RESULT-3] 句：✅ **用户已裁决选候选 C（2026-08-25，歆歆推荐采纳）**——正文现句即定稿语义，
-        终稿窗口无需再二选一，仅需复核措辞与口径标注。
-        数据锚点 reports/c1-decouple-cost-2026-08-24.json aggregated（实测均值 7.32×，论文措辞取保守区间 ≥3×），
-        ⚠️ 预注册条款仍生效：full 档 GPU 复跑若趋势矛盾须回改本句。
-        （曾评估的候选 B 保守版 +10.69pp / 候选 A SMQ 1.53× 已否决——B 因摘要-正文口径不一致风险，A 因 cost 语义不符；
-         B 的数字仍可用于正文 §4.3-E4/tab3，不受本裁决影响。裁决全文见 BOARD 与记忆库 shared。）
--->
+> [W36 合并记录] 原 DRAFT-W32-C7-pivot 注释块①②已复核合并：[RESULT-2] 终填 82.0%@20 clips（`reports/p05-al-efficiency-warmstart-short-2026-08-25.json` curves.*.20.mean=0.8202，22 类、合成偏移层 noise_std=0.10、3 seeds mean±4.3pp）；[RESULT-3] 按用户裁决候选 C 定稿（实测均值 7.32×，措辞保守 ≥3×，锚点 `reports/c1-decouple-cost-2026-08-24.json` aggregated + full 档 `reports/c1-decouple-cost-full-2026-08-25.json` 6.07× 背书）；候选 B（+10.69pp 配对口径）/A（SMQ 1.53×）否决留痕见 BOARD 与记忆库。预注册条款照旧：full 档趋势若矛盾须回改。
 
 > 自检：四要素齐全（背景/方法/结果/结论）✅；数值结果 3 处（1 实 + 2 占位）✅；五句公式结构 ✅；无 "Recently... increasing attention" 类开头 ✅。
 
@@ -42,13 +33,7 @@ Current literature leaves three gaps open (Section 2). Animal behavior pipelines
 
 We propose PSD, a physics–semantics decoupled framework for low-resource animal behavior recognition. PSD factorizes recognition into two layers connected by a narrow interface. A physics layer Φ learns how skeletons move without any behavior labels: it combines extreme-asymmetry contrastive pretraining adapted to quadruped topology with motion-word quantization that segments continuous streams into behavior proposals. A semantic layer Ω learns what behaviors are called from a small seed budget: rule-engine coarse labels seed class anchors, prototype clustering assigns pseudo-labels under confidence filtering, and iterated expansion operates within an annotation budget of 100–200 clips; a warm-start protocol initializes this stage from prior semantic-layer weights, making budgets as small as 20 clips usable. Because the layers interact only through embeddings and proposals, an evaluation-criteria transition replaces the taxonomy of Ω while Φ remains frozen.
 
-<!-- [DRAFT-W32-C7-pivot · 依据 ADR-0006 · 待终稿窗口复核合并]
-     本段仅改尾句：原 "iterated expansion is verified by uncertainty-based active learning within a budget of 100–200 annotated clips"
-     隐含"AL 验证扩展"的效率承诺（C7 裁决①禁用），换轨为 warm-start 可用性表述。
-     数据锚点：reports/p05-al-efficiency-warmstart-short-2026-08-25.json curves（协议层 b=20 两臂均值 82.02%，合成偏移层 noise_std=0.10 口径）。
-     ⚠️ 与 W14 冷启动 ~7.8% 的对照不可在正文并列为同协议数字（W23 meta.comparability 明示分布不同、禁止直接互比），
-     终稿若需并列须加口径限定句。本句未引用冷启动数字，规避此坑。
--->
+> [W36 合并记录] 原 DRAFT-W32-C7-pivot 注释块（Para 4 尾句换轨）已复核：warm-start 表述保留，未引用冷启动数字，规避 W23 meta.comparability 跨分布不可比坑。
 
 ### Para 5 — 贡献 bullets（×4，每条 ≤2 行）
 
@@ -56,22 +41,20 @@ Our contributions are fourfold:
 
 1. **A physics–semantics decoupled framework** that formalizes evolving evaluation criteria as taxonomy transitions and absorbs them through semantic-layer updates alone.
 2. **The first transfer of image-domain anchor–cluster–pseudo-labeling to temporal-skeleton recognition**, supported by a systematic repository-scale survey with zero occupancy (Supplementary Material); arXiv/Scholar re-verification is scheduled before submission.
-3. **Label-free validation on public real animal-skeleton data**: self-supervised pretraining reaches 20.89% kNN top-1 against an 8.33% random baseline, and motion-word segmentation cuts continuous streams into behavior-aligned proposals [PENDING P0.2].
-4. **A complete low-resource pipeline evaluated under a three-caliber protocol** (synthetic / public-real / real-K9); warm-started semantic-layer initialization makes a 20-clip budget usable (82.0% vs 7.8% cold-start reference on the synthetic-offset tier), while uncertainty-based sampling is reported as an exploratory negative finding in Section 5.
+3. **Label-free validation on public real animal-skeleton data**: self-supervised pretraining reaches 20.89% kNN top-1 against an 8.33% random baseline, and motion-word segmentation cuts continuous streams into behavior-aligned proposals (boundary IoU **0.458 ± 0.049** versus an ≈0.30 equal-segment-count random-cut null under a seeds pseudo-ground-truth protocol).
+4. **A complete low-resource pipeline evaluated under a three-caliber protocol** (synthetic / public-real / real-K9); warm-started semantic-layer initialization makes a 20-clip budget usable (**82.0% top-1 on the synthetic-offset tier**; cold-start protocols remain near chance at this budget under their respective distributions), while uncertainty-based sampling is reported as an exploratory negative finding in Section 5.
 
-<!-- [DRAFT-W32-C7-pivot · 依据 ADR-0006 + experiment-skeleton v0.6 · 待终稿窗口复核合并]
-     原 bullet 4 "closing with active learning that reaches ≥85% on 22 classes within the annotation budget [PENDING P0.4-P0.5]"
-     为 C7 裁决①明令禁用的效率主张，整句换轨：
-     - 正证据路径 → warm-start 可用性（82.0%@20 clips，b=200 天花板 95.7%——注意该天花板归属均匀扩展臂，
-       reports/p05-al-efficiency-warmstart-short-2026-08-25.json curves.random.'200'.mean=0.9566；entropy 臂同点 91.4%）；
-     - 效率负结果 → 探索性发现落 §5（W14 冷启动 + W23 强打分器双轮背书）；
-     - [PENDING P0.4-P0.5] 标记随效率主张一并移除；82.0%/7.8% 为合成层口径，三层铁律照旧。
-     ⚠️ outline §3 故事线 #4 计划缩窄口径与本 bullet 对齐；outline 本体 W32 不动。
--->
+> [W36 合并记录] 原 DRAFT-W32-C7-pivot 注释块（bullet 4 换轨）已复核合并：82.0% 保留、7.8% 冷启动直接数字对改为定性限定句（遵守 W23 comparability 护栏——两轮分布不同禁止同协议并列）；[PENDING P0.4-P0.5] 效率主张随裁决①移除；95.7% 天花板（归属均匀扩展臂）不入正文贡献句，防臂属错配。
 
 ### Para 6 — 结果预览与文章组织
 
-Across three data calibers, PSD reaches **[RESULT-4: 22 类主精度]** using [RESULT-5] of the full annotation budget, and absorbs a taxonomy transition at [RESULT-6] of the cost of full retraining while matching its accuracy within noise. Figure 1 overviews the framework. Section 2 reviews related work. Section 3 details the method. Sections 4–5 report experiments and ablations, and Section 6 concludes with limitations.
+Across three data calibers, PSD reaches 96.6% top-1 on the synthetic 22-class benchmark and 82.0% from 20 labeled clips under distribution shift (synthetic-offset tier), attains 44.9% on the four-class public-real subset (1.80× random; severe class imbalance disclosed in Section 6), and absorbs a taxonomy transition at ≥3× lower wall-clock retraining cost while matching full-retraining accuracy within statistical noise. Figure 1 overviews the framework. Section 2 reviews related work. Section 3 details the method. Sections 4–5 report experiments and ablations, and Section 6 concludes with limitations.
+
+> [W36 终填记录] 原 [RESULT-4/5/6] 三占位符按三层口径诚实重写（禁止单数字跨层混排，AGENTS 硬规则 3）：
+> - 合成层 96.6% = `reports/p05-stgcnbc-synthetic-100perclass-Y.json` summary/best_val_acc=0.9659（等预算 50ep 协议，引用须注明）；
+> - 合成偏移层 82.0%@20 = warmstart JSON curves.*.20.mean；
+> - 公开真实层 44.9%（4 类部分口径）= `reports/p05-public-real-partialclass-result-2026-08-25.json` best_val_acc=0.4490，1.80×随机（4 类随机基线 25%），per-class watch 100%/track 23.5%/jump+stay 0 类不平衡如实披露并前送 §6 Limitations L7；
+> - 成本句 = 候选 C 裁决定稿（≥3× 保守界，full 6.07× 背书；精度统计等效 −0.91pp/+2.27pp）。
 
 ---
 
@@ -82,14 +65,17 @@ Across three data calibers, PSD reaches **[RESULT-4: 22 类主精度]** using [R
 | 无泛化开场（首句即具体数字/痛点） | ✅ $12k + 淘汰率 |
 | 贡献前置、Methods 从 §3 开始（页面预算内） | ✅ |
 | 首次性主张带边界声明 | ✅ 贡献点 2 显式标注 |
-| 数字纪律 | ✅ P0.1 归档数字实写；C7 句段经 W32 换轨预改写后仅引用已归档数字（warm-start 82.0%@20 / ≥3× 保守界，均标口径）；其余仍 [RESULT-x]/[PENDING] 占位 |
-| 与 outline 故事线一致 | ✅ 六段一一对应 Narrative Arc 五拍；C7 换轨后 bullet 4 与 outline v0.7 缩窄计划对齐（outline 本体待终稿窗口同步） |
+| 数字纪律 | ✅ 全部数字已归档溯源：20.89%/2.51×（p01-knn-result.json）、0.458±0.049（p02-smq-iou-eC-seeds-recheck.json）、82.0%@20（p05-al-efficiency-warmstart-short-2026-08-25.json）、96.6%（p05-stgcnbc-synthetic-100perclass-Y.json 等预算协议）、44.9%/1.80×（p05-public-real-partialclass-result-2026-08-25.json）、≥3× 保守界（c1-decouple-cost 两档 JSON）；效率主张零残留 |
+| 口径纪律 | ✅ 三层口径逐句标注；warm-start 与冷启动不并列同协议数字（comparability 护栏）；44.9% 明示 4 类部分口径 + 类不平衡前送 L7 |
+| C7 换轨合规 | ✅ 四处 DRAFT 注释块已合并删除；无"≥85% within budget"类禁用表述；AL 仅以探索性发现出现 |
+| 与 outline 故事线一致 | ✅ 六段一一对应 Narrative Arc 五拍；outline 矩阵已由 W36 同步刷新（v0.8） |
 | 引用纪律 | ✅ Science 特稿引用已补全（Grimm, Science feature；新闻特稿措辞，W17 终审） |
 
 ## 待办
-- [ ] P0 数据落地后：回填 RESULT-2~6，删除 [PENDING] 标记，升级为终稿候选
-- [ ] Science 特稿正式题录补全（文献终审窗口）
-- [ ] **[W32 新增]** 终稿窗口合并四处 `DRAFT-W32-C7-pivot` 注释块（含 RESULT-3 源裁决落定后二选一备选句）；合并时删除注释本体
+- [x] ~~P0 数据落地后：回填 RESULT-2~6~~ ✅ W36 终填完成（2026-08-25）
+- [ ] Science 特稿正式题录复核（文献终审窗口保留项）
+- [x] ~~终稿窗口合并四处 `DRAFT-W32-C7-pivot` 注释块~~ ✅ 已合并并删除注释本体，合并记录改为行内引注块（2026-08-25 W36）
+- [ ] 投稿前 Scholar 终审时复核 96.6% 引用协议标注（等预算 50ep vs 早停两种口径并存，见 number-index E1 note）
 
 ## 修订历史
 
@@ -98,3 +84,4 @@ Across three data calibers, PSD reaches **[RESULT-4: 22 类主精度]** using [R
 | v0.1 | 2026-08-23 | W5 增量二：Abstract 占位稿 + Introduction 六段式初稿 |
 | v0.2-draft | 2026-08-25 | W32 C7 换轨预改写（依据 ADR-0006 / experiment-skeleton v0.6）：四处 C7 相关句段替换 + DRAFT 注释锚点——效率主张移除、warm-start 可用性上桌、[RESULT-3] 按 C1 候选预填并附 B 候选备选句；领地边界：仅 C7 相关句段（自助收编 -Permit 特批） |
 | v0.2.1-draft | 2026-08-25 | 用户裁决 [RESULT-3] 选候选 C（解耦墙钟 ≥3× 保守界）落定：Abstract 注释块改为裁决已定态（B/A 备选否决留痕），终稿窗口零决策合并 |
+| v0.3 | 2026-08-25 | **W36 终稿合并**：四处 DRAFT 注释块复核合并删除；[RESULT-1] token 移除（数字已在文）、[RESULT-2]=82.0%@20 clips（合成偏移层口径随句）、[RESULT-3] 定稿 ≥3× 保守界；bullet 3 [PENDING P0.2]→SMQ IoU 0.458±0.049 vs ≈0.30 null（W34 勘误口径：非滑窗基线）；bullet 4 冷启动直接对改定性限定句（comparability 护栏）；Para 6 RESULT-4/5/6 重写为三层口径诚实版（96.6% 合成 / 82.0% 合成偏移 / 44.9% 公开真实 4 类 + 类不平衡前送）；自审记录与待办同步 |
