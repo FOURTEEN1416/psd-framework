@@ -1,0 +1,38 @@
+# W31 tab3 补残「−自监督预训练」消融 — full 档配置
+# 任务书: dev-docs/handovers/NEXT-BATCH-plan.md W31 节（唯一口径来源）
+# 设计: 合成 2200 样本(W12 口径) × 两臂 {scratch 随机初始化, warm 加载 P0.1 AimCLR backbone} × 3 seeds × 50ep 等预算对照
+# 口径: 指标=合成层 val_acc；warm 臂初始权重来自公开真实层(P0.1 InterPet4D)预训练——两层口径在报告中分别披露，禁止混报
+
+data:
+  samples_per_class: 100   # ×22 类 = 2200 样本（W12 口径）
+  T: 30
+  seed: 42                 # data_seed：同时驱动合成生成与切分置换（与 run_p05_full 一致）
+  val_split: 0.2
+
+pretrained:
+  # P0.1 AimCLR 预训练 encoder（kNN 20.89% = 2.51×随机，reports/p01-knn-result.json）
+  # 相对路径按仓库根解析；worktree 内由建窗后手动复制（gitignore 资产）
+  ckpt: runs/p01_aimclr_pretext/epoch120_model.pt
+
+model:
+  num_classes: 22
+  boundary_weight: 0.3     # 与 STGCNBCLoss/W12 主实验一致
+
+train:
+  lr: 0.001                # W12 p05_stgcn_bc_full 同款
+  weight_decay: 0.0001
+  epochs: 50               # 任务书定档：短预算判方向
+  batch_size: 32
+  warmup_epochs: 5
+  device: auto             # full 档 GPU（排 relay ALL_DONE 之后）；冒烟走 --smoke 强制 cpu
+  early_stopping: false    # 等预算对比：两臂必须跑满同轮数
+  patience: 15
+  output_dir: runs/w31_ablation_pretrain
+
+ablation:
+  arms: [scratch, warm]
+  seeds: [0, 1, 2]
+
+# 判读口径（报告生成时引用）:
+#   方向判定 = mean(warm.best_val_acc) − mean(scratch.best_val_acc)，3 seeds 均值±std；
+#   同 seed 同切分公平性由 psd 测试断言保证（唯一差异变量 = encoder 初始权重）。
