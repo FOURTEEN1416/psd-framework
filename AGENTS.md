@@ -28,6 +28,8 @@
 4. **data/ 共享即同盘写入**：worktree 的 data/ 经 Junction 指向主仓 data/（gitignore 生成物不随 git 走）；各窗口生成物必须带窗口前缀或唯一 seed，冲突时以后提交者重命名为准
 5. **runs/ 各窗独立**：上游 checkpoint 由建窗脚本按清单复制；禁止写入他窗 runs 子目录
 6. **Python 解释器统一用主仓绝对路径** `.venv` 不复制：`D:\Desktop\psd-framework\.venv\Scripts\python.exe`（cwd 置于本 worktree 内即可正确 import psd）
+7. **收编自助**：窗口完成验收自检后运行 `pwsh scripts/window_checkin.ps1 -Name <本窗名> [-Remove] [-Message "移交说明"]` 自助合并——脚本强制执行领地扫描/窗口内测试/master 回归三道门禁，冲突自动中止上报；`-Remove` 卸窗含 runs/data_campaign 数据汇聚检查。禁止绕过脚本直接改 master
+8. **跨窗看板**：所有跨窗信息（移交/发现/阻塞/待裁决）必须写入 `dev-docs/board/BOARD.md`（工具 `scripts/window_board.ps1 -Append/-Tail`）；开窗第一件事读看板再读 HANDOVER；协调者监控看板代替逐窗轮询
 
 ## 5. Owner Map
 
@@ -48,3 +50,4 @@
 |------|------|------|
 | v1.0 | 2026-08-23 | 建仓初始化，继承上游硬规则（GitHub-First / truth 单一性 / 三层口径） |
 | v1.1 | 2026-08-25 | W24 增补 §4 并行纪律（B-full worktree 协议六条），Owner Map 顺延为 §5 |
+| v1.2 | 2026-08-25 | §4 增补条款 7-8：收编自助（window_checkin.ps1 三门禁协议）+ 跨窗看板（BOARD.md 强制信道）——消除协调瓶颈与信息不互通 |
