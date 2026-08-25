@@ -328,6 +328,7 @@ ORCHESTRATION = [
 def stage_orchestrate(args: argparse.Namespace) -> None:
     py = sys.executable
     orig_script = REPO / "scripts" / "run_p05_public_real_finetune.py"
+    force_extra = ["--force"] if args.force else []
     for kind, name, init_tag, sources, seed in ORCHESTRATION:
         out_json = OUT_DIR / "results" / f"{name}.json"
         if out_json.exists() and not args.force:
@@ -344,12 +345,12 @@ def stage_orchestrate(args: argparse.Namespace) -> None:
         else:
             # 组件臂需要各自的适应产物
             subprocess.run([py, str(Path(__file__)), "--stage", "adapt",
-                            "--tag", init_tag, "--sources", sources or ""],
+                            "--tag", init_tag, "--sources", sources or ""] + force_extra,
                            check=True)
             cmd = [py, str(Path(__file__)), "--stage", "finetune",
                    "--round-name", name,
                    "--init", str(OUT_DIR / f"adabn_backbone_{init_tag}.pt"),
-                   "--seed", str(seed)]
+                   "--seed", str(seed)] + force_extra
             print(f"[orch] round2 臂: {name} (sources={sources or 'ALL'})")
         subprocess.run(cmd, check=True, cwd=str(REPO))
     print("[orch] 全部臂完成 → --stage report")
