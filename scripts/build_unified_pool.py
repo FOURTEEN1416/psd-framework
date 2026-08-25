@@ -49,6 +49,9 @@ CH_AKV2 = "aptv2_c2_w26"
 CH_MOCAP = "mocap_c3_w27"
 CH_DOGPOSE = "dogpose_c5_w29"
 CH_AK = "ak_public_q3b"
+#: W35 增补第五源: C1 视频片段池提点产物(NEXT-BATCH-plan §W35 第④步,
+#: Permit 特批通道修改——原四源硬编码无视频通道, 见 BOARD 08-25 W35 开工登记)
+CH_VIDEO = "video_c1_w35"
 
 #: 用途域闭集（防下游自由文本漂移）
 USAGE_SCOPES = {
@@ -354,6 +357,76 @@ def _load_dogpose_entries(sources: Dict[str, str]) -> List[Dict[str, Any]]:
     return entries
 
 
+def _load_video_entries(sources: Dict[str, str]) -> Tuple[List[Dict[str, Any]], Dict[str, Any]]:
+    """W35 可选第五源: C1 视频片段 seq30 池 → 统一条目.
+
+    输入契约(由 scripts/harvest_extract_keypoints.py 产出):
+      video_extract_index: extract_index.jsonl, 每行含 fragment_id/status
+      video_sequences_dir: seq30/<fragment_id>.pkl (格式 B, T=30 K9Graph 24kp,
+        xyn 归一化+conf, DEAD_JOINTS 已在 assemble_clip 出口硬掩码清零)
+
+    标签口径沿 W30 判例: 2D 像素域 → usage_scope=pretrain_geometric +
+    label_status=deferred_pixel_domain(rule_seeds 阈值不可跨域迁移;
+    且引擎 clearance 硬依赖的 withers(idx22) 为 dog-pose 死关节——
+    种子草稿仅作 R&D 检视, 不入监督标签, 详见 reports/harvest-w35-*).
+    """
+    seq_dir = Path(sources["video_sequences_dir"])
+    idx_path = Path(sources["video_extract_index"])
+    entries: List[Dict[str, Any]] = []
+    n_index_ok = 0
+    for line in idx_path.read_text(encoding="utf-8").splitlines():
+        line = line.strip()
+        if not line:
+            continue
+        rec = json.loads(line)
+        if rec.get("status") != "ok":
+            continue
+        n_index_ok += 1
+        fp = seq_dir / f"{rec['fragment_id']}.pkl"
+        if not fp.exists():
+            continue
+        with open(fp, "rb") as f:
+            e = pickle.load(f)
+        kp = np.asarray(e["keypoints"], dtype=np.float32)
+        fid = str(rec["fragment_id"])
+        entries.append({
+            "sample_id": f"videoc1::{fid}",
+            "source_channel": CH_VIDEO,
+            "split": "unsplit",
+            "topology_name": str(e.get("topology_name", "K9Graph")),
+            "V": int(kp.shape[1]),
+            "T": int(kp.shape[0]),
+            "keypoints": kp,
+            "coords_semantic": str(e.get("coords_semantic",
+                                         "image_norm_xy_conf01_deadmasked")),
+            "fps_or_sampling": e.get("fps_or_sampling"),
+            "usage_scope": "pretrain_geometric",
+            "label_status": "deferred_pixel_domain",
+            "static": False,
+            "provenance": {
+                "fragment_id": fid,
+                "extract_weights": "Q3a dog-pose 微调 YOLO best.pt(runs/public_real_yolo_dogpose)",
+                "src_fps": rec.get("src_fps"),
+                "detect_ok_rate": (
+                    round(rec["detect_ok"] / max(rec.get("rule_frames") or 0
+                                                 or rec.get("detect_ok") or 1, 1), 4)
+                    if rec.get("detect_ok") is not None else None),
+                "n_interpolated": rec.get("n_interpolated"),
+                "dead_joints_masked": [20, 21, 22, 23],
+                "seed_draft_note": (
+                    "规则种子草稿由 harvest_rule_seeds.py 自产; withers(idx22)死关节"
+                    "致 posture 高度类规则结构性降级, 草稿仅供 R&D 检视非监督标签"),
+            },
+        })
+    verdict = {
+        "n_index_ok": n_index_ok,
+        "n_loaded": len(entries),
+        "note": ("ok" if n_index_ok == len(entries)
+                 else f"index-ok {n_index_ok} 但仅加载 {len(entries)} 条(缺 seq30 pkl)"),
+    }
+    return entries, verdict
+
+
 def assemble_pool(cfg: Dict[str, Any]) -> Tuple[Dict[str, Any], Dict[str, Any]]:
     """按配置汇聚四源 → (pool_dict, manifest_dict)。不落盘（IO 由 main 负责）."""
     sources = cfg["sources"]
@@ -376,6 +449,12 @@ def assemble_pool(cfg: Dict[str, Any]) -> Tuple[Dict[str, Any], Dict[str, Any]]:
     entries.extend(_load_mocap_entries(sources))
     entries.extend(_load_dogpose_entries(sources))
 
+    # -- W35 可选第五源: C1 视频片段池(config 缺省时零行为变化) -------------
+    video_verdict: Optional[Dict[str, Any]] = None
+    if sources.get("video_sequences_dir") and sources.get("video_extract_index"):
+        video_entries, video_verdict = _load_video_entries(sources)
+        entries.extend(video_entries)
+
     honesty = {
         "ak_source": {
             "status": ak_verdict["status"],
@@ -393,6 +472,16 @@ def assemble_pool(cfg: Dict[str, Any]) -> Tuple[Dict[str, Any], Dict[str, Any]]:
             "池内并存 K9Graph-24(aptv2 映射/dogpose/ak) 与 mann_dogset_21j(mocap 原生)；"
             "下游必须按 topology_name 过滤，禁止跨拓扑混批"),
     }
+    if video_verdict is not None:
+        honesty["video_c1_w35"] = {
+            **video_verdict,
+            "label_policy": (
+                "usage_scope=pretrain_geometric + label_status=deferred_pixel_domain:"
+                "单目 2D 视频与 APTv2 同属像素域, rule_seeds 度量 3D 阈值不可迁移;"
+                "且引擎 clearance 依赖的 withers(idx22) 为 dog-pose 死关节,"
+                "种子草稿仅 R&D 检视用途(NEXT-BATCH-plan §W35 / reports/harvest-w35-*)"),
+            "coords_semantic": "image_norm_xy_conf01_deadmasked(T=30 均匀采样)",
+        }
 
     pool = {
         "schema": "psd.data_campaign.unified.real_expansion_v1",
