@@ -21,6 +21,12 @@ sources:
   ak_pkl:      "D:/Desktop/psd-framework/runs/public_real_dataset/partialclass4_T30.pkl"
   ak_manifest: "D:/Desktop/psd-framework/runs/public_real_dataset/partialclass4_manifest.json"
 
+  # ── C1/W25 片段提点池（W35 增补可选第五源：642 条 T=30 K9Graph 24kp，Q3a 权重提点）──
+  #   相对路径锚定运行仓根（W35 worktree 内产出，收编汇聚后主检出同路径可复现）；
+  #   标签口径沿 W30 判例 deferred_pixel_domain（种子草稿仅 R&D 检视）
+  video_sequences_dir: "runs/data_campaign/video/keypoints_w35/seq30"
+  video_extract_index: "runs/data_campaign/video/keypoints_w35/extract_index.jsonl"
+
 output:
   pool_pkl:     "runs/data_campaign/unified/real_expansion_pool_v1.pkl"
   manifest_json: "runs/data_campaign/unified/real_expansion_pool_v1_manifest.json"
