@@ -40,12 +40,22 @@
 > 复现命令（n=100）：`.venv/Scripts/python.exe scripts/gen_synth_22class.py --samples-per-class 100 --output data/synthetic/syn_22class_100per_class_seed42.pkl`
 > 元数据清单：`data/synthetic/_manifest.json`
 
-## 5. 回填记录
+## 5. 数据战役新增源（DATA-CAMPAIGN W25-W29）
+
+| 数据集 | 根路径 | 实测数量 | 关键结构 | 主用途 | 登记窗口 |
+|--------|--------|---------|---------|--------|---------|
+| **MANN DogSet**（SIGGRAPH 2018 真实犬类动捕） | `external/dogset-mann-siggraph2018/raw`（原始 BVH，gitignore）+ `runs/data_campaign/mocap/sequences/*.pkl`（转换产物） | **51 BVH / 147,541 帧 / ≈41min @60fps** | BVH 21 关节厘米制；格式 B pkl `(T,V=21,3)` float32 + `manifest.jsonl`（qc_flag 打标） | 真实运动学先验（合成保真度拟合 C4 / 规则种子校准）；**非行为分类主粮**；许可=研究教育专用禁商用禁再分发（Edinburgh IP） | W27 (C3) |
+
+> 调研 truth 与关节映射表：`dev-docs/research/MOCAP_DATASETS.md`；当次运行证据：`reports/c3-mocap-dogset-2026-08-25.md`
+> 转换脚本：`scripts/bvh_dogset_to_sequence.py`（含 --self-test）
+
+## 6. 回填记录
 
 | 日期 | 数据集 | 复核项 | 结果 |
 |------|--------|--------|------|
 | 2026-08-23（W2） | InterPet4D smal_npy | 序列计数 + npz 抽查 + 骨架维度 | 226 ✓ 吻合；.npz 格式；pose_rotmat (T,35,3,3) / kp_world (T,24,3)，T=326/556/509 抽查 |
 | 2026-08-23（W2） | Animal Kingdom 犬科 | 犬科视频 / 帧级标注计数 | 实测 329 视频（train 231/test 98）、帧行 34,772；≠ 声明 338/239 → 已溯源为规划期估计，K9 truth 已修正 |
 | 2026-08-23（W2） | APTv2 全量 | 文件总数 + COCO 标注统计 | 实测 83,304 文件、annotations 84,611；≠ 声明 242K → 已溯源为规划期估计，K9 truth 已修正 |
+| 2026-08-25（W27） | MANN DogSet | 51 BVH 拓扑一致性 + 帧数统计 + FK 自测 + pkl 抽验 | 51 条单拓扑 60fps ✓；147,541 帧 ✓；(T,21,3) 无 NaN ✓；45/51 带 suspect_glitch 标记（源数据毛刺，详见报告） |
 
 > 差异裁决与完整证据：`reports/data-inventory-2026-08-23.md`；K9 侧修正如上（commit `faaab28`，2026-08-23 双轨处置：回改 K9 truth + 本仓保留差异标注）
