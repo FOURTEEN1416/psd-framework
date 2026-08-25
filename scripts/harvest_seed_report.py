@@ -327,9 +327,10 @@ def render_md(e: dict) -> str:
         "",
         "## 6. 数据对账披露",
         "",
-        "- 任务书口径 759 片段 vs 实测 fragments/ **642**(与 manifest.jsonl 642 行零差额);",
-        "  差额 83 个 mp4 位于 `_runtime/cache`(W25 抓取期候选缓存, 不在 manifest、未准入池), ",
-        "  另有 34 个差额与汇聚期口径有关, 已在 BOARD 登记, 以 manifest 为唯一 truth。",
+        "- 任务书/汇聚记录口径 759 片段 vs 当前磁盘 725 个 mp4 "
+        "(= **642** 准入池[与 manifest.jsonl 零差额] + 83 个 `_runtime/cache` 未准入候选缓存);",
+        "  759−725=34 的历史差额无法由当次运行证据解释, 如实挂账 BOARD;",
+        "  **以 manifest.jsonl 642 行为唯一 truth**, 本报告全部统计仅覆盖该准入集合。",
         "- 死关节处置双保险: seq30 出口硬掩码清零(assemble_clip)+ 种子载入端 NaN 化(harvest_rule_seeds)。",
         "",
         "## 7. 复现命令",
