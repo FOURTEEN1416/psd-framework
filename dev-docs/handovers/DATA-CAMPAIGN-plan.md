@@ -80,7 +80,14 @@ C4 syn_v2 ───────────────────────�
 | C4 | psd/data/synth_stgcn_v2.py(新增不改旧), tests, configs/syn_v2_* | 旧 synth_stgcn.py 行为 |
 | C5 | scripts/assess_dogpose_*, runs/data_campaign/dogpose/ | 同上 |
 
+## 5. 汇聚记录
+
+| 时间 | 动作 | 结果 |
+|------|------|------|
+| 2026-08-25 12:40 | 协调者复核发现数据孤岛（runs/ 各窗独立导致产物滞留 worktree），执行四路汇聚至主检出 runs/data_campaign/ | video 759 mp4 对账零差额（3.0GB）/ mocap 35.5MB / dogpose 3.3MB / aptv2 0.3MB；worktree 原件保留待 -Remove 时清理 |
+
 ## 修订历史
 | 版本 | 日期 | 变更 |
 |------|------|------|
 | v1.0 | 2026-08-25 | 用户裁决立项: 五路攻坚总规划+收敛契约+会师路径 |
+| v1.1 | 2026-08-25 | 五路收编 master + 数据孤岛汇聚完成（对账零差额） |
