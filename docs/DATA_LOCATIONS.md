@@ -73,3 +73,18 @@
 | 2026-08-25（W29） | dog-pose | 全量配对/标注解析/可见性/序列元数据探查 | 8476 图零缺陷；无序列分组元数据；GT 有效关节 20/24。证据 `runs/data_campaign/dogpose/inventory-evidence-2026-08-25.json`，结论 (b) 见 `reports/dogpose-report-2026-08-25.md` |
 
 > 差异裁决与完整证据：`reports/data-inventory-2026-08-23.md`；K9 侧修正如上（commit `faaab28`，2026-08-23 双轨处置：回改 K9 truth + 本仓保留差异标注）
+
+## 6. C1 公开视频主动抓取片段池（W25，2026-08-25 入库）
+
+| 项 | 值 |
+|----|----|
+| 收敛契约 | dev-docs/handovers/DATA-CAMPAIGN-plan.md §0 格式 A |
+| 片段目录 | runs/data_campaign/video/fragments/*.mp4（单段 ≤30s 实测 0 违规） |
+| manifest | runs/data_campaign/video/manifest.jsonl，**642 行**（契约 7 字段逐行校验通过） |
+| 来源平台 | Bilibili 299 / YouTube 343（yt-dlp 访问，B 站游客 cookie、YouTube 经系统代理 127.0.0.1:17890） |
+| 关键词族 | 双语 12 族：IGP 训练 / Schutzhund / 马里努阿犬 训练 / 护卫犬 训练 / 警犬 训练 / 工作犬 训练 / 服从性 比赛 狗 / K9 police dog training / protection dog training / Belgian Malinois training / IGP dog training / dog obedience trial |
+| 犬类粗筛 | ultralytics YOLO COCO 检测权重 yolo11n.pt（dog=class16），CPU 推理，均匀抽 4 帧，出现率 ≥0.5 过筛 |
+| license_note（逐条） | research-use only; public platform content accessed via yt-dlp respecting ToS; no redistribution |
+| 标签策略 | **W6 规则引擎自产种子草稿**（psd/data/rule_seeds.py 七类规则族机械复用）；外部标签零直用；当前 label_status=rule_seed_pending，待 Q3a/Q3b（GPU 接力队列）提点后由 scripts/harvest_rule_seeds.py 生成 |
+| 管线代码 | scripts/harvest_video_pipeline.py + configs/harvest_video_w25.yaml |
+| 报告 | reports/video-report-2026-08-25.md |
