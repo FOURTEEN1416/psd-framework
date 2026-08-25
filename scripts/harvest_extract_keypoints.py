@@ -126,8 +126,8 @@ def build_rule_pkl(dets: Dict[int, Optional[np.ndarray]], rule_idx: List[int],
     return {
         "kp_world": kp_world,
         "kp_weight": kp_weight,
-        "frame_idx": np.asarray(rule_idx[:actual_read] if actual_read <= len(rule_idx) else rule_idx,
-                                dtype=np.int64),
+        # 缺检/未读到帧保留在序列中(对应行 NaN+权重0), 引擎 valid-mask 原生消费
+        "frame_idx": np.asarray(rule_idx, dtype=np.int64),
         "coords_semantic": "image_pixel_xy_with_negy_height_proxy",
         "height_proxy_note": "channel2 = -pixel_y (image up), 单目2D高度代理非度量3D",
         "src_fps": float(fps_src),
@@ -180,7 +180,8 @@ def gpu_foreign_python_pids(mypid: int) -> List[int]:
         out = subprocess.run(
             ["nvidia-smi", "--query-compute-apps=pid,process_name",
              "--format=csv,noheader"],
-            capture_output=True, text=True, timeout=30,
+            capture_output=True, text=True, encoding="utf-8", errors="replace",
+            timeout=30,
         ).stdout
     except Exception:
         return []
@@ -220,6 +221,21 @@ def wait_gpu_free(mypid: int, poll_s: int = 120, max_wait_s: int = 4 * 3600) -> 
 # ---------------------------------------------------------------------------
 # IO/模型层(集成冒烟覆盖)
 # ---------------------------------------------------------------------------
+
+def probe_video(video_path: str) -> Tuple[int, float]:
+    """cv2 现场探测 (n_frames, fps)——manifest 无帧数字段, 不能信元数据兜底."""
+    import cv2
+
+    cap = cv2.VideoCapture(video_path)
+    if not cap.isOpened():
+        raise RuntimeError(f"open_failed: {video_path}")
+    n = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
+    fps = float(cap.get(cv2.CAP_PROP_FPS) or 0.0)
+    cap.release()
+    if n <= 0:
+        raise RuntimeError(f"zero_frames_meta: {video_path}")
+    return n, fps
+
 
 def detect_frames(model, video_path: str, want: List[int],
                   n_meta: int) -> Tuple[Dict[int, Optional[np.ndarray]], int, int, int, dict]:
@@ -330,34 +346,36 @@ def main() -> None:
     t0 = time.time()
     try:
         for k, row in enumerate(todo, 1):
-            if n_in_batch == 0 and k != 1:
+            # 每批(含首批)开始前让行检查——W33 线性评估优先
+            if n_in_batch == 0:
                 if not wait_gpu_free(mypid):
                     sys.exit(3)
 
             fid = row["fragment_id"]
             vpath = frag_dir / f"{fid}.mp4"
-            n_meta = int(row.get("n_frames") or 0)
             fps_src = float(row.get("fps_src") or 0)
             try:
-                cap_probe_fps = fps_src
-                # 元数据无帧数时用探测值兜底(读取阶段会自然截断)
-                want, rule_idx = union_sample_plan(max(n_meta, 1), cap_probe_fps,
+                n_probe, fps_probe = probe_video(str(vpath))
+                # 帧数以现场探测为准; fps 优先 manifest(与抓取期口径一致), 缺失用探测值
+                fps_use = fps_src if fps_src > 0 else fps_probe
+                want, rule_idx = union_sample_plan(n_probe, fps_use,
                                                    args.rule_target_fps)
-                dets, w, h, actual_read, st = detect_frames(model, str(vpath), want, n_meta)
+                dets, w, h, actual_read, st = detect_frames(model, str(vpath), want, n_probe)
                 if w == 0 or h == 0:
                     raise RuntimeError("zero_frames_or_unreadable")
-                rule_pkl = build_rule_pkl(dets, rule_idx, w, h, fps_src, actual_read)
+                rule_pkl = build_rule_pkl(dets, rule_idx, w, h, fps_use, actual_read)
                 with (rule_dir / f"{fid}.pkl").open("wb") as f:
                     pickle.dump(rule_pkl, f)
-                seq_entry, seq_q = build_seq_entry(dets, uniform_frame_indices(actual_read or max(n_meta, 1)))
+                seq_entry, seq_q = build_seq_entry(
+                    dets, uniform_frame_indices(actual_read))
                 if seq_entry is not None:
                     seq_entry["sample_id"] = f"w25::{fid}"
                     seq_entry["fps_or_sampling"] = {
-                        "src_fps": fps_src, "strategy": f"uniform_T{CLIP_LEN_T}"}
+                        "src_fps": fps_use, "strategy": f"uniform_T{CLIP_LEN_T}"}
                     with (seq_dir / f"{fid}.pkl").open("wb") as f:
                         pickle.dump(seq_entry, f)
                 rec = {"fragment_id": fid, "status": seq_q["status"],
-                       "src_fps": fps_src, "frames_read": actual_read,
+                       "src_fps": fps_use, "frames_read": actual_read,
                        "rule_frames": len(rule_idx), "rule_hits": rule_pkl["n_detect_hit"],
                        "no_detect": st["no_detect"], "low_conf": st["low_conf"],
                        "detect_ok": st["ok"], **seq_q}
