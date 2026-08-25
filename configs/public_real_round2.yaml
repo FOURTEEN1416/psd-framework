@@ -98,7 +98,7 @@ endpoints:
     - per_class_val_acc 四类分解（watch=100%/jump=stay=0 塌缩格局是否缓解）
   interpretation:
     flywheel_positive: 主对照 ≥ +2pp 且少数类塌缩不加剧 → 飞轮主张获首个直接实证
-    flywheel_neutral: |Δ| < 2pp → 记录"供数未转化"，分析转化链条断点
+    flywheel_neutral: "|Δ| < 2pp → 记录供数未转化，分析转化链条断点"
     flywheel_negative: 显著下降或塌缩加剧 → 如实记录 + 域差瓶颈四轴分析
       （坐标语义/fps 时序率/掩码约定/有效数据量级）
   negative_result_policy: 负结果照常归档 reports/（沿 W14/W23 双向论证先例）
