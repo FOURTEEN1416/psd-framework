@@ -114,9 +114,16 @@
 | **W23** | `handovers/W23-p05-al-warmstart.md` | ✅ **五步门完成**（2026-08-25：Step1 诊断选定 noise_std=0.10（0.15/0.20"自信地错"退化淘汰）→ Step2 预注册落盘 → Step3 TDD 4 测试先行 `init_from_ckpt` → Step4 short 扫描归档（**负结果如实记录**：强域内打分器下随机仍 3/3 seeds 全线反超熵 4.2~5.0pp，E5 维持 PENDING；warm-start 协议层正收益基线 7.8%→82%）→ Step5 full 排队 W18 Q4（用户可叫停）；报告 `reports/w23-p05-al-warmstart-2026-08-25.md`；路线变更候选上报用户裁决） | 已收官（full 判读回填归 W23 报告 v-next 或协调窗） |
 | **W24** | `handovers/W24-collab-worktree.md` | ✅ **完成**（2026-08-25：建窗脚本含 -Remove 安全卸窗 / AGENTS §4 并行纪律六条 / 冒烟全绿 pytest 288+tiny 训练+Junction 链验证 / 裁决落档 ADR-0005 / 报告 `reports/w24-worktree-governance-2026-08-25.md`；ADR 编号因冲突自 0003 顺延）；新窗口一律 worktree 开工 | 已收官（机制归 AGENTS §4） |
 | ~~W25-W29~~ | `handovers/DATA-CAMPAIGN-plan.md` | ✅ **数据五路攻坚全部收编 master**（C1 视频 759 片段/C2 APTv2 646 轨迹 17kp/C3 DogSet 动捕 147K 帧/C4 syn_v2 17/17 全胜/C5 dog-pose 定案增广池；产物已汇聚主检出 runs/data_campaign/ 对账零差额；全仓 319→323 绿）；dog-pose 死关节事件全链闭环（硬掩码+规则 NaN 化+论文 20/24 口径，ADR 见 BOARD DECISION 01:15 与 commit `4117194`） | 已收官（W25 通道或扩量重开） |
-| **W30** | `handovers/NEXT-BATCH-plan.md` | 🔄 统一真实扩展池组装（APTv2 17→24kp 拓扑映射+15 帧时序策略+四源汇流；W29 提示 D1 硬掩码落点在其映射层） | 以其任务书为准 |
-| **W31** | `handovers/NEXT-BATCH-plan.md` | 🔄 tab3 补残：−自监督预训练消融（先交脚本+TDD+CPU 冒烟，full 排 relay 后） | 以其任务书为准 |
-| **W32** | `handovers/NEXT-BATCH-plan.md` | 🔄 论文终稿回填预备（数字索引+RESULT-3 评定+C7 换轨预改写；Permit 特批 docs/paper/introduction.md） | 以其任务书为准 |
+| ~~W30~~ | `handovers/NEXT-BATCH-plan.md` | ✅ **统一池 v1 收官**（9030→五源 9844 条；17→24kp 映射 17 点全消费+7 槽位诚实 NaN；15 帧定案仅预训练池；TDD 22 绿） | 已收官（Q3b 后池刷新由协调者执行完毕） |
+| ~~W31~~ | `handovers/NEXT-BATCH-plan.md` | ✅ **消融脚本+TDD+冒烟交付**（encoder strict 加载对齐 P0.1；full 档由 W39 执行收官） | 已收官 |
+| ~~W32~~ | `handovers/NEXT-BATCH-plan.md` | ✅ **终稿预备交付**（数字索引表+RESULT-3 用户裁决候选 C+C7 换轨预改写 DRAFT） | 已收官 |
+| **W33** | `handovers/W9-ntu-repro.md` | 🔄 **用户裁决 A 三流链执行中**（五阶段自动链：bone pretext 00:35 起训 ~24h → bone LE → motion pretext → motion LE → 3s 融合对标 77.18%）；joint 单流 74.30% Δ−0.04pp PASS_BAND 已归档（`reports/ntu-phaseB-lineareval-2026-08-25.md` v1.0）；⚠️ 链脚本曾遭误删已恢复，各窗清理前对照领地清单 | `*ntu*`、reports/ntu-* |
+| ~~W34~~ | `handovers/NEXT-BATCH-plan.md` | ✅ **C1 full 回写+E6 校准 v0.7+tab3 末行排查定案**（P0.2 对照系随机 null 非滑窗臂，E2 误标勘误，最小新实验设计入册）；运维发现建窗脚本缺 external/AimCLR 复制→已根治 | 已收官 |
+| ~~W35~~ | `handovers/NEXT-BATCH-plan.md` | ✅ **数据飞轮第二圈收官**（642/642 提点+七类种子草稿 lying 84.7% 失衡如实+统一池五源 9844 条 50.9MB；759/725/642 差额挂账不臆测） | 已收官 |
+| ~~W36~~ | `handovers/NEXT-BATCH-plan.md` | ✅ **论文终稿回填三轮收官——证据矩阵闭合**（skeleton v1.0 占位符终填/tab3 六行全齐零 PENDING/Intro+Abstract 定稿 RESULT-2=82.0%@20·RESULT-3=候选 C ≥3×/method C7 合规改写/Limitations 八条/全文对账零错配） | `docs/paper/**` 转维护态（三流数字升级时小幅回写） |
+| **W38** | `handovers/NEXT-BATCH-plan.md` | ✅ **三臂对照收官**（SMQ 0.4577>均匀滑窗 0.3986>null 0.3228 预注册判据过+固定网格 0.4532 平价如实；tab3 素材交 W36 已入表；全仓 402 绿） | 已收官 |
+| **W39** | `handovers/NEXT-BATCH-plan.md` | 🔄 **full 消融已收编**（scratch 96.82±0.37 vs warm 96.97±0.28 Δ+0.15pp n.s. 如实；收敛动力学占优）；**加跑低资源梯度档 spc{5,10,20}×两臂×3seeds=18runs 全 CPU 让行执行中**（防覆写搬移设计） | runs/w39_*、reports/w39-*、reports/ablation-pretrain-* |
+| **W40** | `handovers/NEXT-BATCH-plan.md` | 🔄 **飞轮效力验证 round2**（TDD 21 绿+预注册+适应集 1069 条就绪；共存模式申报：峰值<1GB+让行检测不驱逐 W33 长训；排 W39 梯度档退出后点火） | configs/public_real_round2_*、runs/public_real_round2_*、reports/p05-public-real-round2-* |
 | **W33** | `handovers/W9-ntu-repro.md`（评估协议节） | 🔄 NTU60 线性评估复现数（epoch300_model.pt 已就绪；预注册线 ≥77.18%；GPU 排 relay ALL_DONE 之后） | `*ntu*`、reports/ntu-* |
 
 > ⏳ ~~用户待决一项：NTU 数据获取渠道~~ → **已决并完成（渠道 A，2026-08-24）**：数据就位校验通过。
@@ -172,3 +179,4 @@
 | v2.1 | 2026-08-25 | W23 完成 warm-start 五步门：§8 W23 行改 ✅ 收官（诊断选档 0.10 / 预注册 / TDD init_from_ckpt / short 负结果归档 + 协议层正收益 / full 排队 Q4 可叫停）；§10 补 W23 执行记录；版本抬头更新至 v2.1 |
 | v2.2 | 2026-08-25 | W23 复核+勘误轮：19 项证据全过零科学缺陷；瑕疵 #1 诊断 JSON 假引用修复（补实际 ckpt_sha256+重跑逐位复现）、#2 RED 新鲜补证、#3 登记不修；附录 `reports/w23-p05-al-warmstart-review-2026-08-25.md`；§10 补复核记录；版本抬头更新至 v2.2 |
 | v2.3 | 2026-08-25 | 协调者大换防：NTU Phase B 300/300 收官（线性评估转 W33）；relay v2 接管（门禁阈值 2600MB 适配桌面基线+内容级校验，W28 上报采纳）；数据五路攻坚 C1-C5 收编+汇聚（W25-W29 收官）；dog-pose 死关节事件全链闭环（硬掩码+NaN 化+20/24 口径，ADR-0006 E5 换轨+Q4 叫停）；AGENTS v1.2/v1.3（自助收编+看板+记忆双写条款 7-9）；multi-window-ops Skill 发布；§8 路由全面刷新（W25-W29 收官存档+W30-W33 立项） |
+| v2.4 | 2026-08-26 | 深夜集群换防：W30-W32 收官（统一池/消融脚本/终稿预备）；W33 用户裁决 A 三流链执行中（joint 单流 74.30% Δ−0.04pp PASS_BAND 归档，链脚本误删已恢复）；W34-W35 收官（C1 full 回写+E6 校准 v0.7+tab3 排查定案/飞轮第二圈 642 片段+五源池 9844 条）；**W36 三轮终稿回填收官——论文证据矩阵闭合**（skeleton v1.0/tab3 六行零 PENDING/Limitations 八条/对账零错配）；W38 三臂对照收官（SMQ>滑窗>null 预注册过）；W39 消融收编+梯度档 18runs CPU 执行中；W40 共存模式待点火；建窗脚本增补 gitignore 资产复制（external/AimCLR，W34 发现）；记忆库故障窗口登记（00:03 重启致写入超时，BOARD 兜底） |
