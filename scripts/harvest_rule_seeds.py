@@ -50,6 +50,14 @@ def load_keypoint_pkl(path: Path) -> dict:
     for k, shape_hint in (("kp_world", 3), ("kp_weight", 2), ("frame_idx", 1)):
         if k not in d:
             raise KeyError(f"{path.name} 缺字段 {k}")
+    # 死关节 → NaN：dog-pose GT 从未标注 idx20-23（C5/W29 盘点证据），
+    # 提点端已硬掩码为零；此处转 NaN 交给 W6 引擎原生 valid-mask 语义，
+    # 防止零值被体高/躯干等规则误读为真实坐标（withers=idx22 是根关节）。
+    import numpy as np
+    from psd.data.ak_pose_extract import DEAD_JOINTS
+    kp = np.asarray(d["kp_world"], dtype=np.float32).copy()
+    kp[:, list(DEAD_JOINTS), :] = np.nan
+    d["kp_world"] = kp
     return d
 
 

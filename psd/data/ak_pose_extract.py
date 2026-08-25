@@ -34,9 +34,17 @@ GATE4_CLASS_TO_IDX: Dict[str, int] = {name: i for i, name in enumerate(GATE4_CLA
 #: ST-GCN 输入时序长度（对齐合成层协议 T=30）
 CLIP_LEN_T: int = 30
 
+#: dog-pose GT 从未标注的死关节索引（8476 图全部为空，非遮挡缺检）。
+#: 证据: runs/data_campaign/dogpose/inventory-evidence-2026-08-25.json（C5/W29 盘点）
+#: 后果: 在该 GT 上微调的 YOLO 对这 4 通道无监督信号 → 坐标与置信度均不可信
+#:       且不能靠置信度过滤（没受过训的通道照样输出高置信垃圾）。
+#: 处置: assemble_clip 组装末端强制硬掩码（坐标+置信度全零），下游按"缺失"消费。
+DEAD_JOINTS: tuple = (20, 21, 22, 23)
+
 __all__ = [
     "GATE4_CLASSES",
     "GATE4_CLASS_TO_IDX",
+    "DEAD_JOINTS",
     "first_mapped_label",
     "select_samples",
     "uniform_frame_indices",
@@ -185,11 +193,17 @@ def assemble_clip(
         kp_stack[i] = (1 - w) * kp_stack[prev_v] + w * kp_stack[next_v]
 
     assert not np.isnan(kp_stack).any(), "插值后仍存在 NaN"
+
+    # 死关节硬掩码：dog-pose GT 四通道从未受训，YOLO 输出为高置信垃圾——
+    # 必须在组装出口统一清零（坐标+置信度），让下游见到"缺失"而非"毒化扩散"。
+    kp_stack[:, list(DEAD_JOINTS), :] = 0.0
+
     return {
         "keypoints": kp_stack.astype(np.float32),
         "label": int(label_idx),
         "boundary": np.zeros(t, dtype=np.float32),
         "n_interpolated": sum(1 for i in range(len(frames)) if frames[i] is None),
+        "dead_joints_masked": list(DEAD_JOINTS),
     }
 
 

@@ -162,3 +162,49 @@ class TestAssembleClip:
     def test_output_uses_gate_index(self):
         clip = assemble_clip([self._kp(1.0)], label_idx=GATE4_CLASS_TO_IDX["jump"])
         assert clip["label"] == 3
+
+# -------------------------------------- 死关节硬掩码（C5/W29 发现的 GT 缺标四通道）
+
+class TestDeadJointsMask:
+    """dog-pose GT 索引 20-23 从未标注（inventory-evidence 在案）——
+    组装出口必须硬掩码为全零，防止高置信垃圾顺图卷积扩散（withers=根关节枢纽）."""
+
+    def test_dead_joints_constant_matches_evidence(self):
+        from psd.data.ak_pose_extract import DEAD_JOINTS
+        assert DEAD_JOINTS == (20, 21, 22, 23)
+
+    def test_assemble_clip_zeroes_dead_joints_all_frames(self):
+        t = 5
+        frames = []
+        rng = np.random.default_rng(0)
+        for _ in range(t):
+            kp = rng.normal(0, 0.1, (24, 3)).astype(np.float32)
+            frames.append(kp)  # 全帧有效，无插值干扰
+        clip = assemble_clip(frames, label_idx=0, t=t)
+        assert clip is not None
+        kp_out = clip["keypoints"]
+        # 死关节 20-23 全帧全特征清零
+        assert (kp_out[:, list(DEAD_JOINTS_RANGE), :] == 0).all()
+        assert clip["dead_joints_masked"] == [20, 21, 22, 23]
+
+    def test_live_joints_untouched_by_mask(self):
+        """反证：活关节数值不得被掩码波及。"""
+        t = 4
+        rng = np.random.default_rng(1)
+        frames = [rng.normal(0, 0.5, (24, 3)).astype(np.float32) for _ in range(t)]
+        clip = assemble_clip(frames, label_idx=2, t=t)
+        kp_out = clip["keypoints"]
+        live = [j for j in range(24) if j not in (20, 21, 22, 23)]
+        np.testing.assert_allclose(kp_out[:, live, :], np.stack(frames)[:, live, :])
+
+    def test_masked_garbage_cannot_survive_interpolation(self):
+        """死关节即使给出巨大垃圾值+中间缺检，输出仍必须为零（插值不复活垃圾）."""
+        t = 5
+        big = np.full((24, 3), 1e6, dtype=np.float32)  # 模拟高置信垃圾
+        frames = [big if i in (0, 4) else None for i in range(t)]  # 中间缺检走插值
+        clip = assemble_clip(frames, label_idx=1, t=t)
+        assert (clip["keypoints"][:, list(range(20, 24)), :] == 0).all()
+
+
+from psd.data.ak_pose_extract import DEAD_JOINTS  # noqa: E402
+DEAD_JOINTS_RANGE = list(DEAD_JOINTS)
