@@ -137,21 +137,27 @@ def apply_kinematic_gate(samples: Dict[str, float],
                          thresholds: Dict[str, float],
                          degenerate_fraction: float = GATE_DEGENERATE_FRACTION,
                          ) -> Tuple[List[str], Dict]:
-    """物理离群硬排除；排除率超过 ``degenerate_fraction`` 触发退化保护（纯报告模式，全保留）。
+    """单侧物理门禁：仅硬排除高速离群（> hi×factor，追踪跳变类毛刺）。
 
-    默认 0.20 按预注册配置；小样本单元测试可显式放宽以单独检验排除逻辑。
+    低速侧只报告不排除（2026-08-26 证据修正）：mocap 参考全部来自跑步机
+    运动犬（永无静止），其 p0.5 下带会系统性误杀静态姿态 clip——而静止
+    是真实犬类行为的合法形态、静态几何对 BN 域校准完全有效。排除率超过
+    ``degenerate_fraction`` 时整体退化为纯报告模式（全保留）。
     """
     factor = float(thresholds.get("factor", GATE_FACTOR_DEFAULT))
-    band_lo = float(thresholds["lo"]) / factor
     band_hi = float(thresholds["hi"]) * factor
-    excluded = sorted(k for k, r in samples.items() if r > band_hi or r < band_lo)
+    band_lo = float(thresholds["lo"]) / factor          # 仅作报告参考线
+    excluded = sorted(k for k, r in samples.items() if r > band_hi)
+    low_side_flagged = sorted(k for k, r in samples.items() if r < band_lo)
     frac = len(excluded) / max(len(samples), 1)
     report_only = frac > degenerate_fraction
     kept = sorted(samples) if report_only else [k for k in sorted(samples)
                                                 if k not in set(excluded)]
     report = {
-        "band": {"lo_inclusive": band_lo, "hi_inclusive": band_hi},
+        "mode": "one_sided_high",
+        "band": {"lo_reference_only": band_lo, "hi_inclusive": band_hi},
         "excluded": [] if report_only else excluded,
+        "low_side_flagged_not_excluded": len(low_side_flagged),
         "excluded_fraction_raw": round(frac, 4),
         "report_only": report_only,
         "n_input": len(samples),

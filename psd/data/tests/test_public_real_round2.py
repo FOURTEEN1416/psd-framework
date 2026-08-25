@@ -167,6 +167,19 @@ class TestKinematicPrior:
         assert th["lo"] == pytest.approx(float(np.percentile(refs, 0.5)))
         assert th["hi"] == pytest.approx(float(np.percentile(refs, 99.5)))
 
+    def test_static_not_excluded_low_side(self):
+        """证据修正契约（2026-08-26）：低速/静态不排除——mocap 参考无静止样本，
+        低带是参考偏差不是物理边界；仅高速毛刺硬排除。"""
+        refs = [0.5, 0.6, 0.7, 0.8]                  # 运动犬参考（无静态）
+        th = kinematic_gate_thresholds(refs)
+        samples = {"static_clip": 0.0, "normal": 0.65,
+                   "slowish": th["lo"] / 10.0}       # 远低于参考下带
+        kept, rep = apply_kinematic_gate(samples, th)
+        assert set(kept) == {"static_clip", "normal", "slowish"}
+        assert rep["excluded"] == []
+        assert rep["low_side_flagged_not_excluded"] == 2
+        assert rep["mode"] == "one_sided_high"
+
     def test_hard_exclusion_only_extreme_outliers(self):
         refs = [0.01] * 98 + [0.02, 0.02]           # 干净参考分布
         th = kinematic_gate_thresholds(refs)
