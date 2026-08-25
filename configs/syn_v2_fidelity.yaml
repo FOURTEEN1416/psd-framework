@@ -1,0 +1,29 @@
+# W28/C4 合成保真度实验配置 (syn_v2 vs v1style 分布距离对比)
+# 执行方式 (模块自执行, 领地内不新增 scripts/):
+#   & "D:\Desktop\psd-framework\.venv\Scripts\python.exe" -m psd.data.synth_stgcn_v2 `
+#       --reference-pkl <下方 reference_pkl> `
+#       --output-json  <下方 output_json> `
+#       --samples-per-class 8 --seed 42 --bins 20
+# (gate4 类清单为模块默认, 无需传 --classes)
+
+experiment: w28-c4-synth-fidelity
+
+# Q3b 真实提点参考. ⚠️ 当前文件为 relay 冒烟残留 (n=1 clip × 30 帧 × coco17);
+# GPU relay Q3b 全量产物落盘后, 仅需替换本路径重跑同一命令即可刷新全部数字.
+reference_pkl: "D:/Desktop/psd-framework/runs/public_real_dataset/partialclass4_T30.pkl"
+
+output_json: "reports/w28-c4-synth-v2-fidelity-2026-08-25.json"
+
+samples_per_class: 8      # 每类生成样本数 (v1style 与 synv2 各一份)
+classes: [stay, track, watch, jump]   # gate4 口径, 与参考 manifest 同源
+seed: 42                  # 可复现性锚点
+bins: 20                  # 速度直方图 bin 数
+
+caliber:
+  layer: 合成层自证          # 三层口径铁律: 本实验无识别精度数字
+  mixing_forbidden: true   # 禁止与合成/公开真实/真实 K9 训练指标混排
+
+known_limitations:
+  - "角度边缘未显式建模 (AR(1) 闭式解只锁定位置边缘方差+帧间速度方差), 角度 KS 为诊断量; 列 v3 迭代项"
+  - "当前参考仅 1 clip×30 帧, KS/直方图绝对值无统计显著性; 结论仅支持同管线相对比较 (v1style vs synv2)"
+  - "参考为 COCO17 归一化坐标 (冒烟期由 COCO 权重提点); dog-pose 24 关节全量产物到位后需拓扑适配再重跑"
