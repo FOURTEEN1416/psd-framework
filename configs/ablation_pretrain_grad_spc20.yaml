@@ -1,0 +1,29 @@
+# W39 低资源梯度档消融 — samples_per_class=20
+# 与 full 档唯一差异: 样本量 100→20 + device 强制 CPU(W33 bone pretext 占卡让行)
+data:
+  samples_per_class: 20     # ×22 类 = 440 样本(train 352 / val 88)
+  T: 30
+  seed: 42
+  val_split: 0.2
+
+pretrained:
+  ckpt: runs/p01_aimclr_pretext/epoch120_model.pt
+
+model:
+  num_classes: 22
+  boundary_weight: 0.3
+
+train:
+  lr: 0.001
+  weight_decay: 0.0001
+  epochs: 50
+  batch_size: 32
+  warmup_epochs: 5
+  device: "cpu"
+  early_stopping: false
+  patience: 15
+  output_dir: runs/w39_ablation_grad_spc20
+
+ablation:
+  arms: [scratch, warm]
+  seeds: [0, 1, 2]
