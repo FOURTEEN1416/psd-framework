@@ -1,0 +1,273 @@
+{
+  "date": "2026-08-26T01:44:59",
+  "protocol": "W40 数据飞轮效力验证——round1 复跑 vs round2(+pretrain_geometric 槽位 AdaBN 增强)，同 seed 同协议",
+  "prereg": {
+    "config": "configs/public_real_round2.yaml",
+    "version": "w40-preregistered-2026-08-26",
+    "prereg_commit_note": "预注册先于实现（commit 996e9b6）"
+  },
+  "round1_baseline": {
+    "archived_best_val_acc": 0.4489795918367347,
+    "archived_source": "reports/p05-public-real-partialclass-result-2026-08-25.json",
+    "rerun_best_val_acc": 0.4489795918367347,
+    "rerun_per_class": {
+      "jump": 0.0,
+      "stay": 0.0,
+      "track": 0.2353,
+      "watch": 1.0
+    },
+    "archived_vs_rerun_pp": 0.0
+  },
+  "round2_primary": {
+    "best_val_acc": 0.40816326530612246,
+    "per_class": {
+      "jump": 0.1111,
+      "stay": 0.0,
+      "track": 0.2353,
+      "watch": 0.7333
+    },
+    "delta_vs_archived_pp": -4.08,
+    "delta_vs_rerun_pp": -4.08,
+    "interpretation": "flywheel_negative",
+    "verdict_text": "扩展池增强反而有害——域差瓶颈分析见报告 md"
+  },
+  "diagnostics": {
+    "seeds": {
+      "seed43": {
+        "round1": 0.3469387755102041,
+        "round2": 0.40816326530612246,
+        "delta_pp": 6.12
+      },
+      "seed44": {
+        "round1": 0.4489795918367347,
+        "round2": 0.3673469387755102,
+        "delta_pp": -8.16
+      }
+    },
+    "component_arms": {
+      "round2_w35only_seed42": {
+        "best_val_acc": 0.4489795918367347,
+        "per_class": {
+          "jump": 0.2222,
+          "stay": 0.0,
+          "track": 0.4706,
+          "watch": 0.6667
+        }
+      },
+      "round2_aptv2only_seed42": {
+        "best_val_acc": 0.4897959183673469,
+        "per_class": {
+          "jump": 0.0,
+          "stay": 0.0,
+          "track": 0.7647,
+          "watch": 0.2667
+        }
+      }
+    }
+  },
+  "adapt_set_summary": {
+    "counts": {
+      "aptv2_c2_w26": 503,
+      "video_c1_w35": 642
+    },
+    "n_total": 1069,
+    "gate_report": {
+      "mode": "one_sided_high",
+      "band": {
+        "lo_reference_only": 0.2396407426474315,
+        "hi_inclusive": 40.68011420261125
+      },
+      "excluded": [
+        "aptv2::aptv2_dog_v1000777_t2_w000",
+        "aptv2::aptv2_dog_v1000779_t2_w000",
+        "aptv2::aptv2_dog_v1000784_t1_w000",
+        "aptv2::aptv2_wolf_v1000719_t2_w000",
+        "videoc1::w25v-04816b3199e3",
+        "videoc1::w25v-0a13ea69ed50",
+        "videoc1::w25v-0d6cecc68ac5",
+        "videoc1::w25v-0eb1cc20b1d5",
+        "videoc1::w25v-12989a312082",
+        "videoc1::w25v-13f97b911a9b",
+        "videoc1::w25v-15251757f885",
+        "videoc1::w25v-15ce2bff02d9",
+        "videoc1::w25v-161527925a74",
+        "videoc1::w25v-23beb2e00946",
+        "videoc1::w25v-24118f0f2cc7",
+        "videoc1::w25v-26c475679c0c",
+        "videoc1::w25v-2c2e615fc5f5",
+        "videoc1::w25v-2eae5c537b34",
+        "videoc1::w25v-3352a131b1b5",
+        "videoc1::w25v-3570e36ed2ac",
+        "videoc1::w25v-3838872a80f2",
+        "videoc1::w25v-3c1784f48f93",
+        "videoc1::w25v-3d3f1078f976",
+        "videoc1::w25v-434c378887d6",
+        "videoc1::w25v-4478f0d5ca5b",
+        "videoc1::w25v-4710988b49c4",
+        "videoc1::w25v-4ebef3c06613",
+        "videoc1::w25v-54a118ec25c6",
+        "videoc1::w25v-577bdbc253be",
+        "videoc1::w25v-57c1f4e687ee",
+        "videoc1::w25v-57f0ee87142d",
+        "videoc1::w25v-5cac500c341e",
+        "videoc1::w25v-5fb714cdeb59",
+        "videoc1::w25v-60d4be2f178d",
+        "videoc1::w25v-61f772d55419",
+        "videoc1::w25v-6dd7f88654a4",
+        "videoc1::w25v-79e53ba00139",
+        "videoc1::w25v-8a0617043de4",
+        "videoc1::w25v-8b815c9290a4",
+        "videoc1::w25v-8d356fbddc28",
+        "videoc1::w25v-8d84a2dca511",
+        "videoc1::w25v-90810e139a1e",
+        "videoc1::w25v-9310248d35b6",
+        "videoc1::w25v-986df5293267",
+        "videoc1::w25v-9dcc8f5b8d79",
+        "videoc1::w25v-9e6e8a64b34d",
+        "videoc1::w25v-a239e8adcc13",
+        "videoc1::w25v-a478250a60cd",
+        "videoc1::w25v-a5fccb0aa430",
+        "videoc1::w25v-ad2fa607c0f2",
+        "videoc1::w25v-b0600b1ddc54",
+        "videoc1::w25v-b33a0206b6e5",
+        "videoc1::w25v-b4e26e99e94f",
+        "videoc1::w25v-bee261f315b4",
+        "videoc1::w25v-c0504032b32d",
+        "videoc1::w25v-c4f3b9fe66f0",
+        "videoc1::w25v-c603456abf6a",
+        "videoc1::w25v-c6709eaef972",
+        "videoc1::w25v-c7f5ec17daac",
+        "videoc1::w25v-d02e965e9ee3",
+        "videoc1::w25v-d103f3a13be0",
+        "videoc1::w25v-d2ec044d2d1d",
+        "videoc1::w25v-d3826f89d020",
+        "videoc1::w25v-d643d0f60098",
+        "videoc1::w25v-d92f5d6ab90b",
+        "videoc1::w25v-df5674f4399e",
+        "videoc1::w25v-e2035e557d0a",
+        "videoc1::w25v-e66a50cbe83d",
+        "videoc1::w25v-e72a8dbc4310",
+        "videoc1::w25v-e94ee7d96283",
+        "videoc1::w25v-eb2322ece08d",
+        "videoc1::w25v-f5483568b765",
+        "videoc1::w25v-f70fa82c3be1",
+        "videoc1::w25v-f86dd175cbde",
+        "videoc1::w25v-fd334e1e2b88",
+        "videoc1::w25v-fd9d1b464eba"
+      ],
+      "low_side_flagged_not_excluded": 48,
+      "excluded_fraction_raw": 0.0664,
+      "report_only": false,
+      "n_input": 1145,
+      "n_kept": 1069,
+      "n_dropped_from_set": 76
+    },
+    "dogset_reference": {
+      "n_sequences": 51,
+      "ratios_summary": {
+        "min": 0.7073104510187598,
+        "median": 3.924197245481431,
+        "max": 13.972290755938914
+      },
+      "thresholds": {
+        "lo": 0.7189222279422944,
+        "hi": 13.560038067537084,
+        "factor": 3.0
+      },
+      "fps_assumptions_echo": {
+        "aptv2_c2_w26": 15.0
+      }
+    },
+    "pool_sha256_16": "459e80a70608b87f"
+  },
+  "all_runs": {
+    "round1_rerun_seed42": {
+      "best_val_acc": 0.4489795918367347,
+      "per_class_val_acc": {
+        "jump": 0.0,
+        "stay": 0.0,
+        "track": 0.2353,
+        "watch": 1.0
+      },
+      "total_epochs_trained": 26,
+      "best_epoch": 11
+    },
+    "round1_rerun_seed43": {
+      "best_val_acc": 0.3469387755102041,
+      "per_class_val_acc": {
+        "jump": 0.0,
+        "stay": 0.375,
+        "track": 0.3529,
+        "watch": 0.0667
+      },
+      "total_epochs_trained": 19,
+      "best_epoch": 4
+    },
+    "round1_rerun_seed44": {
+      "best_val_acc": 0.4489795918367347,
+      "per_class_val_acc": {
+        "jump": 0.0,
+        "stay": 0.0,
+        "track": 0.1765,
+        "watch": 1.0
+      },
+      "total_epochs_trained": 36,
+      "best_epoch": 21
+    },
+    "round2_aptv2only_seed42": {
+      "best_val_acc": 0.4897959183673469,
+      "per_class_val_acc": {
+        "jump": 0.0,
+        "stay": 0.0,
+        "track": 0.7647,
+        "watch": 0.2667
+      },
+      "total_epochs_trained": 29,
+      "best_epoch": 14
+    },
+    "round2_full_seed42": {
+      "best_val_acc": 0.40816326530612246,
+      "per_class_val_acc": {
+        "jump": 0.1111,
+        "stay": 0.0,
+        "track": 0.2353,
+        "watch": 0.7333
+      },
+      "total_epochs_trained": 28,
+      "best_epoch": 13
+    },
+    "round2_full_seed43": {
+      "best_val_acc": 0.40816326530612246,
+      "per_class_val_acc": {
+        "jump": 0.1111,
+        "stay": 0.25,
+        "track": 0.3529,
+        "watch": 0.4
+      },
+      "total_epochs_trained": 28,
+      "best_epoch": 13
+    },
+    "round2_full_seed44": {
+      "best_val_acc": 0.3673469387755102,
+      "per_class_val_acc": {
+        "jump": 0.0,
+        "stay": 0.0,
+        "track": 0.3529,
+        "watch": 0.4
+      },
+      "total_epochs_trained": 22,
+      "best_epoch": 7
+    },
+    "round2_w35only_seed42": {
+      "best_val_acc": 0.4489795918367347,
+      "per_class_val_acc": {
+        "jump": 0.2222,
+        "stay": 0.0,
+        "track": 0.4706,
+        "watch": 0.6667
+      },
+      "total_epochs_trained": 39,
+      "best_epoch": 24
+    }
+  }
+}
