@@ -157,6 +157,58 @@ def hist_l1_distance(
     return float(np.abs(h_a - h_b).sum())
 
 
+# ---------------------------------------------------------------------------
+# 拟合与生成 (RED-2)
+# ---------------------------------------------------------------------------
+
+def fit_from_reference(reference_kpts: np.ndarray) -> Dict[str, object]:
+    """从实测关键点序列拟合 AR(1) 生成参数.
+
+    对每关节每坐标 x: mu / sigma_pos / Var(v) 三统计量 → 闭式解
+        phi   = 1 - Var(v) / (2 sigma_pos^2)   (clamp 到 [0, 0.99])
+        innov = sigma_pos * sqrt(1 - phi^2)
+    使生成序列的位置边缘方差与帧间速度方差同时匹配实测.
+
+    Args:
+        reference_kpts: (N, T, V, C>=2); C==3 时第 3 维视为可见度,
+            逐关节收集 bootstrap 池用于生成 conf 通道.
+
+    Returns:
+        params dict (见测试契约).
+    """
+    raise NotImplementedError("W28 RED: 待实现")
+
+
+def make_synthetic_dataset_v2(
+    params: Dict[str, object],
+    samples_per_class: int = 10,
+    classes: Optional[List[str]] = None,
+    seed: int = 42,
+) -> List[Dict]:
+    """按拟合参数生成合成数据集 (接口与 v1 兼容, 字段含 generator 标识).
+
+    时序模型: p_t = mu + phi * (p_{t-1} - mu) + innov * eps,
+    首帧 p_0 ~ N(mu, sigma_pos^2).
+    """
+    raise NotImplementedError("W28 RED: 待实现")
+
+
+def make_v1style_baseline_17j(
+    samples_per_class: int = 10,
+    classes: Optional[List[str]] = None,
+    T: int = 30,
+    noise_std: float = 0.05,
+    seed: int = 42,
+) -> List[Dict]:
+    """对照基线: v1 方法论(姿态模板 + sin 波 + i.i.d. 高斯噪声)在
+    17 关节归一化域的忠实移植.
+
+    注意: 独立实现, 不 import/复用/修改 psd/data/synth_stgcn.py 的任何行为;
+    存在目的仅为保真度对比中隔离"分布拟合"单一变量.
+    """
+    raise NotImplementedError("W28 RED: 待实现")
+
+
 def fidelity_metrics(ref_angles: np.ndarray, syn_angles: np.ndarray,
                      ref_speed: np.ndarray, syn_speed: np.ndarray,
                      bins: int = 20) -> Dict[str, object]:
