@@ -16,9 +16,18 @@
 
 | 目录 | 说明 |
 |------|------|
-| `data\aptv2_annotations` | 标注处理产物 |
-| `data\aptv2_canidae` | 犬科子集提取 |
-| `data\aptv2_yolo` / `data\aptv2_yolo_pose` | YOLO 检测/姿态训练格式 |
+| `data\aptv2_annotations` | 标注处理产物（与主池 annotations/ 字节级同尺寸重复副本，truth 以主池为准，W26 核对） |
+| `data\aptv2_canidae` | 犬科子集提取：24 mp4（43MB）+ MOT 框级 GT 852 行（class 单类）+ frames/hard 帧图 |
+| `data\aptv2_yolo` / `data\aptv2_yolo_pose` | YOLO 检测/姿态训练格式（各 290 图；pose 版 kpt_shape=[17,3]，nc=3 dog/fox/wolf） |
+
+### 2.1 C2/W26 挖掘登记（2026-08-25）
+
+- **官方来源**: APTv2（ViTAE-Transformer/APTv2，v1.0，2023；据标注内嵌元数据）。许可：本地副本无独立 LICENSE 文件，学术引用待投稿前终审（R-C2-1）
+- **总量对账**: 83,304 = data 池 83,245（jpg 41,569 + LabelMe 帧级 json 41,674 + 杂项 2）+ annotations 树 59 ✓
+- **结构**: 41,179 标注图 ↔ 84,611 条 COCO 标注（train 58,029 / val 11,315 / test 15,267，标注级切分零交集），2,749 视频；30 物种共用唯一 17-kp 四足拓扑
+- **判定**: **15 帧微序列池**（非静态池）：轨迹段内连续帧对 99.8%，但跨度被 ~15 帧窗口截断，canidae 无 ≥16 连续帧轨迹
+- **canidae 规模**（公开真实层）: dog+fox+wolf = 11,410 标注 / 4,676 标注帧 / 326 序列组 / 646 轨迹
+- **证据指针**: 报告 `reports/aptv2-report-2026-08-25.md`；可入库清单 `reports/aptv2-canidae-manifest-2026-08-25.json`；机读盘点 `reports/aptv2-inventory-summary-2026-08-25.json`；脚本 `scripts/mine_aptv2_inventory.py`（运行时落盘 `runs/data_campaign/aptv2/`，gitignore 可再生）
 
 ## 3. 待补充数据源
 
@@ -47,5 +56,6 @@
 | 2026-08-23（W2） | InterPet4D smal_npy | 序列计数 + npz 抽查 + 骨架维度 | 226 ✓ 吻合；.npz 格式；pose_rotmat (T,35,3,3) / kp_world (T,24,3)，T=326/556/509 抽查 |
 | 2026-08-23（W2） | Animal Kingdom 犬科 | 犬科视频 / 帧级标注计数 | 实测 329 视频（train 231/test 98）、帧行 34,772；≠ 声明 338/239 → 已溯源为规划期估计，K9 truth 已修正 |
 | 2026-08-23（W2） | APTv2 全量 | 文件总数 + COCO 标注统计 | 实测 83,304 文件、annotations 84,611；≠ 声明 242K → 已溯源为规划期估计，K9 truth 已修正 |
+| 2026-08-25（W26/C2） | APTv2 全量 + 伴生目录 | 83,304 精确分解 / 物种分布 / 序列连续性 / canidae 规模 / 拓扑与置信度结构 | 全部吻合无漂移：83,245+59=83,304 ✓；判定"15 帧微序列池"；canidae 11,410 标注；证据 `reports/aptv2-report-2026-08-25.md` |
 
 > 差异裁决与完整证据：`reports/data-inventory-2026-08-23.md`；K9 侧修正如上（commit `faaab28`，2026-08-23 双轨处置：回改 K9 truth + 本仓保留差异标注）

@@ -1,0 +1,2141 @@
+{
+  "generated_by": "scripts/mine_aptv2_inventory.py",
+  "k9_data_root": "D:\\Desktop\\k9-training-system\\data",
+  "split_overlap": {
+    "train∩val": 0,
+    "train∩test": 0,
+    "val∩test": 0,
+    "union_unique": 84611
+  },
+  "main_annotations": {
+    "train_annotations.json": {
+      "n_images": 41179,
+      "n_annotations": 58029,
+      "n_unique_ann_identity": 58029,
+      "n_videos": 2749,
+      "anns_per_category": {
+        "antelope": 2097,
+        "black bear": 1665,
+        "buffalo": 1871,
+        "cat": 2468,
+        "cheetah": 2091,
+        "chimpanzee": 1703,
+        "cow": 1870,
+        "deer": 2225,
+        "dog": 2742,
+        "elephant": 1803,
+        "fox": 1895,
+        "giraffe": 1791,
+        "gorilla": 1803,
+        "hippo": 1203,
+        "horse": 2564,
+        "lion": 2699,
+        "monkey": 1817,
+        "noisy night monkey": 1595,
+        "orangutan": 2167,
+        "panda": 1569,
+        "pig": 1889,
+        "polar bear": 1608,
+        "rabbit": 2437,
+        "raccoon": 1750,
+        "rhino": 1430,
+        "sheep": 1887,
+        "spider monkey": 1617,
+        "tiger": 1823,
+        "wolf": 1623,
+        "zebra": 2327
+      },
+      "video_frame_hist_top": {
+        "1083": 30,
+        "1000972": 18,
+        "1322": 17,
+        "1000583": 16,
+        "1000917": 16
+      },
+      "visibility_flags_total": {
+        "0": 344667,
+        "2": 641826
+      },
+      "visibility_per_joint": {
+        "kp1": {
+          "0": 22534,
+          "2": 35495
+        },
+        "kp2": {
+          "0": 22599,
+          "2": 35430
+        },
+        "kp3": {
+          "0": 18070,
+          "2": 39959
+        },
+        "kp4": {
+          "0": 11747,
+          "2": 46282
+        },
+        "kp5": {
+          "0": 17216,
+          "2": 40813
+        },
+        "kp6": {
+          "0": 19763,
+          "2": 38266
+        },
+        "kp7": {
+          "0": 19193,
+          "2": 38836
+        },
+        "kp8": {
+          "0": 19948,
+          "2": 38081
+        },
+        "kp9": {
+          "0": 19564,
+          "2": 38465
+        },
+        "kp10": {
+          "0": 18392,
+          "2": 39637
+        },
+        "kp11": {
+          "0": 19203,
+          "2": 38826
+        },
+        "kp12": {
+          "0": 22903,
+          "2": 35126
+        },
+        "kp13": {
+          "0": 22658,
+          "2": 35371
+        },
+        "kp14": {
+          "0": 23176,
+          "2": 34853
+        },
+        "kp15": {
+          "0": 22630,
+          "2": 35399
+        },
+        "kp16": {
+          "0": 22116,
+          "2": 35913
+        },
+        "kp17": {
+          "0": 22955,
+          "2": 35074
+        }
+      },
+      "num_keypoints_hist": {
+        "0": 4725,
+        "1": 743,
+        "2": 907,
+        "3": 1136,
+        "4": 1548,
+        "5": 1513,
+        "6": 1690,
+        "7": 2331,
+        "8": 2642,
+        "9": 2327,
+        "10": 3545,
+        "11": 3665,
+        "12": 3156,
+        "13": 3823,
+        "14": 4704,
+        "15": 2386,
+        "16": 2853,
+        "17": 14228,
+        "18": 30,
+        "19": 14,
+        "20": 10,
+        "21": 6,
+        "22": 7,
+        "23": 7,
+        "24": 1,
+        "25": 6,
+        "26": 4,
+        "27": 1,
+        "28": 5,
+        "29": 3,
+        "30": 2,
+        "31": 4,
+        "32": 3,
+        "33": 1,
+        "34": 2,
+        "40": 1
+      },
+      "keypoint_array_len_hist": {
+        "51": 58029
+      },
+      "has_bbox": 58029,
+      "has_score_field": 0,
+      "has_track_id": 58029,
+      "topology": {
+        "n_categories": 30,
+        "unique_topology_count": 1,
+        "example_species": "deer",
+        "keypoint_names": [
+          "left_eye",
+          "right_eye",
+          "nose",
+          "neck",
+          "root_of_tail",
+          "left_shoulder",
+          "left_elbow",
+          "left_front_paw",
+          "right_shoulder",
+          "right_elbow",
+          "right_front_paw",
+          "left_hip",
+          "left_knee",
+          "left_back_paw",
+          "right_hip",
+          "right_knee",
+          "right_back_paw"
+        ],
+        "skeleton_edges_1based": [
+          [
+            1,
+            2
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            4,
+            6
+          ],
+          [
+            6,
+            7
+          ],
+          [
+            7,
+            8
+          ],
+          [
+            4,
+            9
+          ],
+          [
+            9,
+            10
+          ],
+          [
+            10,
+            11
+          ],
+          [
+            5,
+            12
+          ],
+          [
+            12,
+            13
+          ],
+          [
+            13,
+            14
+          ],
+          [
+            5,
+            15
+          ],
+          [
+            15,
+            16
+          ],
+          [
+            16,
+            17
+          ]
+        ]
+      }
+    },
+    "val_annotations.json": {
+      "n_images": 41179,
+      "n_annotations": 11315,
+      "n_unique_ann_identity": 11315,
+      "n_videos": 2749,
+      "anns_per_category": {
+        "antelope": 574,
+        "black bear": 285,
+        "buffalo": 390,
+        "cat": 285,
+        "cheetah": 328,
+        "chimpanzee": 407,
+        "cow": 421,
+        "deer": 646,
+        "dog": 386,
+        "elephant": 682,
+        "fox": 481,
+        "giraffe": 540,
+        "gorilla": 386,
+        "hippo": 180,
+        "horse": 340,
+        "lion": 710,
+        "monkey": 414,
+        "noisy night monkey": 278,
+        "orangutan": 180,
+        "panda": 292,
+        "pig": 326,
+        "polar bear": 413,
+        "rabbit": 300,
+        "raccoon": 369,
+        "rhino": 225,
+        "sheep": 383,
+        "spider monkey": 302,
+        "tiger": 270,
+        "wolf": 260,
+        "zebra": 262
+      },
+      "video_frame_hist_top": {
+        "1083": 30,
+        "1000972": 18,
+        "1322": 17,
+        "1000583": 16,
+        "1000917": 16
+      },
+      "visibility_flags_total": {
+        "0": 73381,
+        "2": 118974
+      },
+      "visibility_per_joint": {
+        "kp1": {
+          "0": 5003,
+          "2": 6312
+        },
+        "kp2": {
+          "0": 5319,
+          "2": 5996
+        },
+        "kp3": {
+          "0": 4006,
+          "2": 7309
+        },
+        "kp4": {
+          "0": 2398,
+          "2": 8917
+        },
+        "kp5": {
+          "0": 3292,
+          "2": 8023
+        },
+        "kp6": {
+          "0": 4302,
+          "2": 7013
+        },
+        "kp7": {
+          "0": 4032,
+          "2": 7283
+        },
+        "kp8": {
+          "0": 4156,
+          "2": 7159
+        },
+        "kp9": {
+          "0": 4407,
+          "2": 6908
+        },
+        "kp10": {
+          "0": 4000,
+          "2": 7315
+        },
+        "kp11": {
+          "0": 4171,
+          "2": 7144
+        },
+        "kp12": {
+          "0": 4738,
+          "2": 6577
+        },
+        "kp13": {
+          "0": 4609,
+          "2": 6706
+        },
+        "kp14": {
+          "0": 4683,
+          "2": 6632
+        },
+        "kp15": {
+          "0": 4840,
+          "2": 6475
+        },
+        "kp16": {
+          "0": 4687,
+          "2": 6628
+        },
+        "kp17": {
+          "0": 4738,
+          "2": 6577
+        }
+      },
+      "num_keypoints_hist": {
+        "0": 997,
+        "1": 280,
+        "2": 295,
+        "3": 237,
+        "4": 334,
+        "5": 254,
+        "6": 384,
+        "7": 454,
+        "8": 526,
+        "9": 464,
+        "10": 654,
+        "11": 783,
+        "12": 672,
+        "13": 646,
+        "14": 919,
+        "15": 461,
+        "16": 602,
+        "17": 2336,
+        "18": 9,
+        "19": 1,
+        "21": 1,
+        "22": 2,
+        "32": 1,
+        "33": 2,
+        "34": 1
+      },
+      "keypoint_array_len_hist": {
+        "51": 11315
+      },
+      "has_bbox": 11315,
+      "has_score_field": 0,
+      "has_track_id": 11315,
+      "topology": {
+        "n_categories": 30,
+        "unique_topology_count": 1,
+        "example_species": "deer",
+        "keypoint_names": [
+          "left_eye",
+          "right_eye",
+          "nose",
+          "neck",
+          "root_of_tail",
+          "left_shoulder",
+          "left_elbow",
+          "left_front_paw",
+          "right_shoulder",
+          "right_elbow",
+          "right_front_paw",
+          "left_hip",
+          "left_knee",
+          "left_back_paw",
+          "right_hip",
+          "right_knee",
+          "right_back_paw"
+        ],
+        "skeleton_edges_1based": [
+          [
+            1,
+            2
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            4,
+            6
+          ],
+          [
+            6,
+            7
+          ],
+          [
+            7,
+            8
+          ],
+          [
+            4,
+            9
+          ],
+          [
+            9,
+            10
+          ],
+          [
+            10,
+            11
+          ],
+          [
+            5,
+            12
+          ],
+          [
+            12,
+            13
+          ],
+          [
+            13,
+            14
+          ],
+          [
+            5,
+            15
+          ],
+          [
+            15,
+            16
+          ],
+          [
+            16,
+            17
+          ]
+        ]
+      }
+    },
+    "test_annotations.json": {
+      "n_images": 41179,
+      "n_annotations": 15267,
+      "n_unique_ann_identity": 15267,
+      "n_videos": 2749,
+      "anns_per_category": {
+        "antelope": 406,
+        "black bear": 423,
+        "buffalo": 707,
+        "cat": 641,
+        "cheetah": 489,
+        "chimpanzee": 340,
+        "cow": 617,
+        "deer": 484,
+        "dog": 628,
+        "elephant": 450,
+        "fox": 405,
+        "giraffe": 598,
+        "gorilla": 481,
+        "hippo": 357,
+        "horse": 614,
+        "lion": 525,
+        "monkey": 512,
+        "noisy night monkey": 372,
+        "orangutan": 608,
+        "panda": 405,
+        "pig": 605,
+        "polar bear": 468,
+        "rabbit": 888,
+        "raccoon": 487,
+        "rhino": 371,
+        "sheep": 447,
+        "spider monkey": 475,
+        "tiger": 399,
+        "wolf": 415,
+        "zebra": 650
+      },
+      "video_frame_hist_top": {
+        "1083": 30,
+        "1000972": 18,
+        "1322": 17,
+        "1000583": 16,
+        "1000917": 16
+      },
+      "visibility_flags_total": {
+        "0": 90733,
+        "2": 168806
+      },
+      "visibility_per_joint": {
+        "kp1": {
+          "0": 5634,
+          "2": 9633
+        },
+        "kp2": {
+          "0": 5316,
+          "2": 9951
+        },
+        "kp3": {
+          "0": 4372,
+          "2": 10895
+        },
+        "kp4": {
+          "0": 3218,
+          "2": 12049
+        },
+        "kp5": {
+          "0": 4522,
+          "2": 10745
+        },
+        "kp6": {
+          "0": 5074,
+          "2": 10193
+        },
+        "kp7": {
+          "0": 5002,
+          "2": 10265
+        },
+        "kp8": {
+          "0": 5272,
+          "2": 9995
+        },
+        "kp9": {
+          "0": 4948,
+          "2": 10319
+        },
+        "kp10": {
+          "0": 4995,
+          "2": 10272
+        },
+        "kp11": {
+          "0": 5218,
+          "2": 10049
+        },
+        "kp12": {
+          "0": 6167,
+          "2": 9100
+        },
+        "kp13": {
+          "0": 6209,
+          "2": 9058
+        },
+        "kp14": {
+          "0": 6394,
+          "2": 8873
+        },
+        "kp15": {
+          "0": 5997,
+          "2": 9270
+        },
+        "kp16": {
+          "0": 6098,
+          "2": 9169
+        },
+        "kp17": {
+          "0": 6297,
+          "2": 8970
+        }
+      },
+      "num_keypoints_hist": {
+        "0": 1387,
+        "1": 222,
+        "2": 208,
+        "3": 349,
+        "4": 391,
+        "5": 385,
+        "6": 414,
+        "7": 602,
+        "8": 670,
+        "9": 575,
+        "10": 815,
+        "11": 1082,
+        "12": 700,
+        "13": 776,
+        "14": 1140,
+        "15": 680,
+        "16": 916,
+        "17": 3927,
+        "18": 6,
+        "19": 8,
+        "20": 2,
+        "23": 1,
+        "24": 3,
+        "25": 3,
+        "27": 1,
+        "28": 1,
+        "29": 1,
+        "30": 1,
+        "32": 1
+      },
+      "keypoint_array_len_hist": {
+        "51": 15267
+      },
+      "has_bbox": 15267,
+      "has_score_field": 0,
+      "has_track_id": 15267,
+      "topology": {
+        "n_categories": 30,
+        "unique_topology_count": 1,
+        "example_species": "deer",
+        "keypoint_names": [
+          "left_eye",
+          "right_eye",
+          "nose",
+          "neck",
+          "root_of_tail",
+          "left_shoulder",
+          "left_elbow",
+          "left_front_paw",
+          "right_shoulder",
+          "right_elbow",
+          "right_front_paw",
+          "left_hip",
+          "left_knee",
+          "left_back_paw",
+          "right_hip",
+          "right_knee",
+          "right_back_paw"
+        ],
+        "skeleton_edges_1based": [
+          [
+            1,
+            2
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            4,
+            6
+          ],
+          [
+            6,
+            7
+          ],
+          [
+            7,
+            8
+          ],
+          [
+            4,
+            9
+          ],
+          [
+            9,
+            10
+          ],
+          [
+            10,
+            11
+          ],
+          [
+            5,
+            12
+          ],
+          [
+            12,
+            13
+          ],
+          [
+            13,
+            14
+          ],
+          [
+            5,
+            15
+          ],
+          [
+            15,
+            16
+          ],
+          [
+            16,
+            17
+          ]
+        ]
+      }
+    },
+    "test_annotations_easy.json": {
+      "n_images": 41179,
+      "n_annotations": 5047,
+      "n_unique_ann_identity": 5047,
+      "n_videos": 2749,
+      "anns_per_category": {
+        "antelope": 180,
+        "black bear": 180,
+        "buffalo": 120,
+        "cat": 256,
+        "cheetah": 195,
+        "chimpanzee": 120,
+        "cow": 165,
+        "deer": 167,
+        "dog": 121,
+        "elephant": 180,
+        "fox": 210,
+        "giraffe": 135,
+        "gorilla": 212,
+        "hippo": 180,
+        "horse": 103,
+        "lion": 150,
+        "monkey": 145,
+        "noisy night monkey": 180,
+        "orangutan": 210,
+        "panda": 135,
+        "pig": 194,
+        "polar bear": 155,
+        "rabbit": 135,
+        "raccoon": 180,
+        "rhino": 165,
+        "sheep": 151,
+        "spider monkey": 210,
+        "tiger": 195,
+        "wolf": 166,
+        "zebra": 152
+      },
+      "video_frame_hist_top": {
+        "1083": 30,
+        "1000972": 18,
+        "1322": 17,
+        "1000583": 16,
+        "1000917": 16
+      },
+      "visibility_flags_total": {
+        "0": 14633,
+        "2": 71166
+      },
+      "visibility_per_joint": {
+        "kp1": {
+          "0": 950,
+          "2": 4097
+        },
+        "kp2": {
+          "0": 862,
+          "2": 4185
+        },
+        "kp3": {
+          "0": 692,
+          "2": 4355
+        },
+        "kp4": {
+          "0": 345,
+          "2": 4702
+        },
+        "kp5": {
+          "0": 604,
+          "2": 4443
+        },
+        "kp6": {
+          "0": 662,
+          "2": 4385
+        },
+        "kp7": {
+          "0": 734,
+          "2": 4313
+        },
+        "kp8": {
+          "0": 884,
+          "2": 4163
+        },
+        "kp9": {
+          "0": 561,
+          "2": 4486
+        },
+        "kp10": {
+          "0": 687,
+          "2": 4360
+        },
+        "kp11": {
+          "0": 804,
+          "2": 4243
+        },
+        "kp12": {
+          "0": 1138,
+          "2": 3909
+        },
+        "kp13": {
+          "0": 1189,
+          "2": 3858
+        },
+        "kp14": {
+          "0": 1216,
+          "2": 3831
+        },
+        "kp15": {
+          "0": 1062,
+          "2": 3985
+        },
+        "kp16": {
+          "0": 1096,
+          "2": 3951
+        },
+        "kp17": {
+          "0": 1147,
+          "2": 3900
+        }
+      },
+      "num_keypoints_hist": {
+        "0": 155,
+        "1": 6,
+        "2": 11,
+        "3": 32,
+        "4": 21,
+        "5": 26,
+        "6": 29,
+        "7": 46,
+        "8": 93,
+        "9": 143,
+        "10": 145,
+        "11": 302,
+        "12": 228,
+        "13": 318,
+        "14": 530,
+        "15": 304,
+        "16": 488,
+        "17": 2168,
+        "18": 1,
+        "20": 1
+      },
+      "keypoint_array_len_hist": {
+        "51": 5047
+      },
+      "has_bbox": 5047,
+      "has_score_field": 0,
+      "has_track_id": 5047,
+      "topology": {
+        "n_categories": 30,
+        "unique_topology_count": 1,
+        "example_species": "deer",
+        "keypoint_names": [
+          "left_eye",
+          "right_eye",
+          "nose",
+          "neck",
+          "root_of_tail",
+          "left_shoulder",
+          "left_elbow",
+          "left_front_paw",
+          "right_shoulder",
+          "right_elbow",
+          "right_front_paw",
+          "left_hip",
+          "left_knee",
+          "left_back_paw",
+          "right_hip",
+          "right_knee",
+          "right_back_paw"
+        ],
+        "skeleton_edges_1based": [
+          [
+            1,
+            2
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            4,
+            6
+          ],
+          [
+            6,
+            7
+          ],
+          [
+            7,
+            8
+          ],
+          [
+            4,
+            9
+          ],
+          [
+            9,
+            10
+          ],
+          [
+            10,
+            11
+          ],
+          [
+            5,
+            12
+          ],
+          [
+            12,
+            13
+          ],
+          [
+            13,
+            14
+          ],
+          [
+            5,
+            15
+          ],
+          [
+            15,
+            16
+          ],
+          [
+            16,
+            17
+          ]
+        ]
+      }
+    },
+    "test_annotations_hard.json": {
+      "n_images": 41179,
+      "n_annotations": 10220,
+      "n_unique_ann_identity": 10220,
+      "n_videos": 2749,
+      "anns_per_category": {
+        "antelope": 226,
+        "black bear": 243,
+        "buffalo": 587,
+        "cat": 385,
+        "cheetah": 294,
+        "chimpanzee": 220,
+        "cow": 452,
+        "deer": 317,
+        "dog": 507,
+        "elephant": 270,
+        "fox": 195,
+        "giraffe": 463,
+        "gorilla": 269,
+        "hippo": 177,
+        "horse": 511,
+        "lion": 375,
+        "monkey": 367,
+        "noisy night monkey": 192,
+        "orangutan": 398,
+        "panda": 270,
+        "pig": 411,
+        "polar bear": 313,
+        "rabbit": 753,
+        "raccoon": 307,
+        "rhino": 206,
+        "sheep": 296,
+        "spider monkey": 265,
+        "tiger": 204,
+        "wolf": 249,
+        "zebra": 498
+      },
+      "video_frame_hist_top": {
+        "1083": 30,
+        "1000972": 18,
+        "1322": 17,
+        "1000583": 16,
+        "1000917": 16
+      },
+      "visibility_flags_total": {
+        "0": 76100,
+        "2": 97640
+      },
+      "visibility_per_joint": {
+        "kp1": {
+          "0": 4684,
+          "2": 5536
+        },
+        "kp2": {
+          "0": 4454,
+          "2": 5766
+        },
+        "kp3": {
+          "0": 3680,
+          "2": 6540
+        },
+        "kp4": {
+          "0": 2873,
+          "2": 7347
+        },
+        "kp5": {
+          "0": 3918,
+          "2": 6302
+        },
+        "kp6": {
+          "0": 4412,
+          "2": 5808
+        },
+        "kp7": {
+          "0": 4268,
+          "2": 5952
+        },
+        "kp8": {
+          "0": 4388,
+          "2": 5832
+        },
+        "kp9": {
+          "0": 4387,
+          "2": 5833
+        },
+        "kp10": {
+          "0": 4308,
+          "2": 5912
+        },
+        "kp11": {
+          "0": 4414,
+          "2": 5806
+        },
+        "kp12": {
+          "0": 5029,
+          "2": 5191
+        },
+        "kp13": {
+          "0": 5020,
+          "2": 5200
+        },
+        "kp14": {
+          "0": 5178,
+          "2": 5042
+        },
+        "kp15": {
+          "0": 4935,
+          "2": 5285
+        },
+        "kp16": {
+          "0": 5002,
+          "2": 5218
+        },
+        "kp17": {
+          "0": 5150,
+          "2": 5070
+        }
+      },
+      "num_keypoints_hist": {
+        "0": 1232,
+        "1": 216,
+        "2": 197,
+        "3": 317,
+        "4": 370,
+        "5": 359,
+        "6": 385,
+        "7": 556,
+        "8": 577,
+        "9": 432,
+        "10": 670,
+        "11": 780,
+        "12": 472,
+        "13": 458,
+        "14": 610,
+        "15": 376,
+        "16": 428,
+        "17": 1759,
+        "18": 5,
+        "19": 8,
+        "20": 1,
+        "23": 1,
+        "24": 3,
+        "25": 3,
+        "27": 1,
+        "28": 1,
+        "29": 1,
+        "30": 1,
+        "32": 1
+      },
+      "keypoint_array_len_hist": {
+        "51": 10220
+      },
+      "has_bbox": 10220,
+      "has_score_field": 0,
+      "has_track_id": 10220,
+      "topology": {
+        "n_categories": 30,
+        "unique_topology_count": 1,
+        "example_species": "deer",
+        "keypoint_names": [
+          "left_eye",
+          "right_eye",
+          "nose",
+          "neck",
+          "root_of_tail",
+          "left_shoulder",
+          "left_elbow",
+          "left_front_paw",
+          "right_shoulder",
+          "right_elbow",
+          "right_front_paw",
+          "left_hip",
+          "left_knee",
+          "left_back_paw",
+          "right_hip",
+          "right_knee",
+          "right_back_paw"
+        ],
+        "skeleton_edges_1based": [
+          [
+            1,
+            2
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            4,
+            6
+          ],
+          [
+            6,
+            7
+          ],
+          [
+            7,
+            8
+          ],
+          [
+            4,
+            9
+          ],
+          [
+            9,
+            10
+          ],
+          [
+            10,
+            11
+          ],
+          [
+            5,
+            12
+          ],
+          [
+            12,
+            13
+          ],
+          [
+            13,
+            14
+          ],
+          [
+            5,
+            15
+          ],
+          [
+            15,
+            16
+          ],
+          [
+            16,
+            17
+          ]
+        ]
+      }
+    },
+    "val_annotations_easy.json": {
+      "n_images": 41179,
+      "n_annotations": 3133,
+      "n_unique_ann_identity": 3133,
+      "n_videos": 2749,
+      "anns_per_category": {
+        "antelope": 160,
+        "black bear": 105,
+        "buffalo": 75,
+        "cat": 105,
+        "cheetah": 119,
+        "chimpanzee": 90,
+        "cow": 214,
+        "deer": 98,
+        "dog": 79,
+        "elephant": 105,
+        "fox": 106,
+        "giraffe": 75,
+        "gorilla": 120,
+        "hippo": 90,
+        "horse": 73,
+        "lion": 104,
+        "monkey": 120,
+        "noisy night monkey": 120,
+        "orangutan": 105,
+        "panda": 112,
+        "pig": 103,
+        "polar bear": 105,
+        "rabbit": 60,
+        "raccoon": 105,
+        "rhino": 105,
+        "sheep": 90,
+        "spider monkey": 105,
+        "tiger": 120,
+        "wolf": 90,
+        "zebra": 75
+      },
+      "video_frame_hist_top": {
+        "1083": 30,
+        "1000972": 18,
+        "1322": 17,
+        "1000583": 16,
+        "1000917": 16
+      },
+      "visibility_flags_total": {
+        "0": 12491,
+        "2": 40770
+      },
+      "visibility_per_joint": {
+        "kp1": {
+          "0": 840,
+          "2": 2293
+        },
+        "kp2": {
+          "0": 837,
+          "2": 2296
+        },
+        "kp3": {
+          "0": 637,
+          "2": 2496
+        },
+        "kp4": {
+          "0": 348,
+          "2": 2785
+        },
+        "kp5": {
+          "0": 485,
+          "2": 2648
+        },
+        "kp6": {
+          "0": 642,
+          "2": 2491
+        },
+        "kp7": {
+          "0": 638,
+          "2": 2495
+        },
+        "kp8": {
+          "0": 742,
+          "2": 2391
+        },
+        "kp9": {
+          "0": 606,
+          "2": 2527
+        },
+        "kp10": {
+          "0": 692,
+          "2": 2441
+        },
+        "kp11": {
+          "0": 809,
+          "2": 2324
+        },
+        "kp12": {
+          "0": 856,
+          "2": 2277
+        },
+        "kp13": {
+          "0": 850,
+          "2": 2283
+        },
+        "kp14": {
+          "0": 913,
+          "2": 2220
+        },
+        "kp15": {
+          "0": 816,
+          "2": 2317
+        },
+        "kp16": {
+          "0": 853,
+          "2": 2280
+        },
+        "kp17": {
+          "0": 927,
+          "2": 2206
+        }
+      },
+      "num_keypoints_hist": {
+        "0": 260,
+        "2": 2,
+        "3": 3,
+        "4": 14,
+        "5": 11,
+        "6": 31,
+        "7": 59,
+        "8": 117,
+        "9": 88,
+        "10": 111,
+        "11": 180,
+        "12": 138,
+        "13": 207,
+        "14": 310,
+        "15": 201,
+        "16": 279,
+        "17": 1122
+      },
+      "keypoint_array_len_hist": {
+        "51": 3133
+      },
+      "has_bbox": 3133,
+      "has_score_field": 0,
+      "has_track_id": 3133,
+      "topology": {
+        "n_categories": 30,
+        "unique_topology_count": 1,
+        "example_species": "deer",
+        "keypoint_names": [
+          "left_eye",
+          "right_eye",
+          "nose",
+          "neck",
+          "root_of_tail",
+          "left_shoulder",
+          "left_elbow",
+          "left_front_paw",
+          "right_shoulder",
+          "right_elbow",
+          "right_front_paw",
+          "left_hip",
+          "left_knee",
+          "left_back_paw",
+          "right_hip",
+          "right_knee",
+          "right_back_paw"
+        ],
+        "skeleton_edges_1based": [
+          [
+            1,
+            2
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            4,
+            6
+          ],
+          [
+            6,
+            7
+          ],
+          [
+            7,
+            8
+          ],
+          [
+            4,
+            9
+          ],
+          [
+            9,
+            10
+          ],
+          [
+            10,
+            11
+          ],
+          [
+            5,
+            12
+          ],
+          [
+            12,
+            13
+          ],
+          [
+            13,
+            14
+          ],
+          [
+            5,
+            15
+          ],
+          [
+            15,
+            16
+          ],
+          [
+            16,
+            17
+          ]
+        ]
+      }
+    },
+    "val_annotations_hard.json": {
+      "n_images": 41179,
+      "n_annotations": 8182,
+      "n_unique_ann_identity": 8182,
+      "n_videos": 2749,
+      "anns_per_category": {
+        "antelope": 414,
+        "black bear": 180,
+        "buffalo": 315,
+        "cat": 180,
+        "cheetah": 209,
+        "chimpanzee": 317,
+        "cow": 207,
+        "deer": 548,
+        "dog": 307,
+        "elephant": 577,
+        "fox": 375,
+        "giraffe": 465,
+        "gorilla": 266,
+        "hippo": 90,
+        "horse": 267,
+        "lion": 606,
+        "monkey": 294,
+        "noisy night monkey": 158,
+        "orangutan": 75,
+        "panda": 180,
+        "pig": 223,
+        "polar bear": 308,
+        "rabbit": 240,
+        "raccoon": 264,
+        "rhino": 120,
+        "sheep": 293,
+        "spider monkey": 197,
+        "tiger": 150,
+        "wolf": 170,
+        "zebra": 187
+      },
+      "video_frame_hist_top": {
+        "1083": 30,
+        "1000972": 18,
+        "1322": 17,
+        "1000583": 16,
+        "1000917": 16
+      },
+      "visibility_flags_total": {
+        "0": 60890,
+        "2": 78204
+      },
+      "visibility_per_joint": {
+        "kp1": {
+          "0": 4163,
+          "2": 4019
+        },
+        "kp2": {
+          "0": 4482,
+          "2": 3700
+        },
+        "kp3": {
+          "0": 3369,
+          "2": 4813
+        },
+        "kp4": {
+          "0": 2050,
+          "2": 6132
+        },
+        "kp5": {
+          "0": 2807,
+          "2": 5375
+        },
+        "kp6": {
+          "0": 3660,
+          "2": 4522
+        },
+        "kp7": {
+          "0": 3394,
+          "2": 4788
+        },
+        "kp8": {
+          "0": 3414,
+          "2": 4768
+        },
+        "kp9": {
+          "0": 3801,
+          "2": 4381
+        },
+        "kp10": {
+          "0": 3308,
+          "2": 4874
+        },
+        "kp11": {
+          "0": 3362,
+          "2": 4820
+        },
+        "kp12": {
+          "0": 3882,
+          "2": 4300
+        },
+        "kp13": {
+          "0": 3759,
+          "2": 4423
+        },
+        "kp14": {
+          "0": 3770,
+          "2": 4412
+        },
+        "kp15": {
+          "0": 4024,
+          "2": 4158
+        },
+        "kp16": {
+          "0": 3834,
+          "2": 4348
+        },
+        "kp17": {
+          "0": 3811,
+          "2": 4371
+        }
+      },
+      "num_keypoints_hist": {
+        "0": 737,
+        "1": 280,
+        "2": 293,
+        "3": 234,
+        "4": 320,
+        "5": 243,
+        "6": 353,
+        "7": 395,
+        "8": 409,
+        "9": 376,
+        "10": 543,
+        "11": 603,
+        "12": 534,
+        "13": 439,
+        "14": 609,
+        "15": 260,
+        "16": 323,
+        "17": 1214,
+        "18": 9,
+        "19": 1,
+        "21": 1,
+        "22": 2,
+        "32": 1,
+        "33": 2,
+        "34": 1
+      },
+      "keypoint_array_len_hist": {
+        "51": 8182
+      },
+      "has_bbox": 8182,
+      "has_score_field": 0,
+      "has_track_id": 8182,
+      "topology": {
+        "n_categories": 30,
+        "unique_topology_count": 1,
+        "example_species": "deer",
+        "keypoint_names": [
+          "left_eye",
+          "right_eye",
+          "nose",
+          "neck",
+          "root_of_tail",
+          "left_shoulder",
+          "left_elbow",
+          "left_front_paw",
+          "right_shoulder",
+          "right_elbow",
+          "right_front_paw",
+          "left_hip",
+          "left_knee",
+          "left_back_paw",
+          "right_hip",
+          "right_knee",
+          "right_back_paw"
+        ],
+        "skeleton_edges_1based": [
+          [
+            1,
+            2
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            4,
+            6
+          ],
+          [
+            6,
+            7
+          ],
+          [
+            7,
+            8
+          ],
+          [
+            4,
+            9
+          ],
+          [
+            9,
+            10
+          ],
+          [
+            10,
+            11
+          ],
+          [
+            5,
+            12
+          ],
+          [
+            12,
+            13
+          ],
+          [
+            13,
+            14
+          ],
+          [
+            5,
+            15
+          ],
+          [
+            15,
+            16
+          ],
+          [
+            16,
+            17
+          ]
+        ]
+      }
+    }
+  },
+  "species_union_all_splits": {
+    "antelope": 4057,
+    "black bear": 3081,
+    "buffalo": 4065,
+    "cat": 4320,
+    "cheetah": 3725,
+    "chimpanzee": 3197,
+    "cow": 3946,
+    "deer": 4485,
+    "dog": 4770,
+    "elephant": 4067,
+    "fox": 3667,
+    "giraffe": 4067,
+    "gorilla": 3537,
+    "hippo": 2277,
+    "horse": 4472,
+    "lion": 5169,
+    "monkey": 3669,
+    "noisy night monkey": 2895,
+    "orangutan": 3743,
+    "panda": 2963,
+    "pig": 3751,
+    "polar bear": 3370,
+    "rabbit": 4813,
+    "raccoon": 3462,
+    "rhino": 2622,
+    "sheep": 3547,
+    "spider monkey": 3171,
+    "tiger": 3161,
+    "wolf": 2973,
+    "zebra": 4151
+  },
+  "canidae_species_union": {
+    "dog": 4770,
+    "fox": 3667,
+    "wolf": 2973
+  },
+  "sequence_structure": {
+    "n_videos_with_annotations": 2749,
+    "overall_tracks": {
+      "n_tracks": 5974,
+      "span_median": 15.0,
+      "span_p90": 15,
+      "max_run_median": 15.0,
+      "consecutive_pair_ratio": 0.9988,
+      "tracks_with_run>=8": 5612,
+      "tracks_with_run>=16": 47,
+      "tracks_with_run>=30": 1
+    },
+    "canidae_tracks": {
+      "n_tracks": 646,
+      "span_median": 15.0,
+      "span_p90": 15,
+      "max_run_median": 15.0,
+      "consecutive_pair_ratio": 0.9976,
+      "tracks_with_run>=8": 589,
+      "tracks_with_run>=16": 0,
+      "tracks_with_run>=30": 0
+    },
+    "annotated_images_union": 41179
+  },
+  "file_pool": {
+    "total_files": 83245,
+    "ext_distribution": {
+      ".json": 41674,
+      ".jpg": 41569,
+      ".txt": 1,
+      ".bak": 1
+    },
+    "species_file_counts": {
+      "easy/10gorilla": 1920,
+      "easy/11spider-monkey": 2100,
+      "easy/12noisy-night-monkey": 1920,
+      "easy/13zebra": 1410,
+      "easy/14elephant": 1725,
+      "easy/15hippo": 1860,
+      "easy/16raccoon": 1830,
+      "easy/17rhino": 1858,
+      "easy/18giraffe": 1410,
+      "easy/19tiger": 2070,
+      "easy/1deer": 1654,
+      "easy/20lion": 1380,
+      "easy/21panda": 1470,
+      "easy/22cheetah": 1980,
+      "easy/23black-bear": 1886,
+      "easy/24polar-bear": 1620,
+      "easy/25antelope": 1860,
+      "easy/26fox": 1980,
+      "easy/27buffalo": 870,
+      "easy/28cow": 1620,
+      "easy/29wolf": 1672,
+      "easy/2dog": 1224,
+      "easy/30sheep": 1410,
+      "easy/3cat": 2270,
+      "easy/4horse": 1160,
+      "easy/5rabbit": 1202,
+      "easy/6pig": 1676,
+      "easy/7chimpanzee": 1410,
+      "easy/8monkey": 1380,
+      "easy/9orangutan": 2130,
+      "hard/10gorilla": 926,
+      "hard/11spidermonkey": 900,
+      "hard/12noisy-night-monkey": 898,
+      "hard/13zebra": 1350,
+      "hard/14elephant": 956,
+      "hard/15hippo": 898,
+      "hard/16raccoon": 952,
+      "hard/17rhino": 952,
+      "hard/18giraffe": 1258,
+      "hard/19tiger": 990,
+      "hard/1deer": 1020,
+      "hard/20lion": 1286,
+      "hard/21panda": 1200,
+      "hard/22cheetah": 958,
+      "hard/23black-bear": 988,
+      "hard/24polar-bear": 1108,
+      "hard/25antelope": 990,
+      "hard/26fox": 954,
+      "hard/27buffalo": 1830,
+      "hard/28cow": 1050,
+      "hard/29wolf": 1136,
+      "hard/2dog": 1432,
+      "hard/30sheep": 1256,
+      "hard/3cat": 898,
+      "hard/4horse": 1526,
+      "hard/5rabbit": 1472,
+      "hard/6pig": 982,
+      "hard/7chimps": 930,
+      "hard/8monkey": 1290,
+      "hard/9orangutan": 902
+    },
+    "jpg_annotated_in_splits": 41179,
+    "jpg_on_disk_not_annotated": 390,
+    "annotated_missing_on_disk": 0,
+    "w2_20260823_reference": 83304,
+    "delta_vs_w2": -59
+  },
+  "companion_dirs": {
+    "aptv2_canidae": {
+      "root": "D:\\Desktop\\k9-training-system\\data\\aptv2_canidae",
+      "n_videos_mp4": 24,
+      "videos_total_mb": 42.97,
+      "gt_format": "MOTChallenge(frame,id,x,y,w,h,conf,class,vis)",
+      "gt_total_rows": 852,
+      "gt_per_video": [
+        {
+          "file": "canidae_vid1000341.mp4.txt",
+          "rows": 15,
+          "frames": 15,
+          "track_ids": 1,
+          "classes": {
+            "1": 15
+          }
+        },
+        {
+          "file": "canidae_vid1000356.mp4.txt",
+          "rows": 1,
+          "frames": 1,
+          "track_ids": 1,
+          "classes": {
+            "1": 1
+          }
+        },
+        {
+          "file": "canidae_vid1000538.mp4.txt",
+          "rows": 1,
+          "frames": 1,
+          "track_ids": 1,
+          "classes": {
+            "1": 1
+          }
+        },
+        {
+          "file": "canidae_vid1000606.mp4.txt",
+          "rows": 172,
+          "frames": 15,
+          "track_ids": 12,
+          "classes": {
+            "1": 172
+          }
+        },
+        {
+          "file": "canidae_vid1000607.mp4.txt",
+          "rows": 143,
+          "frames": 15,
+          "track_ids": 10,
+          "classes": {
+            "1": 143
+          }
+        },
+        {
+          "file": "canidae_vid1000612.mp4.txt",
+          "rows": 30,
+          "frames": 15,
+          "track_ids": 2,
+          "classes": {
+            "1": 30
+          }
+        },
+        {
+          "file": "canidae_vid1000615.mp4.txt",
+          "rows": 30,
+          "frames": 15,
+          "track_ids": 2,
+          "classes": {
+            "1": 30
+          }
+        },
+        {
+          "file": "canidae_vid1000641.mp4.txt",
+          "rows": 2,
+          "frames": 2,
+          "track_ids": 1,
+          "classes": {
+            "1": 2
+          }
+        },
+        {
+          "file": "canidae_vid1000724.mp4.txt",
+          "rows": 45,
+          "frames": 15,
+          "track_ids": 3,
+          "classes": {
+            "1": 45
+          }
+        },
+        {
+          "file": "canidae_vid1000727.mp4.txt",
+          "rows": 28,
+          "frames": 15,
+          "track_ids": 2,
+          "classes": {
+            "1": 28
+          }
+        },
+        {
+          "file": "canidae_vid1000732.mp4.txt",
+          "rows": 30,
+          "frames": 15,
+          "track_ids": 2,
+          "classes": {
+            "1": 30
+          }
+        },
+        {
+          "file": "canidae_vid1000747.mp4.txt",
+          "rows": 37,
+          "frames": 15,
+          "track_ids": 3,
+          "classes": {
+            "1": 37
+          }
+        },
+        {
+          "file": "canidae_vid1000751.mp4.txt",
+          "rows": 30,
+          "frames": 15,
+          "track_ids": 2,
+          "classes": {
+            "1": 30
+          }
+        },
+        {
+          "file": "canidae_vid1000753.mp4.txt",
+          "rows": 45,
+          "frames": 15,
+          "track_ids": 3,
+          "classes": {
+            "1": 45
+          }
+        },
+        {
+          "file": "canidae_vid1000756.mp4.txt",
+          "rows": 30,
+          "frames": 15,
+          "track_ids": 2,
+          "classes": {
+            "1": 30
+          }
+        },
+        {
+          "file": "canidae_vid1000777.mp4.txt",
+          "rows": 60,
+          "frames": 15,
+          "track_ids": 4,
+          "classes": {
+            "1": 60
+          }
+        },
+        {
+          "file": "canidae_vid1000779.mp4.txt",
+          "rows": 47,
+          "frames": 15,
+          "track_ids": 4,
+          "classes": {
+            "1": 47
+          }
+        },
+        {
+          "file": "canidae_vid1000786.mp4.txt",
+          "rows": 30,
+          "frames": 15,
+          "track_ids": 2,
+          "classes": {
+            "1": 30
+          }
+        },
+        {
+          "file": "canidae_vid1000788.mp4.txt",
+          "rows": 30,
+          "frames": 15,
+          "track_ids": 2,
+          "classes": {
+            "1": 30
+          }
+        },
+        {
+          "file": "canidae_vid1000810.mp4.txt",
+          "rows": 3,
+          "frames": 3,
+          "track_ids": 1,
+          "classes": {
+            "1": 3
+          }
+        },
+        {
+          "file": "canidae_vid1000823.mp4.txt",
+          "rows": 15,
+          "frames": 15,
+          "track_ids": 1,
+          "classes": {
+            "1": 15
+          }
+        },
+        {
+          "file": "canidae_vid1000828.mp4.txt",
+          "rows": 12,
+          "frames": 12,
+          "track_ids": 1,
+          "classes": {
+            "1": 12
+          }
+        },
+        {
+          "file": "canidae_vid1001068.mp4.txt",
+          "rows": 1,
+          "frames": 1,
+          "track_ids": 1,
+          "classes": {
+            "1": 1
+          }
+        },
+        {
+          "file": "canidae_vid1001090.mp4.txt",
+          "rows": 15,
+          "frames": 15,
+          "track_ids": 1,
+          "classes": {
+            "1": 15
+          }
+        }
+      ],
+      "frames_hard_tree_files": 360,
+      "frames_hard_sample_json_keys": null,
+      "gt_txt_combined_exists": true
+    },
+    "aptv2_yolo": {
+      "images": 290,
+      "labels": 290,
+      "yaml": {
+        "aptv2_canidae.yaml": "\n# APTv2 Canidae 数据集 (YOLO 格式)\npath: D:\\Desktop\\k9-training-system\\data\\aptv2_yolo\ntrain: images\nval: images\n\nnc: 3\nnames: ['dog', 'fox', 'wolf']\n"
+      }
+    },
+    "aptv2_yolo_pose": {
+      "images": 290,
+      "labels": 290,
+      "yaml": {
+        "aptv2_canidae_pose.yaml": "path: D:\\Desktop\\k9-training-system\\data\\aptv2_yolo_pose\ntrain: images\nval: images\n\nnc: 3\nkpt_shape: [17, 3]\nnames: ['dog', 'fox', 'wolf']\n"
+      }
+    },
+    "aptv2_annotations_duplicate_check": [
+      {
+        "file": "train_annotations.json",
+        "size_main": 48049430,
+        "size_dup": 48049430,
+        "same_size": true
+      },
+      {
+        "file": "val_annotations.json",
+        "size_main": 13749767,
+        "size_dup": 13749767,
+        "same_size": true
+      },
+      {
+        "file": "test_annotations.json",
+        "size_main": 16807779,
+        "size_dup": 16807779,
+        "same_size": true
+      }
+    ]
+  }
+}
