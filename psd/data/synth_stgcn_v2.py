@@ -1,0 +1,143 @@
+# -*- coding: utf-8 -*-
+"""W28/C4 — 合成保真度 v2: 分布统计 + 保真度指标 + 参数化拟合生成器.
+
+任务书: dev-docs/handovers/DATA-CAMPAIGN-plan.md §2-C4
+领地: 本文件新增, 禁止修改 psd/data/synth_stgcn.py 行为.
+
+设计要点:
+    - 参考分布源参数化 (--reference-pkl), 当前 Q3b 产物为 n=1 冒烟残留
+      (30 帧 × 17 关节 COCO 归一化坐标); 待全量产物落盘后零成本替换.
+    - 逐关节角: 每关节由 (parent, self, child) 三点内角定义, 值域 [0, π],
+      无方向角周期性问题; 端点/叶关节用祖父/孙关节补齐三元组.
+    - 速度谱: 逐关节帧间位移幅值 ||Δp||.
+    - 保真度指标: 逐关节 KS 距离 (两样本 D 统计量) + 速度直方图 L1 差.
+    - 拟合: 逐关节逐坐标 AR(1) 平滑模型, 闭式解
+          phi = 1 - Var(v) / (2 * sigma_pos^2),  s^2 = sigma_pos^2 (1 - phi^2)
+      使生成序列的位置边缘方差与帧间速度方差同时匹配实测.
+"""
+from __future__ import annotations
+
+from pathlib import Path
+from typing import Dict, List, Optional
+
+import numpy as np
+
+__all__ = [
+    "COCO17_PARENT",
+    "joint_angle_series",
+    "speed_series",
+    "ks_distance",
+    "hist_l1_distance",
+    "fidelity_metrics",
+]
+
+# ---------------------------------------------------------------------------
+# 拓扑: COCO-17 (AK 公开真实层提点所用). parent 映射, 根关节 parent=None.
+# 语义: 0 nose; 1/2 左右眼; 3/4 左右耳; 5/6 左右肩; 7/8 左右肘; 9/10 左右腕;
+#       11/12 左右髋; 13/14 左右膝; 15/16 左右踝.
+COCO17_PARENT: List[Optional[int]] = [
+    5,     # 0 nose <- 左肩 (头部锚定)
+    0, 0,  # 1/2 eye <- nose
+    1, 2,  # 3/4 ear <- eye
+    11,    # 5 左肩 <- 左髋
+    12,    # 6 右肩 <- 右髋
+    5, 6,  # 7/8 elbow <- shoulder
+    7, 8,  # 9/10 wrist <- elbow
+    5,     # 11 左髋 <- 左肩 (躯干闭环, 与 5 互为父子的环路在三点角中无害)
+    6,     # 12 右髋 <- 右肩
+    11, 12,  # 13/14 knee <- hip
+    13, 14,  # 15/16 ankle <- knee
+]
+
+
+def _angle_triplets(v: int) -> tuple[int, int, int]:
+    """关节 i 的 (a, b, c) 三元组: b 处由 a-b-c 构成的内角.
+
+    规则: b=i; a=COCO17_PARENT[i]; c=首个以 i 为 parent 的关节.
+    叶关节(耳/腕/踝)无子关节 → 三元组取 (祖父, 叶, 父), 在叶处观察
+    肢体折叠程度: 伸直时内角→0, 弯曲时增大; 与中段关节的
+    "三点张角"互补, 运动学意义明确且全覆盖 17 关节.
+    """
+    parent = COCO17_PARENT[v]
+    if parent is None:
+        # 根关节(nose): 由首个子关节与孙关节支撑 (eye-nose-ear)
+        children = [k for k, p in enumerate(COCO17_PARENT) if p == v]
+        if not children:
+            raise ValueError(f"根关节 {v} 无法构造三点角")
+        grandchild = next(
+            (g for g, p in enumerate(COCO17_PARENT) if p == children[0]), None
+        )
+        if grandchild is None:
+            raise ValueError(f"根关节 {v} 缺少孙关节")
+        return (children[0], v, grandchild)
+    children = [k for k, p in enumerate(COCO17_PARENT) if p == v]
+    if children:
+        return (parent, v, children[0])
+    # 叶关节: 祖父-父-叶 三点角, 拐点观察位置在叶处
+    grandparent = COCO17_PARENT[parent]
+    if grandparent is None:
+        raise ValueError(f"叶关节 {v} 的父为根且无子链支撑, 无法构造三点角")
+    return (grandparent, v, parent)
+
+
+def _angle_triplet_table(v_count: int) -> List[tuple[int, int, int]]:
+    return [_angle_triplets(v) for v in range(v_count)]
+
+
+def joint_angle_series(keypoints: np.ndarray) -> np.ndarray:
+    """逐关节三点内角时间序列.
+
+    Args:
+        keypoints: (T, V, C>=2) xy 归一化坐标.
+
+    Returns:
+        (T, V) float64, 每列为一关节的内角弧度, 值域 [0, π].
+        零长度骨骼(两关节投影重合)退化保护: 该处内角记 π/2.
+    """
+    raise NotImplementedError("W28 RED: 待实现")
+
+
+def speed_series(keypoints: np.ndarray) -> np.ndarray:
+    """逐关节帧间速度幅值序列.
+
+    Args:
+        keypoints: (T, V, C>=2).
+
+    Returns:
+        (T-1, V) float64, s[t, j] = ||p[t+1, j] - p[t, j]|| (xy 分量).
+    """
+    raise NotImplementedError("W28 RED: 待实现")
+
+
+def ks_distance(sample_a: np.ndarray, sample_b: np.ndarray) -> float:
+    """两样本 KS D 统计量: D = sup_x |F_a(x) - F_b(x)|."""
+    raise NotImplementedError("W28 RED: 待实现")
+
+
+def hist_l1_distance(
+    sample_a: np.ndarray,
+    sample_b: np.ndarray,
+    bins: int = 20,
+) -> float:
+    """两样本直方图 L1 差: 共享 bin 边界, 归一化为频率后 sum|h_a - h_b|.
+
+    两样本均为同一常数时分布恒等, 返回 0.
+    """
+    raise NotImplementedError("W28 RED: 待实现")
+
+
+def fidelity_metrics(ref_angles: np.ndarray, syn_angles: np.ndarray,
+                     ref_speed: np.ndarray, syn_speed: np.ndarray,
+                     bins: int = 20) -> Dict[str, object]:
+    """保真度指标汇总.
+
+    Returns:
+        {
+          "ks_per_joint": list[float],        # 逐关节角度 KS
+          "ks_mean": float,
+          "vel_hist_per_joint": list[float],  # 逐关节速度直方图 L1 差
+          "vel_hist_mean": float,
+        }
+    """
+    raise NotImplementedError("W28 RED: 待实现")
+
