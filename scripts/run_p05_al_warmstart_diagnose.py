@@ -21,6 +21,7 @@
 """
 from __future__ import annotations
 
+import hashlib
 import json
 import subprocess
 import sys
@@ -64,6 +65,15 @@ def git_sha() -> str:
         ).strip()
     except Exception:
         return "unknown"
+
+
+def sha256_file(path: str | Path) -> str:
+    """checkpoint 完整性指纹（勘误轮新增：meta.ckpt_sha256_note 原引用无实际字段）。"""
+    h = hashlib.sha256()
+    with open(path, "rb") as f:
+        for chunk in iter(lambda: f.read(1 << 20), b""):
+            h.update(chunk)
+    return h.hexdigest()
 
 
 def margin_stats(logits: np.ndarray) -> dict:
@@ -167,7 +177,8 @@ def main() -> None:
             "git_sha": git_sha(),
             "device": device,
             "ckpt": str(CKPT.relative_to(REPO_ROOT)),
-            "ckpt_sha256_note": "哈希未记录则说明文件在诊断后未被复算——本字段由下方 sha256 提供",
+            "ckpt_sha256": sha256_file(CKPT),
+            "ckpt_sha256_note": "checkpoint 完整性指纹（SHA-256 全量十六进制，见上字段）",
             "model_cfg": MODEL_CFG,
             "data_gen": {
                 "pool": {"samples_per_class": POOL_SPC, "T": T, "seed": POOL_SEED},

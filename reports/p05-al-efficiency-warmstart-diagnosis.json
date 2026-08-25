@@ -1,12 +1,13 @@
 {
   "meta": {
-    "date": "2026-08-25T00:15:05",
+    "date": "2026-08-25T08:58:22",
     "window": "W23",
     "step": "Step1 diagnosis (task book v1.0)",
-    "git_sha": "e423d8b",
+    "git_sha": "473702c",
     "device": "cpu",
     "ckpt": "runs\\p05_stgcn_bc_full\\best.pt",
-    "ckpt_sha256_note": "哈希未记录则说明文件在诊断后未被复算——本字段由下方 sha256 提供",
+    "ckpt_sha256": "7c3e024c2cfbbcd54cddc87e27c47f1fa1637e40be06ab0a04bede02e6e1afdc",
+    "ckpt_sha256_note": "checkpoint 完整性指纹（SHA-256 全量十六进制，见上字段）",
     "model_cfg": {
       "in_channels": 3,
       "num_classes": 22,
@@ -34,7 +35,7 @@
       "select": "val_acc ∈ [0.4, 0.7] 且 margin_mean(val,pool) < 10.0",
       "fuse": "全档 val_acc > 0.85 或全档饱和"
     },
-    "total_time_sec": 11.3
+    "total_time_sec": 16.9
   },
   "rows": [
     {
