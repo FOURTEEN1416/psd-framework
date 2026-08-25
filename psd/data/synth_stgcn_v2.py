@@ -94,7 +94,23 @@ def joint_angle_series(keypoints: np.ndarray) -> np.ndarray:
         (T, V) float64, 每列为一关节的内角弧度, 值域 [0, π].
         零长度骨骼(两关节投影重合)退化保护: 该处内角记 π/2.
     """
-    raise NotImplementedError("W28 RED: 待实现")
+    kpts = np.asarray(keypoints, dtype=np.float64)
+    T, V = kpts.shape[0], kpts.shape[1]
+    out = np.full((T, V), np.pi / 2, dtype=np.float64)
+    for v in range(V):
+        a, b, c = _angle_triplets(v)
+        ba = kpts[:, a, :2] - kpts[:, b, :2]
+        bc = kpts[:, c, :2] - kpts[:, b, :2]
+        denom = (
+            np.linalg.norm(ba, axis=-1) * np.linalg.norm(bc, axis=-1)
+        )
+        cosang = np.where(
+            denom > 1e-12,
+            (ba * bc).sum(-1) / np.maximum(denom, 1e-12),
+            0.0,
+        )
+        out[:, v] = np.arccos(np.clip(cosang, -1.0, 1.0))
+    return out
 
 
 def speed_series(keypoints: np.ndarray) -> np.ndarray:
@@ -106,12 +122,18 @@ def speed_series(keypoints: np.ndarray) -> np.ndarray:
     Returns:
         (T-1, V) float64, s[t, j] = ||p[t+1, j] - p[t, j]|| (xy 分量).
     """
-    raise NotImplementedError("W28 RED: 待实现")
+    kpts = np.asarray(keypoints, dtype=np.float64)[..., :2]
+    return np.linalg.norm(np.diff(kpts, axis=0), axis=-1)
 
 
 def ks_distance(sample_a: np.ndarray, sample_b: np.ndarray) -> float:
     """两样本 KS D 统计量: D = sup_x |F_a(x) - F_b(x)|."""
-    raise NotImplementedError("W28 RED: 待实现")
+    a = np.sort(np.asarray(sample_a, dtype=np.float64).ravel())
+    b = np.sort(np.asarray(sample_b, dtype=np.float64).ravel())
+    grid = np.concatenate([a, b])
+    cdf_a = np.searchsorted(a, grid, side="right") / len(a)
+    cdf_b = np.searchsorted(b, grid, side="right") / len(b)
+    return float(np.max(np.abs(cdf_a - cdf_b)))
 
 
 def hist_l1_distance(
@@ -123,7 +145,16 @@ def hist_l1_distance(
 
     两样本均为同一常数时分布恒等, 返回 0.
     """
-    raise NotImplementedError("W28 RED: 待实现")
+    a = np.asarray(sample_a, dtype=np.float64).ravel()
+    b = np.asarray(sample_b, dtype=np.float64).ravel()
+    lo = min(a.min(), b.min())
+    hi = max(a.max(), b.max())
+    if not hi > lo:
+        return 0.0
+    edges = np.linspace(lo, hi, bins + 1)
+    h_a = np.histogram(a, bins=edges)[0] / len(a)
+    h_b = np.histogram(b, bins=edges)[0] / len(b)
+    return float(np.abs(h_a - h_b).sum())
 
 
 def fidelity_metrics(ref_angles: np.ndarray, syn_angles: np.ndarray,
@@ -139,5 +170,21 @@ def fidelity_metrics(ref_angles: np.ndarray, syn_angles: np.ndarray,
           "vel_hist_mean": float,
         }
     """
-    raise NotImplementedError("W28 RED: 待实现")
-
+    ref_angles = np.asarray(ref_angles, dtype=np.float64)
+    syn_angles = np.asarray(syn_angles, dtype=np.float64)
+    ref_speed = np.asarray(ref_speed, dtype=np.float64)
+    syn_speed = np.asarray(syn_speed, dtype=np.float64)
+    v_count = ref_angles.shape[1]
+    ks_per_joint = [
+        ks_distance(ref_angles[:, j], syn_angles[:, j]) for j in range(v_count)
+    ]
+    vel_per_joint = [
+        hist_l1_distance(ref_speed[:, j], syn_speed[:, j], bins=bins)
+        for j in range(v_count)
+    ]
+    return {
+        "ks_per_joint": ks_per_joint,
+        "ks_mean": float(np.mean(ks_per_joint)),
+        "vel_hist_per_joint": vel_per_joint,
+        "vel_hist_mean": float(np.mean(vel_per_joint)),
+    }
