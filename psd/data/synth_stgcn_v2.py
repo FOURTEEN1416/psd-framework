@@ -382,3 +382,186 @@ def fidelity_metrics(ref_angles: np.ndarray, syn_angles: np.ndarray,
         "vel_hist_per_joint": vel_per_joint,
         "vel_hist_mean": float(np.mean(vel_per_joint)),
     }
+
+
+# ---------------------------------------------------------------------------
+# 实验入口 (GREEN-3): 当次运行证据 JSON
+# ---------------------------------------------------------------------------
+
+import argparse  # noqa: E402
+import json  # noqa: E402
+import pickle  # noqa: E402
+from datetime import datetime, timezone  # noqa: E402
+
+# gate4 类清单: 与 Q3b 参考 (partialclass4 manifest) 同口径
+GATE4_CLASSES = ["stay", "track", "watch", "jump"]
+
+
+def _load_reference_pkl(path: str) -> np.ndarray:
+    """加载 Q3b 风格参考 pkl → (N, T, V, C), 非 coco17 fail-fast."""
+    with open(path, "rb") as f:
+        data = pickle.load(f)
+    clips = [np.asarray(d["keypoints"], dtype=np.float64) for d in data]
+    kpts = np.stack(clips)
+    if kpts.shape[2] != 17:
+        raise ValueError(
+            f"参考拓扑为 {kpts.shape[2]} 关节, 本模块仅支持 coco17(17 关节); "
+            f"24 关节(dog-pose/K9Graph)参考需另行适配拓扑映射"
+        )
+    return kpts
+
+
+def _stack_joint_series(kpts_xy: np.ndarray, fn) -> np.ndarray:
+    """对每条 clip 独立计算序列后沿时间轴拼接 → (ΣT_i, V)."""
+    return np.concatenate([fn(kpts_xy[i]) for i in range(len(kpts_xy))],
+                          axis=0)
+
+
+def run_fidelity_experiment(
+    reference_pkl: str,
+    output_json: str,
+    samples_per_class: int = 8,
+    classes: Optional[List[str]] = None,
+    seed: int = 42,
+    bins: int = 20,
+) -> Dict[str, object]:
+    """C4 主实验: 拟合实测分布 → v1style/v2 双路生成 → 保真度对比证据.
+
+    三层口径: 本实验属【合成层自证】(syn 数据 vs 公开真实层参考的分布
+    距离), 不产生任何行为识别精度数字, 不得与训练指标混排.
+    """
+    kpts = _load_reference_pkl(reference_pkl)
+    params = fit_from_reference(kpts)
+    class_names = classes if classes is not None else list(GATE4_CLASSES)
+
+    v2_samples = make_synthetic_dataset_v2(
+        params, samples_per_class=samples_per_class,
+        classes=class_names, seed=seed,
+    )
+    base_samples = make_v1style_baseline_17j(
+        samples_per_class=samples_per_class, classes=class_names,
+        T=int(params["clip_t"]), seed=seed,
+    )
+
+    ref_xy = kpts[..., :2]
+    ref_ang = _stack_joint_series(ref_xy, joint_angle_series)
+    ref_spd = _stack_joint_series(ref_xy, speed_series)
+
+    syn_xy = np.concatenate(
+        [s["keypoints"][..., :2].astype(np.float64) for s in v2_samples]
+    )
+    base_xy = np.concatenate(
+        [s["keypoints"][..., :2].astype(np.float64) for s in base_samples]
+    )
+    m_syn = fidelity_metrics(ref_ang, joint_angle_series(syn_xy),
+                             ref_spd, speed_series(syn_xy), bins=bins)
+    m_base = fidelity_metrics(ref_ang, joint_angle_series(base_xy),
+                              ref_spd, speed_series(base_xy), bins=bins)
+
+    try:
+        import subprocess
+
+        git_sha = subprocess.run(
+            ["git", "rev-parse", "--short", "HEAD"],
+            capture_output=True, text=True, timeout=10,
+        ).stdout.strip() or None
+    except Exception:
+        git_sha = None
+
+    evidence = {
+        "meta": {
+            "experiment": "w28-c4-synth-fidelity",
+            "reference_path": str(reference_pkl),
+            "n_ref_clips": int(kpts.shape[0]),
+            "ref_shape": [int(x) for x in kpts.shape],
+            "reference_topology": str(params["topology"]),
+            "samples_per_class": samples_per_class,
+            "classes": class_names,
+            "seed": seed,
+            "bins": bins,
+            "generated_at": datetime.now(timezone.utc).isoformat(),
+            "git_sha": git_sha,
+            "caliber_note": (
+                "合成层自证: syn_v2/v1style 生成数据 vs 公开真实层(AK 提点)"
+                "参考分布的距离; 无识别精度数字; 与训练指标严禁混报"
+            ),
+        },
+        "reference_stats": {
+            "mu_per_joint": params["mu"].tolist(),
+            "sigma_pos_per_joint": params["sigma_pos"].tolist(),
+            "phi_per_joint": params["phi"].tolist(),
+            "innov_per_joint": params["innov"].tolist(),
+            "phi_mean": float(np.mean(params["phi"])),
+            "sigma_pos_mean": float(np.mean(params["sigma_pos"])),
+        },
+        "v1style": {
+            "ks_per_joint": m_base["ks_per_joint"],
+            "ks_mean": m_base["ks_mean"],
+            "vel_hist_per_joint": m_base["vel_hist_per_joint"],
+            "vel_hist_mean": m_base["vel_hist_mean"],
+        },
+        "synv2": {
+            "ks_per_joint": m_syn["ks_per_joint"],
+            "ks_mean": m_syn["ks_mean"],
+            "vel_hist_per_joint": m_syn["vel_hist_per_joint"],
+            "vel_hist_mean": m_syn["vel_hist_mean"],
+        },
+        "verdict": {
+            "synv2_vel_hist_mean": m_syn["vel_hist_mean"],
+            "v1style_vel_hist_mean": m_base["vel_hist_mean"],
+            "synv2_wins_velocity": bool(
+                m_syn["vel_hist_mean"] < m_base["vel_hist_mean"]
+            ),
+            "synv2_ks_mean": m_syn["ks_mean"],
+            "v1style_ks_mean": m_base["ks_mean"],
+            "synv2_wins_angle_ks": bool(
+                m_syn["ks_mean"] < m_base["ks_mean"]
+            ),
+            "known_limitation": (
+                "角度边缘未显式建模(v3 迭代项); KS 绝对值受限于当前参考"
+                "样本量(n_ref 见 meta.n_ref_clips), 仅支持同管线相对比较"
+            ),
+        },
+    }
+
+    out = Path(output_json)
+    out.parent.mkdir(parents=True, exist_ok=True)
+    with open(out, "w", encoding="utf-8") as f:
+        json.dump(evidence, f, ensure_ascii=False, indent=2)
+    return evidence
+
+
+def main(argv: Optional[List[str]] = None) -> int:
+    ap = argparse.ArgumentParser(
+        description="W28/C4 合成保真度实验: syn_v2 vs v1style 分布距离证据",
+    )
+    ap.add_argument("--reference-pkl", required=True,
+                    help="Q3b 风格参考 pkl (list[dict], keypoints (T,17,C))")
+    ap.add_argument("--output-json", required=True,
+                    help="证据 JSON 输出路径")
+    ap.add_argument("--samples-per-class", type=int, default=8)
+    ap.add_argument("--classes", default=None,
+                    help="逗号分隔类名; 缺省用 gate4 口径")
+    ap.add_argument("--seed", type=int, default=42)
+    ap.add_argument("--bins", type=int, default=20)
+    args = ap.parse_args(argv)
+
+    classes = args.classes.split(",") if args.classes else None
+    ev = run_fidelity_experiment(
+        args.reference_pkl, args.output_json,
+        samples_per_class=args.samples_per_class,
+        classes=classes, seed=args.seed, bins=args.bins,
+    )
+    v = ev["verdict"]
+    print(f"[w28-c4] syn_v2 vel_hist={v['synv2_vel_hist_mean']:.4f} "
+          f"vs v1style {v['v1style_vel_hist_mean']:.4f} "
+          f"(wins_velocity={v['synv2_wins_velocity']})")
+    print(f"[w28-c4] angle KS mean: syn_v2 {v['synv2_ks_mean']:.4f} "
+          f"vs v1style {v['v1style_ks_mean']:.4f} "
+          f"(wins_angle={v['synv2_wins_angle_ks']})")
+    print(f"[w28-c4] evidence -> {args.output_json}")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

@@ -272,3 +272,64 @@ class TestFidelityAdvantage:
                                      ref_spd, v2.speed_series(base_k))
         assert m_v2["vel_hist_mean"] < m_base["vel_hist_mean"]
         assert m_v2["vel_hist_mean"] < 0.9  # 宽松绝对上限, 防双退化假阳性
+
+
+# ---------------------------------------------------------------------------
+# 实验入口 (RED-3): 当次运行证据 JSON
+# ---------------------------------------------------------------------------
+
+class TestRunFidelityExperiment:
+    def _write_reference(self, path):
+        import pickle
+
+        rng = np.random.default_rng(21)
+        clips = []
+        for vid in ("AAA11111", "BBB22222"):
+            kpts = np.concatenate([
+                0.5 + 0.03 * rng.standard_normal((30, V, 2)),
+                rng.uniform(0.1, 0.9, size=(30, V, 1)),
+            ], axis=-1).astype(np.float32)
+            clips.append({
+                "keypoints": kpts, "label": 2, "boundary": np.zeros(30),
+                "video_id": vid, "split": "train", "psd_class": "watch",
+            })
+        with open(path, "wb") as f:
+            pickle.dump(clips, f)
+
+    def test_produces_complete_evidence_json(self, tmp_path):
+        import json
+
+        ref_pkl = tmp_path / "ref.pkl"
+        self._write_reference(ref_pkl)
+        out_json = tmp_path / "evidence.json"
+
+        result = v2.run_fidelity_experiment(
+            str(ref_pkl), str(out_json),
+            samples_per_class=2, classes=["stay", "watch"],
+            seed=5, bins=10,
+        )
+        assert out_json.exists()
+        saved = json.loads(out_json.read_text(encoding="utf-8"))
+        for key in ("meta", "reference_stats", "v1style", "synv2", "verdict"):
+            assert key in saved, key
+        assert saved["meta"]["n_ref_clips"] == 2
+        assert saved["meta"]["reference_topology"] == "coco17"
+        for section in ("v1style", "synv2"):
+            assert {"ks_per_joint", "ks_mean",
+                    "vel_hist_per_joint", "vel_hist_mean"} <= set(saved[section])
+        verdict = saved["verdict"]
+        assert "synv2_vel_hist_mean" in verdict
+        assert "v1style_vel_hist_mean" in verdict
+        assert "synv2_wins_velocity" in verdict
+
+    def test_reference_with_legacy_24j_fails_fast(self, tmp_path):
+        """拓扑门禁: 非 coco17 参考(如旧 24 关节合成集)必须显式报错."""
+        import pickle
+
+        from psd.data.synth_stgcn import make_synthetic_dataset
+        legacy = make_synthetic_dataset(samples_per_class=1, T=30, seed=42)
+        pkl = tmp_path / "legacy24.pkl"
+        with open(pkl, "wb") as f:
+            pickle.dump([{"keypoints": legacy[0]["keypoints"]}], f)
+        with pytest.raises(ValueError, match="17"):
+            v2.run_fidelity_experiment(str(pkl), str(tmp_path / "out.json"))
