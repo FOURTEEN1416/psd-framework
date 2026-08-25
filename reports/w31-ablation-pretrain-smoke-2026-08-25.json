@@ -1,0 +1,63 @@
+{
+  "date": "2026-08-25T17:57:03",
+  "window": "W31",
+  "task": "tab3 补残之一：−自监督预训练消融（scratch vs warm-init）",
+  "metric_layer": "synthetic",
+  "init_provenance_layer": "public_real",
+  "config_path": "D:\\Desktop\\psd-framework-W31\\configs\\ablation_pretrain.yaml",
+  "runs": [
+    {
+      "arm": "scratch",
+      "seed": 0,
+      "best_val_acc": 0.0,
+      "best_epoch": -1,
+      "epochs_trained": 1,
+      "final_train_acc": 0.0,
+      "device": "cpu",
+      "train_size": 36,
+      "val_size": 8,
+      "output_dir": "D:\\Desktop\\psd-framework-W31\\runs\\w31_ablation_pretrain_smoke\\scratch_seed0",
+      "ckpt_path": "N/A"
+    },
+    {
+      "arm": "warm",
+      "seed": 0,
+      "best_val_acc": 0.0,
+      "best_epoch": -1,
+      "epochs_trained": 1,
+      "final_train_acc": 0.027777777777777776,
+      "device": "cpu",
+      "train_size": 36,
+      "val_size": 8,
+      "output_dir": "D:\\Desktop\\psd-framework-W31\\runs\\w31_ablation_pretrain_smoke\\warm_seed0",
+      "ckpt_path": "N/A"
+    }
+  ],
+  "aggregate": {
+    "scratch": {
+      "best_val_acc_mean": 0.0,
+      "best_val_acc_std": 0.0,
+      "n_seeds": 1,
+      "per_seed": [
+        0.0
+      ]
+    },
+    "warm": {
+      "best_val_acc_mean": 0.0,
+      "best_val_acc_std": 0.0,
+      "n_seeds": 1,
+      "per_seed": [
+        0.0
+      ]
+    }
+  },
+  "data": {
+    "samples_per_class": 2,
+    "T": 30,
+    "data_seed": 42,
+    "val_split": 0.2,
+    "train_size": 36,
+    "val_size": 8,
+    "caliber": "synthetic"
+  }
+}
