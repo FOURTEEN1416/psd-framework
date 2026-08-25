@@ -11,6 +11,7 @@
 | **InterPet4D** | `D:\Desktop\k9-training-system\data\interpet4d` | smal_npy/ ✓ pet_npy/ smpl_npy/ mano_npy/ interpet_audio/ interpet_mert/ .cache/ | **226 个 .npz** ✓（与声明 226 吻合；骨架维度 pose_rotmat T×35×9 / kp_world T×24×3） | P0.1 AimCLR 预训练 / P0.2 SMQ 分割（smal_npy 3D 关键点） |
 | **Animal Kingdom** | `D:\Desktop\k9-training-system\data\animal_kingdom` | action_recognition/ pose_estimation/ video_grounding/ README | **329 犬科视频**（train 231 / test 98），帧行 34,772（原声明 338/239 已溯源为规划期估计，K9 已修正） | P0.1 弱监督预训练 / P0.2 episode 分割信号 |
 | **APTv2 全量** | `D:\Desktop\k9-training-system\data\APTv2\APTv2` | annotations/ + data/{easy,hard} | **83,304 文件**（原声明 242K 已溯源为规划期估计，K9 已修正） | 无标签池扩展 |
+| **dog-pose（ultralytics 打包）** | `D:\Desktop\datasets\dog-pose` | images/{train,val} ✓ labels/{train,val} ✓ dog-pose.yaml（kpt_shape=[24,3] 单类 dog） | **8476 图 = 6773+1703** ✓（2026-08-25 W29 全量复核：配对/标注/包围盒零缺陷） | C5 静态池：预训练/增广（结论 b）；提点器微调源；规则引擎静态先验标定。⚠️ 无序列元数据、GT 有效关节 20/24（双眼/withers/throat 零标注）。详见 `reports/dogpose-report-2026-08-25.md` |
 
 ## 2. APTv2 伴生处理目录（K9 产品线产物，按需引用）
 
@@ -47,5 +48,6 @@
 | 2026-08-23（W2） | InterPet4D smal_npy | 序列计数 + npz 抽查 + 骨架维度 | 226 ✓ 吻合；.npz 格式；pose_rotmat (T,35,3,3) / kp_world (T,24,3)，T=326/556/509 抽查 |
 | 2026-08-23（W2） | Animal Kingdom 犬科 | 犬科视频 / 帧级标注计数 | 实测 329 视频（train 231/test 98）、帧行 34,772；≠ 声明 338/239 → 已溯源为规划期估计，K9 truth 已修正 |
 | 2026-08-23（W2） | APTv2 全量 | 文件总数 + COCO 标注统计 | 实测 83,304 文件、annotations 84,611；≠ 声明 242K → 已溯源为规划期估计，K9 truth 已修正 |
+| 2026-08-25（W29） | dog-pose | 全量配对/标注解析/可见性/序列元数据探查 | 8476 图零缺陷；无序列分组元数据；GT 有效关节 20/24。证据 `runs/data_campaign/dogpose/inventory-evidence-2026-08-25.json`，结论 (b) 见 `reports/dogpose-report-2026-08-25.md` |
 
 > 差异裁决与完整证据：`reports/data-inventory-2026-08-23.md`；K9 侧修正如上（commit `faaab28`，2026-08-23 双轨处置：回改 K9 truth + 本仓保留差异标注）
