@@ -1,0 +1,130 @@
+# ============================================================================
+# W40 数据飞轮效力验证 — round2 预注册配置
+# ----------------------------------------------------------------------------
+# 预注册纪律（沿 W23 先例）: 本文件先于任何实现代码提交。
+# 变更本文件的任何实验语义字段都必须在报告中显式声明并说明理由。
+#
+# 任务书: dev-docs/handovers/NEXT-BATCH-plan.md §W40（唯一任务书）
+# 基线:   reports/p05-public-real-partialclass-result-2026-08-25.json（44.90% @ seed42）
+# ============================================================================
+
+protocol: public_real_round2
+version: w40-preregistered-2026-08-26
+
+question: >
+  数据五路战役的终极追问——飞轮真的转得动吗？统一真实扩展池（9844 条五源，
+  runs/data_campaign/unified/real_expansion_pool_v1.pkl，只读消费）能否提升公开真实层
+  partialclass4 冻结骨干头重训基线（44.90%）？
+  提升 → "数据飞轮持续供数"主张获首个直接实证；
+  不提升 → 如实记录并分析域差瓶颈。
+
+# ---------------------------------------------------------------------------
+# round1 基线定义（原样复跑，协议零改动）
+# ---------------------------------------------------------------------------
+round1_baseline:
+  archived_result: reports/p05-public-real-partialclass-result-2026-08-25.json
+  archived_best_val_acc: 0.4489795918367347   # best epoch 11, seed 42
+  archived_per_class: {jump: 0.0, stay: 0.0, track: 0.2353, watch: 1.0}
+  # 复跑执行既有脚本（只读执行，零改动），仅改输出落点至本窗领地
+  rerun_script: scripts/run_p05_public_real_finetune.py
+  data_pkl: D:\Desktop\psd-framework\runs\public_real_dataset\partialclass4_T30.pkl  # 主检出只读消费
+  init_ckpt: runs/p05_stgcn_bc_full/best.pt
+  protocol_echo:                              # 与存档 config_echo 逐字段一致
+    epochs: 60
+    batch_size: 16
+    patience: 15
+    seed: 42
+    num_classes: 4
+    freeze_backbone: true
+    use_amp: true
+    split: {train: 123, val: 49}              # split 字段权威，无 test holdout
+
+# ---------------------------------------------------------------------------
+# round2 处置定义（唯一变量 = Phase A 适应；Phase B 协议逐字节一致）
+# ---------------------------------------------------------------------------
+round2_treatment:
+  phase_a_adabn:
+    principle: >
+      AdaBN 式无监督域适应（Li et al. 2017 谱系）：backbone 权重与监督标签零接触，
+      仅 BatchNorm running statistics 在池样本无标签前向中累积真实域几何。
+      这是"几何/预训练用途槽位"的最小侵入消费方式——round1 的 freeze_backbone
+      把 backbone BN 钉死在 eval 模式（合成域统计量贯穿始终），正是域差的结构性落点。
+    bn_momentum: null          # None = 累积移动平均（单遍即全量统计），reset 后累积
+    forward: {batch_size: 16, shuffle_seed: 42, passes: 1, amp: false, no_grad: true}
+    adapt_set:
+      selection: usage_scope == 'pretrain_geometric'   # 池内恰 1145 条（503+642）
+      video_c1_w35:
+        n: 642
+        transform: 原样直通（coords_semantic=image_norm_xy_conf01_deadmasked，
+          与 AK image_pixel_xy_score 归一化+死掩码约定一致）
+      aptv2_c2_w26:
+        n: 503
+        transform:
+          - 序列级 bbox 归一化：xy 对全序列可见点联合包围盒仿射到 [0,1]
+            （逐帧归一会注入假尺度动态，沿 W30"宁缺毋滥"判例拒绝）
+          - NaN 补零：W30 映射表诚实缺失槽位 {13尾尖,14/15耳base,17下巴,18/19耳tip,23喉部}
+          - 目标域死掩码调和：{20双眼,21,22withers,23喉部} 置零
+            （AK/w35 YOLO 提点链的死关节约定；APTv2 原生双眼/withers 值被覆盖——
+             一致性优先于信息保留，报告显式披露此代价）
+          - ch3 保持 vis01 二值（APTv2 无置信分数，伪造连续 conf 被禁止）
+    dogset_kinematic_prior:
+      n: 51                     # mann_dogset_21j 原生拓扑，禁跨拓扑混批（W30 条款）
+      role: 物理合理性审计门禁（统计层消费，不入网络输入，不做拓扑映射）
+      metric: >
+        无量纲速度比 = 全关节 RMS 速度（按秒归一）/ 全关节中位两两距离（体尺度代理）。
+        两端各自在原生拓扑内计算，仅在无量纲比值层跨域比较。
+      gate: >
+        宽容带设计：报告两域比值分布与重叠率；硬排除仅针对参考分布
+        [p0.5, p99.5] × 3 之外的物理不可能离群（追踪跳变类毛刺）。
+        若排除比例 >20% 则门禁退化为纯报告模式并如实登记。
+      fps_assumptions:          # 跨域速度归一的显式近似，全部入报告
+        mocap_c3_w27: 60.0      # 池内实测字段
+        video_c1_w35: src_fps 字段（24~30Hz，T30 均匀采样的下界假设）
+        aptv2_c2_w26: 15.0 名义值（池内标注 unknown_fps_consecutive_annotated_frames）
+  phase_b_head_retrain:
+    identity: 与 round1 协议逐字段一致（epochs60/batch16/patience15/seed/AMP/
+      freeze_backbone/split）；唯一差异 = --init 指向 Phase A 适应后的 backbone。
+
+# ---------------------------------------------------------------------------
+# 端点与判读规则（预注册后不得事后挑选）
+# ---------------------------------------------------------------------------
+endpoints:
+  primary: >
+    round2 best_val_acc(seed42) vs round1 双对照（存档 44.90% + 当日复跑值）。
+    当日复跑与存档差异若 >1pp，以当日复跑为主对照（同机同环境公平性优先）并披露偏差。
+  secondary:
+    - seeds {43, 44} 双轮扩展（稳定性诊断；主结论仍以 seed42 为准）
+    - 组件消融臂 r2_w35only / r2_aptv2only（增益来源定位）
+    - per_class_val_acc 四类分解（watch=100%/jump=stay=0 塌缩格局是否缓解）
+  interpretation:
+    flywheel_positive: 主对照 ≥ +2pp 且少数类塌缩不加剧 → 飞轮主张获首个直接实证
+    flywheel_neutral: |Δ| < 2pp → 记录"供数未转化"，分析转化链条断点
+    flywheel_negative: 显著下降或塌缩加剧 → 如实记录 + 域差瓶颈四轴分析
+      （坐标语义/fps 时序率/掩码约定/有效数据量级）
+  negative_result_policy: 负结果照常归档 reports/（沿 W14/W23 双向论证先例）
+
+# ---------------------------------------------------------------------------
+# 未消费槽位声明（范围保真）
+# ---------------------------------------------------------------------------
+not_consumed:
+  dogpose_c5_w29:
+    n: 8476
+    slot: augment_static
+    reason: 任务书范围外（任务书点名 APTv2+DogSet）；静态 GT 与提点链噪声风格不同源，
+      混入会稀释归因。留待后续增广专项。
+  ak_public_q3b_in_pool:
+    reason: 监督核心直接消费 partialclass4_T30.pkl 原件（boundary 字段在池条目中不存在，
+      池 ak 条目无法喂 STGCNBCTrainer）；两轮共用同一 pkl 保证切分逐位一致。
+
+# ---------------------------------------------------------------------------
+# 领地补充申报（已 BOARD 登记，checkin 时 -Permit）
+# ---------------------------------------------------------------------------
+territory_supplement:
+  new_files:
+    - scripts/public_real_round2_lib.py
+    - scripts/run_p05_public_real_round2.py
+    - psd/data/tests/test_public_real_round2.py
+forbidden:
+  - scripts/build_unified_pool.py 及统一池组装器（只读消费其产物）
+  - AK 原始 pkl / runs/public_real_dataset/**（只读）
+  - docs/paper/**、decisions、*ntu*、relay 队列文件
