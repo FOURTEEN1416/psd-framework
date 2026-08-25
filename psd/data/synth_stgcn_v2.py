@@ -29,6 +29,9 @@ __all__ = [
     "ks_distance",
     "hist_l1_distance",
     "fidelity_metrics",
+    "fit_from_reference",
+    "make_synthetic_dataset_v2",
+    "make_v1style_baseline_17j",
 ]
 
 # ---------------------------------------------------------------------------
@@ -174,9 +177,54 @@ def fit_from_reference(reference_kpts: np.ndarray) -> Dict[str, object]:
             逐关节收集 bootstrap 池用于生成 conf 通道.
 
     Returns:
-        params dict (见测试契约).
+        params dict:
+            topology: "coco17"
+            v / clip_t: 关节数 / 参考 clip 帧数
+            mu, sigma_pos: (V, 2) 位置均值与边缘 std
+            phi, innov: (V, 2) AR(1) 系数与新息 std
+            conf_pools: list[V] of np.ndarray 或 None
     """
-    raise NotImplementedError("W28 RED: 待实现")
+    kpts = np.asarray(reference_kpts, dtype=np.float64)
+    if kpts.ndim == 3:
+        kpts = kpts[None]
+    n, t_len, v_count, c_dim = kpts.shape
+    xy = kpts[..., :2]
+
+    pos = xy.reshape(-1, v_count, 2)                     # 样本内池化位置
+    vel = np.diff(xy, axis=1).reshape(-1, v_count, 2)    # 仅样本内帧间差分
+    mu = pos.mean(axis=0)
+    var_pos = pos.var(axis=0)
+    var_vel = vel.var(axis=0)
+
+    eps = 1e-12
+    phi = np.where(
+        var_pos > eps, 1.0 - var_vel / (2.0 * var_pos + eps), 0.0
+    )
+    phi = np.clip(phi, 0.0, 0.99)
+    innov = np.sqrt(np.maximum(var_pos * (1.0 - phi**2), 0.0))
+
+    conf_pools = None
+    if c_dim >= 3:
+        # 通道布局: x(0), y(1), 可见度/置信度(2)
+        conf_pools = [kpts[:, :, j, 2].ravel() for j in range(v_count)]
+
+    return {
+        "topology": "coco17",
+        "v": v_count,
+        "clip_t": t_len,
+        "mu": mu,
+        "sigma_pos": np.sqrt(var_pos),
+        "phi": phi,
+        "innov": innov,
+        "conf_pools": conf_pools,
+    }
+
+
+def _default_classes() -> List[str]:
+    """默认类清单: 只读引用旧模块常量 (不触碰其任何行为)."""
+    from psd.data.synth_stgcn import ALL_BEHAVIORS_22
+
+    return list(ALL_BEHAVIORS_22)
 
 
 def make_synthetic_dataset_v2(
@@ -190,7 +238,68 @@ def make_synthetic_dataset_v2(
     时序模型: p_t = mu + phi * (p_{t-1} - mu) + innov * eps,
     首帧 p_0 ~ N(mu, sigma_pos^2).
     """
-    raise NotImplementedError("W28 RED: 待实现")
+    rng = np.random.default_rng(seed)
+    class_names = classes if classes is not None else _default_classes()
+    v_count: int = int(params["v"])
+    t_clip: int = int(params["clip_t"])
+    mu = np.asarray(params["mu"], dtype=np.float64)
+    sigma_pos = np.asarray(params["sigma_pos"], dtype=np.float64)
+    phi = np.asarray(params["phi"], dtype=np.float64)
+    innov = np.asarray(params["innov"], dtype=np.float64)
+    pools = params.get("conf_pools")
+
+    samples: List[Dict] = []
+    for ci, cname in enumerate(class_names):
+        for i in range(samples_per_class):
+            p = np.empty((t_clip, v_count, 2), dtype=np.float64)
+            p[0] = mu + sigma_pos * rng.standard_normal((v_count, 2))
+            for t in range(1, t_clip):
+                p[t] = (
+                    mu
+                    + phi * (p[t - 1] - mu)
+                    + innov * rng.standard_normal((v_count, 2))
+                )
+            if pools is not None:
+                conf = np.stack(
+                    [
+                        rng.choice(np.asarray(pools[j]), size=t_clip)
+                        for j in range(v_count)
+                    ],
+                    axis=1,
+                )
+            else:
+                conf = np.ones((t_clip, v_count))
+            kpts = np.concatenate(
+                [p, conf[..., None]], axis=-1
+            ).astype(np.float32)
+
+            boundary = np.zeros(t_clip, dtype=np.float32)
+            boundary[:2] = 1.0
+            boundary[-2:] = 1.0
+
+            samples.append({
+                "keypoints": kpts,
+                "label": ci,
+                "label_name": cname,
+                "boundary": boundary,
+                "frame_dir": f"synv2_{cname}_{i:03d}",
+                "generator": "synth_stgcn_v2",
+            })
+    return samples
+
+
+# 17 关节归一化域四足站姿模板 (侧视, 头朝上/前肢上端为肩)
+_V17_STAND_NORM = np.array([
+    [0.50, 0.62],   # 0 nose
+    [0.46, 0.66], [0.54, 0.66],   # 1/2 eyes
+    [0.44, 0.68], [0.56, 0.68],   # 3/4 ears
+    [0.42, 0.45], [0.58, 0.45],   # 5/6 shoulders
+    [0.40, 0.55], [0.60, 0.55],   # 7/8 elbows
+    [0.38, 0.65], [0.62, 0.65],   # 9/10 wrists
+    [0.44, 0.28], [0.56, 0.28],   # 11/12 hips
+    [0.43, 0.15], [0.57, 0.15],   # 13/14 knees
+    [0.42, 0.04], [0.58, 0.04],   # 15/16 ankles
+], dtype=np.float64)
 
 
 def make_v1style_baseline_17j(
@@ -205,8 +314,41 @@ def make_v1style_baseline_17j(
 
     注意: 独立实现, 不 import/复用/修改 psd/data/synth_stgcn.py 的任何行为;
     存在目的仅为保真度对比中隔离"分布拟合"单一变量.
+    参数字面值沿用 v1 (noise_std=0.05, sin 摆幅 0.05*0.1).
     """
-    raise NotImplementedError("W28 RED: 待实现")
+    rng = np.random.default_rng(seed)
+    class_names = classes if classes is not None else _default_classes()
+    sin_amp = 0.005  # v1: sin_amp(0.05) × 全局系数(0.1), 归一化域同量级
+    v_count = len(_V17_STAND_NORM)
+
+    samples: List[Dict] = []
+    for ci, cname in enumerate(class_names):
+        for i in range(samples_per_class):
+            phase = rng.uniform(0, 2 * np.pi)
+            t_axis = np.arange(T, dtype=np.float64) / max(T - 1, 1)
+            wave = sin_amp * np.sin(2 * np.pi * t_axis + phase)
+
+            kpts = np.zeros((T, v_count, 3), dtype=np.float32)
+            kpts[..., :2] = _V17_STAND_NORM[None, :, :] + wave[:, None, None]
+            for c in range(2):
+                kpts[..., c] += rng.normal(
+                    0.0, noise_std, size=(T, v_count)
+                ).astype(np.float32)
+            kpts[..., 2] = 1.0
+
+            boundary = np.zeros(T, dtype=np.float32)
+            boundary[:2] = 1.0
+            boundary[-2:] = 1.0
+
+            samples.append({
+                "keypoints": kpts,
+                "label": ci,
+                "label_name": cname,
+                "boundary": boundary,
+                "frame_dir": f"v1style17_{cname}_{i:03d}",
+                "generator": "synth_v1style_17j",
+            })
+    return samples
 
 
 def fidelity_metrics(ref_angles: np.ndarray, syn_angles: np.ndarray,
