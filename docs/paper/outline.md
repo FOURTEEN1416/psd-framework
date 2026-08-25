@@ -162,7 +162,7 @@ Abstract 0.2 ｜ Intro 1.5 ｜ RW 1.5 ｜ Method 4 ｜ Experiments 3 ｜ Ablatio
 | # | 级别 | 风险 | 缓解动作 | 状态 |
 |---|------|------|---------|------|
 | R1 | 🔴 CRITICAL | **行为级证据为零**：唯一实测数字是 dog-ID 代理探针，审稿人将质疑"承诺行为识别却无行为识别证据" | C3 措辞永久锁死在"表征区分度"层面；C4-C7 行为级主张全部显式挂 PENDING；P0.4/P0.5 是投稿硬前置 | ⏳ 待实验 |
-| R2 | 🔴 CRITICAL | **标题过度主张风险**：副句 "under Evolving Evaluation Criteria" 的唯一证据 E6 待做 | E6 设计已在 §3.4 形式化；预案：E6 若弱则降级标题为 "...for Low-Resource Animal Behavior Recognition"（投稿前用户裁决）；**C1 实验已获合成层 small 档证据**（墙钟保守 ≥3×、精度 +2.27pp、三 seed 全向一致，`reports/c1-decouple-cost-2026-08-24.md`） | 🟡 合成层实证支持，full 档确认后终裁（降级预案保留） |
+| R2 | 🔴 CRITICAL | **标题过度主张风险**：副句 "under Evolving Evaluation Criteria" 的唯一证据 E6 待做 | E6 设计已在 §3.4 形式化；预案：E6 若弱则降级标题为 "...for Low-Resource Animal Behavior Recognition"（投稿前用户裁决）；**C1 双档证据齐备**：合成层 small 档（7.32×，保守 ≥3×）+ **full 档确认（6.07×，同 seed 配对最小 4.00×，`reports/c1-decouple-cost-full-2026-08-25.json`）**；精度两档统计等效（full −0.91pp / small +2.27pp，均 <2.3pp）——成本维度实证闭合，标题保留与否归用户终裁 | 🟢 成本维度 full 确认（2026-08-25 W34 回写）；标题终裁待用户 |
 | R3 | 🟠 MAJOR | **incremental 指控**："已知组件组合 + 换域 = 增量工作" | 解耦机制列第一贡献；method.md 补迁移非平凡性论证段；related-work.md 三近邻表量化差异 | ✅ 写作侧已加固 |
 | R4 | 🟠 MAJOR | **重实现正确性存疑**：AimCLR/SMQ/TCL 均为本仓适配实现，审稿人会要求验证实现等价性 | ✅ 用户已批准纳入（ADR 0002）；⚠️ 前置=NTU60 骨架数据获取（本仓现无），P0.2 释放 GPU 后独立小窗口执行 | 📋 已批准待排程 |
 | R5 | 🟠 MAJOR | **数据集论文未引**：InterPet4D/AK/APTv2 引用缺失（PR 投稿硬要求） | 引用计划 §6 已补三条 [CITATION-NEEDED]；文献终审窗口必须补齐 | ✅ W17 已解除（2026-08-24，三条题录取自官方渠道自带 BibTeX） |

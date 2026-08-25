@@ -125,6 +125,26 @@ $UpstreamCheckpoints = @(
     "runs/p05_stgcn_bc_full/best.pt"
 )
 
+# gitignore 资产复制清单（W34 发现：external/AimCLR 不随 worktree 走，缺它 W31 测试在新窗必挂）
+$GitignoredAssetDirs = @(
+    "external/AimCLR"
+)
+
+function Copy-GitignoredAssets {
+    foreach ($rel in $GitignoredAssetDirs) {
+        $src = Join-Path $MainRoot $rel
+        $dst = Join-Path $WorktreeDir $rel
+        if (-not (Test-Path -LiteralPath $src)) {
+            Write-Warning "[asset] gitignore 资产缺失，跳过: $src"
+            continue
+        }
+        if (Test-Path -LiteralPath $dst) { continue }
+        New-Item -ItemType Directory -Force -Path (Split-Path $dst -Parent) | Out-Null
+        Copy-Item -LiteralPath $src -Destination $dst -Recurse -Force
+        Write-Host "[asset] 已复制(gitignore 资产): $rel"
+    }
+}
+
 function Copy-UpstreamCheckpoints {
     foreach ($rel in $UpstreamCheckpoints) {
         $src = Join-Path $MainRoot $rel
@@ -179,6 +199,7 @@ try {
     # ── 3. runs/ 独立新建（checkout 自带 runs/.gitkeep）+ checkpoint 清单复制 ──
     New-Item -ItemType Directory -Force -Path (Join-Path $WorktreeDir "runs") | Out-Null
     Copy-UpstreamCheckpoints
+    Copy-GitignoredAssets
 
     # ── 4. .venv 不复制（文档约定见下方提示词）──
 }
