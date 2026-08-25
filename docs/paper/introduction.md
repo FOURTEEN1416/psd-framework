@@ -12,14 +12,12 @@ Behavior recognition in animals underpins welfare monitoring and working-dog tra
 <!-- [DRAFT-W32-C7-pivot · 依据 ADR-0006 + experiment-skeleton v0.6 E5 换轨块 · 待终稿窗口复核合并]
      本段 C7 相关改动两处（其余句未动）：
      ① 方法尾句：uncertainty-based active learning → warm-started semantic-layer initialization（效率主张正文/摘要禁用，ADR-0006 裁决 1）
-     ② [RESULT-3] 句：按 outline §4.1 重选源候选 C（C1 墙钟比）预填——"≥3× lower retraining cost (conservative bound, synthetic-tier benchmark)"；
+     ② [RESULT-3] 句：✅ **用户已裁决选候选 C（2026-08-25，歆歆推荐采纳）**——正文现句即定稿语义，
+        终稿窗口无需再二选一，仅需复核措辞与口径标注。
         数据锚点 reports/c1-decouple-cost-2026-08-24.json aggregated（实测均值 7.32×，论文措辞取保守区间 ≥3×），
-        ⚠️ 预注册条款：full 档 GPU 复跑若趋势矛盾须回改本句。
-     备选版本（若用户裁决 RESULT-3 选候选 B 保守口径，公开真实层）:
-       "...and its iterated pseudo-labeling lifts pool precision by **10.69 pp** (paired t-test, p=0.030) over its unlabeled start point [RESULT-3].
-        数据锚点 reports/p04-tcl-results.json cells/on_consensus_a1.0/paired_first_vs_final/delta_pp_mean=10.69±3.28。
-        ⚠️ 峰值口径 +17.88pp 存在 cherry-picking 风险，摘要不建议使用。
-     候选 A（SMQ 分割 IoU 1.53×）与本句 cost 语义不符，仅建议留在正文 §4.3-E2。
+        ⚠️ 预注册条款仍生效：full 档 GPU 复跑若趋势矛盾须回改本句。
+        （曾评估的候选 B 保守版 +10.69pp / 候选 A SMQ 1.53× 已否决——B 因摘要-正文口径不一致风险，A 因 cost 语义不符；
+         B 的数字仍可用于正文 §4.3-E4/tab3，不受本裁决影响。裁决全文见 BOARD 与记忆库 shared。）
 -->
 
 > 自检：四要素齐全（背景/方法/结果/结论）✅；数值结果 3 处（1 实 + 2 占位）✅；五句公式结构 ✅；无 "Recently... increasing attention" 类开头 ✅。
@@ -99,3 +97,4 @@ Across three data calibers, PSD reaches **[RESULT-4: 22 类主精度]** using [R
 |------|------|------|
 | v0.1 | 2026-08-23 | W5 增量二：Abstract 占位稿 + Introduction 六段式初稿 |
 | v0.2-draft | 2026-08-25 | W32 C7 换轨预改写（依据 ADR-0006 / experiment-skeleton v0.6）：四处 C7 相关句段替换 + DRAFT 注释锚点——效率主张移除、warm-start 可用性上桌、[RESULT-3] 按 C1 候选预填并附 B 候选备选句；领地边界：仅 C7 相关句段（自助收编 -Permit 特批） |
+| v0.2.1-draft | 2026-08-25 | 用户裁决 [RESULT-3] 选候选 C（解耦墙钟 ≥3× 保守界）落定：Abstract 注释块改为裁决已定态（B/A 备选否决留痕），终稿窗口零决策合并 |
