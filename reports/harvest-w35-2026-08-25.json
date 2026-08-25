@@ -1,0 +1,155 @@
+{
+  "schema": "psd.data_campaign.harvest.w35_report_v1",
+  "generated_at": "2026-08-25",
+  "extract": {
+    "n_total": 642,
+    "n_ok": 642,
+    "n_all_missing": 0,
+    "n_error": 0,
+    "error_breakdown": {},
+    "all_missing_ids": [],
+    "rule_frames_total": 171943,
+    "rule_hit_rate": 0.8765,
+    "want_detect_rate": 0.9373,
+    "low_conf_rate": 1.0888,
+    "no_detect_rate": 3.6277,
+    "mean_n_interpolated_seq30": 3.628,
+    "src_fps_values": [
+      23.98,
+      24.0,
+      25.0,
+      29.94,
+      29.97,
+      30.0
+    ]
+  },
+  "seeds": {
+    "n_rows": 642,
+    "n_error_rows": 0,
+    "n_with_segments": 642,
+    "segment_count_by_class": {
+      "lying": 3818,
+      "sitting": 646,
+      "unknown": 613
+    },
+    "frame_occupancy_frac": {
+      "lying": 0.8466,
+      "sitting": 0.0855,
+      "standing": 0.0,
+      "walking": 0.0,
+      "running": 0.0,
+      "rise_transition": 0.0,
+      "jump": 0.0,
+      "unknown": 0.0679
+    },
+    "confidence_by_class": {
+      "lying": {
+        "n": 3818,
+        "mean": 0.7781,
+        "p50": 0.8057,
+        "min": 0.2357,
+        "max": 1.0
+      },
+      "sitting": {
+        "n": 646,
+        "mean": 0.8753,
+        "p50": 0.925,
+        "min": 0.25,
+        "max": 1.0
+      },
+      "standing": {
+        "n": 0,
+        "mean": null,
+        "p50": null,
+        "min": null,
+        "max": null
+      },
+      "walking": {
+        "n": 0,
+        "mean": null,
+        "p50": null,
+        "min": null,
+        "max": null
+      },
+      "running": {
+        "n": 0,
+        "mean": null,
+        "p50": null,
+        "min": null,
+        "max": null
+      },
+      "rise_transition": {
+        "n": 0,
+        "mean": null,
+        "p50": null,
+        "min": null,
+        "max": null
+      },
+      "jump": {
+        "n": 0,
+        "mean": null,
+        "p50": null,
+        "min": null,
+        "max": null
+      }
+    },
+    "total_segment_duration_s_approx_at10fps": 17194.3,
+    "unknown_heavy_clips_gt90pct": 1,
+    "body_scale_px_median": 103.5
+  },
+  "structural_audit": {
+    "mechanism": {
+      "standing_unreachable": "clearance≡0 恒 < stand_min=0.35",
+      "walking_running_unreachable": "gait 门禁 c>lie_max=0.18 恒假",
+      "jump_blocked_second_condition": "air 条件可活但 c>stand_min+spike 恒假",
+      "rise_transition_unreachable": "d_clearance≡0 无尖峰",
+      "lying_overfire_risk": "comp=0.5*head_norm 单腿支撑, head_norm<1.5 即触发"
+    },
+    "measured_dead_classes": {
+      "standing": {
+        "segment_count": 0,
+        "frame_frac": 0.0
+      },
+      "walking": {
+        "segment_count": 0,
+        "frame_frac": 0.0
+      },
+      "running": {
+        "segment_count": 0,
+        "frame_frac": 0.0
+      },
+      "rise_transition": {
+        "segment_count": 0,
+        "frame_frac": 0.0
+      },
+      "jump": {
+        "segment_count": 0,
+        "frame_frac": 0.0
+      }
+    },
+    "prediction_confirmed": true,
+    "lying_frame_frac": 0.8466,
+    "sitting_frame_frac": 0.0855,
+    "verdict": "结构降级实证成立: 高度依赖类全零",
+    "downstream_recommendation": "label_status=deferred_pixel_domain(W30 判例): 种子草稿不入监督管线;如需激活视频通道标签, 须先在 W6 引擎层做 2D 像素域适配(以 front_tops/rear_tops 中值替代 withers 的 clearance 代理), 属引擎领地变更"
+  },
+  "ak_comparison": {
+    "ak_source_path": "D:\\Desktop\\psd-framework\\runs\\public_real_dataset\\partialclass4_extract_quality.json",
+    "ak_n_videos": 172,
+    "ak_mean_no_detect_per_t30": 1.692,
+    "ak_mean_low_conf_per_t30": 0.064,
+    "ak_mean_interpolated_per_t30": 1.756,
+    "w35_mean_no_detect_per_want": 3.6277,
+    "w35_mean_low_conf_per_want": 1.0888,
+    "comparison_note": "AK 为 T=30 均匀采样口径(每视频固定 30 帧), W35 规则轨 ~10fps 密采样口径;比率不可直接混比, 方向性结论: 同权重对 W25 抓取片段的检测稳定性是否与 AK 同量级"
+  },
+  "w6_baseline_headline_frame_frac": {
+    "sitting": 0.363,
+    "walking": 0.234
+  },
+  "inputs": {
+    "extract_index": "D:\\Desktop\\psd-framework-W35\\runs\\data_campaign\\video\\keypoints_w35\\extract_index.jsonl",
+    "seed_draft": "D:\\Desktop\\psd-framework-W35\\runs\\data_campaign\\video\\keypoints_w35\\seed_labels_draft.jsonl",
+    "manifest_note": "正式池=manifest 准入 642 片段(实测对账零差额); 任务书口径 759 含 _runtime 83 个未准入候选缓存"
+  }
+}

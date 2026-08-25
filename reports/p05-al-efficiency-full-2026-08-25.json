@@ -1,0 +1,1902 @@
+{
+  "meta": {
+    "date": "2026-08-25T17:44:46",
+    "window": "W14",
+    "git_sha": "6e2fa20",
+    "layer": "synthetic",
+    "layer_note": "合成层口径：GT oracle 来自合成生成器标签；真实 K9 层数据未到位，≥85% 验收结论不得由本实验外推",
+    "protocol": {
+      "design": "配对增量式 AL：同 seed 两臂共享随机初始核(b=20)，增量由各臂策略以上一累计预算模型打分选择；每预算点冷启动重训",
+      "uncertainty_method": "softmax_entropy",
+      "uncertainty_rationale": "熵=单次确定性前向的信息论标准量(Settles 2009)；MC-dropout 需多次前向且 GPU 被占、STGCNBC dropout=0；边际忽略 22 类尾部概率质量",
+      "curve_metric": "best_val_acc（22 类 top-1，固定 GT 验证集 n=330）",
+      "error_bars": "mean±std across 3 seeds"
+    },
+    "data_fingerprints": {
+      "pool_gen": {
+        "samples_per_class": 10,
+        "T": 30,
+        "noise_std": 0.05,
+        "seed": 20261
+      },
+      "val_gen": {
+        "samples_per_class": 15,
+        "T": 30,
+        "noise_std": 0.05,
+        "seed": 20262
+      }
+    },
+    "model": {
+      "in_channels": 3,
+      "num_classes": 22,
+      "base_channels": 64,
+      "num_stages": 10
+    },
+    "train": {
+      "lr": 0.001,
+      "weight_decay": 0.0001,
+      "epochs": 120,
+      "batch_size": 32,
+      "warmup_epochs": 5,
+      "early_stopping": true,
+      "patience": 25,
+      "use_amp": true,
+      "device": "auto",
+      "output_dir": "runs/p05_al_efficiency/full"
+    },
+    "total_time_sec": 1315.2
+  },
+  "curves": {
+    "entropy": {
+      "20": {
+        "mean": 0.04545454545454545,
+        "std": 8.498374721940739e-18,
+        "per_seed": {
+          "42": 0.045454545454545456,
+          "43": 0.045454545454545456,
+          "44": 0.045454545454545456
+        }
+      },
+      "50": {
+        "mean": 0.048484848484848485,
+        "std": 0.005248638810814777,
+        "per_seed": {
+          "42": 0.05454545454545454,
+          "43": 0.045454545454545456,
+          "44": 0.045454545454545456
+        }
+      },
+      "100": {
+        "mean": 0.6666666666666666,
+        "std": 0.0538678449534278,
+        "per_seed": {
+          "42": 0.6060606060606061,
+          "43": 0.6848484848484848,
+          "44": 0.7090909090909091
+        }
+      },
+      "200": {
+        "mean": 0.7848484848484848,
+        "std": 0.06037836013688262,
+        "per_seed": {
+          "42": 0.8212121212121212,
+          "43": 0.7151515151515152,
+          "44": 0.8181818181818182
+        }
+      }
+    },
+    "random": {
+      "20": {
+        "mean": 0.06060606060606061,
+        "std": 0.0262431940540739,
+        "per_seed": {
+          "42": 0.045454545454545456,
+          "43": 0.045454545454545456,
+          "44": 0.09090909090909091
+        }
+      },
+      "50": {
+        "mean": 0.06060606060606061,
+        "std": 0.026243194054073903,
+        "per_seed": {
+          "42": 0.09090909090909091,
+          "43": 0.045454545454545456,
+          "44": 0.045454545454545456
+        }
+      },
+      "100": {
+        "mean": 0.7898989898989899,
+        "std": 0.051633850178311326,
+        "per_seed": {
+          "42": 0.7303030303030303,
+          "43": 0.8212121212121212,
+          "44": 0.8181818181818182
+        }
+      },
+      "200": {
+        "mean": 0.8626262626262626,
+        "std": 0.01948212274948074,
+        "per_seed": {
+          "42": 0.8545454545454545,
+          "43": 0.8484848484848485,
+          "44": 0.8848484848484849
+        }
+      }
+    }
+  },
+  "curves_per_seed": {
+    "entropy": {
+      "42": {
+        "20": 0.045454545454545456,
+        "50": 0.05454545454545454,
+        "100": 0.6060606060606061,
+        "200": 0.8212121212121212
+      },
+      "43": {
+        "20": 0.045454545454545456,
+        "50": 0.045454545454545456,
+        "100": 0.6848484848484848,
+        "200": 0.7151515151515152
+      },
+      "44": {
+        "20": 0.045454545454545456,
+        "50": 0.045454545454545456,
+        "100": 0.7090909090909091,
+        "200": 0.8181818181818182
+      }
+    },
+    "random": {
+      "42": {
+        "20": 0.045454545454545456,
+        "50": 0.09090909090909091,
+        "100": 0.7303030303030303,
+        "200": 0.8545454545454545
+      },
+      "43": {
+        "20": 0.045454545454545456,
+        "50": 0.045454545454545456,
+        "100": 0.8212121212121212,
+        "200": 0.8484848484848485
+      },
+      "44": {
+        "20": 0.09090909090909091,
+        "50": 0.045454545454545456,
+        "100": 0.8181818181818182,
+        "200": 0.8848484848484849
+      }
+    }
+  },
+  "real_pool_scoring": {
+    "n_scored": 191,
+    "n_skipped": 0,
+    "entropy_stats": {
+      "mean": -9.980672059930643e-13,
+      "std": 1.905021951171371e-14,
+      "min": -1.000088900581841e-12,
+      "max": -7.706067892443516e-13,
+      "q25": -1.000088900581841e-12,
+      "q50": -1.000088900581841e-12,
+      "q75": -1.000088900581841e-12
+    },
+    "logit_margin_stats": {
+      "mean": 100.85601888526797,
+      "min": 32.554941177368164,
+      "max": 206.00946807861328
+    },
+    "entropy_degenerate": true,
+    "ranked_ids": [
+      "interpet_dog11_p22_take04_ego_001",
+      "interpet_dog02_p05_take04_ego_002",
+      "interpet_dog02_p05_take06_ego_002",
+      "interpet_dog11_p23_take06_ego_001",
+      "interpet_dog02_p04_take05_ego_002",
+      "interpet_dog02_p08_take02_ego_002",
+      "interpet_dog11_p22_take03_ego_003",
+      "interpet_dog02_p07_take01_ego_001",
+      "interpet_dog02_p04_take05_ego_002",
+      "interpet_dog04_p11_take05_ego_001",
+      "interpet_dog03_p08_take11_ego_002",
+      "interpet_dog02_p04_take05_ego_002",
+      "interpet_dog02_p04_take05_ego_002",
+      "interpet_dog01_p01_take10_ego_002",
+      "interpet_dog09_p19_take04_ego_002",
+      "interpet_dog11_p23_take06_ego_001",
+      "interpet_dog08_p17_take07_ego_001",
+      "interpet_dog11_p22_take03_ego_002",
+      "interpet_dog08_p17_take07_ego_001",
+      "interpet_dog11_p22_take03_ego_003",
+      "interpet_dog05_p12_take01_ego_002",
+      "interpet_dog02_p04_take05_ego_002",
+      "interpet_dog01_p01_take12_ego_001",
+      "interpet_dog03_p08_take11_ego_001",
+      "interpet_dog03_p08_take06_ego_001",
+      "interpet_dog01_p01_take10_ego_002",
+      "interpet_dog11_p23_take06_ego_002",
+      "interpet_dog02_p04_take08_ego_001",
+      "interpet_dog01_p03_take01_ego_001",
+      "interpet_dog06_p02_take01_ego_001",
+      "interpet_dog08_p17_take07_ego_001",
+      "interpet_dog03_p08_take11_ego_002",
+      "interpet_dog01_p01_take10_ego_002",
+      "interpet_dog05_p12_take01_ego_002",
+      "interpet_dog04_p11_take05_ego_001",
+      "interpet_dog04_p11_take05_ego_001",
+      "interpet_dog04_p11_take05_ego_001",
+      "interpet_dog10_p20_take01_ego_001",
+      "interpet_dog09_p20_take01_ego_001",
+      "interpet_dog10_p20_take01_ego_002",
+      "interpet_dog01_p01_take10_ego_002",
+      "interpet_dog02_p04_take05_ego_002",
+      "interpet_dog01_p01_take02_ego_002",
+      "interpet_dog01_p01_take02_ego_002",
+      "interpet_dog01_p01_take02_ego_002",
+      "interpet_dog01_p01_take02_ego_002",
+      "interpet_dog01_p01_take02_ego_002",
+      "interpet_dog01_p01_take02_ego_002",
+      "interpet_dog01_p01_take03_ego_001",
+      "interpet_dog01_p01_take03_ego_001",
+      "interpet_dog01_p01_take04_ego_002",
+      "interpet_dog01_p01_take05_ego_001",
+      "interpet_dog01_p01_take05_ego_001",
+      "interpet_dog01_p01_take05_ego_002",
+      "interpet_dog01_p01_take10_ego_002",
+      "interpet_dog01_p01_take10_ego_002",
+      "interpet_dog01_p01_take12_ego_001",
+      "interpet_dog01_p01_take12_ego_001",
+      "interpet_dog01_p01_take12_ego_001",
+      "interpet_dog01_p01_take12_ego_001",
+      "interpet_dog01_p01_take12_ego_001",
+      "interpet_dog01_p01_take12_ego_001",
+      "interpet_dog01_p02_take01_ego_001",
+      "interpet_dog01_p03_take01_ego_001",
+      "interpet_dog02_p04_take01_ego_002",
+      "interpet_dog02_p04_take01_ego_002",
+      "interpet_dog02_p04_take05_ego_002",
+      "interpet_dog02_p04_take08_ego_001",
+      "interpet_dog02_p04_take08_ego_002",
+      "interpet_dog02_p05_take04_ego_002",
+      "interpet_dog02_p05_take06_ego_002",
+      "interpet_dog02_p05_take06_ego_002",
+      "interpet_dog02_p07_take01_ego_001",
+      "interpet_dog03_p08_take06_ego_001",
+      "interpet_dog03_p08_take06_ego_001",
+      "interpet_dog03_p08_take06_ego_003",
+      "interpet_dog03_p08_take06_ego_003",
+      "interpet_dog03_p08_take09_ego_001",
+      "interpet_dog03_p08_take11_ego_001",
+      "interpet_dog03_p08_take11_ego_001",
+      "interpet_dog03_p08_take11_ego_002",
+      "interpet_dog03_p09_take01_ego_003",
+      "interpet_dog03_p09_take01_ego_003",
+      "interpet_dog03_p10_take01_ego_002",
+      "interpet_dog03_p10_take01_ego_002",
+      "interpet_dog04_p11_take02_ego_001",
+      "interpet_dog04_p11_take02_ego_001",
+      "interpet_dog04_p11_take05_ego_001",
+      "interpet_dog04_p11_take05_ego_001",
+      "interpet_dog04_p11_take05_ego_001",
+      "interpet_dog04_p11_take08_ego_001",
+      "interpet_dog04_p11_take08_ego_001",
+      "interpet_dog05_p02_take02_ego_001",
+      "interpet_dog05_p02_take02_ego_001",
+      "interpet_dog05_p02_take02_ego_001",
+      "interpet_dog05_p02_take02_ego_001",
+      "interpet_dog05_p02_take02_ego_001",
+      "interpet_dog05_p02_take02_ego_001",
+      "interpet_dog05_p02_take02_ego_002",
+      "interpet_dog05_p12_take01_ego_002",
+      "interpet_dog05_p12_take01_ego_002",
+      "interpet_dog05_p12_take01_ego_002",
+      "interpet_dog05_p12_take01_ego_002",
+      "interpet_dog05_p12_take01_ego_002",
+      "interpet_dog05_p12_take01_ego_002",
+      "interpet_dog05_p12_take02_ego_002",
+      "interpet_dog05_p12_take02_ego_002",
+      "interpet_dog05_p12_take02_ego_002",
+      "interpet_dog05_p12_take02_ego_002",
+      "interpet_dog05_p12_take06_ego_001",
+      "interpet_dog05_p12_take06_ego_001",
+      "interpet_dog05_p12_take10_ego_002",
+      "interpet_dog05_p12_take10_ego_002",
+      "interpet_dog05_p12_take10_ego_002",
+      "interpet_dog05_p12_take10_ego_002",
+      "interpet_dog06_p02_take01_ego_001",
+      "interpet_dog06_p02_take01_ego_001",
+      "interpet_dog06_p13_take02_ego_002",
+      "interpet_dog06_p13_take02_ego_002",
+      "interpet_dog06_p13_take02_ego_002",
+      "interpet_dog06_p13_take02_ego_002",
+      "interpet_dog06_p13_take03_ego_002",
+      "interpet_dog06_p13_take03_ego_002",
+      "interpet_dog06_p13_take05_ego_001",
+      "interpet_dog06_p13_take05_ego_001",
+      "interpet_dog06_p14_take02_ego_001",
+      "interpet_dog06_p14_take02_ego_001",
+      "interpet_dog07_p07_take01_ego_001",
+      "interpet_dog07_p07_take01_ego_001",
+      "interpet_dog07_p07_take01_ego_001",
+      "interpet_dog07_p15_take02_ego_001",
+      "interpet_dog07_p15_take02_ego_001",
+      "interpet_dog07_p15_take02_ego_001",
+      "interpet_dog07_p15_take02_ego_001",
+      "interpet_dog07_p15_take03_ego_002",
+      "interpet_dog07_p15_take03_ego_002",
+      "interpet_dog07_p16_take04_ego_002",
+      "interpet_dog07_p16_take04_ego_002",
+      "interpet_dog07_p16_take05_ego_002",
+      "interpet_dog07_p16_take05_ego_002",
+      "interpet_dog07_p16_take05_ego_002",
+      "interpet_dog07_p16_take05_ego_002",
+      "interpet_dog07_p16_take05_ego_002",
+      "interpet_dog07_p16_take05_ego_002",
+      "interpet_dog07_p16_take05_ego_002",
+      "interpet_dog07_p16_take05_ego_002",
+      "interpet_dog07_p16_take05_ego_002",
+      "interpet_dog08_p17_take01_ego_002",
+      "interpet_dog08_p17_take01_ego_002",
+      "interpet_dog08_p17_take01_ego_002",
+      "interpet_dog08_p17_take04_ego_002",
+      "interpet_dog08_p17_take04_ego_003",
+      "interpet_dog08_p17_take04_ego_003",
+      "interpet_dog08_p17_take04_ego_003",
+      "interpet_dog08_p17_take06_ego_001",
+      "interpet_dog08_p17_take06_ego_001",
+      "interpet_dog08_p17_take07_ego_001",
+      "interpet_dog08_p18_take01_ego_001",
+      "interpet_dog08_p18_take01_ego_001",
+      "interpet_dog08_p18_take01_ego_001",
+      "interpet_dog08_p18_take01_ego_002",
+      "interpet_dog09_p19_take04_ego_002",
+      "interpet_dog09_p19_take04_ego_002",
+      "interpet_dog09_p19_take04_ego_002",
+      "interpet_dog09_p20_take01_ego_001",
+      "interpet_dog10_p20_take01_ego_002",
+      "interpet_dog10_p21_take05_ego_001",
+      "interpet_dog10_p21_take05_ego_001",
+      "interpet_dog10_p21_take05_ego_001",
+      "interpet_dog10_p21_take05_ego_001",
+      "interpet_dog10_p21_take05_ego_001",
+      "interpet_dog10_p21_take09_ego_002",
+      "interpet_dog10_p21_take09_ego_002",
+      "interpet_dog11_p22_take03_ego_002",
+      "interpet_dog11_p22_take03_ego_003",
+      "interpet_dog11_p22_take03_ego_003",
+      "interpet_dog11_p22_take03_ego_003",
+      "interpet_dog11_p22_take04_ego_001",
+      "interpet_dog11_p22_take04_ego_001",
+      "interpet_dog11_p22_take04_ego_001",
+      "interpet_dog11_p22_take04_ego_001",
+      "interpet_dog11_p22_take04_ego_001",
+      "interpet_dog11_p23_take06_ego_002",
+      "interpet_dog11_p23_take06_ego_002",
+      "interpet_dog11_p23_take06_ego_002",
+      "interpet_dog11_p23_take06_ego_002",
+      "interpet_dog11_p23_take06_ego_002",
+      "interpet_dog11_p23_take06_ego_003",
+      "interpet_dog11_p23_take06_ego_003",
+      "interpet_dog11_p23_take06_ego_003",
+      "interpet_dog11_p23_take06_ego_003"
+    ],
+    "ranked_records": [
+      {
+        "clip_id": "interpet_dog11_p22_take04_ego_001",
+        "entropy": -7.706067892443516e-13,
+        "pseudo_label": "sitting",
+        "kappa_margin": 0.396349
+      },
+      {
+        "clip_id": "interpet_dog02_p05_take04_ego_002",
+        "entropy": -8.693110576480641e-13,
+        "pseudo_label": "sitting",
+        "kappa_margin": 0.422839
+      },
+      {
+        "clip_id": "interpet_dog02_p05_take06_ego_002",
+        "entropy": -9.831084397477607e-13,
+        "pseudo_label": "sitting",
+        "kappa_margin": 0.277653
+      },
+      {
+        "clip_id": "interpet_dog11_p23_take06_ego_001",
+        "entropy": -9.936952584399907e-13,
+        "pseudo_label": "sitting",
+        "kappa_margin": 0.426319
+      },
+      {
+        "clip_id": "interpet_dog02_p04_take05_ego_002",
+        "entropy": -9.988535728442516e-13,
+        "pseudo_label": "sitting",
+        "kappa_margin": 0.300932
+      },
+      {
+        "clip_id": "interpet_dog02_p08_take02_ego_002",
+        "entropy": -9.991218070612801e-13,
+        "pseudo_label": "sitting",
+        "kappa_margin": 0.200801
+      },
+      {
+        "clip_id": "interpet_dog11_p22_take03_ego_003",
+        "entropy": -9.998066332339937e-13,
+        "pseudo_label": "sitting",
+        "kappa_margin": 0.230824
+      },
+      {
+        "clip_id": "interpet_dog02_p07_take01_ego_001",
+        "entropy": -1.0000810955411188e-12,
+        "pseudo_label": "sitting",
+        "kappa_margin": 0.248656
+      },
+      {
+        "clip_id": "interpet_dog02_p04_take05_ego_002",
+        "entropy": -1.0000813318667622e-12,
+        "pseudo_label": "sitting",
+        "kappa_margin": 0.303174
+      },
+      {
+        "clip_id": "interpet_dog04_p11_take05_ego_001",
+        "entropy": -1.0000824345157687e-12,
+        "pseudo_label": "sitting",
+        "kappa_margin": 0.422589
+      },
+      {
+        "clip_id": "interpet_dog03_p08_take11_ego_002",
+        "entropy": -1.0000877227586971e-12,
+        "pseudo_label": "running",
+        "kappa_margin": 0.764096
+      },
+      {
+        "clip_id": "interpet_dog02_p04_take05_ego_002",
+        "entropy": -1.000087764158305e-12,
+        "pseudo_label": "sitting",
+        "kappa_margin": 0.241375
+      },
+      {
+        "clip_id": "interpet_dog02_p04_take05_ego_002",
+        "entropy": -1.0000881837174947e-12,
+        "pseudo_label": "sitting",
+        "kappa_margin": 0.165892
+      },
+      {
+        "clip_id": "interpet_dog01_p01_take10_ego_002",
+        "entropy": -1.000088859947434e-12,
+        "pseudo_label": "sitting",
+        "kappa_margin": 0.199818
+      },
+      {
+        "clip_id": "interpet_dog09_p19_take04_ego_002",
+        "entropy": -1.000088895421434e-12,
+        "pseudo_label": "sitting",
+        "kappa_margin": 0.509686
+      },
+      {
+        "clip_id": "interpet_dog11_p23_take06_ego_001",
+        "entropy": -1.000088898995893e-12,
+        "pseudo_label": "running",
+        "kappa_margin": 0.53766
+      },
+      {
+        "clip_id": "interpet_dog08_p17_take07_ego_001",
+        "entropy": -1.0000888992843624e-12,
+        "pseudo_label": "sitting",
+        "kappa_margin": 0.417953
+      },
+      {
+        "clip_id": "interpet_dog11_p22_take03_ego_002",
+        "entropy": -1.000088900099443e-12,
+        "pseudo_label": "sitting",
+        "kappa_margin": 0.450654
+      },
+      {
+        "clip_id": "interpet_dog08_p17_take07_ego_001",
+        "entropy": -1.0000889004001256e-12,
+        "pseudo_label": "running",
+        "kappa_margin": 0.885797
+      },
+      {
+        "clip_id": "interpet_dog11_p22_take03_ego_003",
+        "entropy": -1.0000889004363133e-12,
+        "pseudo_label": "sitting",
+        "kappa_margin": 0.194933
+      },
+      {
+        "clip_id": "interpet_dog05_p12_take01_ego_002",
+        "entropy": -1.000088900517902e-12,
+        "pseudo_label": "standing",
+        "kappa_margin": 0.376716
+      },
+      {
+        "clip_id": "interpet_dog02_p04_take05_ego_002",
+        "entropy": -1.0000889005256105e-12,
+        "pseudo_label": "sitting",
+        "kappa_margin": 0.181425
+      },
+      {
+        "clip_id": "interpet_dog01_p01_take12_ego_001",
+        "entropy": -1.0000889005619925e-12,
+        "pseudo_label": "sitting",
+        "kappa_margin": 0.506745
+      },
+      {
+        "clip_id": "interpet_dog03_p08_take11_ego_001",
+        "entropy": -1.0000889005664588e-12,
+        "pseudo_label": "running",
+        "kappa_margin": 0.762641
+      },
+      {
+        "clip_id": "interpet_dog03_p08_take06_ego_001",
+        "entropy": -1.0000889005742588e-12,
+        "pseudo_label": "running",
+        "kappa_margin": 0.888095
+      },
+      {
+        "clip_id": "interpet_dog01_p01_take10_ego_002",
+        "entropy": -1.0000889005742687e-12,
+        "pseudo_label": "sitting",
+        "kappa_margin": 0.354871
+      },
+      {
+        "clip_id": "interpet_dog11_p23_take06_ego_002",
+        "entropy": -1.0000889005761719e-12,
+        "pseudo_label": "running",
+        "kappa_margin": 0.565229
+      },
+      {
+        "clip_id": "interpet_dog02_p04_take08_ego_001",
+        "entropy": -1.000088900578719e-12,
+        "pseudo_label": "running",
+        "kappa_margin": 0.65989
+      },
+      {
+        "clip_id": "interpet_dog01_p03_take01_ego_001",
+        "entropy": -1.0000889005803411e-12,
+        "pseudo_label": "sitting",
+        "kappa_margin": 0.254523
+      },
+      {
+        "clip_id": "interpet_dog06_p02_take01_ego_001",
+        "entropy": -1.000088900581466e-12,
+        "pseudo_label": "running",
+        "kappa_margin": 0.452391
+      },
+      {
+        "clip_id": "interpet_dog08_p17_take07_ego_001",
+        "entropy": -1.0000889005814765e-12,
+        "pseudo_label": "sitting",
+        "kappa_margin": 0.312054
+      },
+      {
+        "clip_id": "interpet_dog03_p08_take11_ego_002",
+        "entropy": -1.0000889005815562e-12,
+        "pseudo_label": "sitting",
+        "kappa_margin": 0.210479
+      },
+      {
+        "clip_id": "interpet_dog01_p01_take10_ego_002",
+        "entropy": -1.0000889005817204e-12,
+        "pseudo_label": "sitting",
+        "kappa_margin": 0.421764
+      },
+      {
+        "clip_id": "interpet_dog05_p12_take01_ego_002",
+        "entropy": -1.0000889005817235e-12,
+        "pseudo_label": "sitting",
+        "kappa_margin": 0.197322
+      },
+      {
+        "clip_id": "interpet_dog04_p11_take05_ego_001",
+        "entropy": -1.000088900581771e-12,
+        "pseudo_label": "sitting",
+        "kappa_margin": 0.34782
+      },
+      {
+        "clip_id": "interpet_dog04_p11_take05_ego_001",
+        "entropy": -1.0000889005817893e-12,
+        "pseudo_label": "sitting",
+        "kappa_margin": 0.317014
+      },
+      {
+        "clip_id": "interpet_dog04_p11_take05_ego_001",
+        "entropy": -1.0000889005818077e-12,
+        "pseudo_label": "sitting",
+        "kappa_margin": 0.384232
+      },
+      {
+        "clip_id": "interpet_dog10_p20_take01_ego_001",
+        "entropy": -1.0000889005818252e-12,
+        "pseudo_label": "sitting",
+        "kappa_margin": 0.560086
+      },
+      {
+        "clip_id": "interpet_dog09_p20_take01_ego_001",
+        "entropy": -1.0000889005818293e-12,
+        "pseudo_label": "running",
+        "kappa_margin": 0.634472
+      },
+      {
+        "clip_id": "interpet_dog10_p20_take01_ego_002",
+        "entropy": -1.0000889005818386e-12,
+        "pseudo_label": "sitting",
+        "kappa_margin": 0.574486
+      },
+      {
+        "clip_id": "interpet_dog01_p01_take10_ego_002",
+        "entropy": -1.0000889005818394e-12,
+        "pseudo_label": "sitting",
+        "kappa_margin": 0.419546
+      },
+      {
+        "clip_id": "interpet_dog02_p04_take05_ego_002",
+        "entropy": -1.0000889005818396e-12,
+        "pseudo_label": "sitting",
+        "kappa_margin": 0.266689
+      },
+      {
+        "clip_id": "interpet_dog01_p01_take02_ego_002",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "standing",
+        "kappa_margin": 0.378419
+      },
+      {
+        "clip_id": "interpet_dog01_p01_take02_ego_002",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "standing",
+        "kappa_margin": 0.282094
+      },
+      {
+        "clip_id": "interpet_dog01_p01_take02_ego_002",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "standing",
+        "kappa_margin": 0.408597
+      },
+      {
+        "clip_id": "interpet_dog01_p01_take02_ego_002",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "standing",
+        "kappa_margin": 0.33267
+      },
+      {
+        "clip_id": "interpet_dog01_p01_take02_ego_002",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "standing",
+        "kappa_margin": 0.377367
+      },
+      {
+        "clip_id": "interpet_dog01_p01_take02_ego_002",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "sitting",
+        "kappa_margin": 0.29151
+      },
+      {
+        "clip_id": "interpet_dog01_p01_take03_ego_001",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "running",
+        "kappa_margin": 0.92715
+      },
+      {
+        "clip_id": "interpet_dog01_p01_take03_ego_001",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "sitting",
+        "kappa_margin": 0.259383
+      },
+      {
+        "clip_id": "interpet_dog01_p01_take04_ego_002",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "standing",
+        "kappa_margin": 0.358605
+      },
+      {
+        "clip_id": "interpet_dog01_p01_take05_ego_001",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "running",
+        "kappa_margin": 0.413278
+      },
+      {
+        "clip_id": "interpet_dog01_p01_take05_ego_001",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "sitting",
+        "kappa_margin": 0.437608
+      },
+      {
+        "clip_id": "interpet_dog01_p01_take05_ego_002",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "sitting",
+        "kappa_margin": 0.327009
+      },
+      {
+        "clip_id": "interpet_dog01_p01_take10_ego_002",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "sitting",
+        "kappa_margin": 0.386472
+      },
+      {
+        "clip_id": "interpet_dog01_p01_take10_ego_002",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "sitting",
+        "kappa_margin": 0.256481
+      },
+      {
+        "clip_id": "interpet_dog01_p01_take12_ego_001",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "standing",
+        "kappa_margin": 0.381202
+      },
+      {
+        "clip_id": "interpet_dog01_p01_take12_ego_001",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "sitting",
+        "kappa_margin": 0.291353
+      },
+      {
+        "clip_id": "interpet_dog01_p01_take12_ego_001",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "sitting",
+        "kappa_margin": 0.187939
+      },
+      {
+        "clip_id": "interpet_dog01_p01_take12_ego_001",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "sitting",
+        "kappa_margin": 0.216712
+      },
+      {
+        "clip_id": "interpet_dog01_p01_take12_ego_001",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "sitting",
+        "kappa_margin": 0.362484
+      },
+      {
+        "clip_id": "interpet_dog01_p01_take12_ego_001",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "standing",
+        "kappa_margin": 0.394331
+      },
+      {
+        "clip_id": "interpet_dog01_p02_take01_ego_001",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "running",
+        "kappa_margin": 0.417959
+      },
+      {
+        "clip_id": "interpet_dog01_p03_take01_ego_001",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "running",
+        "kappa_margin": 0.677759
+      },
+      {
+        "clip_id": "interpet_dog02_p04_take01_ego_002",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "standing",
+        "kappa_margin": 0.417821
+      },
+      {
+        "clip_id": "interpet_dog02_p04_take01_ego_002",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "standing",
+        "kappa_margin": 0.430022
+      },
+      {
+        "clip_id": "interpet_dog02_p04_take05_ego_002",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "standing",
+        "kappa_margin": 0.457944
+      },
+      {
+        "clip_id": "interpet_dog02_p04_take08_ego_001",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "standing",
+        "kappa_margin": 0.285336
+      },
+      {
+        "clip_id": "interpet_dog02_p04_take08_ego_002",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "sitting",
+        "kappa_margin": 0.24791
+      },
+      {
+        "clip_id": "interpet_dog02_p05_take04_ego_002",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "sitting",
+        "kappa_margin": 0.291655
+      },
+      {
+        "clip_id": "interpet_dog02_p05_take06_ego_002",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "running",
+        "kappa_margin": 0.867963
+      },
+      {
+        "clip_id": "interpet_dog02_p05_take06_ego_002",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "running",
+        "kappa_margin": 0.758727
+      },
+      {
+        "clip_id": "interpet_dog02_p07_take01_ego_001",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "running",
+        "kappa_margin": 0.787134
+      },
+      {
+        "clip_id": "interpet_dog03_p08_take06_ego_001",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "sitting",
+        "kappa_margin": 0.488312
+      },
+      {
+        "clip_id": "interpet_dog03_p08_take06_ego_001",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "running",
+        "kappa_margin": 0.848981
+      },
+      {
+        "clip_id": "interpet_dog03_p08_take06_ego_003",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "running",
+        "kappa_margin": 0.722118
+      },
+      {
+        "clip_id": "interpet_dog03_p08_take06_ego_003",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "standing",
+        "kappa_margin": 0.302727
+      },
+      {
+        "clip_id": "interpet_dog03_p08_take09_ego_001",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "running",
+        "kappa_margin": 0.892089
+      },
+      {
+        "clip_id": "interpet_dog03_p08_take11_ego_001",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "sitting",
+        "kappa_margin": 0.178542
+      },
+      {
+        "clip_id": "interpet_dog03_p08_take11_ego_001",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "running",
+        "kappa_margin": 0.871645
+      },
+      {
+        "clip_id": "interpet_dog03_p08_take11_ego_002",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "running",
+        "kappa_margin": 0.833154
+      },
+      {
+        "clip_id": "interpet_dog03_p09_take01_ego_003",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "standing",
+        "kappa_margin": 0.428422
+      },
+      {
+        "clip_id": "interpet_dog03_p09_take01_ego_003",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "sitting",
+        "kappa_margin": 0.18978
+      },
+      {
+        "clip_id": "interpet_dog03_p10_take01_ego_002",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "running",
+        "kappa_margin": 0.92896
+      },
+      {
+        "clip_id": "interpet_dog03_p10_take01_ego_002",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "running",
+        "kappa_margin": 0.387217
+      },
+      {
+        "clip_id": "interpet_dog04_p11_take02_ego_001",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "sitting",
+        "kappa_margin": 0.394112
+      },
+      {
+        "clip_id": "interpet_dog04_p11_take02_ego_001",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "sitting",
+        "kappa_margin": 0.205191
+      },
+      {
+        "clip_id": "interpet_dog04_p11_take05_ego_001",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "sitting",
+        "kappa_margin": 0.513912
+      },
+      {
+        "clip_id": "interpet_dog04_p11_take05_ego_001",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "sitting",
+        "kappa_margin": 0.210997
+      },
+      {
+        "clip_id": "interpet_dog04_p11_take05_ego_001",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "standing",
+        "kappa_margin": 0.40671
+      },
+      {
+        "clip_id": "interpet_dog04_p11_take08_ego_001",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "sitting",
+        "kappa_margin": 0.403413
+      },
+      {
+        "clip_id": "interpet_dog04_p11_take08_ego_001",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "sitting",
+        "kappa_margin": 0.556602
+      },
+      {
+        "clip_id": "interpet_dog05_p02_take02_ego_001",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "sitting",
+        "kappa_margin": 0.259519
+      },
+      {
+        "clip_id": "interpet_dog05_p02_take02_ego_001",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "sitting",
+        "kappa_margin": 0.409125
+      },
+      {
+        "clip_id": "interpet_dog05_p02_take02_ego_001",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "sitting",
+        "kappa_margin": 0.552771
+      },
+      {
+        "clip_id": "interpet_dog05_p02_take02_ego_001",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "standing",
+        "kappa_margin": 0.215761
+      },
+      {
+        "clip_id": "interpet_dog05_p02_take02_ego_001",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "running",
+        "kappa_margin": 0.708876
+      },
+      {
+        "clip_id": "interpet_dog05_p02_take02_ego_001",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "standing",
+        "kappa_margin": 0.227299
+      },
+      {
+        "clip_id": "interpet_dog05_p02_take02_ego_002",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "running",
+        "kappa_margin": 0.915748
+      },
+      {
+        "clip_id": "interpet_dog05_p12_take01_ego_002",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "sitting",
+        "kappa_margin": 0.18485
+      },
+      {
+        "clip_id": "interpet_dog05_p12_take01_ego_002",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "sitting",
+        "kappa_margin": 0.403283
+      },
+      {
+        "clip_id": "interpet_dog05_p12_take01_ego_002",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "standing",
+        "kappa_margin": 0.416102
+      },
+      {
+        "clip_id": "interpet_dog05_p12_take01_ego_002",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "running",
+        "kappa_margin": 0.544141
+      },
+      {
+        "clip_id": "interpet_dog05_p12_take01_ego_002",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "sitting",
+        "kappa_margin": 0.243257
+      },
+      {
+        "clip_id": "interpet_dog05_p12_take01_ego_002",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "sitting",
+        "kappa_margin": 0.400954
+      },
+      {
+        "clip_id": "interpet_dog05_p12_take02_ego_002",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "running",
+        "kappa_margin": 0.953079
+      },
+      {
+        "clip_id": "interpet_dog05_p12_take02_ego_002",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "running",
+        "kappa_margin": 0.658536
+      },
+      {
+        "clip_id": "interpet_dog05_p12_take02_ego_002",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "sitting",
+        "kappa_margin": 0.328887
+      },
+      {
+        "clip_id": "interpet_dog05_p12_take02_ego_002",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "standing",
+        "kappa_margin": 0.250254
+      },
+      {
+        "clip_id": "interpet_dog05_p12_take06_ego_001",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "standing",
+        "kappa_margin": 0.391947
+      },
+      {
+        "clip_id": "interpet_dog05_p12_take06_ego_001",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "standing",
+        "kappa_margin": 0.393242
+      },
+      {
+        "clip_id": "interpet_dog05_p12_take10_ego_002",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "running",
+        "kappa_margin": 0.685954
+      },
+      {
+        "clip_id": "interpet_dog05_p12_take10_ego_002",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "sitting",
+        "kappa_margin": 0.233282
+      },
+      {
+        "clip_id": "interpet_dog05_p12_take10_ego_002",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "sitting",
+        "kappa_margin": 0.231211
+      },
+      {
+        "clip_id": "interpet_dog05_p12_take10_ego_002",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "standing",
+        "kappa_margin": 0.398791
+      },
+      {
+        "clip_id": "interpet_dog06_p02_take01_ego_001",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "sitting",
+        "kappa_margin": 0.220529
+      },
+      {
+        "clip_id": "interpet_dog06_p02_take01_ego_001",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "sitting",
+        "kappa_margin": 0.175788
+      },
+      {
+        "clip_id": "interpet_dog06_p13_take02_ego_002",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "standing",
+        "kappa_margin": 0.410703
+      },
+      {
+        "clip_id": "interpet_dog06_p13_take02_ego_002",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "standing",
+        "kappa_margin": 0.322373
+      },
+      {
+        "clip_id": "interpet_dog06_p13_take02_ego_002",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "running",
+        "kappa_margin": 0.866347
+      },
+      {
+        "clip_id": "interpet_dog06_p13_take02_ego_002",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "sitting",
+        "kappa_margin": 0.23972
+      },
+      {
+        "clip_id": "interpet_dog06_p13_take03_ego_002",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "sitting",
+        "kappa_margin": 0.232497
+      },
+      {
+        "clip_id": "interpet_dog06_p13_take03_ego_002",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "running",
+        "kappa_margin": 0.232253
+      },
+      {
+        "clip_id": "interpet_dog06_p13_take05_ego_001",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "running",
+        "kappa_margin": 0.813225
+      },
+      {
+        "clip_id": "interpet_dog06_p13_take05_ego_001",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "running",
+        "kappa_margin": 0.335769
+      },
+      {
+        "clip_id": "interpet_dog06_p14_take02_ego_001",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "running",
+        "kappa_margin": 0.887595
+      },
+      {
+        "clip_id": "interpet_dog06_p14_take02_ego_001",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "standing",
+        "kappa_margin": 0.343118
+      },
+      {
+        "clip_id": "interpet_dog07_p07_take01_ego_001",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "running",
+        "kappa_margin": 0.150641
+      },
+      {
+        "clip_id": "interpet_dog07_p07_take01_ego_001",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "standing",
+        "kappa_margin": 0.429084
+      },
+      {
+        "clip_id": "interpet_dog07_p07_take01_ego_001",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "running",
+        "kappa_margin": 0.276984
+      },
+      {
+        "clip_id": "interpet_dog07_p15_take02_ego_001",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "running",
+        "kappa_margin": 0.704396
+      },
+      {
+        "clip_id": "interpet_dog07_p15_take02_ego_001",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "sitting",
+        "kappa_margin": 0.252691
+      },
+      {
+        "clip_id": "interpet_dog07_p15_take02_ego_001",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "running",
+        "kappa_margin": 0.389886
+      },
+      {
+        "clip_id": "interpet_dog07_p15_take02_ego_001",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "sitting",
+        "kappa_margin": 0.175494
+      },
+      {
+        "clip_id": "interpet_dog07_p15_take03_ego_002",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "standing",
+        "kappa_margin": 0.413519
+      },
+      {
+        "clip_id": "interpet_dog07_p15_take03_ego_002",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "sitting",
+        "kappa_margin": 0.222576
+      },
+      {
+        "clip_id": "interpet_dog07_p16_take04_ego_002",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "running",
+        "kappa_margin": 0.87257
+      },
+      {
+        "clip_id": "interpet_dog07_p16_take04_ego_002",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "running",
+        "kappa_margin": 0.922236
+      },
+      {
+        "clip_id": "interpet_dog07_p16_take05_ego_002",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "standing",
+        "kappa_margin": 0.259466
+      },
+      {
+        "clip_id": "interpet_dog07_p16_take05_ego_002",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "running",
+        "kappa_margin": 0.242548
+      },
+      {
+        "clip_id": "interpet_dog07_p16_take05_ego_002",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "sitting",
+        "kappa_margin": 0.513275
+      },
+      {
+        "clip_id": "interpet_dog07_p16_take05_ego_002",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "standing",
+        "kappa_margin": 0.434021
+      },
+      {
+        "clip_id": "interpet_dog07_p16_take05_ego_002",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "sitting",
+        "kappa_margin": 0.40363
+      },
+      {
+        "clip_id": "interpet_dog07_p16_take05_ego_002",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "running",
+        "kappa_margin": 0.838141
+      },
+      {
+        "clip_id": "interpet_dog07_p16_take05_ego_002",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "running",
+        "kappa_margin": 0.184387
+      },
+      {
+        "clip_id": "interpet_dog07_p16_take05_ego_002",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "standing",
+        "kappa_margin": 0.22646
+      },
+      {
+        "clip_id": "interpet_dog07_p16_take05_ego_002",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "sitting",
+        "kappa_margin": 0.257178
+      },
+      {
+        "clip_id": "interpet_dog08_p17_take01_ego_002",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "running",
+        "kappa_margin": 0.918698
+      },
+      {
+        "clip_id": "interpet_dog08_p17_take01_ego_002",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "running",
+        "kappa_margin": 0.876431
+      },
+      {
+        "clip_id": "interpet_dog08_p17_take01_ego_002",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "standing",
+        "kappa_margin": 0.27961
+      },
+      {
+        "clip_id": "interpet_dog08_p17_take04_ego_002",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "sitting",
+        "kappa_margin": 0.172317
+      },
+      {
+        "clip_id": "interpet_dog08_p17_take04_ego_003",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "running",
+        "kappa_margin": 0.19486
+      },
+      {
+        "clip_id": "interpet_dog08_p17_take04_ego_003",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "running",
+        "kappa_margin": 0.698083
+      },
+      {
+        "clip_id": "interpet_dog08_p17_take04_ego_003",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "sitting",
+        "kappa_margin": 0.168307
+      },
+      {
+        "clip_id": "interpet_dog08_p17_take06_ego_001",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "running",
+        "kappa_margin": 0.211761
+      },
+      {
+        "clip_id": "interpet_dog08_p17_take06_ego_001",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "standing",
+        "kappa_margin": 0.333454
+      },
+      {
+        "clip_id": "interpet_dog08_p17_take07_ego_001",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "sitting",
+        "kappa_margin": 0.225584
+      },
+      {
+        "clip_id": "interpet_dog08_p18_take01_ego_001",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "sitting",
+        "kappa_margin": 0.355549
+      },
+      {
+        "clip_id": "interpet_dog08_p18_take01_ego_001",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "standing",
+        "kappa_margin": 0.368079
+      },
+      {
+        "clip_id": "interpet_dog08_p18_take01_ego_001",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "sitting",
+        "kappa_margin": 0.206656
+      },
+      {
+        "clip_id": "interpet_dog08_p18_take01_ego_002",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "standing",
+        "kappa_margin": 0.369701
+      },
+      {
+        "clip_id": "interpet_dog09_p19_take04_ego_002",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "sitting",
+        "kappa_margin": 0.308026
+      },
+      {
+        "clip_id": "interpet_dog09_p19_take04_ego_002",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "sitting",
+        "kappa_margin": 0.332911
+      },
+      {
+        "clip_id": "interpet_dog09_p19_take04_ego_002",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "sitting",
+        "kappa_margin": 0.231572
+      },
+      {
+        "clip_id": "interpet_dog09_p20_take01_ego_001",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "sitting",
+        "kappa_margin": 0.387243
+      },
+      {
+        "clip_id": "interpet_dog10_p20_take01_ego_002",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "sitting",
+        "kappa_margin": 0.325309
+      },
+      {
+        "clip_id": "interpet_dog10_p21_take05_ego_001",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "sitting",
+        "kappa_margin": 0.337894
+      },
+      {
+        "clip_id": "interpet_dog10_p21_take05_ego_001",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "sitting",
+        "kappa_margin": 0.327191
+      },
+      {
+        "clip_id": "interpet_dog10_p21_take05_ego_001",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "sitting",
+        "kappa_margin": 0.486582
+      },
+      {
+        "clip_id": "interpet_dog10_p21_take05_ego_001",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "sitting",
+        "kappa_margin": 0.565969
+      },
+      {
+        "clip_id": "interpet_dog10_p21_take05_ego_001",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "standing",
+        "kappa_margin": 0.275347
+      },
+      {
+        "clip_id": "interpet_dog10_p21_take09_ego_002",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "standing",
+        "kappa_margin": 0.343
+      },
+      {
+        "clip_id": "interpet_dog10_p21_take09_ego_002",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "standing",
+        "kappa_margin": 0.390529
+      },
+      {
+        "clip_id": "interpet_dog11_p22_take03_ego_002",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "sitting",
+        "kappa_margin": 0.268639
+      },
+      {
+        "clip_id": "interpet_dog11_p22_take03_ego_003",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "sitting",
+        "kappa_margin": 0.325165
+      },
+      {
+        "clip_id": "interpet_dog11_p22_take03_ego_003",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "sitting",
+        "kappa_margin": 0.184575
+      },
+      {
+        "clip_id": "interpet_dog11_p22_take03_ego_003",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "sitting",
+        "kappa_margin": 0.211804
+      },
+      {
+        "clip_id": "interpet_dog11_p22_take04_ego_001",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "standing",
+        "kappa_margin": 0.438786
+      },
+      {
+        "clip_id": "interpet_dog11_p22_take04_ego_001",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "standing",
+        "kappa_margin": 0.422384
+      },
+      {
+        "clip_id": "interpet_dog11_p22_take04_ego_001",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "standing",
+        "kappa_margin": 0.412953
+      },
+      {
+        "clip_id": "interpet_dog11_p22_take04_ego_001",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "standing",
+        "kappa_margin": 0.374505
+      },
+      {
+        "clip_id": "interpet_dog11_p22_take04_ego_001",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "standing",
+        "kappa_margin": 0.221681
+      },
+      {
+        "clip_id": "interpet_dog11_p23_take06_ego_002",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "running",
+        "kappa_margin": 0.903242
+      },
+      {
+        "clip_id": "interpet_dog11_p23_take06_ego_002",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "standing",
+        "kappa_margin": 0.240933
+      },
+      {
+        "clip_id": "interpet_dog11_p23_take06_ego_002",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "running",
+        "kappa_margin": 0.882651
+      },
+      {
+        "clip_id": "interpet_dog11_p23_take06_ego_002",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "standing",
+        "kappa_margin": 0.43223
+      },
+      {
+        "clip_id": "interpet_dog11_p23_take06_ego_002",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "running",
+        "kappa_margin": 0.207826
+      },
+      {
+        "clip_id": "interpet_dog11_p23_take06_ego_003",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "running",
+        "kappa_margin": 0.919646
+      },
+      {
+        "clip_id": "interpet_dog11_p23_take06_ego_003",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "running",
+        "kappa_margin": 0.904374
+      },
+      {
+        "clip_id": "interpet_dog11_p23_take06_ego_003",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "running",
+        "kappa_margin": 0.829038
+      },
+      {
+        "clip_id": "interpet_dog11_p23_take06_ego_003",
+        "entropy": -1.000088900581841e-12,
+        "pseudo_label": "standing",
+        "kappa_margin": 0.396407
+      }
+    ],
+    "topk": {
+      "20": [
+        "interpet_dog11_p22_take04_ego_001",
+        "interpet_dog02_p05_take04_ego_002",
+        "interpet_dog02_p05_take06_ego_002",
+        "interpet_dog11_p23_take06_ego_001",
+        "interpet_dog02_p04_take05_ego_002",
+        "interpet_dog02_p08_take02_ego_002",
+        "interpet_dog11_p22_take03_ego_003",
+        "interpet_dog02_p07_take01_ego_001",
+        "interpet_dog02_p04_take05_ego_002",
+        "interpet_dog04_p11_take05_ego_001",
+        "interpet_dog03_p08_take11_ego_002",
+        "interpet_dog02_p04_take05_ego_002",
+        "interpet_dog02_p04_take05_ego_002",
+        "interpet_dog01_p01_take10_ego_002",
+        "interpet_dog09_p19_take04_ego_002",
+        "interpet_dog11_p23_take06_ego_001",
+        "interpet_dog08_p17_take07_ego_001",
+        "interpet_dog11_p22_take03_ego_002",
+        "interpet_dog08_p17_take07_ego_001",
+        "interpet_dog11_p22_take03_ego_003"
+      ],
+      "50": [
+        "interpet_dog11_p22_take04_ego_001",
+        "interpet_dog02_p05_take04_ego_002",
+        "interpet_dog02_p05_take06_ego_002",
+        "interpet_dog11_p23_take06_ego_001",
+        "interpet_dog02_p04_take05_ego_002",
+        "interpet_dog02_p08_take02_ego_002",
+        "interpet_dog11_p22_take03_ego_003",
+        "interpet_dog02_p07_take01_ego_001",
+        "interpet_dog02_p04_take05_ego_002",
+        "interpet_dog04_p11_take05_ego_001",
+        "interpet_dog03_p08_take11_ego_002",
+        "interpet_dog02_p04_take05_ego_002",
+        "interpet_dog02_p04_take05_ego_002",
+        "interpet_dog01_p01_take10_ego_002",
+        "interpet_dog09_p19_take04_ego_002",
+        "interpet_dog11_p23_take06_ego_001",
+        "interpet_dog08_p17_take07_ego_001",
+        "interpet_dog11_p22_take03_ego_002",
+        "interpet_dog08_p17_take07_ego_001",
+        "interpet_dog11_p22_take03_ego_003",
+        "interpet_dog05_p12_take01_ego_002",
+        "interpet_dog02_p04_take05_ego_002",
+        "interpet_dog01_p01_take12_ego_001",
+        "interpet_dog03_p08_take11_ego_001",
+        "interpet_dog03_p08_take06_ego_001",
+        "interpet_dog01_p01_take10_ego_002",
+        "interpet_dog11_p23_take06_ego_002",
+        "interpet_dog02_p04_take08_ego_001",
+        "interpet_dog01_p03_take01_ego_001",
+        "interpet_dog06_p02_take01_ego_001",
+        "interpet_dog08_p17_take07_ego_001",
+        "interpet_dog03_p08_take11_ego_002",
+        "interpet_dog01_p01_take10_ego_002",
+        "interpet_dog05_p12_take01_ego_002",
+        "interpet_dog04_p11_take05_ego_001",
+        "interpet_dog04_p11_take05_ego_001",
+        "interpet_dog04_p11_take05_ego_001",
+        "interpet_dog10_p20_take01_ego_001",
+        "interpet_dog09_p20_take01_ego_001",
+        "interpet_dog10_p20_take01_ego_002",
+        "interpet_dog01_p01_take10_ego_002",
+        "interpet_dog02_p04_take05_ego_002",
+        "interpet_dog01_p01_take02_ego_002",
+        "interpet_dog01_p01_take02_ego_002",
+        "interpet_dog01_p01_take02_ego_002",
+        "interpet_dog01_p01_take02_ego_002",
+        "interpet_dog01_p01_take02_ego_002",
+        "interpet_dog01_p01_take02_ego_002",
+        "interpet_dog01_p01_take03_ego_001",
+        "interpet_dog01_p01_take03_ego_001"
+      ],
+      "100": [
+        "interpet_dog11_p22_take04_ego_001",
+        "interpet_dog02_p05_take04_ego_002",
+        "interpet_dog02_p05_take06_ego_002",
+        "interpet_dog11_p23_take06_ego_001",
+        "interpet_dog02_p04_take05_ego_002",
+        "interpet_dog02_p08_take02_ego_002",
+        "interpet_dog11_p22_take03_ego_003",
+        "interpet_dog02_p07_take01_ego_001",
+        "interpet_dog02_p04_take05_ego_002",
+        "interpet_dog04_p11_take05_ego_001",
+        "interpet_dog03_p08_take11_ego_002",
+        "interpet_dog02_p04_take05_ego_002",
+        "interpet_dog02_p04_take05_ego_002",
+        "interpet_dog01_p01_take10_ego_002",
+        "interpet_dog09_p19_take04_ego_002",
+        "interpet_dog11_p23_take06_ego_001",
+        "interpet_dog08_p17_take07_ego_001",
+        "interpet_dog11_p22_take03_ego_002",
+        "interpet_dog08_p17_take07_ego_001",
+        "interpet_dog11_p22_take03_ego_003",
+        "interpet_dog05_p12_take01_ego_002",
+        "interpet_dog02_p04_take05_ego_002",
+        "interpet_dog01_p01_take12_ego_001",
+        "interpet_dog03_p08_take11_ego_001",
+        "interpet_dog03_p08_take06_ego_001",
+        "interpet_dog01_p01_take10_ego_002",
+        "interpet_dog11_p23_take06_ego_002",
+        "interpet_dog02_p04_take08_ego_001",
+        "interpet_dog01_p03_take01_ego_001",
+        "interpet_dog06_p02_take01_ego_001",
+        "interpet_dog08_p17_take07_ego_001",
+        "interpet_dog03_p08_take11_ego_002",
+        "interpet_dog01_p01_take10_ego_002",
+        "interpet_dog05_p12_take01_ego_002",
+        "interpet_dog04_p11_take05_ego_001",
+        "interpet_dog04_p11_take05_ego_001",
+        "interpet_dog04_p11_take05_ego_001",
+        "interpet_dog10_p20_take01_ego_001",
+        "interpet_dog09_p20_take01_ego_001",
+        "interpet_dog10_p20_take01_ego_002",
+        "interpet_dog01_p01_take10_ego_002",
+        "interpet_dog02_p04_take05_ego_002",
+        "interpet_dog01_p01_take02_ego_002",
+        "interpet_dog01_p01_take02_ego_002",
+        "interpet_dog01_p01_take02_ego_002",
+        "interpet_dog01_p01_take02_ego_002",
+        "interpet_dog01_p01_take02_ego_002",
+        "interpet_dog01_p01_take02_ego_002",
+        "interpet_dog01_p01_take03_ego_001",
+        "interpet_dog01_p01_take03_ego_001",
+        "interpet_dog01_p01_take04_ego_002",
+        "interpet_dog01_p01_take05_ego_001",
+        "interpet_dog01_p01_take05_ego_001",
+        "interpet_dog01_p01_take05_ego_002",
+        "interpet_dog01_p01_take10_ego_002",
+        "interpet_dog01_p01_take10_ego_002",
+        "interpet_dog01_p01_take12_ego_001",
+        "interpet_dog01_p01_take12_ego_001",
+        "interpet_dog01_p01_take12_ego_001",
+        "interpet_dog01_p01_take12_ego_001",
+        "interpet_dog01_p01_take12_ego_001",
+        "interpet_dog01_p01_take12_ego_001",
+        "interpet_dog01_p02_take01_ego_001",
+        "interpet_dog01_p03_take01_ego_001",
+        "interpet_dog02_p04_take01_ego_002",
+        "interpet_dog02_p04_take01_ego_002",
+        "interpet_dog02_p04_take05_ego_002",
+        "interpet_dog02_p04_take08_ego_001",
+        "interpet_dog02_p04_take08_ego_002",
+        "interpet_dog02_p05_take04_ego_002",
+        "interpet_dog02_p05_take06_ego_002",
+        "interpet_dog02_p05_take06_ego_002",
+        "interpet_dog02_p07_take01_ego_001",
+        "interpet_dog03_p08_take06_ego_001",
+        "interpet_dog03_p08_take06_ego_001",
+        "interpet_dog03_p08_take06_ego_003",
+        "interpet_dog03_p08_take06_ego_003",
+        "interpet_dog03_p08_take09_ego_001",
+        "interpet_dog03_p08_take11_ego_001",
+        "interpet_dog03_p08_take11_ego_001",
+        "interpet_dog03_p08_take11_ego_002",
+        "interpet_dog03_p09_take01_ego_003",
+        "interpet_dog03_p09_take01_ego_003",
+        "interpet_dog03_p10_take01_ego_002",
+        "interpet_dog03_p10_take01_ego_002",
+        "interpet_dog04_p11_take02_ego_001",
+        "interpet_dog04_p11_take02_ego_001",
+        "interpet_dog04_p11_take05_ego_001",
+        "interpet_dog04_p11_take05_ego_001",
+        "interpet_dog04_p11_take05_ego_001",
+        "interpet_dog04_p11_take08_ego_001",
+        "interpet_dog04_p11_take08_ego_001",
+        "interpet_dog05_p02_take02_ego_001",
+        "interpet_dog05_p02_take02_ego_001",
+        "interpet_dog05_p02_take02_ego_001",
+        "interpet_dog05_p02_take02_ego_001",
+        "interpet_dog05_p02_take02_ego_001",
+        "interpet_dog05_p02_take02_ego_001",
+        "interpet_dog05_p02_take02_ego_002",
+        "interpet_dog05_p12_take01_ego_002"
+      ],
+      "200": [
+        "interpet_dog11_p22_take04_ego_001",
+        "interpet_dog02_p05_take04_ego_002",
+        "interpet_dog02_p05_take06_ego_002",
+        "interpet_dog11_p23_take06_ego_001",
+        "interpet_dog02_p04_take05_ego_002",
+        "interpet_dog02_p08_take02_ego_002",
+        "interpet_dog11_p22_take03_ego_003",
+        "interpet_dog02_p07_take01_ego_001",
+        "interpet_dog02_p04_take05_ego_002",
+        "interpet_dog04_p11_take05_ego_001",
+        "interpet_dog03_p08_take11_ego_002",
+        "interpet_dog02_p04_take05_ego_002",
+        "interpet_dog02_p04_take05_ego_002",
+        "interpet_dog01_p01_take10_ego_002",
+        "interpet_dog09_p19_take04_ego_002",
+        "interpet_dog11_p23_take06_ego_001",
+        "interpet_dog08_p17_take07_ego_001",
+        "interpet_dog11_p22_take03_ego_002",
+        "interpet_dog08_p17_take07_ego_001",
+        "interpet_dog11_p22_take03_ego_003",
+        "interpet_dog05_p12_take01_ego_002",
+        "interpet_dog02_p04_take05_ego_002",
+        "interpet_dog01_p01_take12_ego_001",
+        "interpet_dog03_p08_take11_ego_001",
+        "interpet_dog03_p08_take06_ego_001",
+        "interpet_dog01_p01_take10_ego_002",
+        "interpet_dog11_p23_take06_ego_002",
+        "interpet_dog02_p04_take08_ego_001",
+        "interpet_dog01_p03_take01_ego_001",
+        "interpet_dog06_p02_take01_ego_001",
+        "interpet_dog08_p17_take07_ego_001",
+        "interpet_dog03_p08_take11_ego_002",
+        "interpet_dog01_p01_take10_ego_002",
+        "interpet_dog05_p12_take01_ego_002",
+        "interpet_dog04_p11_take05_ego_001",
+        "interpet_dog04_p11_take05_ego_001",
+        "interpet_dog04_p11_take05_ego_001",
+        "interpet_dog10_p20_take01_ego_001",
+        "interpet_dog09_p20_take01_ego_001",
+        "interpet_dog10_p20_take01_ego_002",
+        "interpet_dog01_p01_take10_ego_002",
+        "interpet_dog02_p04_take05_ego_002",
+        "interpet_dog01_p01_take02_ego_002",
+        "interpet_dog01_p01_take02_ego_002",
+        "interpet_dog01_p01_take02_ego_002",
+        "interpet_dog01_p01_take02_ego_002",
+        "interpet_dog01_p01_take02_ego_002",
+        "interpet_dog01_p01_take02_ego_002",
+        "interpet_dog01_p01_take03_ego_001",
+        "interpet_dog01_p01_take03_ego_001",
+        "interpet_dog01_p01_take04_ego_002",
+        "interpet_dog01_p01_take05_ego_001",
+        "interpet_dog01_p01_take05_ego_001",
+        "interpet_dog01_p01_take05_ego_002",
+        "interpet_dog01_p01_take10_ego_002",
+        "interpet_dog01_p01_take10_ego_002",
+        "interpet_dog01_p01_take12_ego_001",
+        "interpet_dog01_p01_take12_ego_001",
+        "interpet_dog01_p01_take12_ego_001",
+        "interpet_dog01_p01_take12_ego_001",
+        "interpet_dog01_p01_take12_ego_001",
+        "interpet_dog01_p01_take12_ego_001",
+        "interpet_dog01_p02_take01_ego_001",
+        "interpet_dog01_p03_take01_ego_001",
+        "interpet_dog02_p04_take01_ego_002",
+        "interpet_dog02_p04_take01_ego_002",
+        "interpet_dog02_p04_take05_ego_002",
+        "interpet_dog02_p04_take08_ego_001",
+        "interpet_dog02_p04_take08_ego_002",
+        "interpet_dog02_p05_take04_ego_002",
+        "interpet_dog02_p05_take06_ego_002",
+        "interpet_dog02_p05_take06_ego_002",
+        "interpet_dog02_p07_take01_ego_001",
+        "interpet_dog03_p08_take06_ego_001",
+        "interpet_dog03_p08_take06_ego_001",
+        "interpet_dog03_p08_take06_ego_003",
+        "interpet_dog03_p08_take06_ego_003",
+        "interpet_dog03_p08_take09_ego_001",
+        "interpet_dog03_p08_take11_ego_001",
+        "interpet_dog03_p08_take11_ego_001",
+        "interpet_dog03_p08_take11_ego_002",
+        "interpet_dog03_p09_take01_ego_003",
+        "interpet_dog03_p09_take01_ego_003",
+        "interpet_dog03_p10_take01_ego_002",
+        "interpet_dog03_p10_take01_ego_002",
+        "interpet_dog04_p11_take02_ego_001",
+        "interpet_dog04_p11_take02_ego_001",
+        "interpet_dog04_p11_take05_ego_001",
+        "interpet_dog04_p11_take05_ego_001",
+        "interpet_dog04_p11_take05_ego_001",
+        "interpet_dog04_p11_take08_ego_001",
+        "interpet_dog04_p11_take08_ego_001",
+        "interpet_dog05_p02_take02_ego_001",
+        "interpet_dog05_p02_take02_ego_001",
+        "interpet_dog05_p02_take02_ego_001",
+        "interpet_dog05_p02_take02_ego_001",
+        "interpet_dog05_p02_take02_ego_001",
+        "interpet_dog05_p02_take02_ego_001",
+        "interpet_dog05_p02_take02_ego_002",
+        "interpet_dog05_p12_take01_ego_002",
+        "interpet_dog05_p12_take01_ego_002",
+        "interpet_dog05_p12_take01_ego_002",
+        "interpet_dog05_p12_take01_ego_002",
+        "interpet_dog05_p12_take01_ego_002",
+        "interpet_dog05_p12_take01_ego_002",
+        "interpet_dog05_p12_take02_ego_002",
+        "interpet_dog05_p12_take02_ego_002",
+        "interpet_dog05_p12_take02_ego_002",
+        "interpet_dog05_p12_take02_ego_002",
+        "interpet_dog05_p12_take06_ego_001",
+        "interpet_dog05_p12_take06_ego_001",
+        "interpet_dog05_p12_take10_ego_002",
+        "interpet_dog05_p12_take10_ego_002",
+        "interpet_dog05_p12_take10_ego_002",
+        "interpet_dog05_p12_take10_ego_002",
+        "interpet_dog06_p02_take01_ego_001",
+        "interpet_dog06_p02_take01_ego_001",
+        "interpet_dog06_p13_take02_ego_002",
+        "interpet_dog06_p13_take02_ego_002",
+        "interpet_dog06_p13_take02_ego_002",
+        "interpet_dog06_p13_take02_ego_002",
+        "interpet_dog06_p13_take03_ego_002",
+        "interpet_dog06_p13_take03_ego_002",
+        "interpet_dog06_p13_take05_ego_001",
+        "interpet_dog06_p13_take05_ego_001",
+        "interpet_dog06_p14_take02_ego_001",
+        "interpet_dog06_p14_take02_ego_001",
+        "interpet_dog07_p07_take01_ego_001",
+        "interpet_dog07_p07_take01_ego_001",
+        "interpet_dog07_p07_take01_ego_001",
+        "interpet_dog07_p15_take02_ego_001",
+        "interpet_dog07_p15_take02_ego_001",
+        "interpet_dog07_p15_take02_ego_001",
+        "interpet_dog07_p15_take02_ego_001",
+        "interpet_dog07_p15_take03_ego_002",
+        "interpet_dog07_p15_take03_ego_002",
+        "interpet_dog07_p16_take04_ego_002",
+        "interpet_dog07_p16_take04_ego_002",
+        "interpet_dog07_p16_take05_ego_002",
+        "interpet_dog07_p16_take05_ego_002",
+        "interpet_dog07_p16_take05_ego_002",
+        "interpet_dog07_p16_take05_ego_002",
+        "interpet_dog07_p16_take05_ego_002",
+        "interpet_dog07_p16_take05_ego_002",
+        "interpet_dog07_p16_take05_ego_002",
+        "interpet_dog07_p16_take05_ego_002",
+        "interpet_dog07_p16_take05_ego_002",
+        "interpet_dog08_p17_take01_ego_002",
+        "interpet_dog08_p17_take01_ego_002",
+        "interpet_dog08_p17_take01_ego_002",
+        "interpet_dog08_p17_take04_ego_002",
+        "interpet_dog08_p17_take04_ego_003",
+        "interpet_dog08_p17_take04_ego_003",
+        "interpet_dog08_p17_take04_ego_003",
+        "interpet_dog08_p17_take06_ego_001",
+        "interpet_dog08_p17_take06_ego_001",
+        "interpet_dog08_p17_take07_ego_001",
+        "interpet_dog08_p18_take01_ego_001",
+        "interpet_dog08_p18_take01_ego_001",
+        "interpet_dog08_p18_take01_ego_001",
+        "interpet_dog08_p18_take01_ego_002",
+        "interpet_dog09_p19_take04_ego_002",
+        "interpet_dog09_p19_take04_ego_002",
+        "interpet_dog09_p19_take04_ego_002",
+        "interpet_dog09_p20_take01_ego_001",
+        "interpet_dog10_p20_take01_ego_002",
+        "interpet_dog10_p21_take05_ego_001",
+        "interpet_dog10_p21_take05_ego_001",
+        "interpet_dog10_p21_take05_ego_001",
+        "interpet_dog10_p21_take05_ego_001",
+        "interpet_dog10_p21_take05_ego_001",
+        "interpet_dog10_p21_take09_ego_002",
+        "interpet_dog10_p21_take09_ego_002",
+        "interpet_dog11_p22_take03_ego_002",
+        "interpet_dog11_p22_take03_ego_003",
+        "interpet_dog11_p22_take03_ego_003",
+        "interpet_dog11_p22_take03_ego_003",
+        "interpet_dog11_p22_take04_ego_001",
+        "interpet_dog11_p22_take04_ego_001",
+        "interpet_dog11_p22_take04_ego_001",
+        "interpet_dog11_p22_take04_ego_001",
+        "interpet_dog11_p22_take04_ego_001",
+        "interpet_dog11_p23_take06_ego_002",
+        "interpet_dog11_p23_take06_ego_002",
+        "interpet_dog11_p23_take06_ego_002",
+        "interpet_dog11_p23_take06_ego_002",
+        "interpet_dog11_p23_take06_ego_002",
+        "interpet_dog11_p23_take06_ego_003",
+        "interpet_dog11_p23_take06_ego_003",
+        "interpet_dog11_p23_take06_ego_003",
+        "interpet_dog11_p23_take06_ego_003"
+      ]
+    },
+    "disclosure": "公开真实层口径：合成域迁移模型的不确定性代理排序，供人工标注优先级参考；无 22 类行为 GT，禁止作为精度数字汇报",
+    "pool_jsonl_sha256": "25352b508aa45f41eed69cdbb1d4817b0ebb01b293a157c3877f7eb9d5aa3360"
+  }
+}

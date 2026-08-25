@@ -1,0 +1,37 @@
+{
+  "date": "2026-08-25T20:53:34",
+  "layer": "public_real",
+  "protocol": "AK partialclass4 frozen-backbone head-retrain (warm-init from Y best.pt)",
+  "config_echo": {
+    "pkl": "runs\\public_real_dataset\\partialclass4_T30.pkl",
+    "init": "runs\\p05_stgcn_bc_full\\best.pt",
+    "num_classes": 4,
+    "epochs": 60,
+    "batch_size": 16,
+    "seed": 42,
+    "n_train": 123,
+    "n_val": 49,
+    "class_dist": {
+      "watch": 72,
+      "track": 46,
+      "stay": 27,
+      "jump": 27
+    }
+  },
+  "summary": {
+    "total_epochs_trained": 26,
+    "best_val_acc": 0.4489795918367347,
+    "best_epoch": 11,
+    "final_train_acc": 0.36607142857142855,
+    "final_val_acc": 0.3877551020408163,
+    "device": "cuda",
+    "use_amp": true,
+    "per_class_val_acc": {
+      "jump": 0.0,
+      "stay": 0.0,
+      "track": 0.2353,
+      "watch": 1.0
+    },
+    "wall_clock_sec": 9.9
+  }
+}

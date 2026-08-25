@@ -101,7 +101,7 @@
 | **W4 重启** | `handovers/W7-p02-smq-rescue.md`（唯一任务书） | P0.2 SMQ 分割**救援**（诊断优先，双口径评估，切换需用户裁决） | 原 W4 白名单全部（`*smq*` 文件、psd/models+training、scripts/configs 的 p02 文件、reports/p02-*）；含 W4 未提交产物接管清单 |
 | **W8** | `handovers/W8-p03-jia-phaseA.md` | ✅ **Phase A 完成**（commit `5d790c7`：纯度 0.534=随机 1.615×、噪声消融 30% 仅降 3.1pp、TDD 98 绿、P0.4 池格式已移交）；Phase B 22 类映射等路径 a 合成数据 | 已收官 |
 | ~~W7~~（原 W4 重启） | `handovers/W7-p02-smq-rescue.md` | ✅ **救援+冲刺达标**：根因=官方超参致编码器码塌缩，mse_loss_weight→1.0 修复；种子伪 GT 口径 IoU 0.409 → 冲刺 E-B vm6 **0.476** / 过夜 E-C K=8 **0.4577±0.0488**（均 ≥ 预注册 0.45）。⚠️ `reports/p02-smq-iou-eC-seeds.json` 尚未提交，E-C 定稿收编归 W4 owner 收尾 | 原 W4 白名单；窗口锁 `reports/p02-window-lock.md` |
-| **W9** | `handovers/W9-ntu-repro.md` | Phase A ✅ **全部完成**（协议核实 + 数据已就位并校验通过，见 `reports/ntu-phasea-2026-08-24.md` v1.1；用户经 GKD 加速器走通渠道 A）；Phase B 复现训练✅ **完成**（5/300 epochs，mean loss 16.63，无 NaN，GPU 解禁，调度完成） | `*ntu*` 文件、reports/ntu-* |
+| **W9** | `handovers/W9-ntu-repro.md` | Phase A ✅（协议核实+数据就位）；Phase B 训练 ✅ **300/300 收官**（2026-08-25 14:20，loss 16.63→5.30 零 NaN，`runs/ntu_phaseB/joint_pretext/epoch300_model.pt` 落盘）；⚠️ **任务整体未完**：线性评估复现数（预注册通过线 ≥77.18%，官方参照 79.18%）待 W33 执行——出数前禁写"成功复现" | `*ntu*` 文件、reports/ntu-*（W33 执行中） |
 | ~~W10~~ | `handovers/W10-p04-tcl.md` | ✅ **完成且经复核确认**（2026-08-24 复核会话：commit `4f04ad4` 边界合规、pytest 116 绿新鲜复跑、全量实验重跑逐格复现、移交池哈希一致；B+ 收口不改代码——iter3 池 191 条为交付物，r1 早停池为可选替代见报告 §5①/§8） | 已收官 |
 | **W12** | `handovers/W12-p05-stgcnbc-full.md` | P0.5 骨干微调评估：扩量合成数据（100样本/类→2200总量）+ ST-GCN+BC 完整训练（早停50 epoch）+ E6 双贴合分类体系实验（Y=22类 / Y′=21类 locomotion合并）+ 样本量消融（20/50/100）+ 三层口径报告移交 W13 | `configs/p05_*`、`scripts/run_p05_*`、`psd/data/stgcn_bc_dataset.py`（仅追加扩量函数）、`psd/data/tests/test_stgcn_bc_dataset_scale.py`、`reports/w12-*`、`reports/p05-stgcnbc-synthetic-*.json`、DATA_LOCATIONS 合成层小节 |
 | ~~W5~~ | `handovers/W5-p06-paper-draft.md` | ✅ 写作侧收官，剩余为 P0 数据依赖 | `docs/paper/**` 保持只读待回填 |
@@ -113,6 +113,11 @@
 | **W22** | `handovers/W22-paper-figures-fig3-fig4.md` | 任务书就绪（fig3 分割可视化 + fig4 AL 效率曲线负结果照画） | `docs/paper/figures/**`（fig1/2 勿动） |
 | **W23** | `handovers/W23-p05-al-warmstart.md` | ✅ **五步门完成**（2026-08-25：Step1 诊断选定 noise_std=0.10（0.15/0.20"自信地错"退化淘汰）→ Step2 预注册落盘 → Step3 TDD 4 测试先行 `init_from_ckpt` → Step4 short 扫描归档（**负结果如实记录**：强域内打分器下随机仍 3/3 seeds 全线反超熵 4.2~5.0pp，E5 维持 PENDING；warm-start 协议层正收益基线 7.8%→82%）→ Step5 full 排队 W18 Q4（用户可叫停）；报告 `reports/w23-p05-al-warmstart-2026-08-25.md`；路线变更候选上报用户裁决） | 已收官（full 判读回填归 W23 报告 v-next 或协调窗） |
 | **W24** | `handovers/W24-collab-worktree.md` | ✅ **完成**（2026-08-25：建窗脚本含 -Remove 安全卸窗 / AGENTS §4 并行纪律六条 / 冒烟全绿 pytest 288+tiny 训练+Junction 链验证 / 裁决落档 ADR-0005 / 报告 `reports/w24-worktree-governance-2026-08-25.md`；ADR 编号因冲突自 0003 顺延）；新窗口一律 worktree 开工 | 已收官（机制归 AGENTS §4） |
+| ~~W25-W29~~ | `handovers/DATA-CAMPAIGN-plan.md` | ✅ **数据五路攻坚全部收编 master**（C1 视频 759 片段/C2 APTv2 646 轨迹 17kp/C3 DogSet 动捕 147K 帧/C4 syn_v2 17/17 全胜/C5 dog-pose 定案增广池；产物已汇聚主检出 runs/data_campaign/ 对账零差额；全仓 319→323 绿）；dog-pose 死关节事件全链闭环（硬掩码+规则 NaN 化+论文 20/24 口径，ADR 见 BOARD DECISION 01:15 与 commit `4117194`） | 已收官（W25 通道或扩量重开） |
+| **W30** | `handovers/NEXT-BATCH-plan.md` | 🔄 统一真实扩展池组装（APTv2 17→24kp 拓扑映射+15 帧时序策略+四源汇流；W29 提示 D1 硬掩码落点在其映射层） | 以其任务书为准 |
+| **W31** | `handovers/NEXT-BATCH-plan.md` | 🔄 tab3 补残：−自监督预训练消融（先交脚本+TDD+CPU 冒烟，full 排 relay 后） | 以其任务书为准 |
+| **W32** | `handovers/NEXT-BATCH-plan.md` | 🔄 论文终稿回填预备（数字索引+RESULT-3 评定+C7 换轨预改写；Permit 特批 docs/paper/introduction.md） | 以其任务书为准 |
+| **W33** | `handovers/W9-ntu-repro.md`（评估协议节） | 🔄 NTU60 线性评估复现数（epoch300_model.pt 已就绪；预注册线 ≥77.18%；GPU 排 relay ALL_DONE 之后） | `*ntu*`、reports/ntu-* |
 
 > ⏳ ~~用户待决一项：NTU 数据获取渠道~~ → **已决并完成（渠道 A，2026-08-24）**：数据就位校验通过。
 > 三项用户裁决已落档 `dev-docs/decisions/0002-user-rulings-ntu-synthetic-e6.md`：① NTU 验证纳入（两相推进中）；② 路径 a 合成数据选移植重建（P0.5 前执行）；③ E6 双贴合场景方向确认。
@@ -166,3 +171,4 @@
 | v2.0 | 2026-08-25 | W24 完成 B-full 机制落地：§8 W24 行改 ✅ 收官（脚本含 -Remove 防呆卸窗 / AGENTS §4 并行纪律 / 冒烟 288 绿+Junction 链验证 / ADR-0005 落档）；§10 补 W24 执行记录；版本抬头更新至 v2.0 |
 | v2.1 | 2026-08-25 | W23 完成 warm-start 五步门：§8 W23 行改 ✅ 收官（诊断选档 0.10 / 预注册 / TDD init_from_ckpt / short 负结果归档 + 协议层正收益 / full 排队 Q4 可叫停）；§10 补 W23 执行记录；版本抬头更新至 v2.1 |
 | v2.2 | 2026-08-25 | W23 复核+勘误轮：19 项证据全过零科学缺陷；瑕疵 #1 诊断 JSON 假引用修复（补实际 ckpt_sha256+重跑逐位复现）、#2 RED 新鲜补证、#3 登记不修；附录 `reports/w23-p05-al-warmstart-review-2026-08-25.md`；§10 补复核记录；版本抬头更新至 v2.2 |
+| v2.3 | 2026-08-25 | 协调者大换防：NTU Phase B 300/300 收官（线性评估转 W33）；relay v2 接管（门禁阈值 2600MB 适配桌面基线+内容级校验，W28 上报采纳）；数据五路攻坚 C1-C5 收编+汇聚（W25-W29 收官）；dog-pose 死关节事件全链闭环（硬掩码+NaN 化+20/24 口径，ADR-0006 E5 换轨+Q4 叫停）；AGENTS v1.2/v1.3（自助收编+看板+记忆双写条款 7-9）；multi-window-ops Skill 发布；§8 路由全面刷新（W25-W29 收官存档+W30-W33 立项） |

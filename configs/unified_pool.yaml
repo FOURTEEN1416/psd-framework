@@ -1,0 +1,36 @@
+# W30 统一真实扩展池组装配置
+# 任务书: dev-docs/handovers/NEXT-BATCH-plan.md §W30
+# 源目录 = 主检出绝对路径（runs/ 各窗独立，战役产物已汇聚主检出；只读消费）
+# 产物   = 相对路径锚定本仓根（W30 worktree 内运行 → 落本窗 runs/data_campaign/unified/）
+
+sources:
+  # ── C2/W26 APTv2 canidae 微序列池（503 条 T=15×V=17×C=3）──────────────
+  aptv2_sequences_dir: "D:/Desktop/psd-framework/runs/data_campaign/aptv2/sequences"
+  aptv2_manifest:      "D:/Desktop/psd-framework/runs/data_campaign/aptv2/sequences/_manifest.json"
+
+  # ── C3/W27 DogSet 动捕（51 条 (T,21,3) @60fps，运动学先验池）──────────
+  mocap_sequences_dir: "D:/Desktop/psd-framework/runs/data_campaign/mocap/sequences"
+  mocap_manifest:      "D:/Desktop/psd-framework/runs/data_campaign/mocap/manifest.jsonl"
+
+  # ── C5/W29 dog-pose 静态池（8476 条 T=1 K9Graph 24kp，增广池）─────────
+  dogpose_sequence_pkls:
+    - "D:/Desktop/psd-framework/runs/data_campaign/dogpose/sequences/dogpose_train.pkl"
+    - "D:/Desktop/psd-framework/runs/data_campaign/dogpose/sequences/dogpose_val.pkl"
+
+  # ── AK partialclass4 有标 4 类（⚠️ 当前为冒烟残留将自动隔离，Q3b 全量落盘后重跑即收编）──
+  ak_pkl:      "D:/Desktop/psd-framework/runs/public_real_dataset/partialclass4_T30.pkl"
+  ak_manifest: "D:/Desktop/psd-framework/runs/public_real_dataset/partialclass4_manifest.json"
+
+  # ── C1/W25 片段提点池（W35 增补可选第五源：642 条 T=30 K9Graph 24kp，Q3a 权重提点）──
+  #   相对路径锚定运行仓根（W35 worktree 内产出，收编汇聚后主检出同路径可复现）；
+  #   标签口径沿 W30 判例 deferred_pixel_domain（种子草稿仅 R&D 检视）
+  video_sequences_dir: "runs/data_campaign/video/keypoints_w35/seq30"
+  video_extract_index: "runs/data_campaign/video/keypoints_w35/extract_index.jsonl"
+
+output:
+  pool_pkl:     "runs/data_campaign/unified/real_expansion_pool_v1.pkl"
+  manifest_json: "runs/data_campaign/unified/real_expansion_pool_v1_manifest.json"
+
+options:
+  # true = AK 内容断言失败时硬报错；false = 隔离并如实登记 honesty.ak_source
+  require_ak_full: false

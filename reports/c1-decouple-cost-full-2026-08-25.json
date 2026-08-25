@@ -1,0 +1,353 @@
+{
+  "experiment": "C1 解耦切换成本（Y→Y′ 评估标准演化场景）",
+  "date": "2026-08-25T18:59:55",
+  "layer": "synthetic",
+  "protocol": {
+    "tier": "full",
+    "n_per_class": 100,
+    "epochs": 50,
+    "patience": 15,
+    "seeds": [
+      42,
+      43,
+      44
+    ],
+    "arms": [
+      "decouple",
+      "baseline"
+    ],
+    "device_requested": "auto",
+    "split": "rng(seed).permutation, val_ratio=0.2（W12 口径）",
+    "cost_definition": {
+      "labeled_units_train": "训练样本量（标注单元数主口径）",
+      "wall_clock_sec": "trainer.fit() 当次实测秒数，含前后 GPU 快照",
+      "std_note": "mean±std 的 std 为总体标准差(ddof=0)"
+    },
+    "checkpoint": "D:\\Desktop\\psd-framework\\runs\\p05_stgcn_bc_full\\best.pt"
+  },
+  "runs": [
+    {
+      "arm": "decouple",
+      "seed": 42,
+      "n_per_class": 100,
+      "taxonomy": "Y_prime",
+      "num_classes": 21,
+      "labeled_units_train": 1760,
+      "val_size": 440,
+      "total_labeled_units": 2200,
+      "wall_clock_sec": 27.78,
+      "gpu_state": {
+        "available": true,
+        "name": "NVIDIA GeForce RTX 5060 Laptop GPU",
+        "memory_used_mib": 2021,
+        "memory_total_mib": 8151,
+        "utilization_pct": 23,
+        "captured_at": "2026-08-25T18:48:50"
+      },
+      "gpu_state_after": {
+        "available": true,
+        "name": "NVIDIA GeForce RTX 5060 Laptop GPU",
+        "memory_used_mib": 2162,
+        "memory_total_mib": 8151,
+        "utilization_pct": 52,
+        "captured_at": "2026-08-25T18:49:18"
+      },
+      "epochs_configured": 50,
+      "epochs_run": 17,
+      "best_epoch": 2,
+      "best_val_acc": 0.952273,
+      "final_val_acc": 0.95,
+      "final_train_acc": 1.0,
+      "frozen_params": 1426824,
+      "trainable_params": 6678,
+      "device": "cuda",
+      "use_amp": true,
+      "output_dir": "D:\\Desktop\\psd-framework\\runs\\c1_full\\decouple_seed42",
+      "finished_at": "2026-08-25T18:49:18",
+      "tier": "full"
+    },
+    {
+      "arm": "decouple",
+      "seed": 43,
+      "n_per_class": 100,
+      "taxonomy": "Y_prime",
+      "num_classes": 21,
+      "labeled_units_train": 1760,
+      "val_size": 440,
+      "total_labeled_units": 2200,
+      "wall_clock_sec": 30.6,
+      "gpu_state": {
+        "available": true,
+        "name": "NVIDIA GeForce RTX 5060 Laptop GPU",
+        "memory_used_mib": 2167,
+        "memory_total_mib": 8151,
+        "utilization_pct": 5,
+        "captured_at": "2026-08-25T18:49:19"
+      },
+      "gpu_state_after": {
+        "available": true,
+        "name": "NVIDIA GeForce RTX 5060 Laptop GPU",
+        "memory_used_mib": 2173,
+        "memory_total_mib": 8151,
+        "utilization_pct": 44,
+        "captured_at": "2026-08-25T18:49:50"
+      },
+      "epochs_configured": 50,
+      "epochs_run": 18,
+      "best_epoch": 3,
+      "best_val_acc": 0.954545,
+      "final_val_acc": 0.943182,
+      "final_train_acc": 0.957955,
+      "frozen_params": 1426824,
+      "trainable_params": 6678,
+      "device": "cuda",
+      "use_amp": true,
+      "output_dir": "D:\\Desktop\\psd-framework\\runs\\c1_full\\decouple_seed43",
+      "finished_at": "2026-08-25T18:49:50",
+      "tier": "full"
+    },
+    {
+      "arm": "decouple",
+      "seed": 44,
+      "n_per_class": 100,
+      "taxonomy": "Y_prime",
+      "num_classes": 21,
+      "labeled_units_train": 1760,
+      "val_size": 440,
+      "total_labeled_units": 2200,
+      "wall_clock_sec": 34.92,
+      "gpu_state": {
+        "available": true,
+        "name": "NVIDIA GeForce RTX 5060 Laptop GPU",
+        "memory_used_mib": 2173,
+        "memory_total_mib": 8151,
+        "utilization_pct": 5,
+        "captured_at": "2026-08-25T18:49:51"
+      },
+      "gpu_state_after": {
+        "available": true,
+        "name": "NVIDIA GeForce RTX 5060 Laptop GPU",
+        "memory_used_mib": 2173,
+        "memory_total_mib": 8151,
+        "utilization_pct": 42,
+        "captured_at": "2026-08-25T18:50:26"
+      },
+      "epochs_configured": 50,
+      "epochs_run": 20,
+      "best_epoch": 5,
+      "best_val_acc": 0.965909,
+      "final_val_acc": 0.954545,
+      "final_train_acc": 0.957386,
+      "frozen_params": 1426824,
+      "trainable_params": 6678,
+      "device": "cuda",
+      "use_amp": true,
+      "output_dir": "D:\\Desktop\\psd-framework\\runs\\c1_full\\decouple_seed44",
+      "finished_at": "2026-08-25T18:50:26",
+      "tier": "full"
+    },
+    {
+      "arm": "baseline",
+      "seed": 42,
+      "n_per_class": 100,
+      "taxonomy": "Y_prime",
+      "num_classes": 21,
+      "labeled_units_train": 1760,
+      "val_size": 440,
+      "total_labeled_units": 2200,
+      "wall_clock_sec": 224.82,
+      "gpu_state": {
+        "available": true,
+        "name": "NVIDIA GeForce RTX 5060 Laptop GPU",
+        "memory_used_mib": 2173,
+        "memory_total_mib": 8151,
+        "utilization_pct": 5,
+        "captured_at": "2026-08-25T18:50:27"
+      },
+      "gpu_state_after": {
+        "available": true,
+        "name": "NVIDIA GeForce RTX 5060 Laptop GPU",
+        "memory_used_mib": 2675,
+        "memory_total_mib": 8151,
+        "utilization_pct": 20,
+        "captured_at": "2026-08-25T18:54:12"
+      },
+      "epochs_configured": 50,
+      "epochs_run": 48,
+      "best_epoch": 33,
+      "best_val_acc": 0.965909,
+      "final_val_acc": 0.965909,
+      "final_train_acc": 1.0,
+      "frozen_params": 0,
+      "trainable_params": 1433502,
+      "device": "cuda",
+      "use_amp": true,
+      "output_dir": "D:\\Desktop\\psd-framework\\runs\\c1_full\\baseline_seed42",
+      "finished_at": "2026-08-25T18:54:12",
+      "tier": "full"
+    },
+    {
+      "arm": "baseline",
+      "seed": 43,
+      "n_per_class": 100,
+      "taxonomy": "Y_prime",
+      "num_classes": 21,
+      "labeled_units_train": 1760,
+      "val_size": 440,
+      "total_labeled_units": 2200,
+      "wall_clock_sec": 122.38,
+      "gpu_state": {
+        "available": true,
+        "name": "NVIDIA GeForce RTX 5060 Laptop GPU",
+        "memory_used_mib": 2699,
+        "memory_total_mib": 8151,
+        "utilization_pct": 5,
+        "captured_at": "2026-08-25T18:54:13"
+      },
+      "gpu_state_after": {
+        "available": true,
+        "name": "NVIDIA GeForce RTX 5060 Laptop GPU",
+        "memory_used_mib": 2694,
+        "memory_total_mib": 8151,
+        "utilization_pct": 40,
+        "captured_at": "2026-08-25T18:56:15"
+      },
+      "epochs_configured": 50,
+      "epochs_run": 26,
+      "best_epoch": 11,
+      "best_val_acc": 0.959091,
+      "final_val_acc": 0.947727,
+      "final_train_acc": 0.996023,
+      "frozen_params": 0,
+      "trainable_params": 1433502,
+      "device": "cuda",
+      "use_amp": true,
+      "output_dir": "D:\\Desktop\\psd-framework\\runs\\c1_full\\baseline_seed43",
+      "finished_at": "2026-08-25T18:56:15",
+      "tier": "full"
+    },
+    {
+      "arm": "baseline",
+      "seed": 44,
+      "n_per_class": 100,
+      "taxonomy": "Y_prime",
+      "num_classes": 21,
+      "labeled_units_train": 1760,
+      "val_size": 440,
+      "total_labeled_units": 2200,
+      "wall_clock_sec": 218.99,
+      "gpu_state": {
+        "available": true,
+        "name": "NVIDIA GeForce RTX 5060 Laptop GPU",
+        "memory_used_mib": 2694,
+        "memory_total_mib": 8151,
+        "utilization_pct": 5,
+        "captured_at": "2026-08-25T18:56:16"
+      },
+      "gpu_state_after": {
+        "available": true,
+        "name": "NVIDIA GeForce RTX 5060 Laptop GPU",
+        "memory_used_mib": 2694,
+        "memory_total_mib": 8151,
+        "utilization_pct": 41,
+        "captured_at": "2026-08-25T18:59:55"
+      },
+      "epochs_configured": 50,
+      "epochs_run": 46,
+      "best_epoch": 31,
+      "best_val_acc": 0.975,
+      "final_val_acc": 0.965909,
+      "final_train_acc": 0.999432,
+      "frozen_params": 0,
+      "trainable_params": 1433502,
+      "device": "cuda",
+      "use_amp": true,
+      "output_dir": "D:\\Desktop\\psd-framework\\runs\\c1_full\\baseline_seed44",
+      "finished_at": "2026-08-25T18:59:55",
+      "tier": "full"
+    }
+  ],
+  "aggregated": {
+    "decouple": {
+      "wall_clock_sec": {
+        "mean": 31.100000000000005,
+        "std": 2.9362561196189954,
+        "values": [
+          27.78,
+          30.6,
+          34.92
+        ]
+      },
+      "best_val_acc": {
+        "mean": 0.9575756666666666,
+        "std": 0.005965111305658001,
+        "values": [
+          0.952273,
+          0.954545,
+          0.965909
+        ]
+      },
+      "epochs_run": {
+        "mean": 18.333333333333332,
+        "std": 1.247219128924647,
+        "values": [
+          17.0,
+          18.0,
+          20.0
+        ]
+      },
+      "labeled_units_train": {
+        "mean": 1760.0,
+        "std": 0.0,
+        "values": [
+          1760.0,
+          1760.0,
+          1760.0
+        ]
+      }
+    },
+    "baseline": {
+      "wall_clock_sec": {
+        "mean": 188.73000000000002,
+        "std": 46.976867356888185,
+        "values": [
+          224.82,
+          122.38,
+          218.99
+        ]
+      },
+      "best_val_acc": {
+        "mean": 0.9666666666666667,
+        "std": 0.006516881377537006,
+        "values": [
+          0.965909,
+          0.959091,
+          0.975
+        ]
+      },
+      "epochs_run": {
+        "mean": 40.0,
+        "std": 9.93310961716756,
+        "values": [
+          48.0,
+          26.0,
+          46.0
+        ]
+      },
+      "labeled_units_train": {
+        "mean": 1760.0,
+        "std": 0.0,
+        "values": [
+          1760.0,
+          1760.0,
+          1760.0
+        ]
+      }
+    },
+    "_comparison": {
+      "wall_clock_ratio_baseline_over_decouple": 6.0685,
+      "acc_delta_decouple_minus_baseline": -0.009091,
+      "epochs_ratio_baseline_over_decouple": 2.1818
+    }
+  }
+}

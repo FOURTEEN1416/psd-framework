@@ -3,17 +3,24 @@
 #          ②步骤校验从存在性升级为内容级(W28 上报采纳: 样本量/字段/大小)
 # 队列: Q1(AL full) → Q2(C1 full) → Q3a(YOLO权重) → Q3b(全量提点) → Q3c(公开真实层微调)
 
+param(
+    [string]$StartStep = "Q1_al_full"   # 断点续跑: 从指定步骤开始(Q1_al_full/Q2_c1_full/Q3a_yolo_dogpose/Q3b_extract/Q3c_finetune)
+)
+
 $ErrorActionPreference = "Continue"
 Set-Location "D:\Desktop\psd-framework"
 Start-Transcript -Path "runs\relay_exec\transcript.log" -Append | Out-Null
 
 $PY = "D:\Desktop\psd-framework\.venv\Scripts\python.exe"
 $DATE = "2026-08-25"
-$state = @{ started_at = (Get-Date -Format o); version = "v2"; steps = @() }
+$script:Order = @("Q1_al_full", "Q2_c1_full", "Q3a_yolo_dogpose", "Q3b_extract", "Q3c_finetune")
+$script:StartIdx = $script:Order.IndexOf($StartStep)
+if ($script:StartIdx -lt 0) { $script:StartIdx = 0 }
+$state = @{ started_at = (Get-Date -Format o); version = "v2"; start_step = $StartStep; steps = @() }
 function Save-State { $state | ConvertTo-Json -Depth 5 | Out-File "runs\relay_exec\state.json" -Encoding utf8 }
 
 function Test-GpuFree {
-    # 桌面基线 ~1.8-2.4GB(壁纸引擎/浏览器/OpenCode 常驻)——阈值 2600MB
+    # 桌面基线 ~1.8-2.4GB(壁纸/浏览器/OpenCode 常驻)——阈值 2600MB
     $line = nvidia-smi --query-gpu=memory.used --format=csv,noheader,nounits 2>$null
     if (-not $line) { return $false }
     $mem = [int]($line | Select-Object -First 1)
@@ -46,6 +53,10 @@ function Test-JsonField { param($Path, $Field)
 
 function Invoke-Step {
     param($Name, [scriptblock]$Cmd, [scriptblock]$Verify, [string[]]$CommitPaths, [string]$CommitMsg)
+    if ($script:Order.IndexOf($Name) -lt $script:StartIdx) {
+        Write-Host "[$Name] 跳过（-StartStep=$StartStep 断点续跑）"
+        return
+    }
     Write-Host "`n========== [$Name] START =========="
     for ($attempt = 1; $attempt -le 2; $attempt++) {
         try { & $Cmd } catch { Write-Host "[${Name}] 异常: $_" }
@@ -76,10 +87,10 @@ New-Item -ItemType Directory -Force -Path "runs\relay_exec" | Out-Null
 Save-State
 Wait-GpuFree
 
-# Q1 — AL full-budget(内容校验: JSON 含 summary.best_val_acc)
+# Q1 — AL full-budget(内容校验: curves 键存在——v2.1 修正,summary 字段不存在于本产物结构)
 Invoke-Step "Q1_al_full" `
     { & $PY scripts\run_p05_al_efficiency.py --config configs\p05_al_full.yaml --fresh } `
-    -Verify { Test-JsonField "reports\p05-al-efficiency-full-$DATE.json" "summary" } `
+    -Verify { Test-JsonField "reports\p05-al-efficiency-full-$DATE.json" "curves" } `
     -CommitPaths @("reports\p05-al-efficiency-full-$DATE.json", "configs\p05_al_full.yaml") `
     -CommitMsg "feat(p05): [relay Q1] AL full-budget 复跑归档(GPU 接力 v2)"
 

@@ -1,0 +1,570 @@
+{
+  "meta": {
+    "generator": "scripts/gen_number_index.py",
+    "generated_at": "2026-08-25T17:46:35",
+    "target_date": "2026-08-25",
+    "purpose": "W32 任务书范围1——终稿回填机械化降耗的三列索引（占位符→数值→来源文件+字段）",
+    "inputs": [
+      "dev-docs\\paper-backfill-quickref.md",
+      "docs\\paper/*.md",
+      "reports/*.json"
+    ],
+    "conventions": {
+      "value_json": "当次运行程序化读取的新鲜值",
+      "value_quickref": "quickref 表格声称值（可能滞后于 JSON 覆写）",
+      "verified": "两者相对差 ≤1% 视为一致",
+      "layer_rule": "三层口径（合成/公开真实/真实K9）禁止混报——AGENTS.md 硬规则 3"
+    }
+  },
+  "number_index": [
+    {
+      "experiment_id": "E1",
+      "placeholder_hint": "[E1]",
+      "layer": "合成层",
+      "metric": "val_acc (22类)",
+      "value_json": 0.9659090909090909,
+      "json_status": "ok",
+      "source_file": "reports/p05-stgcnbc-synthetic-100perclass-Y.json",
+      "source_field": "summary/best_val_acc",
+      "companion_fields": "",
+      "value_quickref": "**97.3%**",
+      "random_baseline_quickref": "4.5%",
+      "ratio_quickref": "21.6×",
+      "verified": true,
+      "note": "⚠️ 当前 JSON 为等预算 50ep 覆写版(early_stopping=false)；quickref 另记首跑 97.3% / 早停复核 96.4%，三种口径并存，引用须注明协议"
+    },
+    {
+      "experiment_id": "E2",
+      "placeholder_hint": "[E2]",
+      "layer": "合成层",
+      "metric": "val_acc (21类 Y')",
+      "value_json": 0.9681818181818181,
+      "json_status": "ok",
+      "source_file": "reports/p05-stgcnbc-synthetic-100perclass-Yprime.json",
+      "source_field": "summary/best_val_acc",
+      "companion_fields": "",
+      "value_quickref": "**95.9%**",
+      "random_baseline_quickref": "4.76%",
+      "ratio_quickref": "20.1×",
+      "verified": true,
+      "note": "等预算 50ep 版为当前报告内容；早停版数字仅存 quickref 行内"
+    },
+    {
+      "experiment_id": "E3",
+      "placeholder_hint": "[E3]",
+      "layer": "合成层",
+      "metric": "val_acc (22类, 50样本/类)",
+      "value_json": 0.95,
+      "json_status": "ok",
+      "source_file": "reports/p05-stgcnbc-synthetic-50perclass-Y.json",
+      "source_field": "summary/best_val_acc",
+      "companion_fields": "",
+      "value_quickref": "95.0%",
+      "random_baseline_quickref": "4.5%",
+      "ratio_quickref": "21.1×",
+      "verified": true,
+      "note": "(消融)"
+    },
+    {
+      "experiment_id": "E4",
+      "placeholder_hint": "[E4]",
+      "layer": "合成层",
+      "metric": "val_acc (22类, 20样本/类)",
+      "value_json": 0.7727272727272727,
+      "json_status": "ok",
+      "source_file": "reports/p05-stgcnbc-synthetic-20perclass-Y.json",
+      "source_field": "summary/best_val_acc",
+      "companion_fields": "",
+      "value_quickref": "77.3%",
+      "random_baseline_quickref": "4.5%",
+      "ratio_quickref": "17.2×",
+      "verified": true,
+      "note": "(消融)"
+    },
+    {
+      "experiment_id": "E-C",
+      "placeholder_hint": "[E-C]",
+      "layer": "公开真实层",
+      "metric": "mean_matched_iou (种子伪GT)",
+      "value_json": 0.4577,
+      "json_status": "ok",
+      "source_file": "reports/p02-smq-iou-eC-seeds-recheck.json",
+      "source_field": "aggregate/mean_matched_iou",
+      "companion_fields": "aggregate/std; aggregate/boundary_f1_mean; aggregate/n_episodes",
+      "value_quickref": "**0.458 ± 0.049**",
+      "random_baseline_quickref": "~0.30",
+      "ratio_quickref": "1.53×",
+      "verified": true,
+      "note": "recheck 与首跑逐位一致；随机基线 ~0.30 为估计值非实测"
+    },
+    {
+      "experiment_id": "E-C",
+      "placeholder_hint": "[E-C]",
+      "layer": "公开真实层",
+      "metric": "boundary_F1@16",
+      "value_json": 0.3425,
+      "json_status": "ok",
+      "source_file": "reports/p02-smq-iou-eC-seeds-recheck.json",
+      "source_field": "aggregate/boundary_f1_mean",
+      "companion_fields": "",
+      "value_quickref": "**0.458 ± 0.049**",
+      "random_baseline_quickref": "~0.30",
+      "ratio_quickref": "1.53×",
+      "verified": null,
+      "note": "(伴随指标；quickref 主值列为 IoU，不参与本条对比)"
+    },
+    {
+      "experiment_id": "E-A",
+      "placeholder_hint": "[E-A]",
+      "layer": "公开真实层",
+      "metric": "mean_matched_iou (mse=1.0 修复基线)",
+      "value_json": 0.4087,
+      "json_status": "ok",
+      "source_file": "reports/p02-smq-iou-eA-seeds.json",
+      "source_field": "aggregate/mean_matched_iou",
+      "companion_fields": "",
+      "value_quickref": "0.409",
+      "random_baseline_quickref": "~0.30",
+      "ratio_quickref": "1.36×",
+      "verified": true,
+      "note": "(历史基线)"
+    },
+    {
+      "experiment_id": "P0.1",
+      "placeholder_hint": "[P0.1]",
+      "layer": "公开真实层",
+      "metric": "kNN(k=1) top-1 (%)",
+      "value_json": 20.89,
+      "json_status": "ok",
+      "source_file": "reports/p01-knn-result.json",
+      "source_field": "knn_top1_mean_pct",
+      "companion_fields": "random_baseline_pct; ratio_vs_random; fold_top1_acc",
+      "value_quickref": "**20.89% ± 4.45%**",
+      "random_baseline_quickref": "8.33%",
+      "ratio_quickref": "2.51×",
+      "verified": true,
+      "note": "dog-ID 代理 probe 口径披露随行"
+    },
+    {
+      "experiment_id": "P0.3-main",
+      "placeholder_hint": "[P0.3-main]",
+      "layer": "公开真实层",
+      "metric": "原型聚类 purity",
+      "value_json": 0.5339,
+      "json_status": "ok",
+      "source_file": "reports/p03-jia-phasea-results.json",
+      "source_field": "e3_main/alpha_1.0/purity_mean",
+      "companion_fields": "e3_main/alpha_1.0/random_baseline_purity; e3_main/alpha_1.0/purity_std",
+      "value_quickref": "**0.534**",
+      "random_baseline_quickref": "0.330(Σπ²)",
+      "ratio_quickref": "1.62×",
+      "verified": true,
+      "note": "3 run_seeds 同值；随机基线 Σπ²=0.3306"
+    },
+    {
+      "experiment_id": "P0.3-noise30",
+      "placeholder_hint": "[P0.3-noise30]",
+      "layer": "公开真实层",
+      "metric": "purity@30% 标签噪声",
+      "value_json": 0.5025,
+      "json_status": "ok",
+      "source_file": "reports/p03-jia-phasea-results.json",
+      "source_field": "noise_ablation[3]/purity_mean",
+      "companion_fields": "",
+      "value_quickref": "**0.534**",
+      "random_baseline_quickref": "0.330(Σπ²)",
+      "ratio_quickref": "1.62×",
+      "verified": null,
+      "note": "noise_ablation 为按 noise_rate 升序的列表，[3] 即 q=30%；quickref 该行为主行伴生（P0.3 同 ID），不参与主值对比"
+    },
+    {
+      "experiment_id": "P0.4-main",
+      "placeholder_hint": "[P0.4-main]",
+      "layer": "公开真实层",
+      "metric": "pool_precision (r1 操作点, cov≈35%)",
+      "value_json": 0.6913,
+      "json_status": "ok",
+      "source_file": "reports/p04-tcl-results.json",
+      "source_field": "cells/on_consensus_a1.0/rounds_agg[1]/precision_mean",
+      "companion_fields": "cells/on_consensus_a1.0/rounds_agg[1]/precision_std; cells/on_consensus_a1.0/paired_first_vs_final/delta_pp_mean",
+      "value_quickref": "**0.691 ± 0.013**",
+      "random_baseline_quickref": "0.513(r0)",
+      "ratio_quickref": "1.35×",
+      "verified": true,
+      "note": "quickref 主数值 0.691 取 r1_selftrain 峰值轮"
+    }
+  ],
+  "placeholder_index": [
+    {
+      "kind": "RESULT",
+      "token": "[RESULT-7]",
+      "file": "docs\\paper\\conclusion-limitations.md",
+      "line": "10",
+      "snippet": "…2.51×** random baseline), that the semantic layer attains **[RESULT-7]** on 22-class recognition, and that taxonomy transitions ar…"
+    },
+    {
+      "kind": "RESULT",
+      "token": "[RESULT-8]",
+      "file": "docs\\paper\\conclusion-limitations.md",
+      "line": "10",
+      "snippet": "…ecognition, and that taxonomy transitions are absorbed at **[RESULT-8]** of the full-retraining cost at matched accuracy. Beyond a…"
+    },
+    {
+      "kind": "PENDING",
+      "token": "[PENDING]",
+      "file": "docs\\paper\\conclusion-limitations.md",
+      "line": "16",
+      "snippet": "…-level claims rest on downstream experiments (Sections 4–5) [PENDING].…"
+    },
+    {
+      "kind": "PENDING",
+      "token": "[PENDING]",
+      "file": "docs\\paper\\experiment-skeleton.md",
+      "line": "28",
+      "snippet": "- 种子：⏳ [PENDING] 固定种子清单与重复次数（目标 ≥3 seeds）。"
+    },
+    {
+      "kind": "PENDING",
+      "token": "[PENDING]",
+      "file": "docs\\paper\\experiment-skeleton.md",
+      "line": "130",
+      "snippet": "- [ ] 所有 `[PENDING]` 数字待 P0.2-P0.5 报告归档后回填，回填时同步更新 outline.md 的 Claims-Evidence 矩阵状态"
+    },
+    {
+      "kind": "PENDING",
+      "token": "[PENDING-用户措辞裁决]",
+      "file": "docs\\paper\\experiment-skeleton.md",
+      "line": "142",
+      "snippet": "….013` 冒充残留）——E5 负结果如实入册（W14 合成层短预算：熵未占优 + softmax 饱和诊断，C7 标 [PENDING-用户措辞裁决]）；E6 回填 C1 真证据（合成层 small 档：墙钟 7.32×保守 ≥3×、精度 +2.27pp、标注单元打平，…"
+    },
+    {
+      "kind": "RESULT",
+      "token": "[RESULT-1]",
+      "file": "docs\\paper\\introduction.md",
+      "line": "10",
+      "snippet": "…top-1 of **20.89% versus an 8.33% random baseline (2.51×)** [RESULT-1]; the full pipeline reaches **[RESULT-2]** on 22-class behav…"
+    },
+    {
+      "kind": "RESULT",
+      "token": "[RESULT-2]",
+      "file": "docs\\paper\\introduction.md",
+      "line": "10",
+      "snippet": "…baseline (2.51×)** [RESULT-1]; the full pipeline reaches **[RESULT-2]** on 22-class behavior classification using only 100–200 an…"
+    },
+    {
+      "kind": "RESULT",
+      "token": "[RESULT-3]",
+      "file": "docs\\paper\\introduction.md",
+      "line": "10",
+      "snippet": "…annotated clips, and reduces taxonomy-transition cost by **[RESULT-3]** relative to full retraining. These results indicate that…"
+    },
+    {
+      "kind": "PENDING",
+      "token": "[PENDING P0.2]",
+      "file": "docs\\paper\\introduction.md",
+      "line": "40",
+      "snippet": "…ion cuts continuous streams into behavior-aligned proposals [PENDING P0.2].…"
+    },
+    {
+      "kind": "PENDING",
+      "token": "[PENDING P0.4-P0.5]",
+      "file": "docs\\paper\\introduction.md",
+      "line": "41",
+      "snippet": "…hat reaches ≥85% on 22 classes within the annotation budget [PENDING P0.4-P0.5].…"
+    },
+    {
+      "kind": "RESULT",
+      "token": "[RESULT-4: 22 类主精度]",
+      "file": "docs\\paper\\introduction.md",
+      "line": "45",
+      "snippet": "…Across three data calibers, PSD reaches **[RESULT-4: 22 类主精度]** using [RESULT-5] of the full annotation budget, and absor…"
+    },
+    {
+      "kind": "RESULT",
+      "token": "[RESULT-5]",
+      "file": "docs\\paper\\introduction.md",
+      "line": "45",
+      "snippet": "…ee data calibers, PSD reaches **[RESULT-4: 22 类主精度]** using [RESULT-5] of the full annotation budget, and absorbs a taxonomy trans…"
+    },
+    {
+      "kind": "RESULT",
+      "token": "[RESULT-6]",
+      "file": "docs\\paper\\introduction.md",
+      "line": "45",
+      "snippet": "…ull annotation budget, and absorbs a taxonomy transition at [RESULT-6] of the cost of full retraining while matching its accuracy…"
+    },
+    {
+      "kind": "PENDING",
+      "token": "[PENDING]",
+      "file": "docs\\paper\\introduction.md",
+      "line": "56",
+      "snippet": "| 数字纪律 | ✅ 仅 P0.1 已归档数字实写，其余 [PENDING]/[RESULT-x] 占位 |"
+    },
+    {
+      "kind": "PENDING",
+      "token": "[PENDING]",
+      "file": "docs\\paper\\introduction.md",
+      "line": "61",
+      "snippet": "- [ ] P0 数据落地后：回填 RESULT-2~6，删除 [PENDING] 标记，升级为终稿候选"
+    },
+    {
+      "kind": "PENDING",
+      "token": "[PENDING P0.x]",
+      "file": "docs\\paper\\method.md",
+      "line": "3",
+      "snippet": "> Owner: `docs/paper/method.md` · W5 窗口 2026-08-23 · 状态: 框架 v0.2——结构与可写部分已成文，**全部实验数字以 `[PENDING P0.x]` 占位**"
+    },
+    {
+      "kind": "PENDING",
+      "token": "[PENDING P0.x: extended training schedule results; AimCLR++ backbone comparison]",
+      "file": "docs\\paper\\method.md",
+      "line": "30",
+      "snippet": "*[PENDING P0.x: extended training schedule results; AimCLR++ backbone comparison]*"
+    },
+    {
+      "kind": "PENDING",
+      "token": "[PENDING P0.2]",
+      "file": "docs\\paper\\method.md",
+      "line": "36",
+      "snippet": "*Evidence placeholder.* Segmentation quality is measured by boundary IoU against held-out annotations, compared against a sliding-window baseline: **[PENDING P0.2]**."
+    },
+    {
+      "kind": "PENDING",
+      "token": "[PENDING P0.3: purity curves, sensitivity to $|S|$, $\\tau$, K]",
+      "file": "docs\\paper\\method.md",
+      "line": "65",
+      "snippet": "…olds rather than resampling; this choice is ablated in §5. *[PENDING P0.3: purity curves, sensitivity to $|S|$, $\\tau$, K]*…"
+    },
+    {
+      "kind": "PENDING",
+      "token": "[PENDING P0.4/P0.5: three-tier main results; efficiency curve vs random sampling; 22-class target ≥85%]",
+      "file": "docs\\paper\\method.md",
+      "line": "69",
+      "snippet": "…e loop between automatic expansion and human verification. *[PENDING P0.4/P0.5: three-tier main results; efficiency curve vs random sampling; 22-class target ≥85%]*…"
+    },
+    {
+      "kind": "PENDING",
+      "token": "[PENDING P0.x]",
+      "file": "docs\\paper\\method.md",
+      "line": "100",
+      "snippet": "| 主张与证据分离 | ✅ 全部 `[PENDING P0.x]` 占位；解耦收益句标 `[CLAIM NEEDS EVIDENCE]` |"
+    },
+    {
+      "kind": "CITATION",
+      "token": "[CITATION-NEEDED]",
+      "file": "docs\\paper\\outline.md",
+      "line": "42",
+      "snippet": "> 引用纪律：Evidence 列中一切对外数字必须能溯源到 `reports/` 归档文件；池外引用一律 `[CITATION-NEEDED]`。"
+    },
+    {
+      "kind": "RESULT",
+      "token": "[RESULT-1]",
+      "file": "docs\\paper\\outline.md",
+      "line": "59",
+      "snippet": "- 四要素齐全（背景/方法/结果/结论）+ **≥3 个数值结果**（[RESULT-1] kNN 倍率已实填、[RESULT-2] 22 类精度、⚠️ [RESULT-3] 原\"标注预算节省比\"因 C7 裁决①降级失据，需重选源——候选：SMQ 边界 IoU 1.53× / 伪标签迭代 +17.9pp / C1 墙钟保守比 ≥3×，归摘要终稿窗口定）。"
+    },
+    {
+      "kind": "RESULT",
+      "token": "[RESULT-2]",
+      "file": "docs\\paper\\outline.md",
+      "line": "59",
+      "snippet": "- 四要素齐全（背景/方法/结果/结论）+ **≥3 个数值结果**（[RESULT-1] kNN 倍率已实填、[RESULT-2] 22 类精度、⚠️ [RESULT-3] 原\"标注预算节省比\"因 C7 裁决①降级失据，需重选源——候选：SMQ 边界 IoU 1.53× / 伪标签迭代 +17.9pp / C1 墙钟保守比 ≥3×，归摘要终稿窗口定）。"
+    },
+    {
+      "kind": "RESULT",
+      "token": "[RESULT-3]",
+      "file": "docs\\paper\\outline.md",
+      "line": "59",
+      "snippet": "- 四要素齐全（背景/方法/结果/结论）+ **≥3 个数值结果**（[RESULT-1] kNN 倍率已实填、[RESULT-2] 22 类精度、⚠️ [RESULT-3] 原\"标注预算节省比\"因 C7 裁决①降级失据，需重选源——候选：SMQ 边界 IoU 1.53× / 伪标签迭代 +17.9pp / C1 墙钟保守比 ≥3×，归摘要终稿窗口定）。"
+    },
+    {
+      "kind": "CITATION",
+      "token": "[CITATION-NEEDED: authors+DOI]",
+      "file": "docs\\paper\\outline.md",
+      "line": "130",
+      "snippet": "…GitHub 全局检索锁定） | ⚠️ 题名/会议双源锁定；作者列表与 DOI 无法经允许渠道获得 → 正文缩窄标记 `[CITATION-NEEDED: authors+DOI]`，Scholar 终审补 |…"
+    },
+    {
+      "kind": "CITATION",
+      "token": "[CITATION-NEEDED: author list]",
+      "file": "docs\\paper\\outline.md",
+      "line": "137",
+      "snippet": "…gnition 目录回溯验证 | ⚠️ 题名/期刊/链接双源锁定；作者列表待 Scholar 终审 → 正文缩窄标记 `[CITATION-NEEDED: author list]` |…"
+    },
+    {
+      "kind": "CITATION",
+      "token": "[CITATION-NEEDED]",
+      "file": "docs\\paper\\outline.md",
+      "line": "147",
+      "snippet": "> 铁律执行情况：池外或题录不全者一律 `[CITATION-NEEDED]` 并在文中显式标记；绝不凭记忆生成题录。W17 文献终审（2026-08-24）：11 条完全解决（全部有官方仓 BibTeX / arXiv API 元数据背书），3 条缩窄为作者列表级待补项。"
+    },
+    {
+      "kind": "CITATION",
+      "token": "[CITATION-NEEDED]",
+      "file": "docs\\paper\\outline.md",
+      "line": "168",
+      "snippet": "| R5 | 🟠 MAJOR | **数据集论文未引**：InterPet4D/AK/APTv2 引用缺失（PR 投稿硬要求） | 引用计划 §6 已补三条 [CITATION-NEEDED]；文献终审窗口必须补齐 | ✅ W17 已解除（2026-08-24，三条题录取自官方渠道自带 BibTeX） |"
+    },
+    {
+      "kind": "CITATION",
+      "token": "[CITATION-NEEDED]",
+      "file": "docs\\paper\\outline.md",
+      "line": "212",
+      "snippet": "| v0.2 | 2026-08-23 | 五视角对抗评审：新增 §8 风险登记册（R1-R7，含两条 CRITICAL）+ PR 收录检查单；引用计划补三个数据集论文 [CITATION-NEEDED]；章节重编号 |"
+    },
+    {
+      "kind": "PENDING",
+      "token": "[PENDING-用户措辞裁决]",
+      "file": "docs\\paper\\outline.md",
+      "line": "216",
+      "snippet": "| v0.6 | 2026-08-24 | W21 矩阵同步：C1 ⏳→🟡（合成层 small 档实证，full 待确认）；C7 保持 ⏳ + 负结果注记 [PENDING-用户措辞裁决]；R2 🔴→🟡（合成层证据入册）；新增 R11（AL 负结果对管线完整性叙事的影响，待用户裁决 C7 措辞）；fig4/tab3 状态行同步 |"
+    },
+    {
+      "kind": "RESULT",
+      "token": "[RESULT-3]",
+      "file": "docs\\paper\\outline.md",
+      "line": "217",
+      "snippet": "| v0.7 | 2026-08-25 | 用户裁决 C7 选项①落地：矩阵 C7 行标 🔻 降级（落点 §4.3→§5）；§3 故事线与 §4.1 Intro 贡献 bullet 4 计划缩窄（主动学习转探索性发现）；摘要 [RESULT-3] 标注失据待重选源；fig4 落点迁 §5；R11 状态 ✅ 缓解落地 |"
+    },
+    {
+      "kind": "CITATION",
+      "token": "[CITATION-NEEDED]",
+      "file": "docs\\paper\\related-work.md",
+      "line": "4",
+      "snippet": "> 引用纪律: 全部条目溯源 `dev-docs/research/RESEARCH_LITERATURE.md`（17 篇池）与 `NOVELTY_CHECK_YAOQING_JIA.md`；题录不全者标 `[CITATION-NEEDED]`。"
+    },
+    {
+      "kind": "CITATION",
+      "token": "[CITATION-NEEDED]",
+      "file": "docs\\paper\\related-work.md",
+      "line": "61",
+      "snippet": "| 引用全部有真实出处或显式 [CITATION-NEEDED] | ✅ W17 终审后剩 3 处缩窄标记（YOLO-PetX / TIP Teacher / GRA 的作者列表+DOI 级待补），其余全部补全为官方渠道题录；无凭记忆生成条目 |"
+    },
+    {
+      "kind": "CITATION",
+      "token": "[CITATION-NEEDED]",
+      "file": "docs\\paper\\related-work.md",
+      "line": "85",
+      "snippet": "| v0.4 | 2026-08-24 | W17 文献终审：9 处 [CITATION-NEEDED] 中 6 处补全（Science 特稿/层次化犬行为 workshop 论文/PoseConv3D/CrosSCLR/SMQ/Mamba-MSQNet），3 处缩窄为作者列表级（YOLO-PetX/TIP Teacher/GRA）；VFM 句补 DINO 代表引用；待办清单同步 |"
+    },
+    {
+      "kind": "CITATION",
+      "token": "[CITATION-NEEDED]",
+      "file": "docs\\paper\\review-log.md",
+      "line": "19",
+      "snippet": "| 🌏领域 | **三个数据集论文均未列引用** | MAJOR | 引用计划补三条 [CITATION-NEEDED] |"
+    },
+    {
+      "kind": "PENDING",
+      "token": "[PENDING-用户措辞裁决]",
+      "file": "docs\\paper\\review-log.md",
+      "line": "120",
+      "snippet": "| Claims-Evidence | C1 ⏳→🟡；C7 保持 ⏳ + 负结果注记 [PENDING-用户措辞裁决]；R2 🔴→🟡；新增 R11（AL 负结果对管线完整性叙事影响，🟠 MAJOR 待用户裁决）；fig4/tab3 状态行同步 | outline.md v0.6 |"
+    },
+    {
+      "kind": "PENDING",
+      "token": "[PENDING-用户措辞裁决]",
+      "file": "docs\\paper\\review-log.md",
+      "line": "125",
+      "snippet": "- **C7 措辞 [PENDING-用户措辞裁决]**：①降级\"探索性发现\"写入 §5 分析节；②移出贡献列表。W21 未定稿任何 C7 表述。"
+    },
+    {
+      "kind": "RESULT",
+      "token": "[RESULT-3]",
+      "file": "docs\\paper\\review-log.md",
+      "line": "136",
+      "snippet": "| outline.md v0.7 | 矩阵 C7 行标 🔻 降级（落点 →§5）；§3 故事线 #4 与 §4.1 Intro 贡献 bullet 4 计划缩窄（主动学习转探索性发现）；摘要 [RESULT-3] 原\"标注预算节省比\"失据标记待重选源（候选：SMQ IoU 1.53× / 伪标签 +17.9pp / C1 墙钟 ≥3×）；R11 ✅ 缓解落地 |"
+    },
+    {
+      "kind": "RESULT",
+      "token": "[RESULT-3]",
+      "file": "docs\\paper\\review-log.md",
+      "line": "139",
+      "snippet": "> Introduction.md 本体属 W21 禁触领地（等 Q3 数字统一终稿窗口处理），bullet 4 与摘要 [RESULT-3] 的实际改写已在 outline 计划层登记，由终稿窗口执行。"
+    }
+  ],
+  "result3_candidates_and_c7_evidence": [
+    {
+      "tag": "RESULT-3-cand-A-smq-ratio",
+      "layer": "公开真实层",
+      "desc": "[RESULT-3] 候选A：SMQ 分割 IoU 对估计随机基线的倍率 (~1.53×)",
+      "source_file": "reports/p02-smq-iou-eC-seeds-recheck.json",
+      "source_field": "aggregate/mean_matched_iou",
+      "raw_status": "ok",
+      "derived": 1.526
+    },
+    {
+      "tag": "RESULT-3-cand-B-pseudo-label-peak-delta",
+      "layer": "公开真实层",
+      "desc": "[RESULT-3] 候选B：伪标签迭代 r0→r1 池精度峰值增量 (+17.88pp)",
+      "source_file": "reports/p04-tcl-results.json",
+      "source_field": "cells/on_consensus_a1.0/rounds_agg",
+      "raw_status": "ok",
+      "derived": 17.88
+    },
+    {
+      "tag": "RESULT-3-cand-B-conservative-paired",
+      "layer": "公开真实层",
+      "desc": "[RESULT-3] 候选B保守口径：首末配对检验 Δpp (+10.69±3.28, p=0.030)——摘要引用建议优先此口径防 cherry-picking 指控",
+      "source_file": "reports/p04-tcl-results.json",
+      "source_field": "cells/on_consensus_a1.0/paired_first_vs_final/delta_pp_mean",
+      "raw_status": "ok",
+      "derived": 10.69
+    },
+    {
+      "tag": "RESULT-3-cand-C-wallclock-ratio",
+      "layer": "合成层",
+      "desc": "[RESULT-3] 候选C：解耦切换墙钟比 (实测 ~7.32×, 论文措辞保守区间 ≥3×)",
+      "source_file": "reports/c1-decouple-cost-2026-08-24.json",
+      "source_field": "aggregated",
+      "raw_status": "ok",
+      "derived": 7.32
+    },
+    {
+      "tag": "C7-warmstart-b20-vs-coldstart",
+      "layer": "合成层",
+      "desc": "C7 换轨主张：warm-start 协议层 b=20 两臂共享初始核 acc (82.0%) vs W14 冷启动同预算 (~7.8%)",
+      "source_file": "reports/p05-al-efficiency-warmstart-short-2026-08-25.json",
+      "source_field": "curves",
+      "raw_status": "ok",
+      "derived": {
+        "warm_start_b20_entropy": 0.8202020202020203,
+        "warm_start_b20_random": 0.8202020202020203,
+        "w14_coldstart_b20_entropy": 0.07777777777777778,
+        "w14_coldstart_b20_random": 0.0797979797979798,
+        "cross_run_compare_allowed": false,
+        "compare_note": "W23 meta.comparability 明示与 W14 绝对数值不可直接互比(分布不同)，此处并列仅为叙事锚点"
+      }
+    },
+    {
+      "tag": "C7-warmstart-b200-ceiling-random-arm",
+      "layer": "合成层",
+      "desc": "C7 换轨 b=200 天花板 95.7%——注意归属为 random(均匀扩展)臂，entropy 臂同点为 91.4%",
+      "source_file": "reports/p05-al-efficiency-warmstart-short-2026-08-25.json",
+      "source_field": "curves/random/200/mean",
+      "raw_status": "ok",
+      "derived": 0.9565656565656565
+    },
+    {
+      "tag": "C7-exploratory-negative-w14-gap",
+      "layer": "合成层",
+      "desc": "AL 效率负结果（§5 探索性发现）：随机反超熵 +7.9pp(b=100)/+7.1pp(b=200)，3/3 seeds 同向",
+      "source_file": "reports/p05-al-efficiency-short-2026-08-24.json",
+      "source_field": "curves",
+      "raw_status": "ok",
+      "derived": {
+        "b100_random_minus_entropy_pp": 7.9,
+        "b200_random_minus_entropy_pp": 7.1
+      }
+    }
+  ],
+  "mismatches": [],
+  "stats": {
+    "quickref_rows_parsed": 11,
+    "placeholders_found": 41,
+    "index_entries": 11,
+    "verified_true": 9,
+    "verified_false": 0,
+    "extras": 7
+  }
+}

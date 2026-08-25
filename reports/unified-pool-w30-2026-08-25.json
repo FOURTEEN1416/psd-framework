@@ -1,0 +1,42 @@
+{
+  "report": "reports/unified-pool-w30-2026-08-25.md",
+  "window": "W30",
+  "date": "2026-08-25",
+  "pool_schema": "psd.data_campaign.unified.real_expansion_v1",
+  "runtime_artifacts": {
+    "pool_pkl": "runs/data_campaign/unified/real_expansion_pool_v1.pkl",
+    "manifest_json": "runs/data_campaign/unified/real_expansion_pool_v1_manifest.json",
+    "note": "gitignore 可再生：scripts/build_unified_pool.py --config configs/unified_pool.yaml"
+  },
+  "aggregate": {
+    "total_samples": 9030,
+    "by_source_channel": {"aptv2_c2_w26": 503, "dogpose_c5_w29": 8476, "mocap_c3_w27": 51},
+    "by_topology": {"K9Graph": 8979, "mann_dogset_21j": 51},
+    "by_usage_scope": {"augment_static": 8476, "kinematic_prior": 51, "pretrain_geometric": 503},
+    "by_split": {"test": 79, "train": 7129, "unsplit": 51, "val": 1771},
+    "T_summary": {"min": 1, "max": 13399, "mean": 18.11}
+  },
+  "ak_source_verdict": {
+    "status": "quarantined",
+    "reasons": [
+      "count_mismatch: pkl 1 != manifest 172",
+      "clip[0] keypoints shape (30, 17, 3) != (30, 24, 3)"
+    ],
+    "note": "冒烟残留自动隔离；Q3b 全量落盘后重跑组装器即收编"
+  },
+  "mapping_summary": {
+    "source_topology": "aptv2_quadruped_17kp",
+    "official_order_verified_from": "APTv2 train_annotations.json categories.keypoints (2026-08-25 当次核对)",
+    "mapped_points": 17,
+    "approx_points": [{"aptv2": "neck(3)", "k9graph": "withers(22)", "note": "全表唯一近似点"}],
+    "unmapped_slots": [13, 14, 15, 17, 18, 19, 23],
+    "dead_joint_event_answer": "APTv2 原生覆盖双眼(死关节4点中的2点)；neck 近似 withers；throat 无对应"
+  },
+  "temporal_strategy_decision": "pretrain_only_pool",
+  "label_deferral": "deferred_pixel_domain: rule_seeds.py 需度量 3D z 轴+SMAL 索引组，APTv2 为 2D 像素，阈值不可跨域迁移",
+  "verification_evidence": {
+    "unit_tests": "22 passed (TDD RED->GREEN 双提交留痕)",
+    "fresh_verification": "17/17 PASS: schema 全扫 9030/9030 / sample_id 唯一 / 计数 split 对账零差额 / 真实样本映射 seed42 抽检 max|Δxy|=0.0 / NaN 不变量全池扫描 / AK quarantine 在案",
+    "repro": "& D:/Desktop/psd-framework/.venv/Scripts/python.exe scripts/build_unified_pool.py --config configs/unified_pool.yaml"
+  }
+}
