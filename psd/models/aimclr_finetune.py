@@ -26,14 +26,19 @@ from psd.training.stgcn_loss import STGCNBCLoss
 
 _AIMCLR_ROOT = Path(__file__).resolve().parents[2] / "external" / "AimCLR"
 
-# 与 configs/p01_aimclr.yaml model_args 逐字段一致（num_class=12 为 ckpt 原生
-# 头维度，本适配器不消费该 fc，仅保证 state_dict strict 加载同构）
+# 与 configs/p01_aimclr.yaml model_args 对齐 + net/aimclr.py 预训练态改写：
+#   ① L34——pretrain=True 时 base_encoder 收 num_class=feature_dim(128)，
+#      配置里的 num_class=12 仅非预训练模式生效；
+#   ② L44-48——mlp=True 暴力替换 fc → Sequential(Linear(256,256), ReLU, Linear(256,128))。
+# 实测 epoch120_model.pt 键集（fc.0/fc.2, 输出 128）与上述一致；本适配器不消费
+# 该原生头（分类语义由 cls_head 承担），保留仅为 state_dict strict 同构。
 P01_ENCODER_ARGS: Dict = {
     "in_channels": 3,
     "hidden_channels": 16,
     "hidden_dim": 256,
-    "num_class": 12,
+    "num_class": 128,
     "dropout": 0.5,
+    "mlp": True,
     "graph_args": {"layout": "ntu-rgb+d", "strategy": "spatial"},
     "edge_importance_weighting": True,
 }
@@ -85,6 +90,33 @@ def encode_temporal_map(encoder, x: torch.Tensor) -> torch.Tensor:
     return feat[:, 0]                                        # M=1 → (B,C,T',V')
 
 
+def _apply_mlp_replacement(encoder) -> None:
+    """复刻 net/aimclr.py L44-48: mlp=True 时 fc → Sequential(Linear, ReLU, fc).
+
+    P0.1 预训练 ckpt 的 encoder_q 即此结构（fc.0/fc.2 键），不复刻则 strict
+    加载必然 Missing/Unexpected key 失败。
+    """
+    dim_mlp = encoder.fc.weight.shape[1]
+    encoder.fc = nn.Sequential(
+        nn.Linear(dim_mlp, dim_mlp),
+        nn.ReLU(),
+        encoder.fc,
+    )
+
+
+def _build_encoder(encoder_args: Optional[Dict]):
+    """按 P0.1 参数构建 st_gcn.Model encoder（含 mlp 替换态）。"""
+    args = dict(P01_ENCODER_ARGS)
+    if encoder_args:
+        args.update(encoder_args)
+    use_mlp = bool(args.pop("mlp", True))
+    model_cls = _import_stgcn_model()
+    encoder = model_cls(**args)
+    if use_mlp:
+        _apply_mlp_replacement(encoder)
+    return encoder, int(args["hidden_dim"])
+
+
 class AimCLRFinetune(nn.Module):
     """AimCLR encoder + 分类/边界双头的微调模型（STGCNBCTrainer 兼容契约）.
 
@@ -99,15 +131,11 @@ class AimCLRFinetune(nn.Module):
         encoder_args: Optional[Dict] = None,
     ):
         super().__init__()
-        args = dict(P01_ENCODER_ARGS)
-        if encoder_args:
-            args.update(encoder_args)
-        model_cls = _import_stgcn_model()
-        self.encoder = model_cls(**args)
+        self.encoder, hidden_dim = _build_encoder(encoder_args)
         self.num_classes = num_classes
-        self.hidden_dim = int(args["hidden_dim"])
-        self.cls_head = nn.Linear(self.hidden_dim, num_classes)
-        self.bnd_head = nn.Conv1d(self.hidden_dim, 1, kernel_size=3, padding=1)
+        self.hidden_dim = hidden_dim
+        self.cls_head = nn.Linear(hidden_dim, num_classes)
+        self.bnd_head = nn.Conv1d(hidden_dim, 1, kernel_size=3, padding=1)
         self.loss_fn = STGCNBCLoss(boundary_weight=boundary_weight)
 
     def forward(self, x: torch.Tensor) -> Tuple[torch.Tensor, torch.Tensor]:
