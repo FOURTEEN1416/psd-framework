@@ -43,7 +43,42 @@
 
 W30 与 W32 立即并行（纯 CPU）；W31 先交脚本冒烟，full 档等 relay 清空。
 
+## W33 NTU60 线性评估复现数（用户已开窗）
+
+checkpoint 就绪（epoch300_model.pt），预注册线 ≥77.18%；GPU 排 relay ALL_DONE 后。
+
+## W34 C1 full 档报告回写 + E6 措辞校准（CPU 立即可跑）
+
+**背景**: relay Q2 已完成（`f2fc789`）——full 档墙钟比 6.07×（成本结论稳），但精度差 **−0.91pp**（small 档 +2.27pp）。按预注册"以 full 为准"，需诚实校准。
+
+**任务**:
+1. 更新 `reports/c1-decouple-cost-2026-08-24.md`：增补 full 档章节（两臂全表/方向一致性/精度措辞校准为"统计等效（full −0.91pp，small +2.27pp，均 <2.3pp）"）
+2. 同步 `docs/paper/experiment-skeleton.md` E6 节：成本主张保留（≥3× 由 full 背书），精度表述改"无显著精度代价"
+3. R2 状态复核：成本维度 full 档确认 → 🟡 可转 ✅（在 skeleton 风险注记处更新）
+4. 自助收编（-Permit docs/paper/experiment-skeleton.md）
+
+## W35 W25 片段提点接力 + 规则种子草稿（数据飞轮第二圈）
+
+**触发条件**: relay state.json 出现 Q3a_yolo_dogpose status=done（权重就绪）
+**任务**:
+1. 用 Q3a 权重对 runs/data_campaign/video/ 759 片段跑提点（复用 ak_pose_extract 管线，DEAD_JOINTS 硬掩码自动生效）
+2. 规则种子两段式第二段：harvest_rule_seeds.py 全量跑 → 七类种子草稿池
+3. 产出: 片段骨架序列池 + 种子草稿报告（各类分布/置信度/与 AK 域对比）
+4. 汇入 W30 统一池（重跑组装器）
+**领地**: scripts/harvest_*、runs/data_campaign/video/keypoints_*、reports/harvest-*
+
+## W36 论文终稿回填（条件窗口）
+
+**触发条件**: Q3c 结果 JSON + W33 线性评估数 双双落地
+**任务**: experiment-skeleton 全部占位符终填 + Introduction/Abstract DRAFT 合并定稿 + 全文数字对账（用 W32 索引表） + tab3 收尾核查
+**前置**: 等 W34/W35 不阻塞——tab2 公开真实列与 R4 数字是仅剩硬依赖
+
+## W37 tab3 末行排查：−无监督分割
+
+**疑点**: P0.2 报告已含"SMQ vs 滑窗基线"对照（0.458 vs 基线）——tab3 该行可能**已有数据可填**而非需新实验。任务：核查 P0.2 报告对照表是否构成"分割策略消融"证据，可填则填（W34 顺路），不可用则给出所需新实验设计。
+
 ## 修订历史
 | 版本 | 日期 | 变更 |
 |------|------|------|
 | v1.0 | 2026-08-25 | 三窗规划立项 |
+| v1.1 | 2026-08-25 晚 | 增补 W33-W37：NTU 线性评估/C1 full 回写/片段提点接力/终稿回填/tab3 末行排查 |
