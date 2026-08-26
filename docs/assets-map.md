@@ -132,8 +132,24 @@
 
 ---
 
-## 5. 修订历史
+## 5. K9-Training-System → PSD-Framework Pointer Map (Audit v1.0, 2026-08-24)
+
+> 此板块为本次审计临时登记，注记 k9 仓资产的移植指向与状态。
+> 仅作文档指针，不修改任何 `.py` 文件。符合 AGENTS.md §9 “跨仓只允许文档指针；代码复用走本 map 显式移植”。
+
+| K9 资产 | PSD 指向路径 | 移植状态 | 负责人 | 备注 |
+|---------|-------------|---------|--------|------|
+| stgcn_bc/ 主干（model.py, stgcn.py, bc_head.py, loss.py） | psd/models/stgcn_*.py / psd/data/synth_stgcn.py / psd/training/train_stgcn_bc.py | ⏳ 待移植（W1-W4：ST-GCN+BC 核心复制+namespace适配） | — | 仅在 P0 数据就绪（AimCLR+SMQ+TCL+主动学习）时启动；K9 仓保持只读 |
+| constants.py（22类行为 + 24关键点索引） | psd/data/stgcn_labels.py（docstring 引用 §1/§2） | ✅ 已登录（§1/§2） | — | 全仓第一份 22 类权威记录；所有 YAML / config 均引用此处；禁止另抄一份产生重复 truth |
+| FCI-IGP 评分卡 YAML | psd/scoring/fci_igp.yaml | ⏳ 待移植（W5：YAML 权重 + Schema 扩展） | — | 结构兼容（7维权重 + 5级评级 + DQ 硬约束）；直接移植，无 celery 依赖 |
+| API `/api/llm/explain` | psd/api/llm_explain.py | ⏳ 待移植（W6：产品线保留 k9，研究线移交 psd） | — | LLM 双阶段见 ADR 0011 v1.1；实验室阶段 Agnes API，实用期本地 Llama 3.2 1B；代码环境变量解耦 |
+| 22类 / 24关键点 导入辅助函数 | psd/models/__init__.py（增量编辑） | ⏳ 待移植（W7：append 导出语句） | — | `from .stgcn_bc import STGCNBC, build_stgcn_bc` 等；import smoke test 即可验证 |
+| 合成数据生成函数 | psd/data/synth_stgcn.py | ⏳ 待移植（W3：`make_synthetic_dataset` / `save_synthetic_dataset`） | — | 仅移植合成函数；真实数据类 `STGCNBCDataset` 保留原路径但不激活（W12 消费） |
+
+---
+
+## 6. 修订历史
 
 | 版本 | 日期 | 变更 |
 |------|------|------|
-| v0.1 | 2026-08-24 | W11 阻断解除：首次完整映射；登记 22 类权威清单（§1）+ 24 关键点索引（§2）+ 11 项移植任务（§3） |
+| v0.1 | 2026-08-24 | W11 阻断解除：首次完整映射；登记 22 类权威清单（§1）+ 24 关键点索引（§2）+ 11 项移植任务（§3）+ K9→PSD 指针审计（§5） |
