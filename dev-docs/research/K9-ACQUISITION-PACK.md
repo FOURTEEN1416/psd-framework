@@ -25,10 +25,10 @@
 
 | 文件 | 语言 | 状态 |
 |------|------|------|
-| `dev-docs/research/K9-SAMTWL-email-zh.md` | 中文版（机构版措辞） | 备用 |
-| `dev-docs/research/K9-SAMTWL-email-en.md` | English **v1.1 独立研究者诚实版**（身份=Independent researcher，说服力靠具体计划+三重承诺+接受作者附加条件） | **主发版本** |
+| `dev-docs/research/K9-SAMTWL-email-zh.md` | 中文版（通用机构版措辞） | 备用 |
+| `dev-docs/research/K9-SAMTWL-email-en.md` | English **v1.2 去AI痕迹+云南警官学院背书版** | **主发版本** |
 
-> 纪律注记：作者协议要求注明机构/组织+用途——无机构 affiliation 时如实填写 "Independent researcher (no institutional affiliation)"，**禁止伪造机构信息**；邮件已内置"愿意签署作者提出的简易使用协议"作为替代信任锚。
+> 纪律注记：警院身份表述以与云南警官学院的**真实关系**为准（学生/教师/科研/外部合作四选一，邮件文件内附对照表）；禁虚构职务；如有警院邮箱优先用它发送。
 
 草稿已按作者协议内置四要素：数据用途（跨数据集泛化评估 + 细粒度表征分析）、学术框架（低资源动物行为识别研究、拟投 CV 期刊/会议）、引用承诺（逐字采用其指定格式）、许可承诺（组内学术使用/不再分发/不上传公开网/按要求删除并书面确认）。
 
