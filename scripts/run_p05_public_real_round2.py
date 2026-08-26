@@ -322,6 +322,10 @@ ORCHESTRATION = [
     ("r2", "round2_full_seed43", "r2_full", None, 43),
     ("r1", "round1_rerun_seed44", None, None, 44),
     ("r2", "round2_full_seed44", "r2_full", None, 44),
+    # W43 multi-domain adaptation round3: per-source BN branch vs round2 dilution
+    ("r2", "round3_w35only_seed42", "r3_w35only", "video_c1_w35", 42),
+    ("r2", "round3_aptv2only_seed42", "r3_aptv2only", "aptv2_c2_w26", 42),
+    ("r2", "round3_full_seed42", "r3_full", None, 42),
 ]
 
 
@@ -376,6 +380,9 @@ def stage_report(args: argparse.Namespace) -> Path:
     arch = float(base["archived_best_val_acc"])
     r1 = acc("round1_rerun_seed42")
     r2 = acc("round2_full_seed42")
+    r3_w = acc("round3_w35only_seed42") if "round3_w35only_seed42" in runs else None
+    r3_a = acc("round3_aptv2only_seed42") if "round3_aptv2only_seed42" in runs else None
+    r3_f = acc("round3_full_seed42") if "round3_full_seed42" in runs else None
 
     def interp(delta_pp: float, pc_r1: dict, pc_r2: dict) -> str:
         minority_worse = any(pc_r2[k] < pc_r1[k] - 1e-9 for k in ("jump", "stay"))
@@ -385,14 +392,42 @@ def stage_report(args: argparse.Namespace) -> Path:
             return "flywheel_neutral"
         return "flywheel_negative"
 
+    # Per-source BN branch interpretations for round3
+    def interp3(delta_pp_vs_r1: float, delta_pp_vs_r2: float) -> str:
+        """Compare round3 vs both round1 and round2 baselines.
+        Positive if round3 recovers toward/over baseline despite expansion pool.
+        Negative if round3 still diluted.
+        Neutral if within noise band."""
+        # round3 full recovers toward baseline → flywheel positive
+        if delta_pp_vs_r2 >= 2.0 and r3_f is not None:
+            return "flywheel_positive_per_source_BN"
+        # round3 full still diluted → flywheel negative (bottleneck confirmed)
+        if delta_pp_vs_r2 <= -2.0 and r3_f is not None:
+            return "flywheel_negative_per_source_BN_failed"
+        # within noise band → neutral
+        if abs(delta_pp_vs_r2) < 2.0 and r3_f is not None:
+            return "flywheel_neutral_per_source_BN"
+        # no round3 full data → fall back to two-arm interp
+        return interp(delta_pp_vs_r1, pc_r1, pc_r2)
+
     diag = {}
     for seed in (43, 44):
         k1, k2 = f"round1_rerun_seed{seed}", f"round2_full_seed{seed}"
         if k1 in runs and k2 in runs:
             diag[f"seed{seed}"] = {"round1": acc(k1), "round2": acc(k2),
                                    "delta_pp": round((acc(k2) - acc(k1)) * 100, 2)}
+        # Also record round3 diagnostics per seed if available
+        k3w = f"round3_w35only_seed{seed}" if f"round3_w35only_seed{seed}" in runs else None
+        k3a = f"round3_aptv2only_seed{seed}" if f"round3_aptv2only_seed{seed}" in runs else None
+        k3f = f"round3_full_seed{seed}" if f"round3_full_seed{seed}" in runs else None
+        if k3f:
+            diag[f"seed{seed}_r3f"] = {"round3_full": acc(k3f),
+                                        "delta_vs_r2": round((acc(k3f) - r2) * 100, 2),
+                                        "delta_vs_r1": round((acc(k3f) - acc(k1)) * 100, 2)}
+
     comp = {}
-    for arm in ("round2_w35only_seed42", "round2_aptv2only_seed42"):
+    for arm in ("round2_w35only_seed42", "round2_aptv2only_seed42",
+                "round3_w35only_seed42", "round3_aptv2only_seed42"):
         if arm in runs:
             comp[arm] = {"best_val_acc": acc(arm),
                          "per_class": runs[arm]["summary"]["per_class_val_acc"]}
@@ -403,6 +438,15 @@ def stage_report(args: argparse.Namespace) -> Path:
                             runs["round1_rerun_seed42"]["summary"]["per_class_val_acc"],
                             runs["round2_full_seed42"]["summary"]["per_class_val_acc"])
 
+    # Round3 per-source BN branch verdict
+    r3_full_vs_r2_delta = None
+    r3_full_vs_r1_delta = None
+    r3_full_interp = None
+    if r3_f is not None:
+        r3_full_vs_r2_delta = round((r3_f - r2) * 100, 2)  # round3-full minus round2-full
+        r3_full_vs_r1_delta = round((r3_f - r1) * 100, 2)  # round3-full minus round1-baseline
+        r3_full_interp = interp3(r3_full_vs_r1_delta, r3_full_vs_r2_delta)
+
     adapt_meta_path = OUT_DIR / "adapt_set_meta_w40.json"
     adapt_summary = {}
     if adapt_meta_path.exists():
@@ -411,9 +455,18 @@ def stage_report(args: argparse.Namespace) -> Path:
                          ("counts", "n_total", "gate_report", "dogset_reference", "pool_sha256_16")
                          if k in am}
 
+    verdict_text_map = {
+        "flywheel_positive": "数据飞轮持续供数主张获首个直接实证",
+        "flywheel_neutral": "供数未转化为精度——转化链条断点分析见报告 md",
+        "flywheel_negative": "扩展池增强反而有害——域差瓶颈分析见报告 md",
+        "flywheel_positive_per_source_BN": "per-source BN 修复：域适应下扩展池转正，飞轮主张获直接实证",
+        "flywheel_neutral_per_source_BN": "per-source BN：域适应下精度持平，转化链条效果有限",
+        "flywheel_negative_per_source_BN_failed": "per-source BN 未能扭转：域差瓶颈结论加固，扩展池在域适应下仍贬值",
+    }
+
     payload = {
         "date": datetime.now().isoformat(timespec="seconds"),
-        "protocol": "W40 数据飞轮效力验证——round1 复跑 vs round2(+pretrain_geometric 槽位 AdaBN 增强)，同 seed 同协议",
+        "protocol": "W43 多域适应 round3——per-source BN 分支，三臂对照：round1/round2/round3 同 seed 同协议",
         "prereg": {"config": "configs/public_real_round2.yaml", "version": prereg["version"],
                    "prereg_commit_note": "预注册先于实现（commit 996e9b6）"},
         "round1_baseline": {"archived_best_val_acc": arch,
@@ -426,10 +479,16 @@ def stage_report(args: argparse.Namespace) -> Path:
                            "delta_vs_archived_pp": delta_vs_archived_pp,
                            "delta_vs_rerun_pp": delta_vs_rerun_pp,
                            "interpretation": primary_interp,
-                           "verdict_text": {
-                               "flywheel_positive": "数据飞轮持续供数主张获首个直接实证",
-                               "flywheel_neutral": "供数未转化为精度——转化链条断点分析见报告 md",
-                               "flywheel_negative": "扩展池增强反而有害——域差瓶颈分析见报告 md"}[primary_interp]},
+                           "verdict_text": verdict_text_map.get(primary_interp, primary_interp)},
+        "round3_per_source_BN": {
+            "w35only_best_val_acc": r3_w,
+            "aptv2only_best_val_acc": r3_a,
+            "full_best_val_acc": r3_f,
+            "full_vs_r2_delta_pp": r3_full_vs_r2_delta,
+            "full_vs_r1_delta_pp": r3_full_vs_r1_delta,
+            "interpretation": r3_full_interp,
+            "verdict_text": verdict_text_map.get(r3_full_interp, r3_full_interp or "待实验"),
+        } if any(v is not None for v in [r3_w, r3_a, r3_f]) else None,
         "diagnostics": {"seeds": diag, "component_arms": comp},
         "adapt_set_summary": adapt_summary,
         "all_runs": {k: {"best_val_acc": v["summary"]["best_val_acc"],
@@ -439,11 +498,13 @@ def stage_report(args: argparse.Namespace) -> Path:
                      for k, v in runs.items()},
     }
     date_tag = args.date_tag or datetime.now().strftime("%Y-%m-%d")
-    out = REPO / "reports" / f"p05-public-real-round2-{date_tag}.json"
+    out = REPO / "reports" / f"p05-public-real-round3-{date_tag}.json"
     out.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
     print(f"[report] {out}")
-    print(f"[report] 主对照: round1复跑={r1:.4f} round2={r2:.4f} Δ={delta_vs_rerun_pp:+.2f}pp "
-          f"(vs 存档 {delta_vs_archived_pp:+.2f}pp) → {primary_interp}")
+    summary_str = f"主对照: round1复跑={r1:.4f} round2={r2:.4f} Δ={delta_vs_rerun_pp:+.2f}pp → {primary_interp}"
+    if r3_f is not None:
+        summary_str += f" | round3-full={r3_f:.4f} Δvs-r2={r3_full_vs_r2_delta:+.2f}pp Δvs-r1={r3_full_vs_r1_delta:+.2f}pp → {r3_full_interp}"
+    print(f"[report] {summary_str}")
     return out
 
 
