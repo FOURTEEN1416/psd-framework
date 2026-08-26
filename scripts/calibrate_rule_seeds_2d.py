@@ -21,10 +21,14 @@ from __future__ import annotations
 
 import argparse
 import json
+import sys
 from collections import Counter
 from pathlib import Path
 
 import numpy as np
+
+REPO = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(REPO))
 
 from psd.data.rule_seeds_2d import (
     DEFAULT_CONFIG_2D,
@@ -170,7 +174,7 @@ def calibrate_on_train(train_runs: list[dict]) -> tuple[dict, dict]:
     jump_air_min := jump 帧 paw_air p50 与非跳 p99 之间取 p50 下探保护…
     实际取 max(jump p25, 非跳帧 p99) 保证特异性。证据全部落 JSON。
     """
-    sp_by_cls: dict[str, list[float]] = {"stay": [], "track": [], "jump": []}
+    sp_by_cls: dict[str, list[float]] = {"stay": [], "track": [], "jump": [], "watch": []}
     air_jump: list[float] = []
     air_other: list[float] = []
     for r in train_runs:
@@ -238,10 +242,13 @@ def main() -> None:
             base_runs, subset=["track", "jump", "stay"])
 
     # ---- Step B: train 校准 ----
-    # 为校准先跑一次特征(默认配置仅作特征载体; 校准只消费分布)
-    feat_runs = run_frames(train, make_config(0.0, 999.0, 0.0))  # 阈值放开, 只要特征
-    for r, fr in zip(train, feat_runs):
-        r["res_frame_feat"] = fr["res"]
+    from psd.data.rule_seeds_2d import compute_frame_features_2d, normalize_y_orientation
+    for d in train:
+        kp = d["keypoints"][:, :, :2].astype(np.float64)
+        w = d["keypoints"][:, :, 2].astype(np.float64)
+        d["res_frame_feat"] = compute_frame_features_2d(
+            normalize_y_orientation(kp, "down"), w, np.arange(len(kp)),
+            make_config(0.0, 999.0, 0.0))  # 阈值放开, 只要特征分布
     cal_cfg, cal_ev = calibrate_on_train(train)
     result["calibration"] = cal_ev
     print("[calibrate]", cal_ev["calibrated"])

@@ -152,11 +152,15 @@ class TestYFlipInputInvariance:
         ("standing", 0.0, 0.35, (10, 20)),       # 跳跃
     ])
     def test_same_labels_under_both_conventions(self, kind, vx, lift, lf):
+        """同一物理姿态的两种数据表示(up 表示 / 图像域 flip 表示)，
+        各以匹配的 y_axis 声明输入 → 分类必须一致。"""
         T = 30
-        kp = _mk_pose(T, kind, vx=vx, lift=lift, lift_frames=lf)
+        kp_up = _mk_pose(T, kind, vx=vx, lift=lift, lift_frames=lf)
+        kp_img = kp_up.copy()
+        kp_img[:, :, 1] = 1.0 - kp_img[:, :, 1]  # 同一姿态的图像域(y-down)表示
         fi = np.arange(T)
-        res_up = classify_frames_2d(kp, _weights(T), fi, DEFAULT_CONFIG_2D, y_axis="up")
-        res_down = classify_frames_2d(kp, _weights(T), fi, DEFAULT_CONFIG_2D, y_axis="down")
+        res_up = classify_frames_2d(kp_up, _weights(T), fi, DEFAULT_CONFIG_2D, y_axis="up")
+        res_down = classify_frames_2d(kp_img, _weights(T), fi, DEFAULT_CONFIG_2D, y_axis="down")
         assert res_up["labels"] == res_down["labels"]
 
     def test_flip_of_pixel_data_matches_up_original(self):

@@ -1,0 +1,50 @@
+{
+  "purpose": "W47 负结果根因诊断(v1 withers 死依赖 + shoulder 替代可行性核查)",
+  "evidence": {
+    "withers_clearance_v1": {
+      "quantiles_p10_p50_p90_p99": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "frac_gt_lie_max_0.18": 0.0,
+      "conclusion": "恒0 — withers(idx22)死关节致 masked-mean=NaN->nan_to_num(0), gait 分支永不可达"
+    },
+    "shoulder_surrogate_train": {
+      "jump": {
+        "p10_p50_p90": [
+          -0.0798,
+          0.0831,
+          0.2556
+        ],
+        "frac_gt_0.18": 0.2574
+      },
+      "stay": {
+        "p10_p50_p90": [
+          0.0203,
+          0.1268,
+          0.2185
+        ],
+        "frac_gt_0.18": 0.2263
+      },
+      "track": {
+        "p10_p50_p90": [
+          -0.0122,
+          0.1051,
+          0.2157
+        ],
+        "frac_gt_0.18": 0.1851
+      },
+      "watch": {
+        "p10_p50_p90": [
+          0.0442,
+          0.1362,
+          0.2207
+        ],
+        "frac_gt_0.18": 0.2877
+      }
+    },
+    "shoulder_conclusion": "替代特征脱离恒零但四类分布重合(p50∈[0.08,0.14]), gate4 在 2D 姿态几何特征空间无可分性证据 → v2 迭代预期收益不足"
+  }
+}
