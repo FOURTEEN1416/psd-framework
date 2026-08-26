@@ -1,0 +1,262 @@
+{
+  "protocol_doc": "AK partialclass4 172 clips — 2D 规则种子校准与效果门禁（W47）。",
+  "pkl": "D:\\Desktop\\psd-framework\\runs\\public_real_dataset\\partialclass4_T30.pkl",
+  "gate": {
+    "metric": "clip_level_agreement_on_discernable_subset_val",
+    "discernable_classes": [
+      "track",
+      "jump",
+      "stay"
+    ],
+    "promote_threshold": 0.6,
+    "demote_keep_evidence_band": [
+      0.4,
+      0.6
+    ],
+    "verdicts": {
+      "promote": "supervision_pipeline",
+      "band": "pretrain_pool_keep_evidence",
+      "below": "pretrain_pool_mapping_suspect"
+    }
+  },
+  "n_train": 123,
+  "n_val": 49,
+  "class_dist": {
+    "train": {
+      "watch": 57,
+      "track": 29,
+      "stay": 19,
+      "jump": 18
+    },
+    "val": {
+      "watch": 15,
+      "track": 17,
+      "jump": 9,
+      "stay": 8
+    }
+  },
+  "feature_evidence_train": {
+    "stay": {
+      "n_frames": 570,
+      "centroid_speed_p10_p50_p90": [
+        0.0,
+        0.0009,
+        0.0324
+      ],
+      "paw_air_p50_p90_p99": [
+        0.0,
+        0.0536,
+        0.2231
+      ]
+    },
+    "track": {
+      "n_frames": 870,
+      "centroid_speed_p10_p50_p90": [
+        0.0026,
+        0.02,
+        0.0668
+      ],
+      "paw_air_p50_p90_p99": [
+        0.0,
+        0.1067,
+        0.7479
+      ]
+    },
+    "jump": {
+      "n_frames": 540,
+      "centroid_speed_p10_p50_p90": [
+        0.0,
+        0.0155,
+        0.0567
+      ],
+      "paw_air_p50_p90_p99": [
+        0.0,
+        0.1555,
+        0.6006
+      ]
+    },
+    "watch": {
+      "n_frames": 1710,
+      "centroid_speed_p10_p50_p90": [
+        0.0001,
+        0.0062,
+        0.0504
+      ],
+      "paw_air_p50_p90_p99": [
+        0.0,
+        0.0742,
+        0.3104
+      ]
+    }
+  },
+  "baseline_default3d_train_discernable": {
+    "n": 66,
+    "correct": 19,
+    "wrong": 47,
+    "abstain": 0,
+    "agreement_on_all": 0.2879,
+    "agreement_excl_abstain": 0.2879,
+    "abstain_rate": 0.0,
+    "confusion_top": {
+      "track->stay": 29,
+      "jump->stay": 18
+    },
+    "per_class_pred": {
+      "jump": {
+        "stay": 18
+      },
+      "stay": {
+        "stay": 19
+      },
+      "track": {
+        "stay": 29
+      }
+    }
+  },
+  "calibration": {
+    "unit": "body_scale_per_frame(nominal_fps=1)",
+    "speed_quantiles": {
+      "stay": {
+        "p10": 0.0,
+        "p50": 0.0009,
+        "p90": 0.0324
+      },
+      "track": {
+        "p10": 0.0026,
+        "p50": 0.02,
+        "p90": 0.0668
+      },
+      "jump": {
+        "p10": 0.0,
+        "p50": 0.0155,
+        "p90": 0.0567
+      },
+      "watch": {
+        "p10": 0.0001,
+        "p50": 0.0062,
+        "p90": 0.0504
+      }
+    },
+    "paw_air": {
+      "jump_p25": -0.0491,
+      "nonjump_p99": 0.4339
+    },
+    "calibrated": {
+      "walk_min": 0.0175,
+      "run_min": 0.0668,
+      "min_air_clearance": 0.4339
+    },
+    "notes": [
+      "walk_min=(track p10 + stay p90)/2 — 两行为速度分布的可分性中点",
+      "run_min=track p90 — 高速尾保守起点",
+      "jump_air=max(jump p25, non-jump p99) — 特异性优先",
+      "posture 族阈值无 gate4 监督对应, NOT_CALIBRATED 承 3D 先验"
+    ]
+  },
+  "calibrated_train_discernable": {
+    "n": 66,
+    "correct": 19,
+    "wrong": 47,
+    "abstain": 0,
+    "agreement_on_all": 0.2879,
+    "agreement_excl_abstain": 0.2879,
+    "abstain_rate": 0.0,
+    "confusion_top": {
+      "track->stay": 29,
+      "jump->stay": 18
+    },
+    "per_class_pred": {
+      "jump": {
+        "stay": 18
+      },
+      "stay": {
+        "stay": 19
+      },
+      "track": {
+        "stay": 29
+      }
+    }
+  },
+  "calibrated_val_discernable": {
+    "n": 34,
+    "correct": 8,
+    "wrong": 26,
+    "abstain": 0,
+    "agreement_on_all": 0.2353,
+    "agreement_excl_abstain": 0.2353,
+    "abstain_rate": 0.0,
+    "confusion_top": {
+      "track->stay": 17,
+      "jump->stay": 9
+    },
+    "per_class_pred": {
+      "jump": {
+        "stay": 9
+      },
+      "stay": {
+        "stay": 8
+      },
+      "track": {
+        "stay": 17
+      }
+    }
+  },
+  "calibrated_val_full_incl_watch": {
+    "n": 49,
+    "correct": 8,
+    "wrong": 41,
+    "abstain": 0,
+    "agreement_on_all": 0.1633,
+    "agreement_excl_abstain": 0.1633,
+    "abstain_rate": 0.0,
+    "confusion_top": {
+      "track->stay": 17,
+      "watch->stay": 15,
+      "jump->stay": 9
+    },
+    "per_class_pred": {
+      "jump": {
+        "stay": 9
+      },
+      "stay": {
+        "stay": 8
+      },
+      "track": {
+        "stay": 17
+      },
+      "watch": {
+        "stay": 15
+      }
+    }
+  },
+  "calibrated_val_conf08": {
+    "n": 34,
+    "correct": 8,
+    "wrong": 26,
+    "abstain": 0,
+    "agreement_on_all": 0.2353,
+    "agreement_excl_abstain": 0.2353,
+    "abstain_rate": 0.0,
+    "confusion_top": {
+      "track->stay": 17,
+      "jump->stay": 9
+    },
+    "per_class_pred": {
+      "jump": {
+        "stay": 9
+      },
+      "stay": {
+        "stay": 8
+      },
+      "track": {
+        "stay": 17
+      }
+    }
+  },
+  "VERDICT": {
+    "metric_value": 0.2353,
+    "threshold": 0.6,
+    "verdict": "pretrain_pool_mapping_suspect",
+    "rule": ">=0.6 promote; 0.4~0.6 band; <0.4 below"
+  }
+}
