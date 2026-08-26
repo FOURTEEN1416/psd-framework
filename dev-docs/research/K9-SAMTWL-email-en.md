@@ -1,42 +1,46 @@
 # samtwl Dataset Request Email Draft (English Version)
 
-> **v1.1（2026-08-26）：改为独立研究者诚实版**——身份栏填真实状态，不伪造机构；说服力改由"具体研究计划 + 三重承诺 + 接受作者附加条件"承担。
-> Purpose: request permission to use the 916-clip fine-grained canine behaviour dataset
-> Aligned with: the author's published protocol in `data/Permission-to-Use-Data.md` (must state 1) institution/organization, 2) purpose; must commit to the specified citation)
-> Replace all 【】 placeholders with **real** information before sending.
-> To: samuel050590@gmail.com（gmail 大概率仍活跃）; Cc: samuel.tong.2017@mitb.smu.edu.sg（SMU 学生邮箱可能已注销，退信留痕即达"已尝试"目的）
+> **v1.2（2026-08-26）**：去 AI 痕迹重写（依据 avoid-ai-writing 审计：删破折号插入语/法律腔/模板句/加粗标签堆叠）+ 增加云南警官学院背书。
+> ⚠️ 身份纪律不变：警院身份表述以你与该校的真实关系为准（在下表选一个词），不虚构职务；如有警院邮箱，用它发送最稳。
+> Replace 【】 placeholders with real information before sending.
+> To: samuel050590@gmail.com; Cc: samuel.tong.2017@mitb.smu.edu.sg（可能退信，退信留痕即可）
+
+| 你与警院的真实关系 | 邮件里的写法 |
+|------------------|-------------|
+| 在读学生 | a student at |
+| 教师/教官 | a lecturer at |
+| 科研人员 | a researcher at |
+| 外部合作/课题聘用 | a researcher working with |
 
 ---
 
-**Subject: Request for Permission to Use the Canine Behaviour Action Recognition Dataset (Academic Research Only)**
+Subject: Request for Permission to Use the Canine Behaviour Action Recognition Dataset
 
 Dear Mr. Tong,
 
-I am 【your real name】, an independent researcher based in 【city/country — optional】. I recently came across your 2019 project "Capturing Spatial and Temporal Context for Fine Grained Canine Behaviour Action Recognition" on GitHub, together with its accompanying dataset of 916 video clips covering four canine behavioural traits — angry and sad (negative emotions), happy and submissive (positive emotions). The dataset matches my current research needs very well, and I am writing to formally request your permission to use it.
+My name is 【你的真名】 and I am 【a student / a researcher】 at Yunnan Police Officer Academy (云南警官学院) in Kunming, China. My work involves police dog training and behaviour analysis. While looking for datasets on canine behaviour I came across your 2019 project "Capturing Spatial and Temporal Context for Fine Grained Canine Behaviour Action Recognition" on GitHub, along with its dataset of 916 video clips covering four behavioural traits (angry, sad, happy, and submissive). This is close to what my current study needs, so I am writing to ask for your permission to use it.
 
 Following the requirements listed in your repository's Permission-to-Use-Data.md:
 
-1. **Institution / Organization**: Independent researcher (no institutional affiliation)【可选：如你真实拥有个人主页/GitHub/ORCID，附上一行链接以助信任；没有就删掉此行】
-2. **Purpose of Usage**: Academic research only. I am working on low-resource animal behavior recognition (a physics-prior / semantics-decoupled skeleton-based framework), and plan to use your dataset for:
-   - Cross-dataset generalization evaluation;
-   - Representation analysis of fine-grained behaviour categories.
-   All uses are non-commercial and academic; results are intended for submission to peer-reviewed computer vision venues.
+1. Institution / Organization: Yunnan Police Officer Academy, Kunming, China.
+2. Purpose of Usage: Academic research only. My study builds a dog behaviour recognition method that works from skeletal motion data with limited training samples. Your dataset would be used for cross-dataset testing and for analysing fine-grained behaviour categories. Results are intended for submission to peer-reviewed computer vision venues, and nothing will be used commercially.
 
-I hereby commit to the following:
+If you grant permission, I will:
 
-- **Citation commitment**: I will cite your project in any resulting paper or derivative work, using exactly the citation you specify: "S., Tong & A., Theodore. (2019). Capturing Spatial and Temporal Context for Fine Grained Canine Behaviour Action Recognition. Retrieved from https://github.com/samtwl/Deep-Learning-Fine-Grained-Action-Recognition-Canine-Behavior"
-- **License commitment**: The data will be used solely by me for the academic purposes stated above. I will not redistribute, sell, or use it commercially; I will not upload it to public networks; and upon your request I will delete my local copies within a reasonable time frame and confirm deletion in writing.
+- Cite your project exactly in the form you requested: "S., Tong & A., Theodore. (2019). Capturing Spatial and Temporal Context for Fine Grained Canine Behaviour Action Recognition. Retrieved from https://github.com/samtwl/Deep-Learning-Fine-Grained-Action-Recognition-Canine-Behavior"
+- Keep the data within this study only: no redistribution or sharing, no public upload, and deletion of all local copies upon your request, confirmed to you in writing.
 
-As I write as an individual rather than under a university banner, I am glad to provide any additional assurance you may consider appropriate — for example, signing a simple usage agreement on your terms, or sharing the resulting preprint with you directly upon publication.
+If you need anything else from me, such as a short research summary or proof of affiliation, just let me know. I am also open to signing a simple usage agreement on your terms, and I would be glad to send you the resulting paper once it is out.
 
-Please let me know if you need any further information. Thank you very much for your time, and I look forward to your reply.
+Thank you for your time. I look forward to hearing from you.
 
-Sincerely,
+Best regards,
 
-【your real name】
-【your real email address】
-【date】
+【你的真名】
+Yunnan Police Officer Academy
+【你的真实邮箱】
+【日期，如 2026-08-26】
 
 ---
 
-> 中文版见 `K9-SAMTWL-email-zh.md`（机构版措辞，独立研究者场景请以本英文版为准）；背景事实与风险注记见 `K9-ACQUISITION-PACK.md` §1
+> 中文版见 `K9-SAMTWL-email-zh.md`（通用机构版措辞）；背景事实与风险注记见 `K9-ACQUISITION-PACK.md` §1
