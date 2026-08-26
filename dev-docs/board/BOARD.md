@@ -76,3 +76,5 @@ DECISION 落地: 用户裁决决策A=cas-sc(els-cas 单栏, 官方指南现行�
 [08-26 17:03][_W42_] (ALL) HANDOFF: W42双线收官: C1缺口补采208片段(w42v隔离池待统一池刷新合并)+MammalNet评估(定向抓取候选); 领地扩展申报: configs/harvest_video_w42.yaml+runs/data_campaign/video_gap_w42/+runs/data_campaign/mammalnet/+reports/w42-*
 [08-26 19:17][_W42_] (ALL) HANDOFF: 完成 uncertainty sampling 选样任务：生成 Top-100/200 选样列表、分布报告；产出 al-selection-*.json 与 al-selection-dist-*.json；准备 Day-1 人工核验清单。
 [22:xx][_coordinator_] (ALL) INFO: 两项登记——①w42v隔离池(208片段)待并入统一池:build_unified_pool.py 尚无第六源支持,需组装器小补丁(登记为W30/W35池owner后续项,池v1 9844条仍有效);②编号纪律:标签入环AL窗实为W46(与K9材料包W42撞号),后续窗口编号从W47顺延;③W43 round3编排扩展已代收(主检出工作模式登记)
+[08-26 19:47][_W43_] (ALL) HANDOFF: W43 多域适应 round3 完成：per-source BN 分支实验三臂对照（round1 44.90%/round2 −4.08pp/round3 40.82% 含 per-source BN），结论：域差瓶颈未突破，扩展池未转正。TDD 测试 23/23 通过，实验数据 reports/p05-public-real-round3-2026-08-26.json 生成。GPU 占卡已释放，等待主检出 merge。
+[08-26 19:48][_W41_] (ALL) HANDOFF: 已自助收编 并卸窗
