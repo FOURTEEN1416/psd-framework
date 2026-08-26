@@ -133,7 +133,7 @@
 
 ## §5 下一步行动清单（按优先级）
 
-1. **发 samtwl 邮件**（主发 gmail samuel050590@gmail.com、Cc SMU 学生邮箱；占位符填真实信息后即可发；2 周跟进 / 30 天无回复转 Issue 通道）；状态：待发送；
+1. **发 samtwl 邮件**（主发 gmail samuel050590@gmail.com、Cc SMU 学生邮箱；v1.3 定稿版）状态：**已发送 2026-08-26**（侯志脉）；跟进节奏：2026-09-09 无回复跟进一句 / 2026-09-25 无回复转 GitHub Issue 通道；
 2. **转发拍摄清单一页纸**给基地联系人，启动首批 ≥20 段/类 × 7 类采集（稀缺类 rise_transition/jump 加倍）；
 3. **C1 补采缺口**：新增关键词族「搜救犬 训练」「search and rescue dog training」「IRO dog training」「k9 agility training」（CPU/网络，沿 harvest_video_pipeline 复跑，需开新窗或排期）；
 4. YouTube 41 URL 频道名补拉（代理恢复后，§3.2c 命令模板）；
