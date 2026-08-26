@@ -47,4 +47,9 @@ reports/        # 评估报告归档
 
 ## 许可
 
-暂随主仓库 CC BY-NC 4.0；论文投稿开源前复核（未定）。
+**双轨许可（2026-08-26 用户裁决 A）**：
+- **代码**（psd/ scripts/ configs/）：[MIT](LICENSE)
+- **非代码资产**（论文文本/图表/报告/文档）：[CC BY-NC 4.0](LICENSE-ASSETS.md)
+- 第三方许可审计清单见 [LICENSE](LICENSE#third-party-notice第三方许可审计清单)
+- 训练权重研究教育用途；数据集均不随包分发（见论文 Data Availability 声明）
+- 开源时机：论文投稿时随代码公开（复现主张）

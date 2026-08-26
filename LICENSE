@@ -1,0 +1,46 @@
+MIT License
+
+Copyright (c) 2026 PSD-Framework Authors
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+---------------------------------------------------------------------------
+
+THIRD-PARTY NOTICE（第三方许可审计清单）
+
+本仓库代码为原始实现；对第三方项目仅为 API 调用或独立进程使用，未拷贝其源码。
+随仓库分发的第三方资产及其许可如下（均不随本仓库再分发其原始副本）：
+
+1. AimCLR（external/AimCLR，仅本地克隆不随包分发）
+   - License: MIT
+   - 用途: P0.1 自监督预训练协议参照与 NTU60 复现对照
+2. SMQ（external/SMQ，仅本地克隆不随包分发）
+   - License: 见 external/SMQ 内 LICENSE 文件（本地克隆保留）
+   - 用途: P0.2 无监督时序分割方法参照
+3. Ultralytics YOLO（pip 依赖 ultralytics，不随包分发）
+   - License: AGPL-3.0
+   - 用途: 公开真实层数据构建时的关键点提取工具（独立进程 API 调用）；
+     本仓库不含其源码副本，按 mere aggregation 原则本仓 MIT 许可不及于该依赖
+4. MANN DogSet（SIGGRAPH 2018，Edinburgh 提供方）
+   - License: 研究教育专用（禁商用、禁再分发原始 BVH）
+   - 本仓库处置: 仅提供 BVH→序列转换脚本（scripts/bvh_dogset_to_sequence.py），
+     原始数据由使用者自行获取；转换产物不随包分发
+5. 数据集（InterPet4D / Animal Kingdom / APTv2 / NTU RGB+D 60 / dog-pose）
+   - 均不随本仓库分发；各自许可见论文 Data Availability 声明；
+     派生特征以生成脚本替代原始衍生物分发

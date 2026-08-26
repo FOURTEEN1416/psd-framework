@@ -15,7 +15,7 @@
 | ② Cover Letter | ✅ 草稿成 | 三支柱+双档 C1 证据+八条诚实边界，全文见 §2.1；配套 Highlights 五条全部实测 ≤77 字符（≤85 达标） |
 | ③ DA + Ethics | ✅ 草稿成 | R7 缓解落地；数据许可逐源审计表 + 两处【待用户终审】标注（§3） |
 | ④ fig1-4 终检 | ✅ 通过（附残留注记） | 四张 PDF 全矢量零栅格、字体全内嵌；fig3/fig4 PNG 600dpi 达标；色盲安全+双编码实证；描边灰度差偏近已由线型/标记/纹理补偿（§4） |
-| ⑤ 代码发布包清单 | 🟡 待用户两项 | 物料盘点齐（psd/scripts/configs/README/requirements）；复现链命令节全部在档；**无 LICENSE 文件**——选型与开源时机待用户（§5） |
+| ⑤ 代码发布包清单 | ✅ 已闭环（2026-08-26 用户裁决 A） | 物料齐；**LICENSE 已落地**：MIT（代码）+ CC BY-NC 4.0（资产）双轨 + 第三方审计清单（见根 LICENSE/LICENSE-ASSETS.md）——开源时机=投稿时随代码公开 |
 
 ---
 
@@ -177,7 +177,7 @@ W22 已登记的五条偏差（fig4 不画 85% 目标线属三层口径纪律、
 | 项目 README | 根 `README.md` | ✅ 存在（发布前须补快速上手节，见 5.3） |
 | 数据指针 | `docs/DATA_LOCATIONS.md` | ✅ |
 | 证据链 | `reports/*.json`（knn-result/c1-cost/warmstart/Q3c/eC-seeds 等） | ✅ |
-| **LICENSE** | **不存在** | 🔴【待用户终审-E】 |
+| **LICENSE** | ✅ MIT（代码）+ LICENSE-ASSETS.md（CC BY-NC 4.0） | 已闭环 |
 | CITATION.cff / .zenodo.json | 不存在 | ⚪ 可选项 |
 
 ### 5.2 一条命令复现链核对（硬规则 4：只认在档命令节）
@@ -199,7 +199,7 @@ W22 已登记的五条偏差（fig4 不画 85% 目标线属三层口径纪律、
 
 ```
 psd-framework-release/
-├── LICENSE                      ← 【待用户终审-E】
+├── LICENSE                      ✅（+LICENSE-ASSETS.md）
 ├── README.md                    ← 补：环境/数据获取/三条主命令/测试
 ├── requirements.txt
 ├── psd/  scripts/  configs/
@@ -247,7 +247,7 @@ psd-framework-release/
 | 终审-B | NTU60 许可文本留档确认 | §3.1 |
 | 终审-C | "license 受限时给脚本不给衍生数据"承诺的最终边界 | §3.1 |
 | 终审-D | InterPet4D 人体被试伦理原句摘录留档 | §3.2 |
-| 终审-E | LICENSE 选型 + 开源时机 + 仓库 URL | §5/§6-B |
+| 终审-E | ~~LICENSE 选型~~ ✅ 已裁决 A（MIT+CC 双轨，开源时机=投稿时）；剩开源时机细节与仓库 URL | §5/§6-B |
 | 终审-F | Generative AI 声明措辞与工具名披露颗粒度 | §3.3/F13 |
 | （既有） | 标题去留（R2）/作者名单/C6 措辞收窄/Scholar 终审 | outline R2、C6 注记、L3 |
 
