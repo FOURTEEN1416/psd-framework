@@ -1,0 +1,67 @@
+# ============================================================
+# C1 补采配置（W42 缺口关键词族）
+# 依据: K9-ACQUISITION-PACK.md §3.2a 实证缺口——警犬 训练(31)/dog obedience trial(2)
+#       欠采 + 搜救犬族完全空白
+# 隔离设计: 独立 out_root, 不触碰主池 runs/data_campaign/video/
+#          fragment_id 前缀在 manifest 定稿步统一改名为 w42v-（管线硬编码 w25v-，
+#          见 scripts/harvest_video_pipeline.py stable_id），映射记录入报告
+# 全程 CPU/网络; 禁触 GPU 队列
+# ============================================================
+
+channel: video_gap_w42
+out_root: runs/data_campaign/video_gap_w42
+
+target_fragments: 100            # 补采起步目标(有界,非全量复刻)
+safety_margin: 15
+
+platforms:
+  bilibili:
+    enabled: true
+    proxy: null
+    guest_cookies: true
+  youtube:
+    enabled: true                # 代理若仍不可达, 该平台查询失败即跳过(en 族回落 B 站)
+    proxy: "http://127.0.0.1:17890"
+
+http_user_agent: >-
+  Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36
+  (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36
+
+search:
+  results_per_query: 15
+  download_per_query: 8
+  queries:
+    # ---- 中文缺口族(B 站主用) ----
+    - {kw: "搜救犬 训练",        lang: zh}
+    - {kw: "警犬 训练 科目",     lang: zh}
+    - {kw: "犬 越障 训练",       lang: zh}
+    - {kw: "工作犬 服从 训练",   lang: zh}
+    # ---- 英文缺口族(youtube 主用, 失败回落 bilibili) ----
+    - {kw: "search and rescue dog training", lang: en}
+    - {kw: "k9 agility training",            lang: en}
+  platform_pref:
+    zh: [bilibili, youtube]
+    en: [youtube, bilibili]
+
+source_filters:
+  min_duration_s: 20
+  max_duration_s: 900
+  min_height: 240
+
+split:
+  scene_threshold: 0.30
+  min_scene_gap_s: 1.0
+  max_len_s: 30
+  min_len_s: 1.5
+  encode: {height: 360, crf: 26, preset: veryfast, drop_audio: true}
+
+filter:
+  weights: yolo11n.pt
+  device: cpu                     # 铁律: 不碰 GPU
+  conf: 0.25
+  frames_per_fragment: 4
+  min_dog_rate: 0.5
+
+manifest:
+  license_note: "research-use only; public platform content accessed via yt-dlp respecting ToS; no redistribution"
+  species_note: "canis familiaris (working-dog training footage; COCO-dog coarse filter)"
