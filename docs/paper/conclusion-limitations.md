@@ -1,6 +1,6 @@
 # 6. Conclusion and Limitations（英文骨架 · P0.6 增量二）
 
-> Owner: `docs/paper/conclusion-limitations.md` · W5 窗口 2026-08-23 · 状态: **终稿候选 v0.4（2026-08-25 W36）**——[RESULT-7/8] 已按归档数字终填；Limitations 扩至八条：v0.2 六条 + W36 增 L7（公开真实层 44.90% 类不平衡）与 L8（真实域骨架有效监督 20/24），L5 升级为 AL 双轮负结果（W14 冷启动 + W23 强打分器）
+> Owner: `docs/paper/conclusion-limitations.md` · W5 窗口 2026-08-23 · 状态: **终稿候选 v0.5（2026-08-26 W46）**——[RESULT-7/8] 已按归档数字终填；Limitations 扩至九条：v0.2 六条 + W36 增 L7（公开真实层 44.90% 类不平衡）与 L8（真实域骨架有效监督 20/24），L5 升级为 AL 三重负结果（W14 冷启动 + extended 复跑 + W23 强打分器）；W46 增 L9（round2 数据飞轮预注册负结果 −4.08pp → 跨域无监督增强的正负迁移边界条件：像素域几何 / 动捕运动学先验对工作犬 2D 姿态域）
 > 写作规范: galaxy 诚实原则——Limitations 独立成段、先发制人；结论不超出已测范围。
 
 ---
@@ -13,7 +13,7 @@ We presented PSD, a physics–semantics decoupled framework for low-resource ani
 
 ## 6.2 Limitations（独立成段，先发制人）
 
-Eight limitations bound our claims.
+Nine limitations bound our claims.
 
 1. **Proxy-caliber evidence for representation quality.** Our pretraining evidence uses subject identity as a kNN probe on InterPet4D, which measures representation discriminability rather than behavior accuracy; behavior-level evidence now rests on the downstream experiments of Sections 4–5 (segmentation IoU 0.458±0.049 under a seeds pseudo-ground-truth protocol, pseudo-label pool precision 0.691±0.013, and the four-class public-real fine-tuning result below), each with its caliber disclosed inline.
 2. **Single species family.** All real-data validation covers canids; cross-family generalization (felids, equids, primates) is untested and left to future work.
@@ -23,6 +23,7 @@ Eight limitations bound our claims.
 6. **Structural constraints of the public-real tier.** Under the pre-registered partial-class protocol, only 4 of 12 target classes pass the canine sample-size gate under the relaxed rule (3 under the strict rule; down/stand/scale have zero coverage), and the official pose-estimation subset averages ≈4.6 frames per video with no canine-overlapping video reaching the T=30 temporal length required by skeleton pipelines; a self-extraction pipeline (YOLO11-pose fine-tuned on dog-pose → skeleton extraction → ST-GCN fine-tuning on the 4-class subset) was adopted as mitigation (`reports/p05-public-real-partialclass-2026-08-24.md`), and its first-round outcome is quantified in L7.
 7. **Severe class imbalance dominates the public-real result.** The self-extraction round-one model reaches 44.9% overall validation accuracy on the four-class subset (1.80× the 25% random baseline) under heavily skewed support (train: watch 72 / track 46 / stay 27 / jump 27); per-class accuracies collapse to watch 100% / track 23.5% / jump 0% / stay 0% — majority-class recall accounts for essentially all of the aggregate score (`reports/p05-public-real-partialclass-result-2026-08-25.json`). We therefore present this number with its per-class breakdown attached, restrict all public-real claims to the four-class partial caliber, and treat aggregate-only reporting as prohibited for this tier.
 8. **Real-domain skeletons carry 20/24 valid supervision channels.** The dog-pose annotations never label four of the 24 graph joints (both eyes, withers, throat — the last four slots are absent from the StanfordExtra source), so every real-domain keypoint product in this paper is topology-isomorphic rather than fully supervised: the four dead channels are hard-masked at assembly and NaN-guarded downstream. Any real-domain skeleton-based number therefore rests on 20-channel effective supervision, and rules that depend on the withers landmark are structurally degraded in the pixel domain.
+9. **Boundary conditions of cross-domain unsupervised enhancement—pre-registered negative at this resource level.** We tested whether unlabeled cross-domain geometry transfers into the working-dog 2D pose domain of the public-real tier: a pre-registered round augmented the frozen backbone with AdaBN-style statistics from 1,069 clips (570 from the same-pipeline pixel-domain extraction, 499 from the heterogeneously annotated APTv2 domain) under a kinematic plausibility gate calibrated on 51 motion-capture sequences, then repeated the identical four-class head re-training protocol. The primary endpoint failed: 40.82% vs. 44.90% (−4.08 pp against a bit-identical same-day baseline rerun; paired three-seed deltas −4.08/+6.12/−8.16 pp, mean −2.04 pp inside the ±4.81 pp seed-noise band) (`reports/p05-public-real-round2-2026-08-25.md`). Because the adaptation provably penetrated the backbone (85/85 BatchNorm statistics moved; the track profile swung 23.5%→76.5% in the strongest single-source arm), the bottleneck is conversion, not supply: absent a label-alignment force between unsupervised second-order statistics and small-sample head re-training, (i) no adapted arm improves aggregate accuracy — the only same-seed gain (+4.08 pp, APTv2-only arm) is a class-level swap (track tripled while watch fell 100%→26.7%) that we report strictly as a secondary signal, never as an aggregate improvement; (ii) the majority-class extreme fit is systematically sacrificed (watch declines in every adapted arm); (iii) pooling multiple geometry sources dilutes rather than accumulates (40.82% lies below either single source), and since BatchNorm statistics are per-channel scalars that saturate within a few hundred clips, growing the unlabeled pool cannot in principle close the gap. Motion-capture kinematics transfer only through a one-sided filter: the treadmill-only DogSet reference contains no static behavior, so its low-speed band encodes reference bias rather than physics — the bilateral form of the gate would have discarded 48 legitimate near-static clips, and we corrected it before any GPU run. We therefore claim no accuracy benefit from unlabeled cross-domain enhancement at this caliber and identify label-in-the-loop alignment (an active-learning budget over the expansion pool or adapted rule-based seeds), not more unlabeled volume, as the missing fuel for any future flywheel claim.
 
 > 每条 limitation 均配"为何不动摇核心主张"的回应策略（rebuttal 预案）：
 > 1 → 口径披露在 §3.2.1/§4.3 双处声明，行为级证据由 E2-E6 承担；
@@ -31,22 +32,24 @@ Eight limitations bound our claims.
 > 4 → 消费级算力可行性恰是低资源叙事的佐证，非缺陷。
 > 5 → 负结果按诚实原则先发制人如实呈现（C7 已按用户裁决①降级为探索性发现，2026-08-25；W23 第二轮强打分器复证后双轮负结果闭环，效率主张正文与摘要永久禁用）；不确定性采样的经典前提（较强打分器 + 域内校准）缺失反而强化渐进式标注叙事（先标注→校准打分器→再选样）；warm-start 正证据已按裁决 A 落地为 C7 新主张；
 > 6 → 结构性约束显式披露而非隐藏；自提取管线沉淀为可复用资产；公开真实层相关主张全部限定在 4 类子集口径内，禁止升格；
-> 7 → 44.9% 永远与逐类分解同框呈现（防聚合分数掩盖多数类偏置）；类不平衡处理是 §5 敏感性扫描的显式开关（frequency-aware margin vs 重采样），扩展池增强的第二轮验证（round2）已立项独立窗口，不与本口径混报；
+> 7 → 44.9% 永远与逐类分解同框呈现（防聚合分数掩盖多数类偏置）；类不平衡处理是 §5 敏感性扫描的显式开关（frequency-aware margin vs 重采样），扩展池增强第二轮验证（round2）已收官并独立成 L9（负结果边界条件），本条守 round1 类不平衡口径、L9 守跨域增强边界口径，互不混报；
 > 8 → 死关节硬掩码是组装出口的确定性机制（非统计修补），20/24 口径在 §4.1 与本节双处披露；依赖 withers 的规则降级已在数据飞轮报告中量化归档。
+> 9 → 预注册主端点失败如实归档（沿 W14/W23 负结果先例），机制层传导证据与负端点分开陈述，不用机制话术替代端点失败；正迁移仅以类级换位的次级信号呈现并明示不得升格（预注册防挑选纪律）；round2 数字只在本条边界语境出现，禁止在摘要/tab2 作飞轮正证据引用（W40 报告 §5 引用纪律）；"数据飞轮"若保留措辞，锚定供数管道资产沉淀与机制层传导，不得声称"提升 X pp"；tab2 的 44.9% 按 W40 建议配 ±4.81pp 种子不确定性注记。
 
 ## 自审记录
 
 | 检查项 | 结果 |
 |--------|------|
 | 结论不超出已测范围 | ✅ 全部数字已按归档报告终填（82.0%@20 / ≥3× 保守界 / 统计等效精度带），无占位残留 |
-| Limitations 独立成段 + 每条有回应预案 | ✅ 8 条（v0.2 六条 + W36 增 L7/L8） |
-| 与风险登记册一致 | ✅ L1↔R1、L3↔W1 边界声明、L4↔HANDOVER §4、L5↔R11/W14+W23+full 复跑三证据、L6↔W20 报告结构约束披露、L7↔Q3c JSON 类不平衡如实、L8↔死关节 ADR/20-24 口径块 |
+| Limitations 独立成段 + 每条有回应预案 | ✅ 9 条（v0.2 六条 + W36 增 L7/L8 + W46 增 L9） |
+| 与风险登记册一致 | ✅ L1↔R1、L3↔W1 边界声明、L4↔HANDOVER §4、L5↔R11/W14+W23+full 复跑三证据、L6↔W20 报告结构约束披露、L7↔Q3c JSON 类不平衡如实、L8↔死关节 ADR/20-24 口径块、L9↔p05 round2 预注册判读 flywheel_negative |
+| L9 数字溯源 | ✅ 全部引自 `reports/p05-public-real-round2-2026-08-25.md`/`.json`：−4.08pp（seed42）/−2.04pp（三种子均值）/±4.81pp 噪声带/1069=570+499 适应集/85·85 BN/track 23.5→76.5%/aptv2only +4.08pp 次级信号/watch 100→26.7–73.3%/48 静态保留单侧门禁；无报告外新数字 |
 | 三层口径 | ✅ 82.0% 标合成偏移层；44.9% 标公开真实层 4 类部分口径；成本数字标合成层基准——零混报 |
 
 ## 待办
 - [x] C7 措辞用户裁决落地并同步本文件（2026-08-25，选项①：降级探索性发现）
 - [x] ~~RESULT-7/8 回填后收口终稿~~ ✅ W36 终填（2026-08-25）：RESULT-7=warm-start 82.0%@20 clips（合成偏移层）、RESULT-8=≥3× 保守墙钟成本界（full 6.07× 背书 + 精度统计等效）
-- [ ] round2 扩展池增强结果落地后，评估 L7 是否增补"飞轮效力"实证句（独立窗口执行，本窗不动其数据）
+- [x] round2 扩展池增强结果落地后，评估 L7 是否增补"飞轮效力"实证句（独立窗口执行，本窗不动其数据）✅ **W46 评估落地（2026-08-26）**：判定不在 L7 内增补——L7 口径 owner=round1 类不平衡，混入 round2 数字违反 Truth 单一性；改为**新增 L9** 承接跨域无监督增强正负迁移边界条件，rebuttal #7/#9 同步分工，round2 全部数字引自 `reports/p05-public-real-round2-2026-08-25.md`
 
 ## 修订历史
 
@@ -56,3 +59,4 @@ Eight limitations bound our claims.
 | v0.2 | 2026-08-24 | W21 诚实刷新：新增 L5（冷启动弱打分器场景不确定性采样无优势 + softmax 跨域饱和诊断 100.9 vs ≈10.8）与 L6（AK 公开真实层结构约束：宽松门禁 4/12 类 + PE ≈4.6 帧/视频，自提取管线为缓解方案待 Q3 接力）；rebuttal 预案同步扩至 6 条 |
 | v0.3 | 2026-08-25 | 用户裁决 C7 选项①落地：结论模板删除"100–200 片段预算内达标"句式（RESULT-7 改指语义层精度）；L5 rebuttal 更新为裁决①表述并注明升级通道 |
 | v0.4 | 2026-08-25 | **W36 终稿轮**：[RESULT-7] 终填 warm-start 82.0%@20 clips（±4.3，合成偏移层口径随句）；[RESULT-8] 终填 ≥3× 保守墙钟成本界（实测 full 6.07×/small 7.32× 背书 + 精度统计等效 −0.91/+2.27pp）；语义层组件句随 C7 换轨改 warm-started initialization；L1 去除 [PENDING] 改指向 §4-§5 已落地证据；**L5 升级三重负结果证据链**（短档冷启动 + extended 复跑 + W23 强打分器，random 全线反超）；**新增 L7**（公开真实层 44.9%=1.80×随机但 watch 100%/track 23.5%/jump+stay 0 类不平衡主导聚合分数，逐类分解强制同框）；**新增 L8**（真实域骨架拓扑同构有效监督 20/24 死关节硬掩码口径）；rebuttal 预案扩至 8 条 |
+| v0.5 | 2026-08-26 | **W46 round2 提炼轮**：新增 **L9**（跨域无监督增强正负迁移边界条件——预注册主端点 −4.08pp、三种子均值 −2.04pp 在 ±4.81pp 噪声带内、机制层 85/85 BN 传导成立但"无监督二阶统计→小样本头重训"缺标签对齐力、类级换位仅次级信号不得升格、多源池化稀释、BN 每通道标量饱和论证、动捕运动学先验仅可作单侧合理性门禁的 DogSet 参考偏差教训）；rebuttal 预案扩至 9 条，#7 尾句改指 L9 分工；待办 round2 项闭环（判定：不增补进 L7，守 Truth 单一性） |
