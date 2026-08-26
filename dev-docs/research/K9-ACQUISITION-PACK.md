@@ -26,7 +26,7 @@
 | 文件 | 语言 | 状态 |
 |------|------|------|
 | `dev-docs/research/K9-SAMTWL-email-zh.md` | 中文版（通用机构版措辞） | 备用 |
-| `dev-docs/research/K9-SAMTWL-email-en.md` | English **v1.2 去AI痕迹+云南警官学院背书版** | **主发版本** |
+| `dev-docs/research/K9-SAMTWL-email-en.md` | English **v1.3 定稿版**（学生侯志脉/云南警官学院已填，唯一待填=发件邮箱） | **主发版本** |
 
 > 纪律注记：警院身份表述以与云南警官学院的**真实关系**为准（学生/教师/科研/外部合作四选一，邮件文件内附对照表）；禁虚构职务；如有警院邮箱优先用它发送。
 
