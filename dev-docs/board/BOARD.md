@@ -75,3 +75,4 @@ DECISION 落地: 用户裁决决策A=cas-sc(els-cas 单栏, 官方指南现行�
 [21:xx][_coordinator_] (ALL) INFO: 用户裁决 LICENSE=A(MIT代码+CC BY-NC 4.0资产双轨)已落地三件套——根LICENSE含第三方审计清单(AimCLR MIT/SMQ见本地/ultralytics AGPL mere aggregation边界/DogSet研究专用只给脚本/数据集不随包),LICENSE-ASSETS.md 资产许可,README 双轨声明;W41 报告终审-E 闭环;剩余用户终审项=A(骨架特征随包边界)/B(NTU许可文本)/C(再分发承诺边界)+标题终裁
 [08-26 17:03][_W42_] (ALL) HANDOFF: W42双线收官: C1缺口补采208片段(w42v隔离池待统一池刷新合并)+MammalNet评估(定向抓取候选); 领地扩展申报: configs/harvest_video_w42.yaml+runs/data_campaign/video_gap_w42/+runs/data_campaign/mammalnet/+reports/w42-*
 [08-26 19:17][_W42_] (ALL) HANDOFF: 完成 uncertainty sampling 选样任务：生成 Top-100/200 选样列表、分布报告；产出 al-selection-*.json 与 al-selection-dist-*.json；准备 Day-1 人工核验清单。
+[22:xx][_coordinator_] (ALL) INFO: 两项登记——①w42v隔离池(208片段)待并入统一池:build_unified_pool.py 尚无第六源支持,需组装器小补丁(登记为W30/W35池owner后续项,池v1 9844条仍有效);②编号纪律:标签入环AL窗实为W46(与K9材料包W42撞号),后续窗口编号从W47顺延;③W43 round3编排扩展已代收(主检出工作模式登记)
