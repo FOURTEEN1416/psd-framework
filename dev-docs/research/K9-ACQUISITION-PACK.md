@@ -21,12 +21,14 @@
 | 许可状态 | ⚠️ 仓库无 LICENSE 文件；获取方式即"邮件授权制"——书面承诺必须随信给出 |
 | 活跃度风险 | 最后推送 2019-06-19；主邮箱为 SMU MITB 学生邮箱（.2017），可能已失效 → **双地址同发**（samuel.tong.2017@mitb.smu.edu.sg 主 + samuel050590@gmail.com 备），30 天无回复则走 GitHub Issue 留言通道 |
 
-### 1.2 邮件草稿文件（发送前替换【】占位符）
+### 1.2 邮件草稿文件（发送前替换【】占位符，一律填真实信息）
 
-| 文件 | 语言 |
-|------|------|
-| `dev-docs/research/K9-SAMTWL-email-zh.md` | 中文版 |
-| `dev-docs/research/K9-SAMTWL-email-en.md` | English version |
+| 文件 | 语言 | 状态 |
+|------|------|------|
+| `dev-docs/research/K9-SAMTWL-email-zh.md` | 中文版（机构版措辞） | 备用 |
+| `dev-docs/research/K9-SAMTWL-email-en.md` | English **v1.1 独立研究者诚实版**（身份=Independent researcher，说服力靠具体计划+三重承诺+接受作者附加条件） | **主发版本** |
+
+> 纪律注记：作者协议要求注明机构/组织+用途——无机构 affiliation 时如实填写 "Independent researcher (no institutional affiliation)"，**禁止伪造机构信息**；邮件已内置"愿意签署作者提出的简易使用协议"作为替代信任锚。
 
 草稿已按作者协议内置四要素：数据用途（跨数据集泛化评估 + 细粒度表征分析）、学术框架（低资源动物行为识别研究、拟投 CV 期刊/会议）、引用承诺（逐字采用其指定格式）、许可承诺（组内学术使用/不再分发/不上传公开网/按要求删除并书面确认）。
 
@@ -131,7 +133,7 @@
 
 ## §5 下一步行动清单（按优先级）
 
-1. **发 samtwl 邮件**（双地址，占位符替换后即可发；30 天窗口，无回复转 Issue 通道）；
+1. **发 samtwl 邮件**（主发 gmail samuel050590@gmail.com、Cc SMU 学生邮箱；占位符填真实信息后即可发；2 周跟进 / 30 天无回复转 Issue 通道）；状态：待发送；
 2. **转发拍摄清单一页纸**给基地联系人，启动首批 ≥20 段/类 × 7 类采集（稀缺类 rise_transition/jump 加倍）；
 3. **C1 补采缺口**：新增关键词族「搜救犬 训练」「search and rescue dog training」「IRO dog training」「k9 agility training」（CPU/网络，沿 harvest_video_pipeline 复跑，需开新窗或排期）；
 4. YouTube 41 URL 频道名补拉（代理恢复后，§3.2c 命令模板）；
@@ -153,3 +155,4 @@
 | 版本 | 日期 | 变更 |
 |------|------|------|
 | v1.0 | 2026-08-26 | W42 首版：邮件双版+拍摄清单一页纸+替代源筛查 8 项+频道目录 6 频道+机构线索 5 条+许可伦理注记 |
+| v1.1 | 2026-08-26 | 英文邮件改独立研究者诚实版（v1.1，禁伪造机构的纪律注记入 §1.2）；§5 行动 1 补收发件人安排与状态位 |
