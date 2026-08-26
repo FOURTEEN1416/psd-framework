@@ -56,7 +56,7 @@
 
 | # | 数据集 | 类型 | 犬覆盖 | 规模 | 获取 | 许可/注记 | 对本管线用途 | 判定 |
 |---|--------|------|--------|------|------|----------|-------------|------|
-| D1 | **MammalNet**（Vision-CAIR，CVPR 2023） | 视频+行为标签 | ✅ 家犬属 173 哺乳动物类目之一 | 12 类高层行为；trimmed/full 视频 S3 直链 | wget 直下（README 内嵌链接） | 仓库无显式 LICENSE 文件；官方 BibTeX 提供 → 学术引用制 | 预训练池扩广度（视频级行为标签，非骨架） | **推荐评估下载 dog 子集** |
+| D1 | **MammalNet**（Vision-CAIR，CVPR 2023） | 视频+行为标签 | ✅ 家犬属 173 哺乳动物类目之一 | 12 类高层行为；trimmed/full 视频 S3 直链 | wget 直下（README 内嵌链接） | 仓库无显式 LICENSE 文件；官方 BibTeX 提供 → 学术引用制 | 预训练池扩广度（视频级行为标签，非骨架） | **已评估（2026-08-26，reports/w42-mammalnet-eval-2026-08-26.md）**：标注包解析完成，犬子集 **1,435 条**实锤；trimmed 巨包双 403 失效且 365GB full 包超磁盘——转 yt-dlp 定向抓取路径（文件名即 YT ID），定位降为预训练池广度候选 |
 | D2 | **AP-10K**（Yu et al. 2021） | 静态姿态图 | ✅ 54 种含犬科 | 10,015 图 × 17kp × bbox | openreview 页面链接 | 学术发布，投稿前终审引用条款 | 静态池/预训练增广（沿 C5 判例 b 口径） | 推荐（静态池） |
 | D3 | **Animal-Pose**（Cao et al. ICCV 2019） | 静态姿态图 | ✅ 含 dog | 4,000+ 图 × 20kp × bbox | 官方 Google Sites | 学术发布 | 同上；20kp 与 APTv2 17kp 拓扑近似 | 可选（与 D2 功能重叠） |
 | D4 | **APT-36K**（pandorgan/APT-36K） | 视频姿态图 | ✅ 30 种 | 36,000 图 / 2,400 clip × 17kp | GitHub 指路 | 学术发布 | —— | **跳过**：APTv2 即其 v2 谱系，本地已有 83,304 文件全量 |
@@ -135,9 +135,9 @@
 
 1. **发 samtwl 邮件**（主发 gmail samuel050590@gmail.com、Cc SMU 学生邮箱；v1.3 定稿版）状态：**已发送 2026-08-26**（侯志脉）；跟进节奏：2026-09-09 无回复跟进一句 / 2026-09-25 无回复转 GitHub Issue 通道；
 2. **转发拍摄清单一页纸**给基地联系人，启动首批 ≥20 段/类 × 7 类采集（稀缺类 rise_transition/jump 加倍）；
-3. **C1 补采缺口**：新增关键词族「搜救犬 训练」「search and rescue dog training」「IRO dog training」「k9 agility training」（CPU/网络，沿 harvest_video_pipeline 复跑，需开新窗或排期）；
-4. YouTube 41 URL 频道名补拉（代理恢复后，§3.2c 命令模板）；
-5. MammalNet dog 子集评估下载（trimmed 包直链，先验规模再全量）；
+3. **C1 补采缺口**：✅ **已完成（2026-08-26）**——configs/harvest_video_w42.yaml 六词族有界运行，定稿 208 片段（w42v- 前缀，已对主池去重），搜救犬族 0→90 / k9 agility 0→76 / 警犬科目 +27；详见 reports/w42-harvest-gap-2026-08-26.md；合并入主池待统一池刷新时执行；
+4. YouTube 41 URL 频道名补拉（代理当日 16:37 起恢复；旧池 41 URL 的频道名仍待补，§3.2c 命令模板有效）；
+5. MammalNet dog 子集：✅ **已评估（2026-08-26）**——1,435 条 ID 清单落盘 runs/data_campaign/mammalnet/dog_clips_1435.tsv；巨包 403 失效转定向抓取路径，排期随下个 YouTube 通道窗口顺路执行；
 6. VetDataHub 提 Issue 征询犬行为视频数据集线索（措辞可复用 samtwl 邮件框架）。
 
 ## §6 证据与复现
