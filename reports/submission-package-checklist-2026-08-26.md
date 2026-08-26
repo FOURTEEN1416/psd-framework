@@ -7,7 +7,7 @@
 
 | ✓ | 项 | 状态 | 责任 |
 |---|----|------|------|
-| ☐ | LaTeX 工程（cas-sc 单栏推荐，见报告 §6 决策 A） | 🔴 未建（仓库零 .tex） | 终稿装配窗 |
+| ☑→🔄 | LaTeX 工程（**用户决策 A 已裁 cas-sc**，2026-08-26）：脚手架已建且编译全绿（main.pdf 3页/highlights.pdf 1页），六节正文待装配 | 🔄 脚手架完成 | 终稿装配窗（入口 `docs/paper/latex/README.md`） |
 | ☐ | 五篇 md → tex：introduction / related-work / method / experiment-skeleton / conclusion-limitations | ⏳ 待装配 | 终稿装配窗 |
 | ☐ | 单栏双倍行距、两端对齐、编页码（官方硬约束，禁双栏） | ⏳ 模板选项即含 | 终稿装配窗 |
 | ☐ | 页数窗口校验 **20–35 页含图表参考文献附录**；<20 页会被建议转投 PR Letters | ⏳ 装配后实测 | 终稿装配窗 |

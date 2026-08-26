@@ -213,7 +213,11 @@ psd-framework-release/
 
 ## 6. 需要默默拍板的决策点（对比表 + 推荐）
 
-### 决策 A：LaTeX 模板（cas-sc vs elsarticle）
+### 决策 A：LaTeX 模板（cas-sc vs elsarticle）——✅ 已裁决并落地（2026-08-26 用户拍板 cas-sc）
+
+> **执行结果（W41 同日交付）**：`docs/paper/latex/` 脚手架建成并冒烟编译全绿（pdflatex+bibtex 三段 exit=0，
+> main.pdf 3 页/highlights.pdf 1 页；类选项 review=doublespacing 经 cls L67/L138 实证；题录首条取官方仓
+> AimCLR BibTeX GitHub 取证；thumbnails/ 官方资产随包）。装配纪律与排障记录见 `docs/paper/latex/README.md`。
 
 | | els-cas `cas-sc.cls`（官方现行推荐） | 经典 `elsarticle`（老牌通用） |
 |--|--|--|

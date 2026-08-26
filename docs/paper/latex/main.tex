@@ -1,0 +1,125 @@
+%% ============================================================================
+%% main.tex — PSD Framework @ Pattern Recognition 投稿主装配文件
+%% 模板: els-cas cas-sc (单栏) — 用户决策 A 定案 2026-08-26（官方 Guide for Authors 直链模板族）
+%% 类选项实证: review => setspace + \doublespacing（cas-sc.cls L67/L138），对应 PR
+%%   "single-column, double-spaced" 投稿硬约束; 页数窗口 20-35 页含参考文献附录。
+%% 引用样式: PR 刊出为数字制 => natbib numbers + elsarticle-num.bst（官方 Elsevier 数字样式）。
+%% 装配纪律: 各节 body 的 truth 仍是 docs/paper/<owner>.md（W36 v-final），转换时逐块搬运、
+%%   禁止改写数字与措辞；全文对账以 number-index（gen_number_index.py）为准。
+%% 排版纪律: pdflatex 非 Unicode 引擎——排版面（非注释）禁 CJK；占位一律走 \TODO{} 且参数纯 ASCII。
+%% 编译: 本目录内执行（latexmk 需 Perl，本机未装——用经典三连）:
+%%   pdflatex -interaction=nonstopmode main.tex ; bibtex main ; pdflatex x2
+%% ============================================================================
+
+\documentclass[a4paper,fleqn,review]{cas-sc}
+% ^ review = 双倍行距评审版（投稿用）。终稿清样期去掉 review 改 final。
+% 若标题页超一页: 加选项 longmktitle。
+
+\usepackage[numbers,sort&compress]{natbib}   % 数字引用（PR 刊出口径）
+%\usepackage[authoryear]{natbib}             % 备选: 著者-年份制（配 cas-model2-names）
+\usepackage{xcolor}
+
+%% 装配占位宏: 红色 TODO 在成稿中必须清零（grep '\TODO{' 即得清单）
+\newcommand{\TODO}[1]{\textcolor{red}{\textbf{[TODO: #1]}}}
+
+\graphicspath{{../figures/}}                 % fig1-4 PDF 位于 docs/paper/figures/
+
+\begin{document}
+
+\let\WriteBookmarks\relax
+\def\floatpagepagefraction{1}
+\def\textpagefraction{.001}
+
+%% ---------------- 前置区（Frontmatter）----------------
+\shorttitle{Physics-semantics decoupled framework for low-resource animal behavior recognition}
+%% 排版纪律 2: 前置区字段(shortauthors/author/ead/affiliation)会被类内 LaTeX3 机制全展开——
+%%   禁放任何自定义宏(含 \TODO/\textcolor)，只写纯文本占位；\TODO 仅用于正文区。
+\shortauthors{USER: surname et al.}
+
+% R2 标题终裁仍待用户（现 15 词，官方理想 10-15 词上沿）
+\title[mode = title]{A Physics-Semantics Decoupled Framework for Low-Resource Animal Behavior Recognition under Evolving Evaluation Criteria}
+
+%% 作者区 USER 终审项: 名单/单位/ORCID/通讯标记——结构按官方模板预留
+\author[1]{USER: Author One}
+\cormark[1]
+\ead{USER: email}
+\credit{Conceptualization, Methodology, Software, Validation, Investigation, Data curation, Writing -- original draft, Writing -- review \& editing, Visualization}
+\affiliation[1]{organization={USER},
+            city={USER},
+            postcode={},
+            country={USER}}
+\cortext[1]{Corresponding author}
+
+%% ---------------- 摘要（introduction.md v0.3 W36 合并定稿逐字搬运）----------------
+\begin{abstract}
+Behavior recognition in animals underpins welfare monitoring and working-dog training, yet behavior annotation is scarce and evaluation criteria evolve with operational needs. Existing recognition pipelines couple representation learning to a fixed label set, so every taxonomy change forces re-annotation and retraining. We propose PSD, a physics--semantics decoupled framework that separates \emph{how skeletons move} from \emph{what behaviors are called}. A label-free physics layer combines self-supervised pretraining with unsupervised motion-word segmentation; a lightweight semantic layer expands rule-engine seeds into full taxonomy coverage through anchor-guided prototype clustering with iterated confidence-filtered pseudo-labeling, consolidated by semi-supervised self-training and made usable at small annotation budgets by warm-started semantic-layer initialization. On public real animal-skeleton data, pretraining alone yields kNN top-1 of \textbf{20.89\% versus an 8.33\% random baseline (2.51$\times$)}; the warm-started semantic layer reaches \textbf{82.0\% top-1 on 22 classes from only 20 labeled clips} (synthetic-offset benchmark); and a taxonomy transition is absorbed at \textbf{$\geq$3$\times$ lower retraining cost} than full-pipeline retraining (conservative bound, synthetic-tier benchmark). These results indicate that decoupling turns evolving evaluation criteria from a re-annotation burden into a routine semantic-layer update.
+\end{abstract}
+
+%% Highlights 同步维护两处: 此处（版内）+ highlights.tex（投稿系统独立可编辑文件）
+\begin{highlights}
+\item Physics-semantics decoupled framework absorbs taxonomy evolution cheaply
+\item Taxonomy transitions absorbed at $\geq$3x lower wall-clock cost, matched accuracy
+\item First anchor-cluster-pseudo-label transfer to temporal skeleton recognition
+\item Label-free pretraining reaches 2.51x random kNN on real quadruped skeletons
+\item Warm start makes a 20-clip budget usable: 82.0\% top-1 under shift
+\end{highlights}
+
+%% 关键词（建议稿 F6，1-7 个允许）
+\begin{keywords}
+animal behavior recognition \sep skeleton-based action recognition \sep self-supervised learning \sep pseudo-labeling \sep decoupled architecture \sep low-resource learning
+\end{keywords}
+
+\maketitle
+
+%% ---------------- 正文装配区（truth = docs/paper/<owner>.md，W36 v-final）----------------
+\input{sections/01-introduction}          % <= introduction.md      (Abstract 已内置上方)
+\input{sections/02-related-work}          % <= related-work.md      (题录池 11 条全解决/3 条作者待补)
+\input{sections/03-method}                % <= method.md
+\input{sections/04-experiments}           % <= experiment-skeleton.md §4 (三层口径铁律随行)
+\input{sections/05-ablation-analysis}     % <= experiment-skeleton.md §5 (tab3 六行零 PENDING)
+\input{sections/06-conclusion-limitations}% <= conclusion-limitations.md v0.4 (Limitations 八条)
+
+%% 图示例范（正式装配时启用; 矢量 PDF 已过 W41 终检 reports/submission-package-2026-08-26.md §4）
+%\begin{figure}[t]
+%  \centering
+%  \includegraphics[width=\linewidth]{fig1_framework_overview.pdf}
+%  \caption{The PSD framework. A frozen physics layer $\Phi$ ... (caption truth: figure-specs.md)}\label{fig:framework}
+%\end{figure}
+
+%% ---------------- 声明区（草稿 truth: reports/submission-package-2026-08-26.md §2-§3）----------------
+\section*{CRediT authorship contribution statement}
+\printcredits %% 角色明细取前置区 \credit{} 字段; 作者名单定稿后复核
+
+\section*{Declaration of competing interest}
+%% 经 Editorial Manager 问卷生成 Word 单独上传; 正文此节按官方惯例声明 "The authors declare that they have no known competing financial interests..." USER 复核
+\TODO{assembly: copy declaration sentence from report S2.1 tail}
+
+\section*{Funding}
+This research did not receive any specific grant from funding agencies in the public, commercial, or not-for-profit sectors.\ \TODO{USER: replace if funded}
+
+\section*{Data availability}
+%% 全文草稿: reports/submission-package-2026-08-26.md §3.1; 含三处 USER 终审 A/B/C 许可标注
+\TODO{assembly: copy verbatim from report S3.1}
+
+\section*{Ethics statement}
+%% 全文草稿: reports/submission-package-2026-08-26.md §3.2; USER 终审 D InterPet4D 人被试伦理原句留档
+\TODO{assembly: copy verbatim from report S3.2}
+
+\section*{Declaration of generative AI use}
+%% 建议稿: reports/submission-package-2026-08-26.md §3.3; USER 终审 F 披露颗粒度待拍板——投稿强制项
+\TODO{assembly: from report S3.3, finalize per user ruling F}
+
+%% ---------------- 附录（计入 20-35 页窗口! 超页时移 Supplementary Material）----------------
+%% \appendix
+%% \section{One-command reproduction chain}\label{app:repro}   % truth: reports/p01-aimclr-2026-08-23.md §7 等
+%% \section{Novelty survey matrix}\label{app:novelty}          % truth: dev-docs/research/NOVELTY_CHECK_YAOQING_JIA.md
+
+%% ---------------- 参考文献 ----------------
+%% 脚手架期 nocite 仅用于打通 bibtex 链路（题录取自官方仓自带引用块，W17 已核验双源）——正文装配开始后删除本行
+\nocite{guo2022aimclr}
+
+\bibliographystyle{elsarticle-num}           % 官方 Elsevier 数字样式（MiKTeX 自带）
+%\bibliographystyle{cas-model2-names}        % 备选: CAS 著者-年份样式
+\bibliography{refs}
+
+\end{document}

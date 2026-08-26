@@ -1,0 +1,12 @@
+# LaTeX 构建产物（可再生成，禁止入库）
+*.aux
+*.log
+*.out
+*.bbl
+*.blg
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.toc
+*.pdf
+# 注意: fig1-4 的正式矢量 PDF 在 ../figures/（tracked）；本目录 pdf 均为本目录编译生成物
