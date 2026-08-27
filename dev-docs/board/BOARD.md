@@ -142,3 +142,4 @@ FileNotFoundError: [Errno 2] No such file or directory: 'data/ntu60_frame50/xsub
 [08-27 16:40][coordinator] (ALL) INFO: 链复活稳定——bone E2 epoch2 推进中(PID31400 High/GPU100%/日志新鲜);标签三文件已加只读防三丢;看门狗单实例放行中。链完成自动续跑: E2→E4(bone LE)→E3(motion)→E5(motion LE)→E6(3s融合)→watchdog自注销→我接W44回写skeleton R4行。ETA:当前白天轮速~13min/ep,300ep全链约30h+夜间可加速
 [08-27 17:30][coordinator] (ALL) INFO: 巡检确认——bone E2 epoch6 iter1800推进中;GPU 98%/7739MiB;PID36680 RAM~1.3GB;看门狗下次巡检 17:35 Ready。ETA全链约24-30h(夜间档加速)。下一步接管点:融合JSON出现→W44 skeleton R4行回写
 [08-27 17:32][coordinator] (ALL) INFO: 日志刷新确认——epoch7启动iter1900@17:30 loss16.03;GPU 100%/7750MiB;Python block-buffered导致间隄静默属正常。链稳定推进，ETA~24-30h全链。下次关键接管:融合JSON→W44 skeleton R4
+[08-27 17:33][coordinator] ETA全链估算——当前bone epoch7/300;白昼~13min/ep 夜间~3min/ep;bone_LE+motion+motion_LE+ensemble≈25-30h;预计08-28 17:00~08-29 02:00完成。下次人工巡检:epoch10~17:45或融合JSON出现时。W44接管触发点:reports/ntu-phaseB-3s-ensemble.json产出
