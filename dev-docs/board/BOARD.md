@@ -89,3 +89,52 @@ DECISION 落地: 用户裁决决策A=cas-sc(els-cas 单栏, 官方指南现行�
 [08-27 11:40][coordinator] (ALL) INVESTIGATION-结案: bone轮速异常根因复查完成(只读取证,零GPU干预)——【推翻'bone恒慢于joint2-9x':四段实测曲线显示夜间安静时段bone 3.2-6.2min/ep与joint参照(5min/ep二手值,原日志已被清理)同档】。真实机制=训练主进程单线程数据管线(num_worker=0为Windows spawn规避的历史决策,joint/bone config全同仅stream字段)x主机RAM枯竭:15.7GB只剩0.4-1GB(多AI会话+桌面栈+白天负载),页错误风暴致iter时间x2-x5且间歇深度停顿(单轮最慢57min@08-27 03:13)。时段相关性强:夜间60-90s/100it vs 今晨250-350s/100it。GPU本体排除(无热降频/无功耗墙,P2态1927MHz是果不是因)。ETA含义:纯夜间~23h;白天高负载可膨胀至65h+。【整改建议呈报用户】A零风险:训练进程PriorityClass=High(我可执行);B环境约定:训练窗口内避免本机重量级任务(pytest/索引/多会话爆载),入BOARD纪律;C个人项:动态壁纸等常驻渲染由用户裁量;D中期(memmap/pre-augment降CPU变换)归W33开窗决策勿动现役链;E监控加固:watchdog升级建议用log静默死线(iter时间戳>30min无输出判stuck)代替CPU快照(权限不足时CPU读0会误判)。另:assets-map §5 stgcn_bc两行⏳→✅勘误(W11实已移植,接手核查commit在案)
 [08-27 12:10][coordinator] (ALL) INFO: 窗口批量回收完成(用户指令)——①W23/W25/W29/W31/W32/W34/W35/W36/W39/W40/W41/W43/W44/W45/W46/W47 共16窗卸除:前置双验证(porcelain零遗留+分支全merged)→runs对账→【抢救三窗未汇聚科学资产到主检出: W39 w31_ablation_pretrain checkpoint 121MB + W40 adabn_backbone_*.pt round2权重185MB + W31冒烟产物,复验零差异后才删除】→摘data Junction(rmdir不穿链接)后清目录②官方checkin脚本对历史已收编窗口存在领地门禁误报(把master后续变更算旧窗头上),老窗回收走git原生通道③watchdog v2活性校验已上线(W33运行副本同步+实测放行正常):日志静默>=30min双确认状态机替代CPU快照判据④训练进程已提PriorityClass=High⑤残余活跃: 主检出+psd-framework-W33(三流链现场,链完成二次收编后另行处置);W44融合数监控职责转协调者本窗接管
 [08-27 12:30][coordinator] (ALL) INFO: 记忆MCP超时诊断结案+欠账已还——根因分层:服务进程/qdrant(9μs)/fastembed嵌入全部健康(search秒回),超时仅发生在memory_add的LLM事实抽取链路(端点网络可达0.88s),RAM枯竭时段多步链路间歇>30s触顶MCP客户端上限;workaround=memory_bulk_add快速通道(no-LLM直写,今晨3条成功即此通道)补写三条欠账(bone根因结案/窗口回收/watchdog教训)并search验证可召回;另登记kw_search工具schema错配(query_filter不被服务认)暂不可用。深改方案(给add加超时降级自动落bulk)属共享知识库基础设施变更未擅动,如需由用户或vault owner裁决
+[08-27 13:52][_W33_] (ALL) BLOCK: W33 自动链 HALT @ E2_bone_pretext：exit=1；stderr 尾:     with open(self.label_path, 'rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'data/ntu60_frame50/xsub/train_label.pkl'
+ —— 证据 runs/w33_chain/（state.json/chain.log/阶段stdout+stderr），请协调者判读；后续阶段未执行
+[08-27 13:55][_W33_] (ALL) BLOCK: W33 自动链 HALT @ E2_bone_pretext：exit=1；stderr 尾:     with open(self.label_path, 'rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'data/ntu60_frame50/xsub/train_label.pkl'
+ —— 证据 runs/w33_chain/（state.json/chain.log/阶段stdout+stderr），请协调者判读；后续阶段未执行
+[08-27 14:12][_W33_] (ALL) BLOCK: W33 自动链 HALT @ E2_bone_pretext：exit=1；stderr 尾:     with open(self.label_path, 'rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'data/ntu60_frame50/xsub/train_label.pkl'
+ —— 证据 runs/w33_chain/（state.json/chain.log/阶段stdout+stderr），请协调者判读；后续阶段未执行
+[08-27 14:15][_W33_] (ALL) BLOCK: W33 自动链 HALT @ E2_bone_pretext：exit=1；stderr 尾:     with open(self.label_path, 'rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'data/ntu60_frame50/xsub/train_label.pkl'
+ —— 证据 runs/w33_chain/（state.json/chain.log/阶段stdout+stderr），请协调者判读；后续阶段未执行
+[08-27 14:32][_W33_] (ALL) BLOCK: W33 自动链 HALT @ E2_bone_pretext：exit=1；stderr 尾:     with open(self.label_path, 'rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'data/ntu60_frame50/xsub/train_label.pkl'
+ —— 证据 runs/w33_chain/（state.json/chain.log/阶段stdout+stderr），请协调者判读；后续阶段未执行
+[08-27 14:35][_W33_] (ALL) BLOCK: W33 自动链 HALT @ E2_bone_pretext：exit=1；stderr 尾:     with open(self.label_path, 'rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'data/ntu60_frame50/xsub/train_label.pkl'
+ —— 证据 runs/w33_chain/（state.json/chain.log/阶段stdout+stderr），请协调者判读；后续阶段未执行
+[08-27 14:52][_W33_] (ALL) BLOCK: W33 自动链 HALT @ E2_bone_pretext：exit=1；stderr 尾:     with open(self.label_path, 'rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'data/ntu60_frame50/xsub/train_label.pkl'
+ —— 证据 runs/w33_chain/（state.json/chain.log/阶段stdout+stderr），请协调者判读；后续阶段未执行
+[08-27 14:55][_W33_] (ALL) BLOCK: W33 自动链 HALT @ E2_bone_pretext：exit=1；stderr 尾:     with open(self.label_path, 'rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'data/ntu60_frame50/xsub/train_label.pkl'
+ —— 证据 runs/w33_chain/（state.json/chain.log/阶段stdout+stderr），请协调者判读；后续阶段未执行
+[08-27 15:12][_W33_] (ALL) BLOCK: W33 自动链 HALT @ E2_bone_pretext：exit=1；stderr 尾:     with open(self.label_path, 'rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'data/ntu60_frame50/xsub/train_label.pkl'
+ —— 证据 runs/w33_chain/（state.json/chain.log/阶段stdout+stderr），请协调者判读；后续阶段未执行
+[08-27 15:15][_W33_] (ALL) BLOCK: W33 自动链 HALT @ E2_bone_pretext：exit=1；stderr 尾:     with open(self.label_path, 'rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'data/ntu60_frame50/xsub/train_label.pkl'
+ —— 证据 runs/w33_chain/（state.json/chain.log/阶段stdout+stderr），请协调者判读；后续阶段未执行
+[08-27 15:32][_W33_] (ALL) BLOCK: W33 自动链 HALT @ E2_bone_pretext：exit=1；stderr 尾:     with open(self.label_path, 'rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'data/ntu60_frame50/xsub/train_label.pkl'
+ —— 证据 runs/w33_chain/（state.json/chain.log/阶段stdout+stderr），请协调者判读；后续阶段未执行
+[08-27 15:35][_W33_] (ALL) BLOCK: W33 自动链 HALT @ E2_bone_pretext：exit=1；stderr 尾:     with open(self.label_path, 'rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'data/ntu60_frame50/xsub/train_label.pkl'
+ —— 证据 runs/w33_chain/（state.json/chain.log/阶段stdout+stderr），请协调者判读；后续阶段未执行
+[08-27 15:50][coordinator] (ALL) CRITICAL: NTU xsub/train_label.pkl 二次丢失(13:30-14:52窗口,上次08-24后曾丢同文件;checkpoint epoch5-115全幸存,position.npy/val三件套/xview全齐)→链E2反复失败HALT——恢复被三重阻断:GKD代理17890失联+系统代理ProxyEnable=0+直连超时,**等用户开代理后走ntu_selective_fetch.py补拉**(manifest中该文件size=0无url,需folder枚举路线;严禁xview冒充xsub,切分不同科学口径事故)。防泄漏处置:双看门狗实例互踩实锤(\OpenCode\w33-chain-watchdog昨注册+W33ChainWatchdog今晨重注册节奏错位互重置state.json致HALT失效)+w9-ntu-watchdog旧物,三者已全部Disable(未删),数据恢复后将只保留一个实例并清冗余。训练进度账本:今晨轮至ep29/300(11:28最后iter)较被kill的ep119损失大但根因链完整可溯。恢复SOP=①用户开GKD②fetch验证③仅启一个watchdog④手动点火链续跑
