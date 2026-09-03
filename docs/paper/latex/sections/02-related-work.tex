@@ -41,16 +41,16 @@ Table~\ref{tab:neighbors} summarizes the three nearest neighbors of our semantic
 \caption{Three nearest neighbors and their mechanism coverage. None couples seed-annotated anchors, cluster-based pseudo-label iteration, and a self-supervised physics encoder for temporal-skeleton recognition.}
 \label{tab:neighbors}
 \small
-\begin{tabular}{lccccc}
+\begin{tabularx}{\linewidth}{p{2.9cm}p{2.0cm}ccc p{1.9cm}}
 \hline
-Work & Domain & Seed anchors & Cluster + pseudo-iter & VFM-equivalent enc. & Output \\
+Work & Domain & Seed anchors & Cluster + pseudo-iter & SSL enc. & Output \\
 \hline
-MAC-Learning~\citep{mac2022learning} & Human skeleton & $\times$ (pairs) & $\times$ & $\times$ & Repr. \\
-Skeleton-to-Image~\citep{skel2img2026} & Skeleton repr. & $\times$ & $\times$ & \checkmark & Repr. \\
-TP-CanineNet~\citep{tpcanine2025} & Canine RGB & $\times$ & Partial (video) & $\times$ & Cls. \\
-\textbf{Ours} & \textbf{Quadruped skel.\ stream} & \checkmark\ (rule-engine) & \checkmark\ (conf.-filtered) & \checkmark\ (physics SSL) & Recog.+seg. \\
+MAC-Learning~\citep{mac2022learning} & Human skel. & $\times$ (pairs) & $\times$ & $\times$ & Repr. \\
+Skeleton-to-Image~\citep{skel2img2026} & Skel.\ repr. & $\times$ & $\times$ & \checkmark & Repr. \\
+TP-CanineNet~\citep{tpcanine2025} & Canine RGB & $\times$ & Partial & $\times$ & Cls. \\
+\textbf{Ours} & \textbf{Quadruped stream} & \checkmark\ (rule-eng.) & \checkmark\ (conf.-filt.) & \checkmark\ (physics) & Recog.+seg. \\
 \hline
-\end{tabular}
+\end{tabularx}
 \end{table}
 
 To the best of our knowledge, transferring the combination of seed-annotated anchor learning, prototype clustering, and iterated confidence-filtered pseudo-labeling to temporal-skeleton recognition has not been reported. Our claim of firstness rests on a systematic GitHub-scale survey covering ten query groups and fourteen candidate works with zero occupancy (full survey matrix in Supplementary Material; arXiv/Google Scholar re-verification is scheduled before submission). We state this claim with that explicit boundary rather than as an absolute assertion.

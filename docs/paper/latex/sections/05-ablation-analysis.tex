@@ -10,7 +10,7 @@ Table~\ref{tab:ablation} summarizes the component-level ablations; each row remo
 \caption{Component ablations. Every number is tier-tagged; tiers are never mixed. Paired designs are described inline.}
 \label{tab:ablation}
 \small
-\begin{tabular}{p{2.6cm}p{4.2cm}p{6.2cm}}
+\begin{tabularx}{\linewidth}{p{2.4cm}p{1.4cm}X}
 \hline
 Switch & Claim & Result (caliber) \\
 \hline
@@ -21,7 +21,7 @@ $-$ pseudo-label iteration (single round) & C5 & Pool accuracy 0.5125 $\to$ 0.69
 $-$ uncertainty sampling (use random) & C7 (exploratory) & No entropy advantage under cold-start weak scorers: random leads by $+7.9$\,pp at budget 100 and $+7.1$\,pp at 200 (3/3 seeds); direction confirmed with strong in-domain scorers ($+4.2$--$5.0$\,pp at all budgets) \emph{(synthetic; negative result reported as-is)} \\
 seed-noise injection \{10/20/30\%\} & C5 & Purity 0.5339 $\to$ 0.5267 $\to$ 0.5201 $\to$ 0.5025 at 30\% ($-3.1$\,pp, still $1.52\times$ baseline)---iteration does not amplify seed noise at this scale \emph{(public-real / P0.3)} \\
 \hline
-\end{tabular}
+\end{tabularx}
 \end{table}
 
 \paragraph{Pretraining value is a function of annotation scarcity.}

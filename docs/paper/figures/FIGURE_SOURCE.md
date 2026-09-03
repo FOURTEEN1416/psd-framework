@@ -70,3 +70,13 @@ python docs/paper/figures/scripts/make_fig4_al_efficiency.py
 |------|------|------|
 | v0.1 | 2026-08-24 | W17：fig1/fig2 矢量终图 + fig3/fig4 占位 + 脚本三件套入库 |
 | v0.2 | 2026-08-25 | W22：fig3/fig4 真图替换占位（脚本随图入库）；caption 草稿；规格偏差与决策登记 5 条；灰度自检通过 |
+
+
+## 2026-09-04 重绘登记（期刊规范优化, scientific-visualization 规程）
+
+| 图 | 版本 | 重绘脚本 | 主要修复 |
+|----|------|---------|---------|
+| fig1 | v4 | `figures/scripts/make_fig1_overview_v2.py` | 双向箭头改单向数据流/embeddings+proposals 走接口带顶部通道（不再斜穿边界）/Y→Y' 乱码修复（raw string）/演化带文字与虚线分离/分类框贴层/聚类自迭代环/去 FIGURE_SOURCE 水印（移至本登记） |
+| fig2 | v2 | `figures/scripts/make_fig2_pseudo_label_loop_v2.py` | κ<τ 分支直达 AL queue（原飞线跳过 queue）/判断节点入环/verified seeds 回流改指 re-estimate（原错指 init）/配色与 fig1 统一（青=人工种子侧, 橙=自动学习侧）/frozen 句移除（caption 已述） |
+
+三表（tab1/tab2/tab3）同轮修复: tabular -> tabularx 版心自适应（原 tab1/tab2 右列被页缘裁切、tab3 碎行 12 段）。
