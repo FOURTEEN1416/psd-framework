@@ -1,0 +1,208 @@
+{
+  "date": "2026-09-03T12:09:35",
+  "layer": "public_real",
+  "protocol": "AK full12(9 classes with samples) frozen-backbone head-retrain two-arm; warm=Y best.pt backbone, scratch=random backbone, both frozen (single variable = backbone weights)",
+  "classes_in_space": [
+    "sit",
+    "down",
+    "stand",
+    "stay",
+    "bark",
+    "bite",
+    "track",
+    "apprehend",
+    "watch",
+    "retrieve",
+    "jump",
+    "scale"
+  ],
+  "config_echo": {
+    "pkl": "runs/public_real_dataset/full12_T30.pkl",
+    "num_classes": 12,
+    "epochs": 60,
+    "batch_size": 16,
+    "patience": 15,
+    "seeds": [
+      42,
+      43,
+      44
+    ],
+    "n_train": 141,
+    "n_val": 56,
+    "class_dist": {
+      "watch": 64,
+      "track": 44,
+      "sit": 7,
+      "retrieve": 8,
+      "bark": 7,
+      "jump": 26,
+      "bite": 8,
+      "stay": 26,
+      "apprehend": 7
+    }
+  },
+  "runs": [
+    {
+      "arm": "warm",
+      "seed": 42,
+      "best_val_acc": 0.375,
+      "macro_P": 0.0208,
+      "macro_R": 0.0833,
+      "macro_F1": 0.0333,
+      "per_class_val_acc": {
+        "sit": 0.0,
+        "stay": 0.0,
+        "bite": 0.0,
+        "track": 0.0,
+        "apprehend": 0.0,
+        "watch": 1.0,
+        "retrieve": 0.0,
+        "jump": 0.0
+      },
+      "best_epoch": 18,
+      "wall_clock_sec": 24.2
+    },
+    {
+      "arm": "warm",
+      "seed": 43,
+      "best_val_acc": 0.35714285714285715,
+      "macro_P": 0.0633,
+      "macro_R": 0.0885,
+      "macro_F1": 0.0436,
+      "per_class_val_acc": {
+        "sit": 0.0,
+        "stay": 0.0,
+        "bite": 0.0,
+        "track": 0.0625,
+        "apprehend": 0.0,
+        "watch": 1.0,
+        "retrieve": 0.0,
+        "jump": 0.0
+      },
+      "best_epoch": 10,
+      "wall_clock_sec": 16.1
+    },
+    {
+      "arm": "warm",
+      "seed": 44,
+      "best_val_acc": 0.3392857142857143,
+      "macro_P": 0.0891,
+      "macro_R": 0.1094,
+      "macro_F1": 0.0813,
+      "per_class_val_acc": {
+        "sit": 0.0,
+        "stay": 0.375,
+        "bite": 0.0,
+        "track": 0.9375,
+        "apprehend": 0.0,
+        "watch": 0.0,
+        "retrieve": 0.0,
+        "jump": 0.0
+      },
+      "best_epoch": 16,
+      "wall_clock_sec": 18.9
+    },
+    {
+      "arm": "scratch",
+      "seed": 42,
+      "best_val_acc": 0.2857142857142857,
+      "macro_P": 0.0208,
+      "macro_R": 0.0833,
+      "macro_F1": 0.0333,
+      "per_class_val_acc": {
+        "sit": 0.0,
+        "stay": 0.0,
+        "bite": 0.0,
+        "track": 0.0,
+        "apprehend": 0.0,
+        "watch": 1.0,
+        "retrieve": 0.0,
+        "jump": 0.0
+      },
+      "best_epoch": 12,
+      "wall_clock_sec": 16.5
+    },
+    {
+      "arm": "scratch",
+      "seed": 43,
+      "best_val_acc": 0.2857142857142857,
+      "macro_P": 0.0208,
+      "macro_R": 0.0833,
+      "macro_F1": 0.0333,
+      "per_class_val_acc": {
+        "sit": 0.0,
+        "stay": 0.0,
+        "bite": 0.0,
+        "track": 0.0,
+        "apprehend": 0.0,
+        "watch": 1.0,
+        "retrieve": 0.0,
+        "jump": 0.0
+      },
+      "best_epoch": 1,
+      "wall_clock_sec": 10.0
+    },
+    {
+      "arm": "scratch",
+      "seed": 44,
+      "best_val_acc": 0.25,
+      "macro_P": 0.0208,
+      "macro_R": 0.0833,
+      "macro_F1": 0.0333,
+      "per_class_val_acc": {
+        "sit": 0.0,
+        "stay": 0.0,
+        "bite": 0.0,
+        "track": 0.0,
+        "apprehend": 0.0,
+        "watch": 1.0,
+        "retrieve": 0.0,
+        "jump": 0.0
+      },
+      "best_epoch": 1,
+      "wall_clock_sec": 10.1
+    }
+  ],
+  "agg": {
+    "warm": {
+      "best_val_acc": {
+        "mean": 0.3571,
+        "std": 0.0146,
+        "values": [
+          0.375,
+          0.35714285714285715,
+          0.3392857142857143
+        ]
+      },
+      "macro_F1": {
+        "mean": 0.0527,
+        "std": 0.0206,
+        "values": [
+          0.0333,
+          0.0436,
+          0.0813
+        ]
+      }
+    },
+    "scratch": {
+      "best_val_acc": {
+        "mean": 0.2738,
+        "std": 0.0168,
+        "values": [
+          0.2857142857142857,
+          0.2857142857142857,
+          0.25
+        ]
+      },
+      "macro_F1": {
+        "mean": 0.0333,
+        "std": 0.0,
+        "values": [
+          0.0333,
+          0.0333,
+          0.0333
+        ]
+      }
+    }
+  }
+}
