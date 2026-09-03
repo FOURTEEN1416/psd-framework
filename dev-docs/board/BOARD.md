@@ -143,3 +143,20 @@ FileNotFoundError: [Errno 2] No such file or directory: 'data/ntu60_frame50/xsub
 [08-27 17:30][coordinator] (ALL) INFO: 巡检确认——bone E2 epoch6 iter1800推进中;GPU 98%/7739MiB;PID36680 RAM~1.3GB;看门狗下次巡检 17:35 Ready。ETA全链约24-30h(夜间档加速)。下一步接管点:融合JSON出现→W44 skeleton R4行回写
 [08-27 17:32][coordinator] (ALL) INFO: 日志刷新确认——epoch7启动iter1900@17:30 loss16.03;GPU 100%/7750MiB;Python block-buffered导致间隄静默属正常。链稳定推进，ETA~24-30h全链。下次关键接管:融合JSON→W44 skeleton R4
 [08-27 17:33][coordinator] ETA全链估算——当前bone epoch7/300;白昼~13min/ep 夜间~3min/ep;bone_LE+motion+motion_LE+ensemble≈25-30h;预计08-28 17:00~08-29 02:00完成。下次人工巡检:epoch10~17:45或融合JSON出现时。W44接管触发点:reports/ntu-phaseB-3s-ensemble.json产出
+[08-28 01:15][_W33_] (ALL) BLOCK: W33 自动链 HALT @ E2_bone_pretext：exit=1；stderr 尾:   File "C:\Program Files\Python312\Lib\shutil.py", line 633, in _rmtree_unsafe
+    os.unlink(fullname)
+PermissionError: [WinError 32] 另一个程序正在使用此文件，进程无法访问。: 'runs/ntu_phaseB/bone_pretext/train\\events.out.tfevents.1787850944.Fourteen'
+ —— 证据 runs/w33_chain/（state.json/chain.log/阶段stdout+stderr），请协调者判读；后续阶段未执行
+[08-28 04:55][_W33_] (ALL) BLOCK: W33 自动链 HALT @ E2_bone_pretext：exit=-1；stderr 尾:   File "C:\Program Files\Python312\Lib\shutil.py", line 633, in _rmtree_unsafe
+    os.unlink(fullname)
+PermissionError: [WinError 32] 另一个程序正在使用此文件，进程无法访问。: 'runs/ntu_phaseB/bone_pretext/train\\events.out.tfevents.1787850944.Fourteen'
+ —— 证据 runs/w33_chain/（state.json/chain.log/阶段stdout+stderr），请协调者判读；后续阶段未执行
+[08-30 05:32][_W33_] (ALL) INFO: W33 自动链: E4_bone_lineareval 完成 best_top1=71.51%（内容级校验通过，详见 runs/w33_chain/state.json）
+[08-30 05:32][_W33_] (ALL) BLOCK: W33 自动链 HALT @ E3_motion_pretext：exit=1；stderr 尾:   File "C:\Program Files\Python312\Lib\shutil.py", line 633, in _rmtree_unsafe
+    os.unlink(fullname)
+PermissionError: [WinError 32] 另一个程序正在使用此文件，进程无法访问。: 'runs/ntu_phaseB/motion_pretext/train\\events.out.tfevents.1788036617.Fourteen'
+ —— 证据 runs/w33_chain/（state.json/chain.log/阶段stdout+stderr），请协调者判读；后续阶段未执行
+[09-01 17:26][_W33_] (ALL) BLOCK: W33 自动链 HALT @ E3_motion_pretext：exit=1；stderr 尾:  —— 证据 runs/w33_chain/（state.json/chain.log/阶段stdout+stderr），请协调者判读；后续阶段未执行
+[09-02 13:44][_W33_] (ALL) INFO: W33 自动链: E5_motion_lineareval 完成 best_top1=67.84%（内容级校验通过，详见 runs/w33_chain/state.json）
+[09-02 13:44][_W33_] (ALL) BLOCK: W33 自动链 HALT @ E6_ensemble_3s：joint 流 best_top1 收集失败 —— 证据 runs/w33_chain/（state.json/chain.log/阶段stdout+stderr），请协调者判读；后续阶段未执行
+[09-03 12:10][coord] (ALL) PLAN: 补强路径A修正版预注册——①数据事实:InterPet4D官方无行为标注(npz仅运动字段),原设想不可行;②改走AK 14类全类扩展:犬科329视频名单(caliber-A)+211本地mp4+YOLO提点管线+ST-GCN训练全部现成,唯一改动=类协议4类(stay/track/watch/jump)→14类全类(关门禁);③协议:两臂scratch vs warm-init×3seeds(42/43/44),指标overall top1+macro-F1+per-class强制同框(类不平衡如实);④定性:新预注册实验,旧4类结果保留不动;⑤产出目标:R1行为级证据+C3行为级微调对照+tab2公开真实列完整化。执行序:改协议→重建manifest→提点→pkl→训练→归档回写
