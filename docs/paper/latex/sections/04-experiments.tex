@@ -41,5 +41,30 @@ A three-arm ablation under the seeds pseudo-ground-truth protocol (Section~\ref{
 \paragraph{Scope statements.}
 Two registered comparisons remain outside the present evaluation and are not claimed anywhere in this paper: the AimCLR++ backbone variant (77.2\% NTU cross-subject reference) as an alternative physics-layer encoder, and exhaustive sweeps over the confidence threshold $\tau$ and cluster count $K$.
 
-\paragraph{Main table (tab2).}
-\TODO{tab2 typesetting: synthetic 96.6\% full-budget / 82.0\%@20 warm-start offset tier; public-real 44.90\% 4-class partial with per-class row; real-K9 column blank by design}
+\begin{table}[t]
+\centering
+\caption{Main results under the three-tier protocol (plus the public human-domain benchmark used for implementation-equivalence verification). Tiers are never mixed; the real-K9 column is blank because that tier is not exercised in this study (Section~\ref{sec:datasets}). Per-class breakdowns accompany every public-real aggregate (Section~\ref{sec:conclusion}).}
+\label{tab:main}
+\small
+\begin{tabular}{llll}
+\hline
+Tier & Task / protocol & Metric & Result \\
+\hline
+Synthetic & 22-class, full budget (matched 50-ep) & top-1 & 96.6\% \\
+Synthetic (offset) & 22-class, 20-clip warm-start & top-1 & 82.0\% \\
+Synthetic & taxonomy transition, decoupled vs.\ full & wall-clock & 31.1\,s vs.\ 188.7\,s ($6.07\times$; $\geq 3\times$ claimed) \\
+\hline
+Public-real & $k$-NN subject probe (representation) & top-1 & 20.89\% ($2.51\times$ random) \\
+Public-real & segmentation IoU (seeds pseudo-GT) & IoU & 0.458 $\pm$ 0.049 \\
+Public-real & prototype purity (12-class space, 9 with samples) & purity & 0.5339 ($1.62\times$) \\
+Public-real & pseudo-label pool accuracy & acc. & 0.691 $\pm$ 0.013 \\
+Public-real & 4-class partial, frozen backbone + head & top-1 & 44.90\% (per-class in L7) \\
+Public-real & 12-class two-arm (warm vs.\ random backbone) & top-1 & 35.71\% vs.\ 27.38\% \\
+\hline
+Public human benchmark & NTU60 xsub 3-stream fusion (equivalence) & top-1 & 77.97\% (line: 77.18\%) \\
+\hline
+Real K9 & --- & --- & not exercised in this study \\
+\hline
+\end{tabular}
+\end{table}
+
