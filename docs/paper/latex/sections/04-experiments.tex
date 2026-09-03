@@ -1,5 +1,45 @@
-% 04-experiments.tex — 装配源 truth: docs/paper/experiment-skeleton.md §4（v1.0 W36 三轮收口）
-% 纪律: 4.1 数据集与三层口径协议(20/24 有效监督口径块随行) / 4.2 实现细节+统计协议 / 4.3 主实验 E1-E6(每实验先声明 claim 句) /
-% 4.4 对比研究; tab2 主表(真实 K9 列空缺如实标注); NTU 行待三流融合数落地后由协调者派单回填——装配时保持当前 v1.0 文字。
+% 04-experiments.tex — 装配源 truth: docs/paper/experiment-skeleton.md §4 (v1.2, 2026-09-02 三流收官收编轮)
+% 纪律: 4.1 数据集与三层口径协议(20/24 有效监督口径随行) / 4.2 实现细节+统计协议 / 4.3 主实验 E1-E6(每实验先声明 claim 句) /
+% 4.4 对比研究(NTU 等价性段=成文块装配); tab2 真实 K9 列空缺如实标注; 内部路径/文件名禁入正文(ROUND2 发现#7)。
 \section{Experiments}\label{sec:experiments}
-\TODO{assembly: experiment-skeleton.md S4.1-S4.4 + tab2}
+
+\subsection{Datasets and the three-tier protocol}\label{sec:datasets}
+
+Because no public dataset spans the scenarios our claims require, we evaluate under a three-tier protocol and never mix numbers across tiers: a \emph{synthetic} tier for pipeline shake-down and controlled ablations, a \emph{public-real} tier for label-free and low-resource validation on real animal skeletons, and a \emph{real-K9} tier (working-dog training footage) reserved for the target-domain deployment scenario, which is not exercised in this study; tables accordingly leave that column explicitly blank rather than extrapolating.
+
+The public-real tier draws on three sources. InterPet4D~\citep{peng2026interpet4d} provides 226 SMAL-fitted skeleton sequences of human--pet interactions (225 used; one all-NaN sequence excluded and reported rather than silently dropped) and serves as the unlabeled stream for self-supervised pretraining and segmentation evaluation. The Animal Kingdom canine split~\citep{ng2022animalkingdom} contributes 329 videos (231 train / 98 test) with 34{,}772 annotated frames for weak-supervision and behavior-classification evaluation. APTv2~\citep{yang2023aptv2} supplies a large unlabeled pose pool (83{,}304 files) for expansion experiments. Skeletons are represented as world-coordinate keypoint sequences of shape $T{\times}24{\times}3$ with a per-joint confidence channel. One structural caveat applies to every real-domain skeleton product in this paper: the dog-pose annotations never label four of the 24 graph slots (both eyes, withers, and throat), so real-domain keypoints are topology-isomorphic with 20/24 effective supervision channels; the four dead channels are hard-masked at assembly and NaN-guarded downstream.
+
+\subsection{Implementation details}\label{sec:implementation}
+
+All experiments run on a single consumer GPU (RTX 5060 Laptop, 8\,GB); self-supervised pretraining takes about 13 minutes for 120 epochs on InterPet4D, which we report as evidence that the physics layer is reproducible without data-center resources. Pretraining uses a learning rate of 0.05, a queue of 1{,}024, and window length $T{=}64$; this configuration is the first working setting rather than the result of a systematic search, and we disclose it as such. $k$-NN probes and fine-tuning report 5-fold mean$\pm$std with the fold-level spread disclosed; per-experiment seed choices are listed with their sources in the released protocol files. Following our statistics protocol, aggregate comparisons are accompanied by paired fold-level tests, multiple comparisons within a table are corrected (Holm--Bonferroni), effect sizes are reported alongside raw values with a random-baseline reference, and outliers are explicitly explained rather than silently removed.
+
+\subsection{Main results}\label{sec:main-results}
+
+\paragraph{E1: representation quality of the physics layer (C3).}
+This experiment tests whether self-supervised pretraining on unlabeled quadruped skeletons yields discriminative dynamics representations. Using subject identity as a $k$-NN probe on InterPet4D---a proxy task that measures representation discriminability, not behavior accuracy, and is disclosed as such---pretraining reaches \textbf{20.89\% $\pm$ 4.45\%} top-1 against an 8.33\% random baseline ($2.51\times$). The fold-level range is wide (15.56--26.67\%), which we attribute to the small number of sequences and subject diversity rather than hiding it; a projection-head feature caliber yields 12.89\% ($1.55\times$) and is reported alongside, since both calibers are legal views of the same encoder.
+
+\paragraph{E2: unsupervised segmentation quality (C4).}
+This experiment tests whether motion-word quantization cuts continuous streams into behavior-aligned proposals. Under a seeds pseudo-ground-truth protocol, boundary IoU against held-out annotations is \textbf{0.458 $\pm$ 0.049}, versus an equal-segment-count random-cut null of 0.323 $\pm$ 0.022 (Monte-Carlo expectation over 200 random cuts); boundary F1 (0.343) is reported alongside so that no single metric is cherry-picked.
+
+\paragraph{E3: anchor-guided label expansion (C5).}
+This experiment tests whether a small rule-engine seed set expands toward taxonomy coverage via iterated pseudo-labeling. Anchor-guided prototype clustering reaches purity \textbf{0.5339} against a 0.3306 random-assignment baseline ($1.62\times$). Injecting 30\% label noise into the seeds degrades purity by only 3.1\,pp (0.5025$\pm$0.0063, still $1.52\times$ baseline), and enlarging the seed ratio from 25\% to 100\% adds at most 1\,pp---prototype quality saturates early, which is what makes a small seed budget practical.
+
+\paragraph{E4: semi-supervised self-training on the public-real tier (C6).}
+This experiment tests whether self-training converts pseudo-labeled coverage into usable classification under scarce labels. Iterating from round~0 to round~1 raises pseudo-label pool accuracy from 0.5125 to \textbf{0.691 $\pm$ 0.013}. Under the pre-registered partial-class protocol on the Animal Kingdom canine subset (4 of 12 classes pass the sample-size gate), a frozen-backbone classifier with a re-trained head reaches 44.90\% overall ($1.80\times$ the 25\% random baseline); we attach the per-class breakdown (watch 100\% / track 23.5\% / jump 0\% / stay 0\%) in every presentation, because the aggregate score is dominated by class imbalance, and we restrict all public-real claims to this four-class partial caliber. As a human-domain reference---not counted toward our conclusions---TCL reported 82.7\% with 10\% of labels against an 88.6\% fully-supervised ceiling~\citep{singh2021tcl}.
+
+\paragraph{E5: taxonomy-transition cost (C1).}
+This experiment tests whether absorbing a taxonomy change under decoupling costs less than full-pipeline retraining at matched accuracy. On the synthetic tier, the decoupled semantic-layer rebuild averages 31.1\,s of wall-clock retraining versus 188.7\,s for full-pipeline retraining ($6.07\times$; same-seed paired ratios never below $4.00\times$); convergence epochs improve by a further $2.18\times$; and accuracy is statistically equivalent between arms ($-0.91$\,pp full / $+2.27$\,pp small, both inside the $<2.3$\,pp noise band). Annotation units are identical across arms by construction, so the saving is computational rather than labeling-driven. Following our pre-registered conservative-bound rule we claim \textbf{$\geq 3\times$ lower retraining cost}, with the accuracy equivalence stated as statistical equivalence rather than any directional advantage.
+
+\subsection{Comparison studies}\label{sec:comparison}
+
+\paragraph{Implementation-equivalence verification on NTU60.}
+Because AimCLR, SMQ, and the self-training machinery are re-implemented in this repository rather than imported, we verify implementation correctness on the human-domain benchmark before applying the pipeline to animal data. Following the linear-evaluation protocol of AimCLR~\citep{guo2022aimclr} on NTU60 cross-subject, each stream (joint, bone, motion) is pretrained for 300 epochs and evaluated with a frozen encoder and a fully-connected classifier; the three streams are then fused with the official fixed weights (joint 0.6, bone 0.6, motion 0.4). The re-implementation reaches 74.30\% (joint), 71.51\% (bone), and 67.84\% (motion) top-1, and the three-stream fusion attains \textbf{77.97\% top-1 (95.78\% top-5; $n=16{,}487$)} --- exceeding our pre-registered acceptance line of 77.18\% and lying within 0.93\,pp of the 78.9\% reported in the AimCLR paper body. We therefore treat the adapted implementation as equivalent to the official one for the purposes of this study.
+
+\paragraph{Segmentation strategy.}
+A three-arm ablation under the seeds pseudo-ground-truth protocol (Section~\ref{sec:ablation}) shows motion-word quantization (0.458$\pm$0.049) ahead of an equal-segment-count uniform-window arm (0.399$\pm$0.035) and the random-cut null (0.323$\pm$0.022), passing all three pre-registered gates; a fixed-grid probe (0.453$\pm$0.027) is statistically on par with SMQ and is disclosed as such.
+
+\paragraph{Scope statements.}
+Two registered comparisons remain outside the present evaluation and are not claimed anywhere in this paper: the AimCLR++ backbone variant (77.2\% NTU cross-subject reference) as an alternative physics-layer encoder, and exhaustive sweeps over the confidence threshold $\tau$ and cluster count $K$.
+
+\paragraph{Main table (tab2).}
+\TODO{tab2 typesetting: synthetic 96.6\% full-budget / 82.0\%@20 warm-start offset tier; public-real 44.90\% 4-class partial with per-class row; real-K9 column blank by design}
