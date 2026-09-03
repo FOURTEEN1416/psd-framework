@@ -1,5 +1,63 @@
-% 03-method.tex — 装配源 truth: docs/paper/method.md
-% 纪律: 3.1 问题形式化 / 3.2 物理层(预训练 C8 工程注记 + SMQ) / 3.3 语义层(锚点/原型聚类伪标签迭代 Algorithm 1/warm-start) /
-% 3.4 解耦机制(taxonomy T->T' 形式化 + 成本度量); fig2 落 §3.3; 超参冻结表引用 method.md §清单。
+% 03-method.tex — 装配源 truth: docs/paper/method.md (终稿候选 v0.3, 2026-08-25 W36 终填轮)
+% 纪律: galaxy Method 规范——呈现设计决策, 验证数字留 §4(E1-E6 各段), 此处不重复 Evidence 块;
+% fig2 落 §3.3(规格 figure-specs.md, PDF 待绘); Algorithm 1 用 algorithm/algpseudocode。
 \section{Method}\label{sec:method}
-\TODO{assembly: method.md full text + fig2 + Algorithm 1}
+
+This section presents the Physics--Semantics Decoupled framework (PSD). Section~\ref{ssec:formulation} fixes notation and gives an overview. Section~\ref{ssec:physics} details the physics layer, which learns \emph{how skeletons move} without any behavior labels. Section~\ref{ssec:semantic} details the semantic layer, which learns \emph{what behaviors are called} from a small seed budget. Section~\ref{ssec:decoupling} formalizes the decoupling mechanism that absorbs evolving evaluation criteria.
+
+\subsection{Problem formulation and overview}\label{ssec:formulation}
+
+\paragraph{Notation.}
+Let $X = \{x_1, \dots, x_T\}$ denote an unlabeled skeleton stream, where $x_t \in \mathbb{R}^{J \times 3}$ holds 3D joint coordinates for $J$ joints at frame $t$. A taxonomy $\mathcal{Y}$ maps behavior names to labels; evaluation criteria evolve by replacing $\mathcal{Y}$ with $\mathcal{Y}'$. The annotation budget is a set $S$ of seed clips with coarse labels produced by a rule engine over physical priors.
+
+\paragraph{Framework overview.}
+PSD factorizes recognition into two layers with a narrow interface. The \emph{physics layer} $\Phi$ maps skeleton windows to dynamics embeddings, trained once per species family on unlabeled streams; it comprises self-supervised pretraining (§\ref{ssec:pretrain}) and unsupervised temporal segmentation (§\ref{ssec:segmentation}). The \emph{semantic layer} $\Omega$ maps dynamics embeddings and segment proposals to labels under the current taxonomy $\mathcal{Y}$; it comprises anchor learning (§\ref{ssec:anchors}), prototype clustering with iterated pseudo-labeling (§\ref{ssec:proto}), and semi-supervised self-training with small-budget initialization (§\ref{ssec:selftrain}). The layers interact only through embeddings and proposals. This constraint is what allows $\mathcal{Y} \to \mathcal{Y}'$ transitions to leave $\Phi$ untouched (§\ref{ssec:decoupling}).
+
+\subsection{Physics layer}\label{ssec:physics}
+
+\subsubsection{Self-supervised pretraining}\label{ssec:pretrain}
+
+We adapt extreme-asymmetry contrastive pretraining~\citep{guo2022aimclr} to quadruped skeletons. Three adaptations matter. First, the joint graph is rebuilt for the target species topology rather than the human body plan; our pipeline uses a 24-joint quadruped layout mapped into an NTU-compatible view via an identity correspondence plus one dead slot. Second, augmentation primitives are restricted to transformations that preserve quadruped plausibility. Third, the official weight initialization is deliberately skipped: re-initializing all convolutional and linear weights to $\mathcal{N}(0, 0.02)$ collapses representations into a cone from which InfoNCE cannot escape on our data, and skipping it restores normal convergence. We report this as a reproducibility note for practitioners reusing official code bases.
+
+\subsubsection{Unsupervised temporal segmentation}\label{ssec:segmentation}
+
+Continuous skeleton streams must be cut into behavior-proposal units before labeling. We adopt motion-word quantization~\citep{gokay2025smq}: local motion patterns are quantized into a discrete vocabulary, and segment boundaries are proposed where the quantized sequence changes regime.
+
+\subsection{Semantic layer}\label{ssec:semantic}
+
+The semantic layer grows a complete taxonomy from the rule-engine seed set $S$, following the anchor--cluster--pseudo-label recipe transferred from image-domain few-shot recognition (Section~\ref{ssec:rw-semi}).
+
+The transfer is not a drop-in replacement, and its non-triviality is a designed-in property rather than an incidental one. Three domain shifts require re-engineering rather than re-application: (i) anchors must be defined over \emph{temporal segment embeddings} from a self-supervised physics encoder instead of image features, so anchor quality depends on representation adequacy (§\ref{ssec:pretrain}); (ii) prototype clustering operates on variable-length proposals delivered by unsupervised segmentation rather than fixed-size inputs, coupling label-expansion quality to segmentation quality (§\ref{ssec:segmentation}); and (iii) confidence calibration must tolerate quadruped kinematics whose intra-class motion variance differs from both image textures and human locomotion. Each shift is validated separately in Sections~\ref{sec:experiments}--\ref{sec:ablation} before the composed pipeline is evaluated.
+
+\subsubsection{Anchor learning}\label{ssec:anchors}
+
+Rule-engine coarse labels over physical priors provide seed anchors $A = \{(e_i, y_i)\}$, where $e_i$ are physics-layer embeddings of seed segments. Anchors are learned as class-representative prototypes initialized from seed embeddings and refined during training. Unlike anchor-based contrastive objectives that treat anchors as sample pairs~\citep{mac2022learning}, our anchors carry semantic identity and directly supervise cluster assignment.
+
+\subsubsection{Prototype clustering and iterated pseudo-labeling}\label{ssec:proto}
+
+Unlabeled proposals from §\ref{ssec:segmentation} are embedded by $\Phi$ and assigned to their nearest prototype with confidence $\kappa$. Proposals above threshold $\tau$ receive pseudo-labels and join the training pool; prototypes are then re-estimated. Algorithm~\ref{alg:pseudoloop} summarizes the loop.
+
+\begin{algorithm}[t]
+\caption{Anchor-guided iterative pseudo-labeling}\label{alg:pseudoloop}
+\begin{algorithmic}[1]
+\Require physics encoder $\Phi$ (frozen), seeds $A$, unlabeled proposals $U$
+\Ensure classifier $\Omega$ under taxonomy $\mathcal{Y}$
+\State initialize prototypes $P$ from seed anchors $A$
+\Repeat
+  \State assign each $u \in U$ to nearest prototype $p_k$; confidence $\kappa(u)$
+  \State $L_{\mathrm{high}} \leftarrow \{u : \kappa(u) \geq \tau\}$; add pseudo-labeled pairs to pool
+  \State update $\Omega$ on seeds $\cup$ pseudo-labeled pool
+  \State re-estimate $P$ from embedded features
+\Until{proposal assignment stabilizes or iteration budget reached}
+\end{algorithmic}
+\end{algorithm}
+
+Design decisions fixed at this stage: confidence filtering uses prototype-margin scores; each iteration retrains only $\Omega$, never $\Phi$; the iteration budget guards against confirmation bias accumulating across rounds; and seed-noise amplification is bounded by treating rule-engine seeds as high-recall/low-precision priors---anchors initialized from noisy seeds are corrected by confidence-filtered cluster consensus and verified in downstream evaluation rather than trusted as ground truth. Class imbalance in animal behavior distributions (long-tail rare behaviors) is handled at the prototype level via frequency-aware margin thresholds rather than resampling; this choice is ablated in Section~\ref{sec:ablation}.
+
+\subsubsection{Semi-supervised self-training and small-budget initialization}\label{ssec:selftrain}
+
+Pseudo-labeled coverage is consolidated by temporal contrastive self-training in the spirit of TCL~\citep{singh2021tcl}. To make very small annotation budgets usable, a warm-start protocol initializes this stage from previously trained semantic-layer weights before expansion proceeds within a budget of 100--200 clips.
+
+\subsection{Decoupling mechanism}\label{ssec:decoupling}
+
+We formalize an evaluation-criteria evolution as a taxonomy transition $\mathcal{Y} \to \mathcal{Y}'$ (splitting, merging, renaming, or adding behaviors). We define the transition cost as $C(\mathcal{Y} \to \mathcal{Y}') = $ human annotation units consumed plus wall-clock retraining time, measured at matched final accuracy. Under decoupling: (1) the physics layer $\Phi$ and its pretrained parameters remain frozen; (2) existing segment proposals are re-used---only their label assignments change; (3) the semantic layer is rebuilt through §\ref{ssec:semantic} using seeds under $\mathcal{Y}'$; and (4) the reported quantity is $C_{\mathrm{decoupled}}(\mathcal{Y} \to \mathcal{Y}')$ versus $C_{\mathrm{full}}(\mathcal{Y} \to \mathcal{Y}')$, where the full baseline retrains representation learning under $\mathcal{Y}'$. We hypothesize that $C_{\mathrm{decoupled}} < C_{\mathrm{full}}$ at matched accuracy, and that accuracy under $\mathcal{Y}'$ matches full retraining within noise; Section~\ref{sec:experiments} (E5) tests both hypotheses.
