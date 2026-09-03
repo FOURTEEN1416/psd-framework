@@ -30,3 +30,34 @@
 ## 复审计划
 
 Round 2 聚焦: 修复项复核 + 摘要/Intro/S2 逐句句长与 AI 腔扫描（前两轮未覆盖的文风层）。
+
+---
+
+# Round 3（2026-09-03 · anti-defensive-writing 防御性写作专项）
+
+> 工具: 本轮起用新融入技能 anti-defensive-writing（Kiterlin 上游, MIT; 见工具箱 skills/anti-defensive-writing/）
+> 方法: 十项检测清单模式化扫描 + 高影响力位置 hedge 词密度 + 保护句式密度 + 人工六类分类判读
+> 保护区声明: 10 条 Limitations、三层口径标注、[CITATION-NEEDED]、首次性边界声明 = 真实方法学限定（第 3 类），一律保留
+
+## 扫描结果
+
+| 扫描项 | 结果 |
+|--------|------|
+| 十项检测清单（does not claim / worth noting / to be clear / not-X-but-Y 滥用 / 双重转折 / 防批评解释等） | **0 命中** |
+| 高影响力位置 hedge 词（abstract/贡献 bullets/结论第一段） | **0 命中**（"overall accuracy" 为指标术语，非对冲） |
+| "is disclosed as such" 保护句式 | 4 处（04×2 表格与对比段、05×1 tab3、06×1 L5），全部位于正确章节 |
+
+## 六类分类判读
+
+| 类别 | 数量 | 处置 |
+|------|------|------|
+| 1 不必要免责 | 0 | — |
+| 2 必要范围条件 | 多处 | 保留（tier 标注随行） |
+| 3 真实方法学限定 | 多处 | 保留（Limitations/口径/边界） |
+| 4 有用概念对比 | 少量 | 保留（"frozen physics, revisable semantics" 等对比本身是论点） |
+| 5 基于证据的限定 | 多处 | 保留（"within 0.93pp" 等） |
+| 6 冗余澄清 | 0 必修 | "is disclosed as such" ×4 属统一纪律句式——**保留统一不变体**：审稿人识别其为系统性纪律而非疏忽（防 R2#4 元数据不一致教训重演） |
+
+## 裁决
+
+**零必修项。** 成稿防御性写作已达到该技能的 Final Pass 标准（deliver text free of unnecessary disclaimers）——归因于项目自大纲阶段起的正向框架纪律（outline 措辞纪律 v0.3、claim ledger 门禁）。本技能在本稿的价值 = 提供了系统性验证手段（而非修复）；后续修订轮（审稿回复信）为主要应用场景。
