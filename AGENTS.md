@@ -1,7 +1,11 @@
 # AGENTS.md — PSD-Framework Agent Constitution
 
-> 状态: v1.0（2026-08-23 建仓）
+> 状态: v1.1（2026-09-03 补行为准则节）
 > 方法论继承自 k9-training-system AGENTS.md（sliver-vibe-coding 框架），此处只保留本仓库必需条款
+
+## 0. 行为准则（个人级，全局优先）
+
+个人行为规则（五条铁律详版 / 决策人话条款 / 防乐观完成 / 用户偏好）由 **全局 `C:\Users\FOUR\.zcode\AGENTS.md` v2.0** 提供，本文件不重复。冲突时：**本仓硬规则（下节）在工程口径上优先于全局**——特别是硬规则 1（GitHub-First 调研零容忍、禁 WebSearch）覆盖全局 Research-First 的工具白名单；全局的"决策人话条款/用户偏好"在本仓同样强制生效。
 
 ## 1. 项目身份
 
