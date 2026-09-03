@@ -1,5 +1,59 @@
-% 02-related-work.tex — 装配源 truth: docs/paper/related-work.md
-% 纪律: 三小节主题式(2.1 动物行为 / 2.2 骨架自监督人类域集中 / 2.3 半监督伪标签) + 每小节 gap 句收尾;
-% tab1 三近邻差距表随行; [CITATION-NEEDED] 标记原样保留至文献窗补齐。
+% 02-related-work.tex — 装配源 truth: docs/paper/related-work.md (v0.4, W17 文献终审标记同步)
+% 纪律: 三小节主题式 + 每小节 gap 句收尾; tab1 三近邻差距表随行;
+% [CITATION-NEEDED] 内嵌标记移除, 作者待补状态记录 refs.bib note(3 条: yolo2025petx/mct2024tip/gra2024tnnls)。
 \section{Related work}\label{sec:related}
-\TODO{assembly: related-work.md full text + tab1 (three nearest-neighbor gap table)}
+
+Animal behavior recognition supports applications ranging from livestock welfare monitoring to working-dog training. Training a single guide dog costs more than USD 12{,}000, and more than half of candidate dogs fail to graduate, which motivates objective, automated behavior assessment~\citep{grimm2026science}. Deployed systems already combine wearable sensors with classical machine learning for canine posture estimation~\citep{plosone2023imu}, yet the field lacks a recognition framework that works when labels are scarce and evaluation criteria keep evolving. We review three bodies of work that bear on this gap: animal behavior understanding, skeleton-based self-supervised learning, and pseudo-label-driven semi-supervised learning.
+
+\subsection{Animal behavior understanding}\label{ssec:rw-animal}
+
+Existing animal behavior pipelines divide into appearance-based, pose-based, and sensor-based lines.
+
+Appearance-based methods classify behavior directly from RGB frames or video. YOLO-PetX adapts a detection backbone to anomalous dog behavior~\citep{yolo2025petx}. TP-CanineNet applies temporal contrastive learning with pseudo-labels to canine separation-anxiety video~\citep{tpcanine2025}. These methods inherit the strengths of image recognition but depend on large annotated corpora, and their accuracy degrades under background change, occlusion by handlers, and breed variation in appearance.
+
+Pose-based methods first extract keypoints, then classify dynamics. DeepLabCut~\citep{mathis2018dlc} and SLEAP~\citep{pereira2022sleap} made markerless animal pose estimation practical. Building on such inputs, ASBAR unifies skeleton-based animal action recognition with PoseConv3D and reports 75.3\% top-1 on primate benchmarks~\citep{asbar2024}. BCST-GCN adapts ST-GCN-style graph convolutions with bidirectional cross-attention to pig behavior and reaches 94.43\% overall accuracy on a private four-behavior dataset~\citep{bcstgcn2026}. Hierarchical representation learning of dog behavior from single-view 3D pose has also been explored~\citep{miyai2025workshop}. Skeleton representations are compact, background-invariant, and robust across individuals---properties that suit low-resource settings---but every method above is trained fully supervised on a fixed label set.
+
+Sensor-based methods use accelerometers or IMUs. They capture coarse daily activities reliably~\citep{plosone2023imu} but cannot resolve fine-grained behaviors that differ mainly in body configuration rather than global motion.
+
+\paragraph{Gap.}
+Current animal pipelines assume a fixed taxonomy and supervision-heavy training. None of them exploits unlabeled video streams at scale, and none is designed so that changing evaluation criteria can be absorbed without re-annotating the corpus.
+
+\subsection{Skeleton-based self-supervised and unsupervised learning}\label{ssec:rw-ssl}
+
+Self-supervised representation learning for skeletons is mature in the human domain. ST-GCN established graph convolutions over joint topologies~\citep{yan2018stgcn}, and PoseConv3D recasts keypoints as heatmap volumes for 3D convolution~\citep{duan2022posec3d}. Among purely unsupervised objectives, AimCLR maximizes asymmetry across extreme augmented views with an InfoNCE queue and reports 79.18\% on NTU60 cross-subject under the linear-evaluation protocol (frozen encoder + FC-softmax classifier; three-stream joint/motion/bone fusion; the paper body itself reports 78.9\%, with 79.18\% being the authors' re-measured score of the released checkpoints)~\citep{guo2022aimclr}; its journal extension AimCLR++ further improves NTU cross-subject accuracy to 77.2\%~\citep{aimclrpp2024}. Cross-view contrastive objectives form a parallel self-supervised family for skeletons~\citep{li2021crossclr}, and we treat the encoder choice as replaceable within our framework; AimCLR serves as the reference physics-layer instantiation rather than a load-bearing design commitment. For temporal structure, unsupervised segmentation methods quantize motion into discrete vocabularies; Skeleton Motion Words (SMQ) derives behavior-proposal boundaries from motion-word sequences~\citep{gokay2025smq}.
+
+Two observations motivate our treatment of this literature. First, virtually all benchmarks, augmentations, and graph templates assume the human body plan; transferring these objectives to quadruped kinematics requires adapting joint topology, augmentation priors, and view construction. Second, pretraining and segmentation are studied separately, although a recognition system needs both: representations without proposals cannot localize behaviors, and proposals without semantics cannot name them. State-space backbones such as VideoMamba~\citep{videomamba2024} and Mamba-MSQNet for animal action recognition~\citep{fazzari2024mambamsqnet} offer efficiency alternatives but do not address label scarcity either.
+
+\paragraph{Gap.}
+Self-supervised skeleton machinery exists almost exclusively for humans, is validated on human benchmarks, and is decoupled from unsupervised temporal decomposition. Animal-domain adaptation remains largely unexplored; our repository-scale survey found no published self-supervised animal-skeleton recognition pipeline (systematic internal survey; to be migrated to supplementary material before submission).
+
+\subsection{Semi-supervised, few-shot, and pseudo-label learning}\label{ssec:rw-semi}
+
+Semi-supervised skeleton action recognition in the human domain relies mostly on consistency regularization and teacher--student schemes, including momentum-contrastive teachers~\citep{mct2024tip} and graph-representation alignment~\citep{gra2024tnnls}. These methods regularize predictions under perturbation but receive no external guidance about which classes matter. MAC-Learning introduces anchor-based contrastive learning, where ``anchors'' are contrastive sample pairs selected to structure the embedding space~\citep{mac2022learning}; it does not maintain seed-annotated anchors that supervise cluster assignment, and it includes no iterative pseudo-label loop. Few-shot approaches such as PAINet learn episode-based metric classifiers~\citep{painet2023} and likewise lack a mechanism for expanding labels beyond the support set.
+
+Vision foundation models supply another route to low-shot recognition~\citep{caron2021dino}. Skeleton-to-image encoding maps skeletons into images consumed by VFM-pretrained encoders~\citep{skel2img2026}, demonstrating that foundation-model features transfer to skeleton data. This line uses VFMs for representation only; it does not close the loop from a handful of annotated seeds to full taxonomy coverage. In the animal domain specifically, TP-CanineNet is the closest use of pseudo-labels, operating on RGB video rather than skeletal dynamics~\citep{tpcanine2025}.
+
+\paragraph{Positioning against the three nearest neighbors.}
+Table~\ref{tab:neighbors} summarizes the three nearest neighbors of our semantic-layer design.
+
+\begin{table}[t]
+\centering
+\caption{Three nearest neighbors and their mechanism coverage. None couples seed-annotated anchors, cluster-based pseudo-label iteration, and a self-supervised physics encoder for temporal-skeleton recognition.}
+\label{tab:neighbors}
+\small
+\begin{tabular}{lccccc}
+\hline
+Work & Domain & Seed anchors & Cluster + pseudo-iter & VFM-equivalent enc. & Output \\
+\hline
+MAC-Learning~\citep{mac2022learning} & Human skeleton & $\times$ (pairs) & $\times$ & $\times$ & Repr. \\
+Skeleton-to-Image~\citep{skel2img2026} & Skeleton repr. & $\times$ & $\times$ & \checkmark & Repr. \\
+TP-CanineNet~\citep{tpcanine2025} & Canine RGB & $\times$ & Partial (video) & $\times$ & Cls. \\
+\textbf{Ours} & \textbf{Quadruped skel.\ stream} & \checkmark\ (rule-engine) & \checkmark\ (conf.-filtered) & \checkmark\ (physics SSL) & Recog.+seg. \\
+\hline
+\end{tabular}
+\end{table}
+
+To the best of our knowledge, transferring the combination of seed-annotated anchor learning, prototype clustering, and iterated confidence-filtered pseudo-labeling to temporal-skeleton recognition has not been reported. Our claim of firstness rests on a systematic GitHub-scale survey covering ten query groups and fourteen candidate works with zero occupancy (internal survey; arXiv/Google Scholar re-verification is scheduled before submission). We state this claim with that explicit boundary rather than as an absolute assertion.
+
+\paragraph{Gap.}
+Three absences compound across the three lines reviewed above. Animal behavior understanding offers no label-efficient path and no mechanism for taxonomy change (§\ref{ssec:rw-animal}). Skeleton-based self-supervision supplies representation machinery that has never been adapted to quadruped data, and treats segmentation as a separate problem (§\ref{ssec:rw-ssl}). Semi-supervised learning supplies pseudo-label machinery whose components---seed-annotated anchors, prototype clustering, iterated confidence-filtered labeling---have never been assembled for temporal-skeleton recognition (§\ref{ssec:rw-semi}). No existing method couples a label-free physics layer (self-supervised dynamics modeling plus unsupervised segmentation) with an anchor-guided semantic layer that grows from tens of seeds to a complete, revisable taxonomy. This coupling is precisely what evolving evaluation criteria demand, and it defines the contribution of this paper.
