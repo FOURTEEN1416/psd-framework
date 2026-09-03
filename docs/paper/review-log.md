@@ -69,7 +69,7 @@
 - [ ] Scholar/arXiv 人工终审完成并回写核验文档（W1 边界声明解除）
 - [ ] 内部引用迁移至 Supplementary Material 完成
 - [ ] Data Availability + Ethics + 许可终审声明就位（R7 解除）
-- [ ] NTU 复现行完成或用户书面豁免（R4 解除）
+- [x] NTU 复现行完成或用户书面豁免（R4 解除）✅ **2026-09-02 三流融合 77.97% ≥ 77.18% 预注册线 PASS**（joint 74.30 / bone 71.51 / motion 67.84；证据 `reports/ntu-phaseB-3s-ensemble.json`）
 
 ---
 

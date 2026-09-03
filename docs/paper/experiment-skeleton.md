@@ -1,6 +1,6 @@
 # 4-5. Experiments & Ablation 骨架（三层口径 · P0.6）
 
-> Owner: `docs/paper/experiment-skeleton.md` · W5 窗口 2026-08-23 · 状态: **终稿候选 v1.1（2026-08-26 W45 预训练价值梯度轮；v1.0 = W36 三轮收口）**——E1-E4 数字在档；E5 负结果如实入册且 C7 换轨定稿；E6 成本 6.07× 背书 ≥3×；**tab3 六行全部映射溯源完成（W38 滑窗臂 + W39 预训练消融双双入表，零 PENDING）**；§4.4 NTU 行 R4：joint 单流 74.30%（Δ−0.04pp PASS_BAND 保真实证）、预注册三流线 NOT_TRIGGERED、补全链按用户裁决 A 执行中待二次收编；**v1.1 增补（W45）：tab3 −自监督预训练行升级为四档梯度叙事 + 新增低资源梯度叙事段（标题 *Low-Resource* 定量注脚）+ 预训练收益交叉点诚实边界前送 conclusion-limitations.md（重基后因 W46 撞号重排为 L10）**
+> Owner: `docs/paper/experiment-skeleton.md` · W5 窗口 2026-08-23 · 状态: **终稿候选 v1.2（2026-09-02 协调者三流收官收编轮；v1.1 = W45 预训练价值梯度轮）**——E1-E4 数字在档；E5 负结果如实入册且 C7 换轨定稿；E6 成本 6.07× 背书 ≥3×；tab3 六行全部映射溯源完成；**§4.4 NTU 行 R4 ✅ 终判 PASS（2026-09-02）：三流 pretext 300/300 ×3 + LE joint 74.30 / bone 71.51 / motion 67.84 + 3s 融合 77.97% ≥ 预注册线 77.18%（top5 95.78%, n=16487）——本仓适配实现与官方等价性成立，风险登记册 R4 解除**；v1.1 增补（W45）：tab3 梯度叙事 + 低资源梯度段 + L10 前送（保持不变）
 > v0.2 对抗评审加固：统计协议节 + 数据集引用义务注记 + NTU 实现正确性验证行【需用户决策】+ E1 折间方差披露。
 > 规范来源: `analyze-results` 结果呈现规范 + galaxy 实验章要求（每个实验先声明支撑哪条 claim）+ AGENTS.md 三层口径铁律
 
@@ -100,7 +100,13 @@
 | 分割策略 | 运动词量化 vs 滑动窗口 vs 均匀切分 | ✅ **三臂对照已落地（W38，2026-08-26）**：SMQ 0.458±0.049 > 等段数均匀滑窗 0.399±0.035（预注册判据通过）> 随机切分 null 0.323±0.022；固定网格旁证臂 0.453±0.027 与 SMQ 统计等效如实披露——完整消融证据与双向论证见 tab3 −无监督分割行 |
 | 语义扩展 | 锚点聚类伪标签 vs 一致性正则 vs mean-teacher | ⏳ 待 P0.3/P0.4 |
 | 动物域参照 | ASBAR（PoseConv3D）/ BCST-GCN 式图卷积（可复现行） | ⏳ 视工程量裁剪，砍项需用户确认 |
-| **实现正确性验证**✅已批准（ADR 0002） | 在 NTU60 上复现 AimCLR 参照成绩（口径已于 W9 核实：NTU60 xsub 线性评估 + 三流融合；论文正文 78.9%，79.18% 为官方 released-model 复测——`reports/ntu-phasea-2026-08-24.md`；预注册通过线维持 ≥77.18%），证明本仓适配实现与官方等价后再用于动物域——重实现类论文的标配防线（风险登记册 R4） | 🔄 **W36 状态终填 v2（2026-08-26，含 W33 收编结果）**——Phase A ✅（协议核实 + 数据就位，verify PASS 113,156）；Phase B joint pretext 300/300 ✅（loss 16.63→5.30 零 NaN）；**E1 joint 单流线性评估 ✅ 收官（33 分钟）：best_top1 = 74.30%（ep85，top5@末评 94.65%）vs 官方 README joint 74.34%，Δ = −0.04pp → 判定 PASS_BAND，Phase B 预训练管线保真度获直接实证**【公开基准层 NTU60 xsub】。⚠️ **预注册线 ≥77.18% NOT_TRIGGERED 如实归档**：对照物是三流融合（README joint 74.34/bone 71.87/motion 68.68/3s 79.18），单流不构成判定；用户已裁决选项 A 补全三流——自动链点火中（bone pretext 训练 → bone LE → motion pretext → motion LE → 3s 融合，ETA ~49h，内容级校验+HALT 留证），数字类产物待链完成后二次收编回填本行与 R4 终判。来源：`reports/ntu-phaseB-lineareval-2026-08-25.json` v1.0 + BOARD W33/W36 移交记录 |
+| **实现正确性验证**✅已批准（ADR 0002） | 在 NTU60 上复现 AimCLR 参照成绩（口径已于 W9 核实：NTU60 xsub 线性评估 + 三流融合；论文正文 78.9%，79.18% 为官方 released-model 复测——`reports/ntu-phasea-2026-08-24.md`；预注册通过线维持 ≥77.18%），证明本仓适配实现与官方等价后再用于动物域——重实现类论文的标配防线（风险登记册 R4） | ✅ **终判 PASS（2026-09-02 协调者收官收编）**——Phase A ✅（协议核实 + 数据就位，verify PASS 113,156）；Phase B 三流 pretext 全部 300/300 ✅；三流线性评估 joint **74.30%** / bone **71.51%** / motion **67.84%**；3s 融合 **top1=77.97% / top5=95.78%（n=16,487）≥ 预注册线 77.18% → PASS**，与论文正文 78.9% 差 0.93pp 在容差内——本仓适配实现等价性成立（风险登记册 R4 解除；joint 单流 74.30% vs 官方 README 74.34% Δ=−0.04pp 的 PASS_BAND 保真度证据保留在案）。证据：`reports/ntu-phaseB-3s-ensemble.json`（per_stream 元数据完整）。成文段见下方 §4.4 成文块 |
+
+#### §4.4 成文块（英文正文素材，装配目标 latex/sections/04-experiments.tex；数字全部溯源 `reports/ntu-phaseB-3s-ensemble.json`）
+
+**Implementation-equivalence verification on NTU60.** Because AimCLR, SMQ, and the self-training machinery are re-implemented in this repository rather than imported, we verify implementation correctness on the human-domain benchmark before applying the pipeline to animal data. Following the linear-evaluation protocol of AimCLR on NTU60 cross-subject, each stream (joint, bone, motion) is pretrained for 300 epochs and evaluated with a frozen encoder and a fully-connected classifier; the three streams are then fused with the official fixed weights (joint 0.6, bone 0.6, motion 0.4). The re-implementation reaches 74.30% (joint), 71.51% (bone), and 67.84% (motion) top-1, and the three-stream fusion attains **77.97% top-1 (95.78% top-5; n = 16,487)** — exceeding our pre-registered acceptance line of 77.18% and lying within 0.93 pp of the 78.9% reported in the AimCLR paper body. We therefore treat the adapted implementation as equivalent to the official one for the purposes of this study. 【公开基准层 NTU60 xsub；融合权重与协议移植自官方 ensemble_ntu_cs.py，入口 `scripts/ntu_ensemble_3s.py`】
+
+> 成文纪律：①数字零池外（78.9% 口径经 W9 核实；正文 78.9% 与 79.18% released-model 复测之区分已在 §2.2 处理，本段只引 78.9%）；②层级标注【公开基准层】强制随行；③本段不进 Abstract/Intro——R4 是防线证据不是贡献主张，落点 §4.4 即止。
 
 ## 5. 消融与分析（Ablation and Analysis）— tab3（W21 映射版）
 
@@ -144,7 +150,7 @@
 - [x] ~~所有 `[PENDING]` 数字待 P0.2-P0.5 报告归档后回填~~ ✅ W36 终填完成（2026-08-25/26 三轮）——可填占位符全部按索引表溯源终填，tab3 六行零 PENDING
 - [x] ~~tab3 −自监督预训练行~~ ✅ W39 full 档落地入表（2026-08-26，零结果如实 + 引用纪律随行）；✅ W45 升级四档梯度叙事 + 低资源梯度叙事段（同日，交叉边界前送 Limitations L10——重基于 W46 后撞号重排，原拟 L9）
 - [ ] （可选加固项，非阻塞）spc{35,50} 细档定位预训练收益交叉点 / seeds 扩至 5–10 收紧置信区间——纯 CPU 分钟~半小时级，见 `reports/ablation-gradient-2026-08-26.md` §2-Next
-- [ ] NTU 三流补全链数字落地后：更新 §4.4 实现正确性行（3s 融合 vs 预注册线 ≥77.18% 终判）与 R4 状态
+- [x] NTU 三流补全链数字落地后：更新 §4.4 实现正确性行（3s 融合 vs 预注册线 ≥77.18% 终判）与 R4 状态 ✅ **2026-09-02 收官收编**——三流全交付：joint 74.30 / bone 71.51 / motion 67.84，3s 融合 **77.97% ≥ 77.18% → PASS**（top5 95.78%, n=16487, alpha 0.6/0.6/0.4）；证据 `reports/ntu-phaseB-3s-ensemble.json`；E6 曾双失败 HALT 已双修复（入口 cwd 对齐 + 时间戳前缀行内解析），JSON 干净归档
 - [ ] E4 对比研究"动物域参照行"若工程量超支，砍项决定须上报用户
 - [ ] 合成层规模登记待 K9 资产移植（`docs/assets-map.md` 流程）
 - [ ] Q3c round2（扩展池增强）结果落地后复核 E4 公开真实列第二行表述

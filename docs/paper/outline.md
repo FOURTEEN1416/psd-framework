@@ -164,7 +164,7 @@ Abstract 0.2 ｜ Intro 1.5 ｜ RW 1.5 ｜ Method 4 ｜ Experiments 3 ｜ Ablatio
 | R1 | 🔴 CRITICAL | **行为级证据为零**：唯一实测数字是 dog-ID 代理探针，审稿人将质疑"承诺行为识别却无行为识别证据" | C3 措辞永久锁死在"表征区分度"层面；C4-C7 行为级主张全部显式挂 PENDING；P0.4/P0.5 是投稿硬前置 | ⏳ 待实验 |
 | R2 | 🔴 CRITICAL | **标题过度主张风险**：副句 "under Evolving Evaluation Criteria" 的唯一证据 E6 待做 | E6 设计已在 §3.4 形式化；预案：E6 若弱则降级标题为 "...for Low-Resource Animal Behavior Recognition"（投稿前用户裁决）；**C1 双档证据齐备**：合成层 small 档（7.32×，保守 ≥3×）+ **full 档确认（6.07×，同 seed 配对最小 4.00×，`reports/c1-decouple-cost-full-2026-08-25.json`）**；精度两档统计等效（full −0.91pp / small +2.27pp，均 <2.3pp）——成本维度实证闭合，标题保留与否归用户终裁 | 🟢 成本维度 full 确认（2026-08-25 W34 回写）；标题终裁待用户 |
 | R3 | 🟠 MAJOR | **incremental 指控**："已知组件组合 + 换域 = 增量工作" | 解耦机制列第一贡献；method.md 补迁移非平凡性论证段；related-work.md 三近邻表量化差异 | ✅ 写作侧已加固 |
-| R4 | 🟠 MAJOR | **重实现正确性存疑**：AimCLR/SMQ/TCL 均为本仓适配实现，审稿人会要求验证实现等价性 | ✅ 用户已批准纳入（ADR 0002）；⚠️ 前置=NTU60 骨架数据获取（本仓现无），P0.2 释放 GPU 后独立小窗口执行 | 📋 已批准待排程 |
+| R4 | 🟠 MAJOR | **重实现正确性存疑**：AimCLR/SMQ/TCL 均为本仓适配实现，审稿人会要求验证实现等价性 | ✅ 用户已批准纳入（ADR 0002）；⚠️ 前置=NTU60 骨架数据获取（本仓现无），P0.2 释放 GPU 后独立小窗口执行 | ✅ **PASS（2026-09-02 协调者收编）**——NTU60 xsub 三流全交付：joint 74.30 / bone 71.51 / motion 67.84，3s 融合 **top1=77.97%（top5 95.78%, n=16487）≥ 预注册线 77.18%**，与论文正文 78.9% 差 0.93pp 容差内——本仓适配实现等价性成立；证据 `reports/ntu-phaseB-3s-ensemble.json`，回写 experiment-skeleton.md §4.4 |
 | R5 | 🟠 MAJOR | **数据集论文未引**：InterPet4D/AK/APTv2 引用缺失（PR 投稿硬要求） | 引用计划 §6 已补三条 [CITATION-NEEDED]；文献终审窗口必须补齐 | ✅ W17 已解除（2026-08-24，三条题录取自官方渠道自带 BibTeX） |
 | R6 | 🟡 MINOR | 统计严谨性质疑 | experiment-skeleton 已补统计协议节 | ✅ 协议已立 |
 | R7 | 🟡 MINOR | 数据许可与伦理声明（PR 投稿系统必填） | brief §8 许可终审项覆盖；投稿前补 Data Availability + Ethics 声明 | ⏳ 已跟踪 |
@@ -179,7 +179,7 @@ Abstract 0.2 ｜ Intro 1.5 ｜ RW 1.5 ｜ Method 4 ｜ Experiments 3 ｜ Ablatio
 |----------------|---------|
 | 方法论新颖性（非纯应用） | ✅ 解耦框架 + 迁移组合（W1 核验）；写作侧已防 incremental 指控 |
 | 广泛充分的实验 | ⏳ P0.2-P0.5 全部待做——**当前最大短板，投稿前置** |
-| 与 SOTA 对比 | ⏳ 对比研究骨架已建；NTU 复现行待用户决策 |
+| 与 SOTA 对比 | 🟡 对比研究骨架已建；**NTU 复现行 ✅ 完成（2026-09-02，三流融合 77.97% PASS）**——公开基准层等价性证据入册 §4.4 |
 | 统计严谨（误差棒+显著性检验） | ✅ 协议已立，待数据 |
 | 可复现性（代码/超参公开） | ✅ 一条命令复现链已有（P0.1 实测）；开源计划见定位文档 §6 |
 | 诚实局限声明 | ✅ Limitations 独立成段设计 |
@@ -219,3 +219,4 @@ Abstract 0.2 ｜ Intro 1.5 ｜ RW 1.5 ｜ Method 4 ｜ Experiments 3 ｜ Ablatio
 | v0.9 | 2026-08-26 | **W36 二轮同步**（重基 master 收编 W33/W38 并行成果）：C4 Evidence 增 W38 三臂消融（SMQ>均匀滑窗>null 预注册三门全过 + 网格平价/F1 反向双披露，措辞边界随行）；tab3 状态改五行已映射/一行执行中；R2 行 🟢 维持（W34 已判） |
 | v1.0 | 2026-08-26 | **W36 三轮收口**（吸收 W39 收编）：tab3 ✅ 六行全部映射溯源完成——W39 预训练消融零结果如实入表（Δ=+0.15pp n.s.，预训练价值锚定 kNN 表征证据）；消融表零 PENDING；剩余待办仅 NTU 三流链二次收编与 round2 复核 |
 | v1.1 | 2026-08-27 | 协调者移交项同步（W45 移交清单闭合）：tab3 状态行并入四档梯度叙事（原"零结果如实入表"描述已不完整，skeleton 与 conclusion-limitations v0.6 均已含梯度叙事）；其余矩阵/风险册零变更 |
+| v1.2 | 2026-09-02 | **三流收官收编轮（协调者，NTU PhaseB 全链 ALL_DONE）**：R4 🟠→✅（NTU60 xsub 三流融合 77.97% ≥ 77.18% 预注册线 PASS——joint 74.30 / bone 71.51 / motion 67.84，top5 95.78%, n=16487，与论文正文 78.9% 差 0.93pp 容差内）；§8.2 检查单"与 SOTA 对比"行 ⏳→🟡（NTU 复现行完成）；experiment-skeleton.md §4.4 终判回写 + v1.2；review-log.md 投稿就绪门 R4 条解除；证据 `reports/ntu-phaseB-3s-ensemble.json` |
