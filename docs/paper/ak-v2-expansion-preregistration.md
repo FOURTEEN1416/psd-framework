@@ -38,3 +38,7 @@ The warm-start backbone (Y_CKPT) was supervised on v1 training-split videos; v2 
 ## 6. Reproduction
 
 Builder: `scripts/run_p11_ak_v2_build.py` (this protocol's §2 implemented verbatim). Replication driver: `scripts/run_p12_ak_v2_replicate.py` (reuses p07/p08/p10 protocol functions). Evidence: `reports/p11-akv2-build-*.json`, `reports/p12-akv2-replication-*.json` + `.md`.
+
+## 7. Amendment (2026-09-04, post-registration)
+
+R8 adversarial review identified that the EP3 raw-top-1 threshold is confounded by the class-space change (v1 12-class chance 8.33% vs v2 8-class chance 12.5%; the +4.17pp chance shift exceeds the measured +3.57pp). A **same-space control** is added: re-scoring the v1 full-supervision arm on the eight classes v2 retains yields 25.96%, so the same-space rise is +11.54pp (above-chance 13.5→25.0pp; above-majority −4.8→+3.1pp). The data-bottleneck attribution is supported on top-1 under this control; macro-F1 moves oppositely (14.7→7.8, driven by v2's n=2 sit class) and is reported alongside. The original §4 rule text is preserved above unaltered; this amendment supersedes its interpretation.

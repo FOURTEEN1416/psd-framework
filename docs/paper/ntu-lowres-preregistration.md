@@ -34,3 +34,7 @@ TCL's 82.7/88.6 pair comes from their fine-tuned pipeline; our reference arm is 
 ## 5. Reproduction
 
 Feature dump: `scripts/run_p14_ntu_featuredump.py` → `runs/ntu_lowres/features_joint_ep300.npz`. Protocol: `scripts/run_p14_ntu_lowres.py` → `reports/p14-ntu-lowres-<date>.json` + `.md`.
+
+## 6. Amendment (2026-09-04, post-registration, pre-submission)
+
+R8 citation audit falsified the TCL reference used in §1: the cited paper (arXiv 2102.02751) contains no NTU60 experiment and no 82.7/88.6 figures (full-text PDF search: NTU 0 hits). The TCL comparison is therefore **removed**; the primary endpoint stands on its own pre-registered 90% line only. Additional disclosures added post hoc: the final head uses StandardScaler + logistic regression (tol 1e-3) and GPU heads (scale adaptations); the 10% subset is a single stratified draw; retention ratios are protocol-dependent (frozen-probe curves are flatter by construction). None of these changes the arms, budget, seeds, or decision rule.

@@ -63,7 +63,7 @@
 *This experiment tests whether self-training closes the gap to full supervision under ≤20% labels.*
 - 三层口径 × 标注比例 {10%, 20%, 100%} 主表 tab2：**0.691 ± 0.013 (公开真实层/P0.4)**。
 - ✅ **tab2 公开真实列第二行（W36 终填，relay Q3c 落地数字）**：AK partialclass4 冻结骨干 + 头部重训（warm-init from Y best.pt）→ best_val_acc **44.90%（=1.80× 随机基线 25%）**【公开真实层/4 类部分口径】；per-class watch **100%** / track **23.5%** / jump **0%** / stay **0%**——类不平衡主导聚合分数（train 支持 watch 72/track 46/stay 27/jump 27），成稿必须逐类分解同框呈现并前送 Limitations L7，禁止聚合单报。来源：`reports/p05-public-real-partialclass-result-2026-08-25.json`（seed=42 单次，26ep 早停 @11）+ 协议链 `reports/p05-public-real-partialclass-2026-08-24.md`。⚠️ 扩展池增强第二轮（round2）独立窗口执行中，结果落地前本行不得预写"飞轮有效"结论。
-- 人类域参照行（明确标注为他域参照，不计入本文结论）：TCL CVPR 2021 82.7% @10% vs 全监督 88.6%。
+- 人类域参照行：❌ 已删除（2026-09-04 R8 引用实查：TCL arXiv 2102.02751 原文 15 页 PDF 检索 NTU=0 命中、82.7=0、88.6=0，其数据集为 Mini-Something-V2/Jester/Kinetics-400/Charades-Ego——该数字系池内继承的无出处假引用，正文/摘要/outline 全链清除；bib 作者同步修正 Ankit Singh…Abir Das）。
 
 ### E5 主动学习效率【C7 已裁决①（2026-08-25）：降级"探索性发现"，不作主结果主张】
 *This experiment examines how uncertainty sampling behaves under cold-start weak scorers within a limited annotation budget (exploratory; negative result reported as-is).*
@@ -108,7 +108,7 @@
 ### E7b AK v2 预注册复现层 → 检验 E7 天花板归因（PSD-AKV2-PREREG-001，2026-09-04 构建前冻结）
 *This experiment tests the data-bottleneck attribution of E7 under a frozen decision rule.*
 - 构建：同 329 犬科视频多段重提取（K≤4 连续段、段≥40 帧、逐帧标签一致性门 ≥0.80、同 YOLO/assemble/质量门、视频级 split 不变）→ **352 clips（train 256/val 96），8 类空间**（bark 零段过门、sit n=2 如实披露）。驱动 `scripts/run_p11_ak_v2_build.py`，产物 `runs/public_real_dataset/full12v2_*`。
-- **EP3 天花板检验（判据冻结：≥+3.0pp=数据瓶颈成立）**：v2 full **37.50%** − v1 33.93% = **+3.57pp → DATA_BOTTLENECK_CONFIRMED**——"天花板由数据量主导"从归因辩解升级为预注册检验成立的结论。
+- **EP3 天花板检验（判据冻结：≥+3.0pp=数据瓶颈成立）**：v2 full **37.50%** − v1 33.93% = **+3.57pp**，原始判据触发；**R8 修订**：该差值被类别空间混淆（12→8 类 chance 位移 +4.17pp > +3.57pp），补同空间对照——v1 full 在 v2 的 8 类子空间重算=**25.96%**，同空间差 **+11.54pp**（above-chance 13.5→25.0pp、above-majority −4.8→+3.1pp）→ 数据瓶颈归因在同空间对照下于 top-1 成立；macro-F1 反向（14.7→7.8，sit n=2 驱动）双指标并报。
 - **EP2 复现+增强（n=10）**：warm spc2 **33.23±3.35**（保留自身全监督 88.6%，绝对预算 2 片段/类=6% 标注比例）；warm vs aimclr top-1 **+12.92pp 10-0-0 p=0.002** 且 **macro-F1 +6.08pp 10-0-0 p=0.002**（v1 的 macro-F1 持平判定为单片段标签结构伪影——一致性门剔除混标段后 AimCLR 少数类预测优势消失: macro-F1 坍缩至 1.71%）；warm vs scratch top-1 +9.79pp p=0.002。
 - 纪律：v1 数字不替换，v2 并列报告禁合并；v2 措辞用 matched absolute budget 禁写 13%。来源：`reports/p12-akv2-replication-2026-09-04.md` + `.json`；驱动 `scripts/run_p12_ak_v2_replicate.py`。
 - **P1.3 端到端微调诊断对照（非预注册终点，control 措辞）**：v2 上解冻骨干端到端 50ep——finetune_full **32.99±3.94 < 冻结头 37.50**（256 段喂不饱骨干梯度路径，过拟合吞掉 pretext 先验）；finetune_spc2 **9.72±1.59** vs warm-start 33.23 = **3.4×**——"天花板非冻结所致"与"解耦设计实证更优"两条防御句的直接数字。来源：`reports/p13-v2-finetune-2026-09-04.md`；驱动 `scripts/run_p13_v2_finetune.py`。
@@ -117,7 +117,7 @@
 *This experiment tests whether the low-resource retention behavior generalizes to the human domain where a published budget reference exists.*
 - 设置: NTU60 xsub joint 流，冻结 epoch300 pretext 骨干 256d 特征（官方 Feeder_single 无增强口径，p14a 导出 40091+16487）；10% 分层子集 seed42 固定=4009 clips；三臂 (c)100% 线性头参照 /(a)10% 线性头 /(b)10%+run_selftrain（与 E7 同函数同参，适配 #1 device=cuda、#2 StandardScaler+LR tol=1e-3 披露随行）。
 - **结果**: (c) **74.45%**（vs 官方 LE 74.30%，Δ0.15pp——管线保真自检通过）；(a) 66.05%（保留 88.7%）；(b) **74.01/74.06/74.25，mean 74.11±0.13 = 保留率 99.5%**。
-- **预注册判据: GENERALIZES（≥90% 线）**。对照 TCL 发表保留率 93.3%（82.7/88.6）——**仅比保留行为不比绝对值**（我们 74.1 < TCL 82.7，冻结探针 vs 细调管线，协议 §1 冻结轴）。次终点 (a)vs(b): 伪标签迭代人体规模贡献 **+8.0pp**，与动物域机制一致。
+- **预注册判据: GENERALIZES（≥90% 线）**。~~对照 TCL 发表保留率 93.3%~~（R8 引用实查证伪，对比删除——保留率仅与本预注册 90% 线比，不与任何发表方法比；且保留率轴协议依赖：冻结探针曲线天然平缓于细调管线）。次终点 (a)vs(b): 伪标签迭代人体规模贡献 **+8.1pp**（74.11−66.05=8.06），标注子集为动物层训练池 28×（4009 vs 141）。
 - 诚实边界: 池 ~34.4k/seed（近恢复全训练集即机制本身）；NTU 无伪 GT 故池精度未单独评估——主张限于预算保留行为。
 - 来源: `reports/p14-ntu-lowres-2026-09-04.md` + `.json`；驱动 `scripts/run_p14_ntu_featuredump.py` + `run_p14_ntu_lowres.py`；协议 `docs/paper/ntu-lowres-preregistration.md`。
 
@@ -206,3 +206,4 @@
 | v1.5 | 2026-09-04 | **E7b AK v2 预注册复现轮**（把天花板归因变成检验）：协议 PSD-AKV2-PREREG-001 构建前冻结→多段重提取 352 clips（8 类空间，bark/sit 门失败如实披露）→**EP3 触发 DATA_BOTTLENECK_CONFIRMED（v2 full 37.50% = v1+3.57pp ≥ +3.0pp 冻结线）**；EP2 复现增强：warm spc2 33.23（88.6% 保留@6% 预算）、warm vs aimclr **双指标 10-0-0 p=0.002**（v1 macro-F1 持平判定为单片段标签结构伪影，AimCLR v2 坍缩至 1.71%）；§4.1 数据集句+§4.3 E7b 段+tab2 v2 行+E7 天花板句升级装配；v1 数字零替换；驱动 `scripts/run_p11_ak_v2_build.py` + `run_p12_ak_v2_replicate.py`；`reports/p12-akv2-replication-2026-09-04.md` |
 | v1.6 | 2026-09-04 | **P1.3 端到端微调诊断对照轮**（回答『绝对精度为何不刷』）：v2 解冻骨干端到端 full **32.99±3.94 < 冻结头 37.50**（过拟合吞先验）/ spc2 **9.72** vs warm 33.23=3.4× 坍缩——『天花板非冻结所致+解耦实证更优』入 §4.3 E7b 段末（control 措辞非预注册终点）；驱动 `scripts/run_p13_v2_finetune.py`；`reports/p13-v2-finetune-2026-09-04.md` |
 | v1.7 | 2026-09-04 | **E9 NTU 低资源保留率轮（重炮命中）**：PSD-NTU-PREREG-001 实验前冻结→冻结 pretext 探针三臂——10%+selftrain **74.11±0.13 = 保留率 99.5%**（参照 74.45，判据 GENERALIZES≥90%）；10% 纯线性 66.05（伪标签迭代 +8.0pp）；对照 TCL 保留率 93.3% 仅比行为不比绝对值；参照臂 74.45 vs 官方 LE 74.30 保真自检过；§4.4 E9 段+tab2 行+Intro Para6 半句装配；驱动 `run_p14_ntu_featuredump/lowres.py`；`reports/p14-ntu-lowres-2026-09-04.md` |
+| v1.8 | 2026-09-04 | **R8 对抗审稿+引用实查修复轮（学术诚信级）**：①TCL 82.7%/88.6%/NTU60 经原文 PDF 全文检索证伪（NTU 0 命中），系池内继承假引用——正文 E4/E9/Intro 全链删除，bib 作者修正（Ankit Singh/Abir Das），outline/method/related-work/skeleton 同步清污；②E7b 类别空间混淆修复：8 类同空间对照 v1(8cls)=25.96% → 同空间差 +11.54pp（数据瓶颈归因修复后于 top-1 成立，macro-F1 反向双报）；③E9 修复：30× 不可解释数字删除、8.0→8.1pp、ceiling→reference、单子集/适配/协议依赖披露补全、TCL 对比删除；④Y_CKPT 源视频泄漏披露补全+independent→pre-registered parallel；⑤微调句 macro-F1 反向双报+ superiority 限定双指标一致区；⑥tab3 (10 seeds) full 列限定、both-arms-beat-scratch 限定 spc2、only-backbone→+预处理、artifact→hypothesis、geometry 断言降格、Abstract 94% 补绝对锚点、Intro ten-seeds 修饰语修正、13% 口径澄清；⑦AimCLR++ 77.2→80.9（官方仓库证伪）、79.18 归属措辞、NTU60 补引 Shahroudy2016、aimclrpp 题名按 CrossRef；⑧两预注册协议追加 dated 修订节（非静默改）。审稿 agent 判定 Major Revision→修复后证据-主张对齐恢复 |

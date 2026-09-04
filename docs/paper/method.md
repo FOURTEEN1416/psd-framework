@@ -68,7 +68,7 @@ Design decisions fixed at this stage: confidence filtering uses prototype-margin
 
 ### 3.3.3 Semi-Supervised Self-Training and Small-Budget Initialization
 
-Pseudo-labeled coverage is consolidated by temporal contrastive self-training in the spirit of TCL [Singh et al., CVPR 2021, arXiv 2102.02751], which reported 82.7% accuracy using 10% of labels against an 88.6% fully supervised reference on human benchmarks. To make very small annotation budgets usable, a warm-start protocol initializes this stage from previously trained semantic-layer weights before expansion proceeds within a budget of 100–200 clips.
+Pseudo-labeled coverage is consolidated by temporal contrastive self-training in the spirit of TCL [Singh et al., CVPR 2021, arXiv 2102.02751]（R8 勘误 2026-09-04：原记载『82.7%@10% vs 88.6% 全监督』经原文 PDF 全文检索证伪——该文无 NTU 实验、无此数字，其数据集为 Mini-Something-V2/Jester/Kinetics-400/Charades-Ego；方法精神引用保留，数字删除）。 To make very small annotation budgets usable, a warm-start protocol initializes this stage from previously trained semantic-layer weights before expansion proceeds within a budget of 100–200 clips.
 
 *Evidence.* Under distribution shift on the synthetic-offset tier, the warm-started semantic layer reaches **82.0% top-1 on 22 classes from only 20 labeled clips** (mean over three seeds, ±4.3; cold-start protocols remain near chance at this budget under their respective distributions), with uniform expansion reaching 95.7% at a 200-clip ceiling (`reports/p05-al-efficiency-warmstart-short-2026-08-25.json`). Uncertainty-based sampling strategies are evaluated separately as an exploratory negative finding in Section 5 and carry no methodological claim here; three-tier main results are reported in Section 4 (`reports/p05-public-real-partialclass-result-2026-08-25.json` for the public-real partial caliber). （数据 owner：experiment-skeleton.md §E4/E5，此处只引用不独立改数；W23 comparability 条款——warm-start 与冷启动绝对数值禁止同协议并列。）
 
@@ -106,7 +106,7 @@ We hypothesize that $C_{\text{decoupled}} < C_{\text{full}}$ at matched accuracy
 | 主张与证据分离 | ✅ §3.2.1/§3.2.2/§3.3.2/§3.3.3/§3.4 五处 Evidence 块均已按归档报告终填（W36）；AimCLR++ 对比与 τ-K 全扫以显式 scope 声明保留（未执行不冒充） |
 | 口径诚实 | ✅ dog-ID 代理探针口径披露；坍缩事故写成复现性注记而非隐藏；warm-start 与冷启动禁止同协议并列（comparability 护栏）；C1 臂属方向经当次 JSON 复核（decouple 31.1s vs baseline 188.7s） |
 | C7 换轨合规 | ✅ §3.3.2 "active-learning loop 验证"改"downstream evaluation"；§3.3.3 标题与正文换轨 warm-start，AL 仅以探索性发现出现；无 ≥85% 预算主张残留 |
-| 引用纪律 | ✅ 池内条目带出处标识；SMQ/TCL 已于 W17 终审补全（arXiv 2508.04513 / 2102.02751）；TCL 数字 82.7%/88.6% 投稿前对照原文复核 |
+| 引用纪律 | ✅ SMQ/TCL 题录 W17 补全；TCL 数字 82.7%/88.6% 已于 R8（2026-09-04）原文 PDF 证伪并全链删除——该待办闭环 |
 
 ## 修订历史
 

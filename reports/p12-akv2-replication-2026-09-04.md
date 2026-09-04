@@ -41,3 +41,8 @@
 - tab2: 新增 Public-real (v2 replication) 行。
 - E7 段天花板句: 由"归因披露"升级为"预注册检验成立"。
 - skeleton/outline: v1.5 登记。
+
+## 6. 勘误附注（R8，2026-09-04）
+
+- §3 "EP3 判据触发 DATA_BOTTLENECK_CONFIRMED" 修复：原始 +3.57pp 差值被类别空间混淆（12→8 类 chance 位移 +4.17pp 更大）。补同空间对照：v1 full 在 8 类子空间重算=25.96% → 同空间差 **+11.54pp**（above-chance 13.5→25.0pp）——数据瓶颈归因于 top-1 修复后成立；macro-F1 反向（14.7→7.8，sit n=2 驱动）双指标并报。协议 §7 追加 dated 修订。
+- Y_CKPT 源视频泄漏披露按协议 §5 承诺补入正文（E7b 段）。

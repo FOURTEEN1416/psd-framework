@@ -70,7 +70,7 @@ To the best of our knowledge, transferring the combination of seed-annotated anc
 - [x] 补全待补题录（W17 终审 2026-08-24：11 条完全解决，3 条缩窄为作者列表级；溯源明细见 review-log.md 终审节）
 - [x] **补三个数据集原始论文题录**（InterPet4D / Animal Kingdom / APTv2）——✅ W17 已补齐官方 BibTeX，R5 解除
 - [ ] 投稿前 Scholar 终审补 3 处作者列表：YOLO-PetX（CEECT 2025）、Momentum Contrastive Teacher（TIP）、GRA（TNNLS）的作者与正式 DOI
-- [ ] TCL 数字复核：method.md 中 82.7%（10% 标注）/88.6%（全监督）沿用池内记载，投稿前对照 CVPR 2021 原文核验
+- [x] TCL 数字复核：✅ 2026-09-04 R8 执行——arXiv 2102.02751 原文 PDF（15 页全文检索）NTU=0/82.7=0/88.6=0，数字无出处（池内继承错误），已从 method/正文/outline/skeleton 全链删除；作者名修正 Ankit Singh/Abir Das
 - [ ] **内部引用迁移**：正文 2 处 "(internal survey...)" 措辞在投稿时替换为 Supplementary Material 正式引用（内部报告整理为附录）；"[internal survey; arXiv/Google Scholar re-verification...]" 同规则处理
 - [ ] SMQ 与 AimCLR 的具体数字（79.18%/77.2%/75.3%）在投稿前对照原文复核一遍（✅ AimCLR 79.18% 已于 2026-08-24 W9 核实并改写正文口径：linear eval/xsub/3s，论文正文 78.9%、79.18% 为 released-model 复测——见 `reports/ntu-phasea-2026-08-24.md`；SMQ 75.3% 与 AimCLR++ 77.2% 仍待核）
 - [ ] 若 P0.2-P0.5 结论变化，回改 2.2/2.3 的差距句强度；C6 的 "≤20%" 措辞按 E4 实测收紧

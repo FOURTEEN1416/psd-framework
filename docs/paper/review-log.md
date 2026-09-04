@@ -174,3 +174,17 @@ YOLO-PetX（IEEE CEECT 2025，全题名经 GitHub 全局代码检索锁定）、
 - [x] 三层口径零混排（E5/E6/tab3 各格层级标注齐备）
 
 **提交链**: `64a1c8a`（E5/E6）→ `7d69b15`（tab3）→ `afd7b0c`（矩阵+Limitations）→ 本条登记。
+---
+
+## R8 对抗审稿轮（2026-09-04，增量轰炸本轮新增内容；双通道：程序化数字对账 + 独立恶意审稿 agent + 引用权威实查 agent）
+
+**通道 1 程序对账**（35 项 tex 数字 vs reports JSON）：29 过；真错 1 处（E9 +8.0→**+8.1pp**，74.11−66.05=8.06）；其余 5 项为格式差非错误。
+**通道 2 恶意审稿**（Reviewer-2 人格，只打新增段落）：判定 **Major Revision**——2 CRITICAL + 9 MAJOR + 6 MINOR，全部有效并修复：
+- **CRITICAL-1 类别空间混淆**：EP3 原始 +3.57pp < chance 位移 +4.17pp（12→8 类）→ 补 8 类同空间对照（v1 full 重算 25.96% → 同空间差 **+11.54pp**，above-chance 13.5→25.0）；归因修复后于 top-1 成立，macro-F1 反向双报；协议 §7 dated 修订。
+- **CRITICAL-2 泄漏披露违约**：协议承诺入文的 Y_CKPT 源视频披露正文缺失 + "independent" 矛盾 → E7b 补披露句，independent→pre-registered parallel。
+- **CRITICAL-3（引用实查 agent，最重）TCL 假引用**：82.7%/88.6%/NTU60 经 arXiv 2102.02751 原文 15 页 PDF 全文检索**证伪**（NTU 0 命中/82.7 0/88.6 0；真实数据集=Mini-Something-V2/Jester/Kinetics-400/Charades-Ego）；bib 作者亦错（正确=Ankit Singh…Abir Das，前轮"Jathushan/Amlan"系张冠李戴）。该数字系 outline 池内继承、R7 只核作者未核数字、待办挂账未执行——**教训：作者核验≠数字核验，"投稿前复核"待办必须闭环不得挂账**。处置：正文 E4/E9 删除、Intro 联动、method/related-work/outline/skeleton/两报告全链清污+勘误附注、协议 §6 修订；E9 判据仅依赖预注册 90% 线（结论不受影响）。
+- MAJOR 修复：微调句双指标限定（macro-F1 16.73>7.83 反向如实报，superiority 限双指标一致区）/v2 macro-F1 腰斩+sit n=2 披露/artifact→hypothesis/tab3 full 列 "(deterministic, untested)"/both-arms-beat-scratch 限 spc2/only-backbone→+预处理/30× 删除改 28× 定义/probe ceiling→reference/协议依赖+单子集披露/Intro 机制限定语/Abstract 补绝对锚点。
+- MINOR 修复：ten-seeds 修饰语/13% 口径（18/141）/适配披露入文/tab2 行注/微调种子数/geometry 断言降格（无 CKA 实测）。
+- 附带：AimCLR++ 77.2→**80.9**（官方仓库证伪，77.2 系 CrosSCLR 串行误引）；79.18 归属措辞；aimclrpp 题名按 CrossRef；NTU60 补引 Shahroudy2016。
+**查无问题维度（明示）**：significant 措辞零滥用/13% vs 6% 无混引/K9 预注册句忠实/E7 n=10 数字逐位吻合。
+**修复后状态**：21 处正文编辑+3 处 bib+8 处 truth 源+2 协议修订+2 报告勘误；重编译验证；证据-主张对齐恢复。
