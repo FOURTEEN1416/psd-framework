@@ -61,3 +61,24 @@ Round 2 聚焦: 修复项复核 + 摘要/Intro/S2 逐句句长与 AI 腔扫描�
 ## 裁决
 
 **零必修项。** 成稿防御性写作已达到该技能的 Final Pass 标准（deliver text free of unnecessary disclaimers）——归因于项目自大纲阶段起的正向框架纪律（outline 措辞纪律 v0.3、claim ledger 门禁）。本技能在本稿的价值 = 提供了系统性验证手段（而非修复）；后续修订轮（审稿回复信）为主要应用场景。
+
+
+---
+
+# 复核轮（2026-09-04 · 图表重绘+三表修复后全量复核）
+
+## 编译链复核（三连×2 收敛）
+- 零错误（`!` 计数 = 0）；21 页 442946 字节
+- 交叉引用：追加两遍 pdflatex 后全部收敛，零 undefined
+- bibtex 10 条 "empty pages" 警告 = 无页码条目的正常提示（arXiv/工作仓类），非缺陷
+- LaTeX Warning 2 条 "No positions in optional float specifier"：**最小复现实验证明来自 cas-sc.cls 类内 float 机制**（空类文档 + 单 figure 也触发，行号是类内行号非源文件行号），与源码 specifier 无关、对输出零影响、源码侧不可消除——判定为上游模板噪声，留档不追
+
+## 图表复核（全部页面 110dpi 渲染目检）
+- fig1 v4 / fig2 v2：入稿后渲染正常，矢量无损，配色语义一致（青=人工/种子侧，橙=自动学习侧）
+- tab1：六列全入版心，Output 列完整（"Recog.+seg."）
+- tab2：11 行全完整（"31.1 s vs. 188.7 s (6.07×; ≥3× claimed)" 不再截断）
+- tab3：7 行紧凑结构（原 12 行碎片全清）
+
+## 遗留核对
+- fig2/fig3 目前未在正文引用（fig3 待 §4.3 定性图引用位、fig2 待 §3.3 引用位）——下一步装配时补 ef
+- 低风险项均无新增
