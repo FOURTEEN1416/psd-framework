@@ -92,6 +92,18 @@
 - ✅ **双贴合候选场景已预注册并获用户方向性认可（ADR 0002 v1.1，2026-08-24）**：业务动机取自 K9 系统真实报表粒度差——日常训练日报（粗粒度：合并步态类为 locomotion）vs 结业考核单（细粒度：jump 拆分 jump_up/jump_down）；可计算基础取自本仓物理先验 7 类。论文叙事闭环：§1 行业动机 → §3.4 形式化 → E6 实例，同源非自造。P0.5 前用户一句话最终定稿。
 - ⚠️ **matched accuracy 判据固定（v0.3）**：两侧使用相同训练预算与收敛判据（如固定 epoch + 验证集早停 patience 一致），禁止事后选择最优点制造有利对比。
 
+### E7 端到端管线有效性 → 支撑 C6（低资源主张的端到端量化，冲击 PR 补强，2026-09-04 预注册 fb1a060）
+*This experiment tests whether the complete PSD pipeline, run end-to-end from a small annotation budget, approaches full-supervision accuracy on the public-real tier.*
+- 管线：Y/scratch backbone 特征 → 种子（每类 spc 个 clip）→ run_selftrain（锚点+原型聚类+置信过滤伪标签迭代）→ seeds∪pool 线性头 → val top-1。防泄漏：anchor_mask 与池宇宙严格限 train split，val(56) 全程隔离。
+- **端到端结果（公开真实层 AK full12，9 类有样本，3 seeds mean±std）**：
+  - warm spc2（≈13% 标注）：top-1 **0.3095±0.0223**，macro-F1 0.1244
+  - warm spc4（≈26%）：top-1 0.3214±0.0253，macro-F1 0.1422
+  - warm full（100% 全监督对照）：top-1 0.3393，macro-F1 0.1465
+  - scratch spc2（随机 backbone）：top-1 0.2500，macro-F1 0.0451
+- **两条主张**：① **低资源端到端成立**——13% 标注预算达全监督的 **91%**（0.31 vs 0.34，仅差 3pp），把"低资源"从组件级证据升级为端到端量化；② **预训练端到端价值**——warm vs scratch 同预算 +6pp top-1、macro-F1 **2.8×**（0.124 vs 0.045），少数类感知显著。
+- **诚实边界**：绝对天花板 ~34% 由该层自提取数据瓶颈主导（197 clips/单标签/类不平衡，见 L7），非模型选择——与 §4.4 五臂窄带结论一致。
+- 来源：`reports/p07-endtoend-ak-full12-2026-09-04.json`；驱动 `scripts/run_p07_endtoend_ak.py`。
+
 ## 4.4 对比研究（Comparison Studies）
 
 | 对照轴 | 基线 | 状态 |
