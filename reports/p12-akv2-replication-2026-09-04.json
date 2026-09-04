@@ -1,0 +1,146 @@
+{
+  "date": "2026-09-04T19:19:53",
+  "protocol": "PSD-AKV2-PREREG-001 EP2/EP3",
+  "layer": "public_real_v2",
+  "disclosures": [
+    "v2 is an 8-class space (bark absent; sit n=2) after the 0.80 frame-consistency gate",
+    "spc2 on v2 = 16/256 train clips ~ 6% label fraction (absolute budget 2 clips/class identical to v1)",
+    "v1 numbers are NOT replaced; v2 is a parallel replication tier",
+    "Y_CKPT warm-start saw v1 train videos; v2 adds new segments of the same videos to training pool (inherent to task-pretraining, val videos disjoint)"
+  ],
+  "config_echo": {
+    "pkl": "D:\\Desktop\\psd-framework\\runs\\public_real_dataset\\full12v2_T30.pkl",
+    "seeds": [
+      42,
+      43,
+      44,
+      45,
+      46,
+      47,
+      48,
+      49,
+      50,
+      51
+    ],
+    "classes": [
+      "apprehend",
+      "bite",
+      "jump",
+      "retrieve",
+      "sit",
+      "stay",
+      "track",
+      "watch"
+    ],
+    "n_train": 256,
+    "n_val": 96
+  },
+  "summary": {
+    "warm_spc2": {
+      "n": 10,
+      "top1_mean": 0.3323,
+      "top1_std": 0.0335,
+      "macro_f1_mean": 0.078,
+      "macro_f1_std": 0.0236
+    },
+    "warm_spc4": {
+      "n": 10,
+      "top1_mean": 0.3365,
+      "top1_std": 0.0156,
+      "macro_f1_mean": 0.0788,
+      "macro_f1_std": 0.0066
+    },
+    "warm_spc-1": {
+      "n": 10,
+      "top1_mean": 0.375,
+      "top1_std": 0.0,
+      "macro_f1_mean": 0.0783,
+      "macro_f1_std": 0.0
+    },
+    "aimclr_spc2": {
+      "n": 10,
+      "top1_mean": 0.2031,
+      "top1_std": 0.0172,
+      "macro_f1_mean": 0.0171,
+      "macro_f1_std": 0.0043
+    },
+    "aimclr_spc4": {
+      "n": 10,
+      "top1_mean": 0.2052,
+      "top1_std": 0.022,
+      "macro_f1_mean": 0.0168,
+      "macro_f1_std": 0.0098
+    },
+    "aimclr_spc-1": {
+      "n": 10,
+      "top1_mean": 0.1875,
+      "top1_std": 0.0,
+      "macro_f1_mean": 0.0114,
+      "macro_f1_std": 0.0
+    },
+    "scratch_spc2": {
+      "n": 10,
+      "top1_mean": 0.2344,
+      "top1_std": 0.0179,
+      "macro_f1_mean": 0.0132,
+      "macro_f1_std": 0.0148
+    }
+  },
+  "paired_tests": {
+    "warm_vs_aimclr_spc2_top1": {
+      "mean_delta_pp": 12.92,
+      "std_delta_pp": 3.11,
+      "wins": 10,
+      "losses": 0,
+      "ties": 0,
+      "wilcoxon_p": 0.002
+    },
+    "warm_vs_aimclr_spc2_macro_f1": {
+      "mean_delta_pp": 6.08,
+      "std_delta_pp": 2.5,
+      "wins": 10,
+      "losses": 0,
+      "ties": 0,
+      "wilcoxon_p": 0.002
+    },
+    "warm_vs_aimclr_spc4_top1": {
+      "mean_delta_pp": 13.12,
+      "std_delta_pp": 3.11,
+      "wins": 10,
+      "losses": 0,
+      "ties": 0,
+      "wilcoxon_p": 0.002
+    },
+    "warm_vs_aimclr_spc4_macro_f1": {
+      "mean_delta_pp": 6.19,
+      "std_delta_pp": 1.26,
+      "wins": 10,
+      "losses": 0,
+      "ties": 0,
+      "wilcoxon_p": 0.002
+    },
+    "warm_vs_scratch_spc2_top1": {
+      "mean_delta_pp": 9.79,
+      "std_delta_pp": 3.68,
+      "wins": 10,
+      "losses": 0,
+      "ties": 0,
+      "wilcoxon_p": 0.002
+    },
+    "warm_vs_scratch_spc2_macro_f1": {
+      "mean_delta_pp": 6.48,
+      "std_delta_pp": 3.05,
+      "wins": 10,
+      "losses": 0,
+      "ties": 0,
+      "wilcoxon_p": 0.002
+    }
+  },
+  "ep3_ceiling_test": {
+    "v2_full_top1": 0.375,
+    "v1_ceiling": 0.3393,
+    "delta_pp": 3.57,
+    "verdict": "DATA_BOTTLENECK_CONFIRMED (v2 full >= v1 + 3pp)"
+  },
+  "wall_clock_sec": 310.2
+}

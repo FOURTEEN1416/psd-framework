@@ -105,6 +105,13 @@
 - 来源：`reports/p07-endtoend-ak-full12-2026-09-04.json`；驱动 `scripts/run_p07_endtoend_ak.py`。
 - **⬆️ P1.0 种子扩容 supersession（2026-09-04 同日，n=3→10，论文主数字改用此口径）**：warm spc2 **0.3196±0.0245**（占全监督 **94%**）/ warm spc4 0.3143±0.0423 / scratch spc2 0.2464±0.0164（每 seed 独立随机骨干，torch 种子可复现）；配对 Wilcoxon：warm vs scratch top-1 **+7.32pp 10-0-0 p=0.002 显著**、macro-F1 +9.97pp 10-0-0 p=0.002 显著。p07 JSON 保留为 n=3 历史归档。来源：`reports/p10-seedexpansion-2026-09-04.md` + `.json`；驱动 `scripts/run_p10_seedexpansion.py`。
 
+### E7b AK v2 预注册复现层 → 检验 E7 天花板归因（PSD-AKV2-PREREG-001，2026-09-04 构建前冻结）
+*This experiment tests the data-bottleneck attribution of E7 under a frozen decision rule.*
+- 构建：同 329 犬科视频多段重提取（K≤4 连续段、段≥40 帧、逐帧标签一致性门 ≥0.80、同 YOLO/assemble/质量门、视频级 split 不变）→ **352 clips（train 256/val 96），8 类空间**（bark 零段过门、sit n=2 如实披露）。驱动 `scripts/run_p11_ak_v2_build.py`，产物 `runs/public_real_dataset/full12v2_*`。
+- **EP3 天花板检验（判据冻结：≥+3.0pp=数据瓶颈成立）**：v2 full **37.50%** − v1 33.93% = **+3.57pp → DATA_BOTTLENECK_CONFIRMED**——"天花板由数据量主导"从归因辩解升级为预注册检验成立的结论。
+- **EP2 复现+增强（n=10）**：warm spc2 **33.23±3.35**（保留自身全监督 88.6%，绝对预算 2 片段/类=6% 标注比例）；warm vs aimclr top-1 **+12.92pp 10-0-0 p=0.002** 且 **macro-F1 +6.08pp 10-0-0 p=0.002**（v1 的 macro-F1 持平判定为单片段标签结构伪影——一致性门剔除混标段后 AimCLR 少数类预测优势消失: macro-F1 坍缩至 1.71%）；warm vs scratch top-1 +9.79pp p=0.002。
+- 纪律：v1 数字不替换，v2 并列报告禁合并；v2 措辞用 matched absolute budget 禁写 13%。来源：`reports/p12-akv2-replication-2026-09-04.md` + `.json`；驱动 `scripts/run_p12_ak_v2_replicate.py`。
+
 ## 4.4 对比研究（Comparison Studies）
 
 | 对照轴 | 基线 | 状态 |
@@ -187,3 +194,4 @@
 | v1.2 | 2026-09-04 | **E7/E8 端到端补强轮**（冲击 PR 的预注册实验，驱动 `scripts/run_p07_endtoend_ak.py`）：新增 §4.3 E7 段（全管线端到端 spc2=2 片段/类 ≈13% 标注预算达全监督 91%：30.95%±2.23 vs 33.93%；warm vs scratch 端到端 +6.0pp、macro-F1 2.8×）+ E8 预算曲线（spc2/spc4/full）+ tab2 端到端行；Abstract/Intro/§4.3 同步回填；outline C6 行旧"池精度而非端到端"保留意见解除 |
 | v1.3 | 2026-09-04 | **P0.8 同协议消融 + K9 预注册轮**：tab3 新增 −语义warm-start 行（AimCLR@InterPet4D 替代 PSD warm，端到端协议唯一变量替换——top-1 全预算 warm 占优 +3.6/+7.7/+3.6pp、macro-F1 混合如实并报、n=3 未达显著禁写"显著"、mocap 域差与原生预处理公平性披露随行；`reports/p08-aimclr-arm-2026-09-04.md`）；K9 真实域试点结案为**数据物理不存在**（k9 仓 ADR 0008 v1.7 用户 2026-08-19 已确认 682 片段零标注并废弃该路径；生成脚本已删、归一化约定不可核实→无监督域差探针亦放弃，避免预处理污染）——唯一诚实处置 = 预注册协议 `docs/paper/k9-pilot-preregistration.md`（PSD-K9-PREREG-001：双标注 κ≥0.60 门/session 级切分/单一主终点配对判据/禁再分发），§4.1 装配引用句；DA 声明审稿快照由 commit 哈希改为不可变 tag `review-snapshot`（消除自引用死锁） |
 | v1.4 | 2026-09-04 | **P1.0 种子扩容轮**（解除"n=3 未显著"审稿风险）：E7/P0.8 关键对比 n=3→10（驱动 `scripts/run_p10_seedexpansion.py`，特征确定性只重跑协议层，scratch 每 seed 独立随机骨干）——**warm vs aimclr top-1 spc2 +5.89pp 10-0-0 p=0.002 / spc4 +7.32pp p=0.016 全预算显著**；macro-F1 spc2 持平 p=0.77（n=3 反转消解为种子噪声，"多数类锐化权衡"叙事降级）；warm vs scratch +7.32pp/+9.97pp 双显著 p=0.002。**论文主数字切换**: warm@spc2 31.96±2.45=全监督 **94%**（原 91%），Abstract/Intro/§4.3/tab2/tab3/§4.4 六处联动刷新；`reports/p10-seedexpansion-2026-09-04.md` |
+| v1.5 | 2026-09-04 | **E7b AK v2 预注册复现轮**（把天花板归因变成检验）：协议 PSD-AKV2-PREREG-001 构建前冻结→多段重提取 352 clips（8 类空间，bark/sit 门失败如实披露）→**EP3 触发 DATA_BOTTLENECK_CONFIRMED（v2 full 37.50% = v1+3.57pp ≥ +3.0pp 冻结线）**；EP2 复现增强：warm spc2 33.23（88.6% 保留@6% 预算）、warm vs aimclr **双指标 10-0-0 p=0.002**（v1 macro-F1 持平判定为单片段标签结构伪影，AimCLR v2 坍缩至 1.71%）；§4.1 数据集句+§4.3 E7b 段+tab2 v2 行+E7 天花板句升级装配；v1 数字零替换；驱动 `scripts/run_p11_ak_v2_build.py` + `run_p12_ak_v2_replicate.py`；`reports/p12-akv2-replication-2026-09-04.md` |
