@@ -67,7 +67,8 @@ def draw_track(ax, segments, y_center, facecolor, edgecolor,
             continue
         ax.broken_barh([(s, e - s)], (y_center - BAR_H / 2, BAR_H),
                        facecolors=facecolor, edgecolors=edgecolor, linewidth=0.8)
-        if labels and (e - s) >= label_min_dur:
+        label_w = (len(labels[i]) * 6.5 + 10) if (labels and i < len(labels) and labels[i]) else 0
+        if labels and (e - s) >= max(label_min_dur, label_w):
             # zoom 窗口内只标注完全落在窗内的段，避免文字被轴缘截断
             fully_inside = x_clip is None or (s >= x_clip[0] and e <= x_clip[1])
             if fully_inside:
@@ -166,20 +167,12 @@ axi.set_ylabel("Matched IoU\n(seed pseudo-GT protocol)", fontsize=9)
 axi.set_ylim(0, 0.72)
 axi.grid(True, axis="y", color=GRID_GRAY, linewidth=0.8)
 axi.set_axisbelow(True)
-for spine in axi.spines.values():
-    spine.set_linewidth(0.9)
-axi.legend(loc="upper left", frameon=False, fontsize=8.5)
+for side in ('top', 'right'):
+    axi.spines[side].set_visible(False)
+for side in ('left', 'bottom'):
+    axi.spines[side].set_linewidth(0.9)
+axi.legend(loc="lower center", bbox_to_anchor=(0.5, 1.0), ncol=2, frameon=False, fontsize=8.5)
 
-# ---- 口径注记 + 溯源小注：放画布下方负坐标区（bbox tight 自动收入），左右分行防重叠 ----
-fig.text(0.01, -0.042,
-         "Public-real layer (InterPet4D smal_npy) \u00b7 GT = W6 rule-engine seed pseudo-labels "
-         "(\u03ba\u22650.8, \u22650.5 s; weak reference, not human annotation) \u00b7 "
-         "band text = seed behavior class \u00b7 SMQ epoch-30 checkpoint",
-         fontsize=6, color=NOTE_GRAY, ha="left", va="top")
-fig.text(0.99, -0.016,
-         "FIGURE_SOURCE: docs/paper/figures/scripts/make_fig3_segmentation_qualitative.py "
-         "\u00b7 PSD-Framework \u00b7 W22 \u00b7 2026-08-25",
-         fontsize=6, color=NOTE_GRAY, ha="right", va="top")
 
 pdf_path = OUT_DIR / "fig3_segmentation_qualitative.pdf"
 png_path = OUT_DIR / "fig3_segmentation_qualitative.png"

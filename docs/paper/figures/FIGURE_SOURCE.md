@@ -80,3 +80,5 @@ python docs/paper/figures/scripts/make_fig4_al_efficiency.py
 | fig2 | v2 | `figures/scripts/make_fig2_pseudo_label_loop_v2.py` | κ<τ 分支直达 AL queue（原飞线跳过 queue）/判断节点入环/verified seeds 回流改指 re-estimate（原错指 init）/配色与 fig1 统一（青=人工种子侧, 橙=自动学习侧）/frozen 句移除（caption 已述） |
 
 三表（tab1/tab2/tab3）同轮修复: tabular -> tabularx 版心自适应（原 tab1/tab2 右列被页缘裁切、tab3 碎行 12 段）。
+
+| v0.3 | 2026-09-05 | **R9-R11 印刷尺寸重设计轮（judge 视觉门 4/4 通过）**：R8 视觉验收发现四图按大画布设计、缩至 8.6cm 栏宽后落地字号 2.0-2.6pt 不可读——全部改为**最终印刷尺寸设计**（figsize≈3.4in 宽，字号 1:1 落地 5.5-7.6pt）。现行脚本：fig1=make_fig1_overview_v3.py、fig2=make_fig2_pseudo_label_loop_v5.py（人工侧中性灰消除与 fig1 青=物理层跨图语义冲突；辐条标签贴 hub 外沿）、fig3=make_fig3_segmentation_qualitative_v2.py（去 zoom 列，caption 删 band-text 承诺——GT 段宽 21-148 帧物理放不下类名）、fig4=make_fig4_al_efficiency.py（去顶/右 spine，基线注释移虚线下方）。数据溯源不变（p02 recheck / AL JSON，聚合值逐位一致）。judge 三轮复验记录见 review-log.md R9-R11。 |

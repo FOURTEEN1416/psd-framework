@@ -127,4 +127,7 @@ During the preparation of this work the authors used AI-assisted development too
 %\bibliographystyle{cas-model2-names}        % 备选: CAS 著者-年份样式
 \bibliography{refs}
 
+%% lastpage 修复: 强制浮动体在 \AtEndDocument 记录 LastPage 之前输出,
+%% 否则文末图页不计入页脚 'Page N of M' 总数 (R8 视觉验收发现)
+\clearpage
 \end{document}

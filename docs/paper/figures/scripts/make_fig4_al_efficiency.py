@@ -68,7 +68,7 @@ for arm in SERIES:
 CHANCE_PCT = 4.5  # 22 类随机猜测基线（K9 实验，HANDOVER §7）
 
 # ---- 绘图 ----
-fig, ax = plt.subplots(figsize=(6.6, 4.4))
+fig, ax = plt.subplots(figsize=(3.42, 2.62))
 fig.patch.set_facecolor("white")
 ax.set_facecolor("white")
 
@@ -83,35 +83,30 @@ for arm, style in SERIES.items():
 
 # 随机猜测基线（22 类 -> 4.5%）
 ax.axhline(CHANCE_PCT, color=NOTE_GRAY, linewidth=1.2, linestyle=(0, (4, 3)), zorder=2)
-ax.text(203, CHANCE_PCT + 1.2, "random-guess baseline 4.5% (22 classes)",
-        ha="right", va="bottom", fontsize=8, color=NOTE_GRAY)
+ax.text(203, CHANCE_PCT - 1.4, "random-guess baseline 4.5% (22 classes)",
+        ha="right", va="top", fontsize=6.2, color=NOTE_GRAY)
 
 # 负结果如实标注（不隐藏不美化）
 ax.annotate("random exceeds uncertainty\nfor budgets \u2265 100\n(cold-start protocol)",
-            xy=(200, stats["random"][200][0]), xytext=(118, 52),
-            fontsize=8, color=NOTE_GRAY, style="italic", ha="left", va="center",
+            xy=(200, stats["random"][200][0]), xytext=(112, 46),
+            fontsize=6.2, color=NOTE_GRAY, style="italic", ha="left", va="center",
             arrowprops=dict(arrowstyle="-", color=NOTE_GRAY, linewidth=0.9,
                             shrinkA=2, shrinkB=4))
 
-ax.set_xlabel("Annotation budget (labeled clips)", fontsize=10)
-ax.set_ylabel("Best validation accuracy (%)", fontsize=10)
+ax.set_xlabel("Annotation budget (labeled clips)", fontsize=7)
+ax.set_ylabel("Best validation accuracy (%)", fontsize=7)
 ax.set_xticks(BUDGETS)
 ax.set_xlim(8, 212)
 ax.set_ylim(0, 100)
 ax.grid(True, color=GRID_GRAY, linewidth=0.8, zorder=0)
 ax.set_axisbelow(True)
-for spine in ax.spines.values():
-    spine.set_linewidth(1.0)
-ax.legend(loc="upper left", frameon=False, fontsize=8.5)
+for side in ('top', 'right'):
+    ax.spines[side].set_visible(False)
+for side in ('left', 'bottom'):
+    ax.spines[side].set_linewidth(1.0)
+ax.tick_params(labelsize=6)
+ax.legend(loc="upper left", frameon=False, fontsize=6.2)
 
-# 口径注记 + 溯源小注：放画布下方负坐标区（bbox tight 自动收入），左右分行防重叠
-fig.text(0.01, -0.055,
-         "Synthetic-layer short-budget protocol \u00b7 best_val_acc on fixed GT val set (n=330) "
-         "\u00b7 mean\u00b1std over 3 seeds \u00b7 cold-start retraining at every budget point",
-         fontsize=6, color=NOTE_GRAY, ha="left", va="top")
-fig.text(0.99, -0.022,
-         "FIGURE_SOURCE: docs/paper/figures/scripts/make_fig4_al_efficiency.py \u00b7 PSD-Framework \u00b7 W22 \u00b7 2026-08-25",
-         fontsize=6, color=NOTE_GRAY, ha="right", va="top")
 
 pdf_path = OUT_DIR / "fig4_al_efficiency.pdf"
 png_path = OUT_DIR / "fig4_al_efficiency.png"

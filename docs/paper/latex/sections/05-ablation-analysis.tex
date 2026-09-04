@@ -39,6 +39,6 @@ Seed-ratio sweeps show prototype quality saturating early ($\leq$1\,pp beyond 25
 
 \begin{figure}[t]
   \centering
-  \includegraphics[width=0.85\linewidth]{fig4_al_efficiency.pdf}
+  \includegraphics[width=\linewidth]{fig4_al_efficiency.pdf}
   \caption{Active-learning efficiency on the synthetic layer (short-budget protocol). Best validation accuracy (22-class top-1 on a fixed ground-truth validation set, $n=330$; mean $\pm$ std over 3 seeds) versus annotation budget, with cold-start retraining at every budget point. Both arms saturate far above the 4.5\% random-guess baseline (22 classes). Under this cold-start protocol, uncertainty sampling (softmax entropy) shows no efficiency advantage over random selection: it does not outperform random at any budget and is exceeded by random for budgets $\geq 100$ (e.g., 69.9\% vs.\ 77.8\% at $b=100$; 80.9\% vs.\ 88.0\% at $b=200$).}\label{fig:al-efficiency}
 \end{figure}

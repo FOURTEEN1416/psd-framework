@@ -188,3 +188,14 @@ YOLO-PetX（IEEE CEECT 2025，全题名经 GitHub 全局代码检索锁定）、
 - 附带：AimCLR++ 77.2→**80.9**（官方仓库证伪，77.2 系 CrosSCLR 串行误引）；79.18 归属措辞；aimclrpp 题名按 CrossRef；NTU60 补引 Shahroudy2016。
 **查无问题维度（明示）**：significant 措辞零滥用/13% vs 6% 无混引/K9 预注册句忠实/E7 n=10 数字逐位吻合。
 **修复后状态**：21 处正文编辑+3 处 bib+8 处 truth 源+2 协议修订+2 报告勘误；重编译验证；证据-主张对齐恢复。
+
+---
+
+## R9-R11 视觉修复轮（2026-09-05，绘图技能加载：diagram-design + scientific-visualization + anti-defensive-writing）
+
+- **触发**：用户令真实加载绘图 skills 优化图。judge 首轮 4/4 FAIL → 根因=大画布缩放致落地字号 2.0-2.6pt（Elsevier 要求 ≥6pt）→ 四图全部按印刷尺寸重设计（figsize 3.4in 1:1）。
+- **R9**：修局部碰撞（fig1 框宽/换行/横幅缩短/标题出线、fig2 hub 缩字+辐条标签外移、fig3 标签门限+agg 下移、fig4 注释移位+字号 6.2）→ judge 复验 fig4 PASS，余 3 局部 fail。
+- **R10**：fig1 输入标签缩短、fig2 辐条标签贴 hub 外沿+站盒 23、fig3 agg 移左上+caption 删 band-text 承诺。**过程事故**：补丁脚本末段路径错抛异常 → `&&` 链断 → 图未重生成即送 judge → judge 报"修复未落地"（judge 正确）。教训：**复验前必须验证工件时间戳/内容确实更新**（pymupdf 提取 PDF 文本核对），不能假设脚本跑了。
+- **R11**：重生成+重编译+pymupdf 核对嵌入内容后送 judge → **4/4 PASS，视觉门通过**。
+- **anti-defensive-writing 对新增段落复查**：E7b/E9 新披露句逐句归类=第 3/5 类（真实方法学限定/基于证据的限定），按 Preserve Necessary Precision 铁律全部保留；无第 1/6 类（不必要免责/冗余澄清）命中——本轮修复本身是"加必要披露"，非防御性对冲。
+- 引用数字清扫（R8 续）：BCST-GCN 94.43→95.36（张冠李戴证伪）、Grimm USD 12,000→tens of thousands（原文无此数）、AK 329/APTv2 83,304/≈4.6 帧三处归属措辞改"本仓实测"口径、grimm bib 补 DOI/volume/pages、NTU60 补引 Shahroudy2016、AimCLR++ 77.2→80.9。

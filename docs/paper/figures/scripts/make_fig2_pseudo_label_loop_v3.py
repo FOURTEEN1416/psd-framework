@@ -25,17 +25,17 @@ SOFT = "#9CA3AF"        # write-back 辐条
 ACCENT = "#C2410C"      # focal（分叉判断）
 ACCENT_TINT = "#FFE3DA"
 C_TEXT = "#111111"
-C_PHYS_EDGE = "#0E7490"  # 青描边（人工/种子侧 station 描边）
-C_PHYS_FILL = "#DAFFFF"
+C_PHYS_EDGE = "#6B7280"  # 中性灰描边（人工环节; 青保留给 fig1 物理层, 跨图语义不冲突）
+C_PHYS_FILL = "#F3F4F6"
 C_SEM_FILL = "#FFE3DA"
 C_SEM_EDGE = "#C2410C"
 
 # ---- 几何参数（type-loop §2） ----
 N = 6
 CX, CY = 50.0, 33.0
-R = 22.0
+R = 25.0
 ST_W, ST_H = 21.0, 8.6
-HUB_W, HUB_H = 20.0, 11.0
+HUB_W, HUB_H = 17.0, 9.5
 MARKER_OVERRHANG = 0.6
 
 STATIONS = [
@@ -151,9 +151,9 @@ for k, (name, sub, spoke_label, focal, manual) in enumerate(STATIONS):
 ax.add_patch(FancyBboxPatch((CX - HUB_W/2, CY - HUB_H/2), HUB_W, HUB_H,
                             boxstyle="round,pad=0.15,rounding_size=1.2",
                             facecolor=INK, edgecolor=INK, linewidth=1.5))
-ax.text(CX, CY + 1.6, "Prototypes $P$ +", ha="center", va="center", fontsize=9.2,
+ax.text(CX, CY + 1.6, "Prototypes $P$ +", ha="center", va="center", fontsize=8.6,
         color=PAPER, fontweight="bold")
-ax.text(CX, CY - 1.8, "classifier $\\Omega$  (state)", ha="center", va="center", fontsize=9.2,
+ax.text(CX, CY - 1.8, "classifier $\\Omega$  (state)", ha="center", va="center", fontsize=8.6,
         color=PAPER)
 
 # ---- 站盒（最后画, 盖住弧线溢出） ----
@@ -171,9 +171,9 @@ for k, (name, sub, spoke_label, focal, manual) in enumerate(STATIONS):
 
 # ---- 图例（侧注: 颜色语义） ----
 ax.plot([1.5, 4.5], [64.0, 64.0], color=C_PHYS_EDGE, lw=2.0)
-ax.text(5.2, 64.0, "human / seed side", fontsize=7.4, color=C_TEXT, va="center")
+ax.text(5.2, 64.0, "human-in-the-loop step", fontsize=7.4, color=C_TEXT, va="center")
 ax.plot([1.5, 4.5], [61.8, 61.8], color="#C2410C", lw=2.0)
-ax.text(5.2, 61.8, "automated learning side", fontsize=7.4, color=C_TEXT, va="center")
+ax.text(5.2, 61.8, "automated learning step", fontsize=7.4, color=C_TEXT, va="center")
 ax.plot([1.5, 4.5], [59.6, 59.6], color=SOFT, lw=1.4, linestyle=(0, (5, 4)))
 ax.text(5.2, 59.6, "write-back to shared state", fontsize=7.4, color=C_TEXT, va="center")
 
