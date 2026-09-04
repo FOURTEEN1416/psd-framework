@@ -1,0 +1,60 @@
+{
+  "date": "2026-09-05T02:01:09",
+  "holm": {
+    "family_p10_v1tier": {
+      "raw": {
+        "warm_vs_aimclr_spc2_top1": 0.002,
+        "warm_vs_aimclr_spc2_macro_f1": 0.7695,
+        "warm_vs_aimclr_spc4_top1": 0.0156,
+        "warm_vs_aimclr_spc4_macro_f1": 0.084,
+        "warm_vs_scratch_spc2_top1": 0.002,
+        "warm_vs_scratch_spc2_macro_f1": 0.002
+      },
+      "corrected": {
+        "warm_vs_aimclr_spc2_top1": 0.012,
+        "warm_vs_scratch_spc2_top1": 0.012,
+        "warm_vs_scratch_spc2_macro_f1": 0.012,
+        "warm_vs_aimclr_spc4_top1": 0.0468,
+        "warm_vs_aimclr_spc4_macro_f1": 0.168,
+        "warm_vs_aimclr_spc2_macro_f1": 0.7695
+      }
+    },
+    "family_p12_v2tier": {
+      "raw": {
+        "warm_vs_aimclr_spc2_top1": 0.002,
+        "warm_vs_aimclr_spc2_macro_f1": 0.002,
+        "warm_vs_aimclr_spc4_top1": 0.002,
+        "warm_vs_aimclr_spc4_macro_f1": 0.002,
+        "warm_vs_scratch_spc2_top1": 0.002,
+        "warm_vs_scratch_spc2_macro_f1": 0.002
+      },
+      "corrected": {
+        "warm_vs_aimclr_spc2_top1": 0.012,
+        "warm_vs_aimclr_spc2_macro_f1": 0.012,
+        "warm_vs_aimclr_spc4_top1": 0.012,
+        "warm_vs_aimclr_spc4_macro_f1": 0.012,
+        "warm_vs_scratch_spc2_top1": 0.012,
+        "warm_vs_scratch_spc2_macro_f1": 0.012
+      }
+    },
+    "method": "Holm-Bonferroni step-down within each experiment family (m=6 each), monotonicity enforced",
+    "note": "exact Wilcoxon p from n=10 sign patterns: 10-0-0 -> 2/2^10=0.001953; 7-0-3 -> 2/2^7=0.015625"
+  },
+  "eightclass_control": {
+    "method": "v1 full-supervision arm per-class accuracies (p07 JSON, deterministic single run) reweighted by v1 validation support counts restricted to the 8 classes present in v2; NOT a re-run of the model on v2 clips",
+    "v1_full_8class_top1": 0.2596,
+    "v1_val_support_8cls": 52,
+    "v1_val_majority_8cls": 0.3077,
+    "v2_full_top1": 0.375,
+    "same_space_delta_pp": 11.54,
+    "above_chance_1_8": {
+      "v1_8cls": 13.5,
+      "v2": 25.0
+    },
+    "above_majority": {
+      "v1_8cls": -4.8,
+      "v2": 3.1
+    },
+    "residual_confound_disclosed": "v1(8cls) evaluates on v1's 52 val clips, v2 on its own 96 val clips; the control removes the chance-rate confound but not the clip-set difference"
+  }
+}

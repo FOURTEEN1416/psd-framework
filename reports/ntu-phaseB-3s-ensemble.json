@@ -1,0 +1,34 @@
+{
+  "protocol": "3s-AimCLR linear-eval score ensemble (alpha joint0.6/bone0.6/motion0.4; port of external/AimCLR/ensemble_ntu_cs.py with key-aligned hardening)",
+  "top1": 0.7797052222963547,
+  "top5": 0.9577849214532662,
+  "n": 16487,
+  "alpha": {
+    "joint": 0.6,
+    "bone": 0.6,
+    "motion": 0.4
+  },
+  "stream_paths": {
+    "joint": "runs/ntu_phaseB/lineareval_joint/test_result.pkl",
+    "bone": "runs/ntu_phaseB/lineareval_bone/test_result.pkl",
+    "motion": "runs/ntu_phaseB/lineareval_motion/test_result.pkl"
+  },
+  "per_stream": {
+    "joint": {
+      "best_top1": 74.3,
+      "last_top1": 74.2,
+      "work_dir": "runs\\ntu_phaseB\\lineareval_joint"
+    },
+    "bone": {
+      "best_top1": 71.51,
+      "last_top1": 71.15,
+      "work_dir": "runs\\ntu_phaseB\\lineareval_bone"
+    },
+    "motion": {
+      "best_top1": 67.84,
+      "last_top1": 67.63,
+      "work_dir": "runs\\ntu_phaseB\\lineareval_motion"
+    }
+  },
+  "generated_at": "2026-09-02T14:23:21+08:00"
+}

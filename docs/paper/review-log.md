@@ -199,3 +199,28 @@ YOLO-PetX（IEEE CEECT 2025，全题名经 GitHub 全局代码检索锁定）、
 - **R11**：重生成+重编译+pymupdf 核对嵌入内容后送 judge → **4/4 PASS，视觉门通过**。
 - **anti-defensive-writing 对新增段落复查**：E7b/E9 新披露句逐句归类=第 3/5 类（真实方法学限定/基于证据的限定），按 Preserve Necessary Precision 铁律全部保留；无第 1/6 类（不必要免责/冗余澄清）命中——本轮修复本身是"加必要披露"，非防御性对冲。
 - 引用数字清扫（R8 续）：BCST-GCN 94.43→95.36（张冠李戴证伪）、Grimm USD 12,000→tens of thousands（原文无此数）、AK 329/APTv2 83,304/≈4.6 帧三处归属措辞改"本仓实测"口径、grimm bib 补 DOI/volume/pages、NTU60 补引 Shahroudy2016、AimCLR++ 77.2→80.9。
+
+---
+
+## R12 全文三维度对抗审稿轮（2026-09-05，工具箱技能 ars-adversarial-reviewer + scholar-critique-manuscript；三独立 agent 并行：新颖性/统计方法/可复现工件）
+
+**新颖性线（4 MAJOR + 3 MINOR，全部修复）**：
+- 首次性主张被 arXiv 2603.06201（Point-Supervised Skeleton Action Segmentation，原型伪标签+聚类，时序骨架）实质逼近——**本会话 arXiv API 独立复核 6 篇新引全部真实**（含 ID→标题精确映射，防 agent 幻觉引入假引用）。修复：§2.3 增最近邻区分句（"claim firstness for that combination, not for prototype pseudo-labels per se"）、Intro bullet 2 加 to-our-knowledge + 不可排除未发表工作、highlights.tex 恢复 hedge（此前与 main.tex 版内不同步=独立文件无限定断言）。
+- "Supplementary Material" 三次引用但附录被注释不存在 → **启用双附录**：app:novelty（14+1 候选英文矩阵表）+ app:repro（真实脚本名复现链，逐一核对存在性）。
+- §2.1 绝对 gap 句被 2509.12193（灵长域自适应预训练）/2507.09513/2207.10553 击穿 → 软化+补引；§2.2 骨架 MAE/foundation model 线（2209.02399/2508.12586）整段缺席 → 补入并正交性区分（冻结的是物理编码器，可修订的是语义层，度量是迁移成本非表征质量）。
+- Intro "cold-start near chance at 20 clips" 无落点 → 补 w23 实测 ~7.8% 对照入句；"≈0.30"→0.32（压低 null 放大表观增益，违反自家数字纪律）。
+
+**统计线（1 CRITICAL + 3 MAJOR + 1 MINOR）**：
+- **CRITICAL：§4.2 声称 Holm-Bonferroni 校正但从未执行**——修复=真做：`scripts/run_r12_artifacts.py` 产出 `reports/r12-holm-eightclass-2026-09-05.json`，p10 族（m=6）校正后 spc2 top1=0.012/spc4 top1=0.047（仍显著）/mf1 parity=0.77，p12 族全 0.012；正文改印校正 p；"fold-level"→"seed-level"。
+- 25.96% 无工件+措辞失实（"re-scoring"实为 per-class 重组）→ 工件入仓 + 正文改 "reweighting...on v1's validation clips" + 披露残余 clip-set 混淆。
+- E9 置信门接受 ~95% 池——"confidence-filtered"近恒等 → 正文披露 + **新增 L11**（Ten→Eleven limitations）；40,091 vs 官方 40,128 差异披露。
+- "statistically equivalent"（E5/结论）→ "inside the pre-registered noise band"（非 TOST 不借术语）。
+
+**可复现线（4 MAJOR + 2 MINOR）**：
+- **77.97% 证据 JSON 从未 commit**（仅存 W33 worktree）→ 已拷入 `reports/ntu-phaseB-3s-ensemble.json`（top1=0.7797/top5=0.9578/n=16487/三流 74.3/71.51/67.84 与正文逐位一致）。
+- "committed before the build/experiment" 被 git 时间戳证伪（协议与结果同批 commit）→ 措辞降级 "frozen before the build (protocol and results landed in the same repository batch)"——预注册实质（构建前冻结）保留，可验证性声称诚实化。
+- "one-command chains" 对审稿人不成立（硬编码 k9 私有仓路径+权重不入库）→ DA 措辞改"released scripts + reproduction appendix + 外部数据按许可自取"；README 增 Reproduction 节；app:repro 列全链真实脚本名。
+- 1.62×→1.61×（3 处，选择性进位）；96.6% 补 "single run; ±0.5pp observed"。
+
+**验证**：20 项程序化断言全过（含 77.97 可追/工件存在/措辞残留清零）；编译 29 页零错误零 undefined（附录 +2 页，仍在 PR 20-35 页窗口内）。
+**判定**：R12 前=Major Revision 级（Holm 虚假声称+无工件数字+证据缺失为三大硬伤）→ 修复后证据-主张对齐恢复，且新增 6 条真实引用强化文献定位。

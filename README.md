@@ -53,3 +53,7 @@ reports/        # 评估报告归档
 - 第三方许可审计清单见 [LICENSE](LICENSE#third-party-notice第三方许可审计清单)
 - 训练权重研究教育用途；数据集均不随包分发（见论文 Data Availability 声明）
 - 开源时机：论文投稿时随代码公开（复现主张）
+
+## Reproduction
+
+论文全部报告数字可由本仓库复现：外部数据集按各自许可获取（InterPet4D / Animal Kingdom / APTv2 / NTU60 frame-50），派生骨架由发布脚本从原始数据再生成（不随包分发）。完整命令链见论文附录 B（Reproduction chain）与 reports/ 下各实验报告；数据路径常量集中在 scripts/run_p05_public_real_full12.py 顶部常量块（META/TRAIN_CSV/VIDEO_DIR 等），按自身数据位置修改后即可运行下游链。预训练权重不入库（许可与体积），训练命令见附录 B。
