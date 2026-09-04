@@ -1,0 +1,441 @@
+{
+  "date": "2026-09-04T17:56:02",
+  "layer": "public_real",
+  "protocol": "identical to p07 E7/E8 end-to-end pipeline; ONLY backbone init replaced: AimCLR encoder_q (InterPet4D SSL) instead of PSD warm (Y_CKPT AK-22 supervised)",
+  "fairness_notes": [
+    "each arm uses its native preprocessing (AimCLR: NTU-view + sequence norm; PSD: raw (30,24,3))",
+    "AimCLR pretrain source is mocap (domain gap to in-the-wild AK disclosed); this arm is a generic-SSL transfer lower-bound reference, not AimCLR best-tuned",
+    "scratch arm numbers quoted from p07 report, not re-run"
+  ],
+  "config_echo": {
+    "pkl": "D:\\Desktop\\psd-framework\\runs\\public_real_dataset\\full12_T30.pkl",
+    "aimclr_ckpt": "D:\\Desktop\\psd-framework\\runs\\p01_aimclr_pretext\\epoch120_model.pt",
+    "y_ckpt_for_reference": "D:\\Desktop\\psd-framework\\runs\\p05_stgcn_bc_full\\best.pt",
+    "seeds": [
+      42,
+      43,
+      44
+    ],
+    "n_clips": 197,
+    "classes": [
+      "apprehend",
+      "bark",
+      "bite",
+      "jump",
+      "retrieve",
+      "sit",
+      "stay",
+      "track",
+      "watch"
+    ]
+  },
+  "runs": [
+    {
+      "arm": "aimclr",
+      "spc": 2,
+      "seed": 42,
+      "n_seeds": 18,
+      "n_pool": 109,
+      "tau_star": 0.1225,
+      "rounds": 7,
+      "stop": "budget",
+      "top1": 0.2143,
+      "macro_f1": 0.146,
+      "per_class": {
+        "apprehend": {
+          "support": 1,
+          "acc": 0.0
+        },
+        "jump": {
+          "support": 8,
+          "acc": 0.125
+        },
+        "sit": {
+          "support": 2,
+          "acc": 0.5
+        },
+        "stay": {
+          "support": 16,
+          "acc": 0.125
+        },
+        "track": {
+          "support": 4,
+          "acc": 0.0
+        },
+        "watch": {
+          "support": 14,
+          "acc": 0.5714
+        }
+      },
+      "budget": "spc2"
+    },
+    {
+      "arm": "aimclr",
+      "spc": 2,
+      "seed": 43,
+      "n_seeds": 18,
+      "n_pool": 107,
+      "tau_star": 0.2396,
+      "rounds": 7,
+      "stop": "budget",
+      "top1": 0.3214,
+      "macro_f1": 0.187,
+      "per_class": {
+        "apprehend": {
+          "support": 1,
+          "acc": 0.0
+        },
+        "jump": {
+          "support": 8,
+          "acc": 0.125
+        },
+        "sit": {
+          "support": 2,
+          "acc": 0.5
+        },
+        "stay": {
+          "support": 16,
+          "acc": 0.375
+        },
+        "track": {
+          "support": 4,
+          "acc": 0.0
+        },
+        "watch": {
+          "support": 14,
+          "acc": 0.7143
+        }
+      },
+      "budget": "spc2"
+    },
+    {
+      "arm": "aimclr",
+      "spc": 2,
+      "seed": 44,
+      "n_seeds": 18,
+      "n_pool": 80,
+      "tau_star": 0.6184,
+      "rounds": 5,
+      "stop": "precision_drop",
+      "top1": 0.2857,
+      "macro_f1": 0.1232,
+      "per_class": {
+        "apprehend": {
+          "support": 1,
+          "acc": 0.0
+        },
+        "jump": {
+          "support": 8,
+          "acc": 0.25
+        },
+        "sit": {
+          "support": 2,
+          "acc": 0.0
+        },
+        "stay": {
+          "support": 16,
+          "acc": 0.3125
+        },
+        "track": {
+          "support": 4,
+          "acc": 0.0
+        },
+        "watch": {
+          "support": 14,
+          "acc": 0.6429
+        }
+      },
+      "budget": "spc2"
+    },
+    {
+      "arm": "aimclr",
+      "spc": 4,
+      "seed": 42,
+      "n_seeds": 35,
+      "n_pool": 9,
+      "tau_star": 0.8278,
+      "rounds": 3,
+      "stop": "precision_drop",
+      "top1": 0.125,
+      "macro_f1": 0.0907,
+      "per_class": {
+        "apprehend": {
+          "support": 1,
+          "acc": 0.0
+        },
+        "jump": {
+          "support": 8,
+          "acc": 0.375
+        },
+        "sit": {
+          "support": 2,
+          "acc": 1.0
+        },
+        "stay": {
+          "support": 16,
+          "acc": 0.0
+        },
+        "track": {
+          "support": 4,
+          "acc": 0.0
+        },
+        "watch": {
+          "support": 14,
+          "acc": 0.1429
+        }
+      },
+      "budget": "spc4"
+    },
+    {
+      "arm": "aimclr",
+      "spc": 4,
+      "seed": 43,
+      "n_seeds": 35,
+      "n_pool": 82,
+      "tau_star": 0.2612,
+      "rounds": 3,
+      "stop": "precision_drop",
+      "top1": 0.2679,
+      "macro_f1": 0.1185,
+      "per_class": {
+        "apprehend": {
+          "support": 1,
+          "acc": 0.0
+        },
+        "jump": {
+          "support": 8,
+          "acc": 0.375
+        },
+        "sit": {
+          "support": 2,
+          "acc": 0.0
+        },
+        "stay": {
+          "support": 16,
+          "acc": 0.25
+        },
+        "track": {
+          "support": 4,
+          "acc": 0.0
+        },
+        "watch": {
+          "support": 14,
+          "acc": 0.5714
+        }
+      },
+      "budget": "spc4"
+    },
+    {
+      "arm": "aimclr",
+      "spc": 4,
+      "seed": 44,
+      "n_seeds": 35,
+      "n_pool": 83,
+      "tau_star": 0.2271,
+      "rounds": 3,
+      "stop": "precision_drop",
+      "top1": 0.3393,
+      "macro_f1": 0.1793,
+      "per_class": {
+        "apprehend": {
+          "support": 1,
+          "acc": 0.0
+        },
+        "jump": {
+          "support": 8,
+          "acc": 0.125
+        },
+        "sit": {
+          "support": 2,
+          "acc": 0.5
+        },
+        "stay": {
+          "support": 16,
+          "acc": 0.5
+        },
+        "track": {
+          "support": 4,
+          "acc": 0.0
+        },
+        "watch": {
+          "support": 14,
+          "acc": 0.6429
+        }
+      },
+      "budget": "spc4"
+    },
+    {
+      "arm": "aimclr",
+      "spc": -1,
+      "seed": 42,
+      "budget": "full",
+      "n_seeds": 141,
+      "n_pool": 0,
+      "tau_star": null,
+      "rounds": 0,
+      "stop": "full-supervision(no pseudo-label)",
+      "top1": 0.3036,
+      "macro_f1": 0.1825,
+      "per_class": {
+        "apprehend": {
+          "support": 1,
+          "acc": 0.0
+        },
+        "jump": {
+          "support": 8,
+          "acc": 0.125
+        },
+        "sit": {
+          "support": 2,
+          "acc": 0.5
+        },
+        "stay": {
+          "support": 16,
+          "acc": 0.4375
+        },
+        "track": {
+          "support": 4,
+          "acc": 0.0
+        },
+        "watch": {
+          "support": 14,
+          "acc": 0.5714
+        }
+      }
+    },
+    {
+      "arm": "aimclr",
+      "spc": -1,
+      "seed": 43,
+      "budget": "full",
+      "n_seeds": 141,
+      "n_pool": 0,
+      "tau_star": null,
+      "rounds": 0,
+      "stop": "full-supervision(no pseudo-label)",
+      "top1": 0.3036,
+      "macro_f1": 0.1825,
+      "per_class": {
+        "apprehend": {
+          "support": 1,
+          "acc": 0.0
+        },
+        "jump": {
+          "support": 8,
+          "acc": 0.125
+        },
+        "sit": {
+          "support": 2,
+          "acc": 0.5
+        },
+        "stay": {
+          "support": 16,
+          "acc": 0.4375
+        },
+        "track": {
+          "support": 4,
+          "acc": 0.0
+        },
+        "watch": {
+          "support": 14,
+          "acc": 0.5714
+        }
+      }
+    },
+    {
+      "arm": "aimclr",
+      "spc": -1,
+      "seed": 44,
+      "budget": "full",
+      "n_seeds": 141,
+      "n_pool": 0,
+      "tau_star": null,
+      "rounds": 0,
+      "stop": "full-supervision(no pseudo-label)",
+      "top1": 0.3036,
+      "macro_f1": 0.1825,
+      "per_class": {
+        "apprehend": {
+          "support": 1,
+          "acc": 0.0
+        },
+        "jump": {
+          "support": 8,
+          "acc": 0.125
+        },
+        "sit": {
+          "support": 2,
+          "acc": 0.5
+        },
+        "stay": {
+          "support": 16,
+          "acc": 0.4375
+        },
+        "track": {
+          "support": 4,
+          "acc": 0.0
+        },
+        "watch": {
+          "support": 14,
+          "acc": 0.5714
+        }
+      }
+    }
+  ],
+  "agg": {
+    "aimclr_spc2": {
+      "n": 3,
+      "top1_mean": 0.2738,
+      "top1_std": 0.0445,
+      "macro_f1_mean": 0.1521,
+      "macro_f1_std": 0.0264
+    },
+    "aimclr_spc4": {
+      "n": 3,
+      "top1_mean": 0.2441,
+      "top1_std": 0.0891,
+      "macro_f1_mean": 0.1295,
+      "macro_f1_std": 0.037
+    },
+    "aimclr_spc-1": {
+      "n": 3,
+      "top1_mean": 0.3036,
+      "top1_std": 0.0,
+      "macro_f1_mean": 0.1825,
+      "macro_f1_std": 0.0
+    }
+  },
+  "p07_reference_agg": {
+    "warm_spc2": {
+      "n": 6,
+      "top1_mean": 0.3095,
+      "top1_std": 0.0223,
+      "macro_f1_mean": 0.1244,
+      "macro_f1_std": 0.0246
+    },
+    "warm_spc4": {
+      "n": 3,
+      "top1_mean": 0.3214,
+      "top1_std": 0.0253,
+      "macro_f1_mean": 0.1422,
+      "macro_f1_std": 0.0058
+    },
+    "warm_spc-1": {
+      "n": 3,
+      "top1_mean": 0.3393,
+      "top1_std": 0.0,
+      "macro_f1_mean": 0.1465,
+      "macro_f1_std": 0.0
+    },
+    "scratch_spc2": {
+      "n": 3,
+      "top1_mean": 0.25,
+      "top1_std": 0.0,
+      "macro_f1_mean": 0.0451,
+      "macro_f1_std": 0.0
+    },
+    "scratch_spc4": null,
+    "scratch_spc-1": null
+  },
+  "wall_clock_sec": 20.3
+}
