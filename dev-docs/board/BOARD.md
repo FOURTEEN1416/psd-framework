@@ -169,3 +169,4 @@ PermissionError: [WinError 32] 另一个程序正在使用此文件，进程无�
 [09-03 23:40][coord] (ALL) FIX: 333errors彻底修复(用户指出我当时口径绕过不对)——根因=releases dated快照被收集器扫描+catalog两新条目schema违规+11条绘图域欠账;修复=pytest.ini限定收集范围+catalog一致性改造;双口径验证:仓库根285 passed/工具箱242 passed;临时脚本已清
 [09-04 00:30][coord] (ALL) FIX: 图表质量轮收官——fig1 v4+fig2 v2 重绘(scientific-visualization规程):箭头语义/接口带通道/乱码/压字/闭环/配色统一全修;三表tabularx版心适配(原tab1/2右列裁切,tab3碎行12段全清);21页零错误(746e619)。新脚本:figures/scripts/make_fig{1,2}*v2*.py
 [09-04 08:10][coord] (ALL) FIX: 复核轮+图位修正——①cas-sc类内float警告最小复现判定为模板噪声(空文档也触发,非源码问题);②fig1迁01-intro尾修p22悬空;③fig2闭环图入稿03-method(此前未引用的缺口补齐);④22页零错零undefined,Figure1@p19/Figure2@p20落页目检通过
+[09-04 09:00][coord] (ALL) MILESTONE: Round4收官——①fig2 v3 Loop flywheel版入稿(diagram-design规范:6站+hub累积状态+4辐条+青橙语义,渲染目检p20通过);②fig3入稿E2(p22,定性边界+聚合柱状);③引用双核查:checker 0/0+双向对账零缺失;④方向核定:三真源逐条对账无偏离(用户质疑处置完毕);⑤23页零错误(de70827+cf53fe3系列)。剩余=用户终审项(作者名单搁置/GenAI确认/许可截图)+Scholar16条人工
