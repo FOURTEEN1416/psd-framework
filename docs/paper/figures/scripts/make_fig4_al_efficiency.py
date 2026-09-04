@@ -68,7 +68,8 @@ for arm in SERIES:
 CHANCE_PCT = 4.5  # 22 类随机猜测基线（K9 实验，HANDOVER §7）
 
 # ---- 绘图 ----
-fig, ax = plt.subplots(figsize=(3.42, 2.62))
+fig, axes = plt.subplots(2, 1, figsize=(3.42, 4.45), sharex=True)
+ax = axes[0]
 fig.patch.set_facecolor("white")
 ax.set_facecolor("white")
 
@@ -83,8 +84,9 @@ for arm, style in SERIES.items():
 
 # 随机猜测基线（22 类 -> 4.5%）
 ax.axhline(CHANCE_PCT, color=NOTE_GRAY, linewidth=1.2, linestyle=(0, (4, 3)), zorder=2)
-ax.text(203, CHANCE_PCT - 1.4, "random-guess baseline 4.5% (22 classes)",
-        ha="right", va="top", fontsize=6.2, color=NOTE_GRAY)
+ax.text(203, 2.2, "random-guess baseline 4.5% (22 classes)",
+        ha="right", va="center", fontsize=6.2, color=NOTE_GRAY,
+        bbox=dict(facecolor="white", edgecolor="none", pad=1.0))
 
 # 负结果如实标注（不隐藏不美化）
 ax.annotate("random exceeds uncertainty\nfor budgets \u2265 100\n(cold-start protocol)",
@@ -93,8 +95,8 @@ ax.annotate("random exceeds uncertainty\nfor budgets \u2265 100\n(cold-start pro
             arrowprops=dict(arrowstyle="-", color=NOTE_GRAY, linewidth=0.9,
                             shrinkA=2, shrinkB=4))
 
-ax.set_xlabel("Annotation budget (labeled clips)", fontsize=7)
 ax.set_ylabel("Best validation accuracy (%)", fontsize=7)
+ax.set_title("(a) cold-start scorers", loc="left", fontsize=7)
 ax.set_xticks(BUDGETS)
 ax.set_xlim(8, 212)
 ax.set_ylim(0, 100)
@@ -107,6 +109,39 @@ for side in ('left', 'bottom'):
 ax.tick_params(labelsize=6)
 ax.legend(loc="upper left", frameon=False, fontsize=6.2)
 
+# ---- panel (b): warm-started in-domain scorers (stronger negative evidence, same protocol) ----
+WDATA = ROOT / "reports" / "p05-al-efficiency-warmstart-short-2026-08-25.json"
+assert WDATA.is_file(), f"data missing: {WDATA}"
+wpay = json.loads(WDATA.read_text(encoding="utf-8"))
+axb = axes[1]
+for arm, style in SERIES.items():
+    means = [wpay["curves"][arm][str(b)]["mean"] * 100.0 for b in BUDGETS]
+    stds = [wpay["curves"][arm][str(b)]["std"] * 100.0 for b in BUDGETS]
+    axb.errorbar(BUDGETS, means, yerr=stds,
+                 color=style["color"], marker=style["marker"],
+                 markersize=6, linewidth=1.8, linestyle=style["ls"],
+                 elinewidth=1.1, capsize=4, capthick=1.1,
+                 label=style["label"], zorder=3)
+axb.axhline(CHANCE_PCT, color=NOTE_GRAY, linewidth=1.2, linestyle=(0, (4, 3)), zorder=2)
+axb.annotate("random leads by 4.2–5.0 pp\nfor $b \\geq 50$\n(b=20: shared initial set)",
+             xy=(200, wpay["curves"]["random"]["200"]["mean"] * 100.0), xytext=(60, 55),
+             fontsize=6.2, color=NOTE_GRAY, style="italic", ha="left", va="center",
+             arrowprops=dict(arrowstyle="-", color=NOTE_GRAY, linewidth=0.9,
+                             shrinkA=2, shrinkB=4))
+axb.set_xlabel("Annotation budget (labeled clips)", fontsize=7)
+axb.set_ylabel("Best validation accuracy (%)", fontsize=7)
+axb.set_title("(b) warm-started in-domain scorers", loc="left", fontsize=7)
+axb.set_xticks(BUDGETS)
+axb.set_ylim(0, 100)
+axb.grid(True, color=GRID_GRAY, linewidth=0.8, zorder=0)
+axb.set_axisbelow(True)
+for side in ('top', 'right'):
+    axb.spines[side].set_visible(False)
+for side in ('left', 'bottom'):
+    axb.spines[side].set_linewidth(1.0)
+axb.tick_params(labelsize=6)
+axb.legend(loc="lower right", frameon=False, fontsize=6.2)
+fig.subplots_adjust(hspace=0.35)
 
 pdf_path = OUT_DIR / "fig4_al_efficiency.pdf"
 png_path = OUT_DIR / "fig4_al_efficiency.png"

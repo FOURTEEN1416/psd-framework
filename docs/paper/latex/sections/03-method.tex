@@ -35,12 +35,12 @@ Rule-engine coarse labels over physical priors provide seed anchors $A = \{(e_i,
 
 \subsubsection{Prototype clustering and iterated pseudo-labeling}\label{ssec:proto}
 
-Unlabeled proposals from §\ref{ssec:segmentation} are embedded by $\Phi$ and assigned to their nearest prototype with confidence $\kappa$. Proposals above threshold $\tau$ receive pseudo-labels and join the training pool; prototypes are then re-estimated. Figure~\ref{fig:pseudoloop} depicts the loop and Algorithm~\ref{alg:pseudoloop} summarizes it.
+Unlabeled proposals from §\ref{ssec:segmentation} are embedded by $\Phi$ and assigned to their nearest prototype with confidence $\kappa$. Proposals above the round-adaptive threshold $\tau$ (quantile-targeted on estimated coverage) receive pseudo-labels and join the training pool; prototypes are then re-estimated. Figure~\ref{fig:pseudoloop} depicts the loop and Algorithm~\ref{alg:pseudoloop} summarizes it.
 
 \begin{figure}[t]
   \centering
   \includegraphics[width=\linewidth]{fig2_pseudo_label_loop.pdf}
-  \caption{The anchor-guided pseudo-labeling loop as a flywheel. Stations (clockwise): prototype assignment with confidence $\kappa$; high-confidence proposals ($\kappa \geq \tau$) join the training pool and update classifier $\Omega$; prototypes are re-estimated each round. Low-confidence proposals ($\kappa < \tau$) divert to a human annotation queue (budget $B$ of 100--200 clips), whose verified seeds re-enter the loop. The dark hub marks the shared state (prototypes and classifier) that each pass writes back to; the physics encoder stays frozen. Gray stations are human-in-the-loop steps; orange stations are automated steps (the palette axis is independent of Fig.~\ref{fig:framework}'s layer colors).}\label{fig:pseudoloop}
+  \caption{The anchor-guided pseudo-labeling loop as a flywheel. Stations (clockwise): prototype assignment with confidence $\kappa$; high-confidence proposals ($\kappa \geq \tau$) join the training pool and update classifier $\Omega$; prototypes are re-estimated each round. Low-confidence proposals ($\kappa < \tau$) divert to a human annotation queue (budget $B$ of 100--200 clips), whose verified seeds re-enter the loop. The dark hub marks the shared state (prototypes and classifier) that each pass writes back to; the physics encoder stays frozen. Gray stations are human-in-the-loop steps; orange stations are automated steps (the palette axis is independent of Fig.~\ref{fig:framework}'s layer colors). The annotation queue is a deployment extension of Algorithm~\ref{alg:pseudoloop}; $B$ denotes the human-labeling budget in clips.}\label{fig:pseudoloop}
 \end{figure}
 
 \begin{algorithm}[t]
@@ -54,7 +54,7 @@ Unlabeled proposals from §\ref{ssec:segmentation} are embedded by $\Phi$ and as
   \State $L_{\mathrm{high}} \leftarrow \{u : \kappa(u) \geq \tau\}$; add pseudo-labeled pairs to pool
   \State update $\Omega$ on seeds $\cup$ pseudo-labeled pool
   \State re-estimate $P$ from embedded features
-\Until{proposal assignment stabilizes or iteration budget reached}
+\Until{proposal assignment stabilizes, the iteration budget is reached, or estimated pseudo-label precision drops}
 \end{algorithmic}
 \end{algorithm}
 
@@ -62,7 +62,7 @@ Design decisions fixed at this stage: confidence filtering uses prototype-margin
 
 \subsubsection{Semi-supervised self-training and small-budget initialization}\label{ssec:selftrain}
 
-Pseudo-labeled coverage is consolidated by temporal contrastive self-training in the spirit of TCL~\citep{singh2021tcl}. To make very small annotation budgets usable, a warm-start protocol initializes this stage from previously trained semantic-layer weights before expansion proceeds within a budget of 100--200 clips.
+Pseudo-labeled coverage is consolidated by temporal contrastive self-training in the spirit of TCL~\citep{singh2021tcl}. To make very small annotation budgets usable, a warm-start protocol initializes this stage from the semantic-layer weights of a full-budget model trained under the previous taxonomy on the same distribution before expansion proceeds within a budget of 100--200 clips. Figure~\ref{fig:pseudoloop} illustrates the complete loop.
 
 \subsection{Decoupling mechanism}\label{ssec:decoupling}
 

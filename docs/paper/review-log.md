@@ -224,3 +224,19 @@ YOLO-PetX（IEEE CEECT 2025，全题名经 GitHub 全局代码检索锁定）、
 
 **验证**：20 项程序化断言全过（含 77.97 可追/工件存在/措辞残留清零）；编译 29 页零错误零 undefined（附录 +2 页，仍在 PR 20-35 页窗口内）。
 **判定**：R12 前=Major Revision 级（Holm 虚假声称+无工件数字+证据缺失为三大硬伤）→ 修复后证据-主张对齐恢复，且新增 6 条真实引用强化文献定位。
+
+---
+
+## R13 恶意评审轮 + R14 图终验轮（2026-09-05，ars-adversarial-reviewer 三人格机制 + scholar-critique-manuscript/figures 框架）
+
+**R13a 恶意全文（Reviewer-2 人格，回归攻击 R12 修复+全文遗留）**：2 CRITICAL + 19 MAJOR + 12 MINOR，逐条独立验证后全部处置：
+- CRITICAL-1 §2.2 新句自带 "Supplementary Material" 死指针（R12 修 §2.3 时漏改 §2.2）→ 改 Appendix ref。
+- CRITICAL-2 E1 "±4.45%" 与存档 JSON 重算不符（fold std ddof=1=4.04）→ 改 ±4.04 并注明口径。number-index 的 quickref 值系历史错误——**头条不确定度也须对账**。
+- MAJOR 全修：novelty 计数三方互斥（14/18/19→统一 18+1=19 行口径）；复现链幽灵 E8/合成层整层缺链/NTU 错序→重写；L3 与已完成 re-verification 矛盾→改写；"full taxonomy coverage"摘要/结论升格→toward；"any recognition task"→限定两域已验证+设计主张；E7 "confirms"→"supports on top-1"；摘要 kNN 补 subject-identification probe 标注；12-class→12-class protocol 9-with-samples；Algorithm 停止条件补 precision-drop、τ 注明自适应；fig2 队列=部署扩展+B 定义入 caption；44.90 补单 seed+±4.81；0.691 补 r1 操作点+停止规则；purity 口径纠错（InterPet4D 7 标签空间非 12-class）+ majority 基线 0.4858 主动披露；pool accuracy→precision 统一；"below both arms' std"→within one arm's；fig4 种子级 "3/3" 证伪（b=100 seed43 entropy 赢）→2/3+caption "no detectable advantage"；warm-start 82% 先验来源（全监督同分布模型）披露；C1-C7 标签映射句入 §4.1；三图正文引用补齐（fig:pseudoloop/fig:budget/fig:al-efficiency 原零引用=期刊硬伤）。
+- 干净维度如实记录：Holm p 逐位一致、62 处 \ref 零悬空、34 cite 全在 bib、无 "we will" 残留、"Eleven limitations" 计数正确。
+
+**R13b 图内容批判（scholar-critique-figures 框架）**：1C+10M——fig4 种子断言（已并入 R13a 修）；fig2 辐条语义错误（全 6 站画写回辐条，但 Assign/AL queue 不写状态）→ 只保留 Ω/P/A 三辐条、κ 路由标签移环弧、focal 移至 pool 站；fig1 缺 warm-start 元素+接口箭头落错盒（指 self-training 应为 clustering）→ 双修；fig3 正文 zoom 从句失效→删；**新增 Figure 4 budget-retention 散点**（论文核心低资源主张首次获得单图视觉证据，5 点 4 层直读 JSON）；fig4-AL 增面板 (b) warm-start 臂（更强负证据入图）。
+
+**R14 视觉终验（judge 三轮）**：第一轮 4/5 fail（fig1 弧钩残留/fig2 hub 裁切+站名溢出/fig4 y 轴 `\%`+图例碰撞/fig5 注释穿线+caption 溢出）→ 修复中踩坑：**副题删除正则误吞 PDF savefig 行**（PNG 更新 PDF 未写，judge 正确报"未落地"——复验再次证明工件时间戳/内容核验不可省）；第二轮 fig4 图例右上仍撞（窄图内无空位）→ 移轴外下方两列；第三轮 **5/5 全过，视觉门通过**。页脚 -1 偏移为 cas-sc 首页不编号既有行为，非缺陷。
+
+**编译**：31 页零错误零未定义引用。

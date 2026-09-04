@@ -28,16 +28,16 @@ N = 6
 CX, CY = 50.0, 42.0
 R = 25.0
 ST_W, ST_H = 23.0, 7.4
-HUB_W, HUB_H = 16.5, 8.0
+HUB_W, HUB_H = 16.5, 9.0
 
 STATIONS = [
     # (name, sublabel, spoke_label or None, focal, manual)
-    ("Assign proposals", "conf. $\\kappa$", None, True, False),
-    ("Pseudo-label pool", "$\\kappa \\geq \\tau$", "HIGH", False, False),
-    ("Update $\\Omega$", "seeds $\\cup$ pool", "POOL", False, False),
-    ("Re-estimate $P$", "each round", "RE-EST", False, False),
-    ("AL queue", "human, $\\leq$B clips", "$\\kappa<\\tau$", False, True),
-    ("Verified seeds", "queue output", "VERIFIED", False, True),
+    ("Assign proposals", "conf. $\\kappa$", None, False, False),
+    ("Label pool", "$\\kappa \\geq \\tau$", None, True, False),
+    ("Update $\\Omega$", "seeds $\\cup$ pool", "$\\Omega$", False, False),
+    ("Re-estimate $P$", "each round", "$P$", False, False),
+    ("AL queue", "human, $\\leq$B clips", None, False, True),
+    ("Verified seeds", "queue output", "$\\mathcal{A}$", False, True),
 ]
 
 fig, ax = plt.subplots(figsize=(3.42, 3.05))
@@ -68,6 +68,14 @@ for k in range(N):
     xt = CX + R * np.cos(np.deg2rad(t1 - 4)); yt = CY + R * np.sin(np.deg2rad(t1 - 4))
     ax.add_patch(FancyArrowPatch((xt, yt), (x1, y1), arrowstyle="-|>",
                                  mutation_scale=7, color=SOFT, lw=1.1, zorder=1))
+    if k == 0:   # Assign -> Pool 弧: 高置信路由
+        am = np.deg2rad((t0 + t1) / 2)
+        ax.text(CX + (R + 4.2) * np.cos(am), CY + (R + 4.2) * np.sin(am),
+                "$\\kappa \geq \\tau$", fontsize=5.8, color="#4B5563", ha="center", va="center")
+    if k == 3:   # Re-estimate -> AL queue 弧: 低置信路由
+        am = np.deg2rad((t0 + t1) / 2)
+        ax.text(CX + (R + 4.2) * np.cos(am), CY + (R + 4.2) * np.sin(am),
+                "$\\kappa < \\tau$", fontsize=5.8, color="#4B5563", ha="center", va="center")
 
 # ---- write-back 辐条（真半径虚线向心） ----
 HUB_HALF = (HUB_W / 2, HUB_H / 2)
@@ -86,8 +94,9 @@ for k, (name, sub, spoke_label, focal, manual) in enumerate(STATIONS):
     start = (cxk - u[0] * d_st, cyk - u[1] * d_st)
     gap = 1.0
     end = (CX + u[0] * (d_hub + gap), CY + u[1] * (d_hub + gap))
-    ax.annotate("", xy=end, xytext=start,
-                arrowprops=dict(arrowstyle="-|>", color=SOFT, lw=0.9, linestyle=(0, (4, 3))))
+    if spoke_label:
+        ax.annotate("", xy=end, xytext=start,
+                    arrowprops=dict(arrowstyle="-|>", color=SOFT, lw=0.9, linestyle=(0, (4, 3))))
     if spoke_label:
         lm = CX + u[0] * (d_hub + gap + 3.6)
         lm_y = CY + u[1] * (d_hub + gap + 3.6)
