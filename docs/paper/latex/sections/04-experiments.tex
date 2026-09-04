@@ -23,6 +23,14 @@ This experiment tests whether self-supervised pretraining on unlabeled quadruped
 \paragraph{E2: unsupervised segmentation quality (C4).}
 This experiment tests whether motion-word quantization cuts continuous streams into behavior-aligned proposals. Under a seeds pseudo-ground-truth protocol, boundary IoU against held-out annotations is \textbf{0.458 $\pm$ 0.049}, versus an equal-segment-count random-cut null of 0.323 $\pm$ 0.022 (Monte-Carlo expectation over 200 random cuts); boundary F1 (0.343) is reported alongside so that no single metric is cherry-picked.
 
+Figure~\ref{fig:segqual} visualizes the resulting boundaries against the seed pseudo-ground-truth on two representative episodes, including a zoomed region where the quantized motion sequence changes regime.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\linewidth]{fig3_segmentation_qualitative.pdf}
+  \caption{Qualitative segmentation boundaries on two episodes of the public-real tier (seed pseudo-ground-truth protocol; matched IoU shown per episode against the equal-segment-count random-cut null). The zoomed region highlights boundary alignment where the quantized motion sequence changes regime.}\label{fig:segqual}
+\end{figure}
+
 \paragraph{E3: anchor-guided label expansion (C5).}
 This experiment tests whether a small rule-engine seed set expands toward taxonomy coverage via iterated pseudo-labeling. Anchor-guided prototype clustering reaches purity \textbf{0.5339} against a 0.3306 random-assignment baseline ($1.62\times$). Injecting 30\% label noise into the seeds degrades purity by only 3.1\,pp (0.5025$\pm$0.0063, still $1.52\times$ baseline), and enlarging the seed ratio from 25\% to 100\% adds at most 1\,pp---prototype quality saturates early, which is what makes a small seed budget practical.
 
