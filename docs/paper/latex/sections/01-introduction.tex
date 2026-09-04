@@ -20,3 +20,9 @@ Our contributions are fourfold:
 \end{enumerate}
 
 Across three data calibers, PSD reaches 96.6\% top-1 on the synthetic 22-class benchmark, and 82.0\% from 20 labeled clips under distribution shift (synthetic-offset tier). It attains 44.9\% on the four-class public-real subset ($1.80\times$ random; severe class imbalance disclosed in Section~\ref{sec:conclusion}), and absorbs a taxonomy transition at $\geq 3\times$ lower wall-clock retraining cost while matching full-retraining accuracy within statistical noise. Figure~\ref{fig:framework} overviews the framework. Section~\ref{sec:related} reviews related work. Section~\ref{sec:method} details the method. Sections~\ref{sec:experiments}--\ref{sec:ablation} report experiments and ablations, and Section~\ref{sec:conclusion} concludes with limitations.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\linewidth]{fig1_framework_overview.pdf}
+  \caption{The PSD framework. A frozen physics layer $\Phi$ (left) turns unlabeled skeleton streams into dynamics embeddings and behavior proposals via self-supervised pretraining and motion-word quantization. A revisable semantic layer $\Omega$ (right) expands rule-engine seeds into taxonomy coverage through anchor-guided clustering with iterated confidence-filtered pseudo-labeling, consolidated by self-training and warm-started small-budget initialization. The layers communicate only through embeddings and proposals, so a taxonomy transition $\mathcal{Y}\to\mathcal{Y}'$ retrains $\Omega$ alone.}\label{fig:framework}
+\end{figure}

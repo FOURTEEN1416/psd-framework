@@ -35,7 +35,13 @@ Rule-engine coarse labels over physical priors provide seed anchors $A = \{(e_i,
 
 \subsubsection{Prototype clustering and iterated pseudo-labeling}\label{ssec:proto}
 
-Unlabeled proposals from §\ref{ssec:segmentation} are embedded by $\Phi$ and assigned to their nearest prototype with confidence $\kappa$. Proposals above threshold $\tau$ receive pseudo-labels and join the training pool; prototypes are then re-estimated. Algorithm~\ref{alg:pseudoloop} summarizes the loop.
+Unlabeled proposals from §\ref{ssec:segmentation} are embedded by $\Phi$ and assigned to their nearest prototype with confidence $\kappa$. Proposals above threshold $\tau$ receive pseudo-labels and join the training pool; prototypes are then re-estimated. Figure~\ref{fig:pseudoloop} depicts the loop and Algorithm~\ref{alg:pseudoloop} summarizes it.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=0.92\linewidth]{fig2_pseudo_label_loop.pdf}
+  \caption{Anchor-guided iterative pseudo-labeling. High-confidence assignments ($\kappa \geq \tau$) join the training pool; low-confidence proposals enter an active-learning queue for human verification. Prototypes are re-estimated each round; the physics encoder stays frozen.}\label{fig:pseudoloop}
+\end{figure}
 
 \begin{algorithm}[t]
 \caption{Anchor-guided iterative pseudo-labeling}\label{alg:pseudoloop}
