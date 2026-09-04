@@ -111,6 +111,15 @@
 - **EP3 天花板检验（判据冻结：≥+3.0pp=数据瓶颈成立）**：v2 full **37.50%** − v1 33.93% = **+3.57pp → DATA_BOTTLENECK_CONFIRMED**——"天花板由数据量主导"从归因辩解升级为预注册检验成立的结论。
 - **EP2 复现+增强（n=10）**：warm spc2 **33.23±3.35**（保留自身全监督 88.6%，绝对预算 2 片段/类=6% 标注比例）；warm vs aimclr top-1 **+12.92pp 10-0-0 p=0.002** 且 **macro-F1 +6.08pp 10-0-0 p=0.002**（v1 的 macro-F1 持平判定为单片段标签结构伪影——一致性门剔除混标段后 AimCLR 少数类预测优势消失: macro-F1 坍缩至 1.71%）；warm vs scratch top-1 +9.79pp p=0.002。
 - 纪律：v1 数字不替换，v2 并列报告禁合并；v2 措辞用 matched absolute budget 禁写 13%。来源：`reports/p12-akv2-replication-2026-09-04.md` + `.json`；驱动 `scripts/run_p12_ak_v2_replicate.py`。
+- **P1.3 端到端微调诊断对照（非预注册终点，control 措辞）**：v2 上解冻骨干端到端 50ep——finetune_full **32.99±3.94 < 冻结头 37.50**（256 段喂不饱骨干梯度路径，过拟合吞掉 pretext 先验）；finetune_spc2 **9.72±1.59** vs warm-start 33.23 = **3.4×**——"天花板非冻结所致"与"解耦设计实证更优"两条防御句的直接数字。来源：`reports/p13-v2-finetune-2026-09-04.md`；驱动 `scripts/run_p13_v2_finetune.py`。
+
+### E9 NTU 低资源保留率 → 支撑 C6 跨域泛化（PSD-NTU-PREREG-001，2026-09-04 实验前冻结）
+*This experiment tests whether the low-resource retention behavior generalizes to the human domain where a published budget reference exists.*
+- 设置: NTU60 xsub joint 流，冻结 epoch300 pretext 骨干 256d 特征（官方 Feeder_single 无增强口径，p14a 导出 40091+16487）；10% 分层子集 seed42 固定=4009 clips；三臂 (c)100% 线性头参照 /(a)10% 线性头 /(b)10%+run_selftrain（与 E7 同函数同参，适配 #1 device=cuda、#2 StandardScaler+LR tol=1e-3 披露随行）。
+- **结果**: (c) **74.45%**（vs 官方 LE 74.30%，Δ0.15pp——管线保真自检通过）；(a) 66.05%（保留 88.7%）；(b) **74.01/74.06/74.25，mean 74.11±0.13 = 保留率 99.5%**。
+- **预注册判据: GENERALIZES（≥90% 线）**。对照 TCL 发表保留率 93.3%（82.7/88.6）——**仅比保留行为不比绝对值**（我们 74.1 < TCL 82.7，冻结探针 vs 细调管线，协议 §1 冻结轴）。次终点 (a)vs(b): 伪标签迭代人体规模贡献 **+8.0pp**，与动物域机制一致。
+- 诚实边界: 池 ~34.4k/seed（近恢复全训练集即机制本身）；NTU 无伪 GT 故池精度未单独评估——主张限于预算保留行为。
+- 来源: `reports/p14-ntu-lowres-2026-09-04.md` + `.json`；驱动 `scripts/run_p14_ntu_featuredump.py` + `run_p14_ntu_lowres.py`；协议 `docs/paper/ntu-lowres-preregistration.md`。
 
 ## 4.4 对比研究（Comparison Studies）
 
@@ -195,3 +204,5 @@
 | v1.3 | 2026-09-04 | **P0.8 同协议消融 + K9 预注册轮**：tab3 新增 −语义warm-start 行（AimCLR@InterPet4D 替代 PSD warm，端到端协议唯一变量替换——top-1 全预算 warm 占优 +3.6/+7.7/+3.6pp、macro-F1 混合如实并报、n=3 未达显著禁写"显著"、mocap 域差与原生预处理公平性披露随行；`reports/p08-aimclr-arm-2026-09-04.md`）；K9 真实域试点结案为**数据物理不存在**（k9 仓 ADR 0008 v1.7 用户 2026-08-19 已确认 682 片段零标注并废弃该路径；生成脚本已删、归一化约定不可核实→无监督域差探针亦放弃，避免预处理污染）——唯一诚实处置 = 预注册协议 `docs/paper/k9-pilot-preregistration.md`（PSD-K9-PREREG-001：双标注 κ≥0.60 门/session 级切分/单一主终点配对判据/禁再分发），§4.1 装配引用句；DA 声明审稿快照由 commit 哈希改为不可变 tag `review-snapshot`（消除自引用死锁） |
 | v1.4 | 2026-09-04 | **P1.0 种子扩容轮**（解除"n=3 未显著"审稿风险）：E7/P0.8 关键对比 n=3→10（驱动 `scripts/run_p10_seedexpansion.py`，特征确定性只重跑协议层，scratch 每 seed 独立随机骨干）——**warm vs aimclr top-1 spc2 +5.89pp 10-0-0 p=0.002 / spc4 +7.32pp p=0.016 全预算显著**；macro-F1 spc2 持平 p=0.77（n=3 反转消解为种子噪声，"多数类锐化权衡"叙事降级）；warm vs scratch +7.32pp/+9.97pp 双显著 p=0.002。**论文主数字切换**: warm@spc2 31.96±2.45=全监督 **94%**（原 91%），Abstract/Intro/§4.3/tab2/tab3/§4.4 六处联动刷新；`reports/p10-seedexpansion-2026-09-04.md` |
 | v1.5 | 2026-09-04 | **E7b AK v2 预注册复现轮**（把天花板归因变成检验）：协议 PSD-AKV2-PREREG-001 构建前冻结→多段重提取 352 clips（8 类空间，bark/sit 门失败如实披露）→**EP3 触发 DATA_BOTTLENECK_CONFIRMED（v2 full 37.50% = v1+3.57pp ≥ +3.0pp 冻结线）**；EP2 复现增强：warm spc2 33.23（88.6% 保留@6% 预算）、warm vs aimclr **双指标 10-0-0 p=0.002**（v1 macro-F1 持平判定为单片段标签结构伪影，AimCLR v2 坍缩至 1.71%）；§4.1 数据集句+§4.3 E7b 段+tab2 v2 行+E7 天花板句升级装配；v1 数字零替换；驱动 `scripts/run_p11_ak_v2_build.py` + `run_p12_ak_v2_replicate.py`；`reports/p12-akv2-replication-2026-09-04.md` |
+| v1.6 | 2026-09-04 | **P1.3 端到端微调诊断对照轮**（回答『绝对精度为何不刷』）：v2 解冻骨干端到端 full **32.99±3.94 < 冻结头 37.50**（过拟合吞先验）/ spc2 **9.72** vs warm 33.23=3.4× 坍缩——『天花板非冻结所致+解耦实证更优』入 §4.3 E7b 段末（control 措辞非预注册终点）；驱动 `scripts/run_p13_v2_finetune.py`；`reports/p13-v2-finetune-2026-09-04.md` |
+| v1.7 | 2026-09-04 | **E9 NTU 低资源保留率轮（重炮命中）**：PSD-NTU-PREREG-001 实验前冻结→冻结 pretext 探针三臂——10%+selftrain **74.11±0.13 = 保留率 99.5%**（参照 74.45，判据 GENERALIZES≥90%）；10% 纯线性 66.05（伪标签迭代 +8.0pp）；对照 TCL 保留率 93.3% 仅比行为不比绝对值；参照臂 74.45 vs 官方 LE 74.30 保真自检过；§4.4 E9 段+tab2 行+Intro Para6 半句装配；驱动 `run_p14_ntu_featuredump/lowres.py`；`reports/p14-ntu-lowres-2026-09-04.md` |

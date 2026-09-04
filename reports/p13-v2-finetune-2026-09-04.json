@@ -1,0 +1,81 @@
+{
+  "date": "2026-09-04T20:38:46",
+  "layer": "public_real_v2",
+  "protocol": "end-to-end fine-tune ST-GCN+BC (12-slot head, 8 classes present) on v2; 50ep lr1e-3 wd1e-4 batch32; eval val96",
+  "reference_frozen_head": {
+    "full_top1": 0.375,
+    "warm_spc2_top1": 0.3323
+  },
+  "classes": [
+    "apprehend",
+    "bite",
+    "jump",
+    "retrieve",
+    "sit",
+    "stay",
+    "track",
+    "watch"
+  ],
+  "config_echo": {
+    "pkl": "D:\\Desktop\\psd-framework\\runs\\public_real_dataset\\full12v2_T30.pkl",
+    "seeds": [
+      42,
+      43,
+      44
+    ],
+    "epochs": 50
+  },
+  "runs": [
+    {
+      "arm": "finetune_full",
+      "seed": 42,
+      "top1": 0.375,
+      "macro_f1": 0.187
+    },
+    {
+      "arm": "finetune_full",
+      "seed": 43,
+      "top1": 0.3125,
+      "macro_f1": 0.1769
+    },
+    {
+      "arm": "finetune_full",
+      "seed": 44,
+      "top1": 0.3021,
+      "macro_f1": 0.1381
+    },
+    {
+      "arm": "finetune_spc2",
+      "seed": 42,
+      "top1": 0.0833,
+      "macro_f1": 0.0568
+    },
+    {
+      "arm": "finetune_spc2",
+      "seed": 43,
+      "top1": 0.1146,
+      "macro_f1": 0.0627
+    },
+    {
+      "arm": "finetune_spc2",
+      "seed": 44,
+      "top1": 0.0938,
+      "macro_f1": 0.0897
+    }
+  ],
+  "agg": {
+    "finetune_full": {
+      "top1_mean": 0.3299,
+      "top1_std": 0.0394,
+      "macro_f1_mean": 0.1673,
+      "macro_f1_std": 0.0258
+    },
+    "finetune_spc2": {
+      "top1_mean": 0.0972,
+      "top1_std": 0.0159,
+      "macro_f1_mean": 0.0697,
+      "macro_f1_std": 0.0175
+    }
+  },
+  "wall_clock_sec": 84.9
+}
