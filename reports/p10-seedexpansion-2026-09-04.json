@@ -1,0 +1,93 @@
+{
+  "date": "2026-09-04T18:53:55",
+  "layer": "public_real",
+  "protocol": "p07/p08 end-to-end arms at n=10 seeds (42..51); scratch re-inits backbone per seed; paired tests on same-seed deltas",
+  "summary": {
+    "warm_spc2": {
+      "n": 10,
+      "top1_mean": 0.3196,
+      "top1_std": 0.0245,
+      "macro_f1_mean": 0.1436,
+      "macro_f1_std": 0.0286
+    },
+    "warm_spc4": {
+      "n": 10,
+      "top1_mean": 0.3143,
+      "top1_std": 0.0423,
+      "macro_f1_mean": 0.1472,
+      "macro_f1_std": 0.0358
+    },
+    "aimclr_spc2": {
+      "n": 10,
+      "top1_mean": 0.2607,
+      "top1_std": 0.0455,
+      "macro_f1_mean": 0.1478,
+      "macro_f1_std": 0.04
+    },
+    "aimclr_spc4": {
+      "n": 10,
+      "top1_mean": 0.2411,
+      "top1_std": 0.056,
+      "macro_f1_mean": 0.1087,
+      "macro_f1_std": 0.0359
+    },
+    "scratch_spc2": {
+      "n": 10,
+      "top1_mean": 0.2464,
+      "top1_std": 0.0164,
+      "macro_f1_mean": 0.0439,
+      "macro_f1_std": 0.0017
+    }
+  },
+  "paired_tests": {
+    "warm_vs_aimclr_spc2_top1": {
+      "mean_delta_pp": 5.89,
+      "std_delta_pp": 3.95,
+      "wins": 10,
+      "losses": 0,
+      "ties": 0,
+      "wilcoxon_p": 0.002
+    },
+    "warm_vs_aimclr_spc2_macro_f1": {
+      "mean_delta_pp": -0.42,
+      "std_delta_pp": 3.76,
+      "wins": 5,
+      "losses": 5,
+      "ties": 0,
+      "wilcoxon_p": 0.7695
+    },
+    "warm_vs_aimclr_spc4_top1": {
+      "mean_delta_pp": 7.32,
+      "std_delta_pp": 7.26,
+      "wins": 7,
+      "losses": 0,
+      "ties": 3,
+      "wilcoxon_p": 0.0156
+    },
+    "warm_vs_aimclr_spc4_macro_f1": {
+      "mean_delta_pp": 3.84,
+      "std_delta_pp": 5.27,
+      "wins": 8,
+      "losses": 2,
+      "ties": 0,
+      "wilcoxon_p": 0.084
+    },
+    "warm_vs_scratch_spc2_top1": {
+      "mean_delta_pp": 7.32,
+      "std_delta_pp": 1.77,
+      "wins": 10,
+      "losses": 0,
+      "ties": 0,
+      "wilcoxon_p": 0.002
+    },
+    "warm_vs_scratch_spc2_macro_f1": {
+      "mean_delta_pp": 9.97,
+      "std_delta_pp": 2.77,
+      "wins": 10,
+      "losses": 0,
+      "ties": 0,
+      "wilcoxon_p": 0.002
+    }
+  },
+  "wall_clock_sec": 180.2
+}
