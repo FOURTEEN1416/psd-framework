@@ -1,0 +1,643 @@
+{
+  "date": "2026-09-04T16:53:08",
+  "layer": "public_real",
+  "protocol": "E7 end-to-end PSD pipeline (Y/scratch backbone -> seeds spc2 -> run_selftrain anchor-cluster-pseudo-label -> seeds+pool linear head -> val); E8 budget curve spc2/spc4/full",
+  "leakage_guard": "anchor_mask & pool_universe restricted to train split; val(56) isolated; truth eval-only",
+  "config_echo": {
+    "pkl": "D:\\Desktop\\psd-framework\\runs\\public_real_dataset\\full12_T30.pkl",
+    "y_ckpt": "D:\\Desktop\\psd-framework\\runs\\p05_stgcn_bc_full\\best.pt",
+    "seeds": [
+      42,
+      43,
+      44
+    ],
+    "n_clips": 197,
+    "classes": [
+      "apprehend",
+      "bark",
+      "bite",
+      "jump",
+      "retrieve",
+      "sit",
+      "stay",
+      "track",
+      "watch"
+    ],
+    "n_train": 141,
+    "n_val": 56
+  },
+  "runs": [
+    {
+      "arm": "warm",
+      "spc": 2,
+      "seed": 42,
+      "n_seeds": 18,
+      "n_pool": 96,
+      "tau_star": 0.1214,
+      "rounds": 3,
+      "stop": "precision_drop",
+      "top1": 0.2857,
+      "macro_f1": 0.0901,
+      "per_class": {
+        "apprehend": {
+          "support": 1,
+          "acc": 0.0
+        },
+        "jump": {
+          "support": 8,
+          "acc": 0.0
+        },
+        "sit": {
+          "support": 2,
+          "acc": 0.0
+        },
+        "stay": {
+          "support": 16,
+          "acc": 0.5
+        },
+        "track": {
+          "support": 4,
+          "acc": 0.0
+        },
+        "watch": {
+          "support": 14,
+          "acc": 0.5
+        }
+      }
+    },
+    {
+      "arm": "warm",
+      "spc": 2,
+      "seed": 43,
+      "n_seeds": 18,
+      "n_pool": 122,
+      "tau_star": 0.103,
+      "rounds": 7,
+      "stop": "budget",
+      "top1": 0.3393,
+      "macro_f1": 0.1465,
+      "per_class": {
+        "apprehend": {
+          "support": 1,
+          "acc": 0.0
+        },
+        "jump": {
+          "support": 8,
+          "acc": 0.0
+        },
+        "sit": {
+          "support": 2,
+          "acc": 0.5
+        },
+        "stay": {
+          "support": 16,
+          "acc": 0.5
+        },
+        "track": {
+          "support": 4,
+          "acc": 0.0
+        },
+        "watch": {
+          "support": 14,
+          "acc": 0.6429
+        }
+      }
+    },
+    {
+      "arm": "warm",
+      "spc": 2,
+      "seed": 44,
+      "n_seeds": 18,
+      "n_pool": 67,
+      "tau_star": 0.1746,
+      "rounds": 3,
+      "stop": "precision_drop",
+      "top1": 0.3036,
+      "macro_f1": 0.1365,
+      "per_class": {
+        "apprehend": {
+          "support": 1,
+          "acc": 0.0
+        },
+        "jump": {
+          "support": 8,
+          "acc": 0.0
+        },
+        "sit": {
+          "support": 2,
+          "acc": 0.5
+        },
+        "stay": {
+          "support": 16,
+          "acc": 0.625
+        },
+        "track": {
+          "support": 4,
+          "acc": 0.0
+        },
+        "watch": {
+          "support": 14,
+          "acc": 0.4286
+        }
+      }
+    },
+    {
+      "arm": "scratch",
+      "spc": 2,
+      "seed": 42,
+      "n_seeds": 18,
+      "n_pool": 123,
+      "tau_star": 0.0006,
+      "rounds": 3,
+      "stop": "precision_drop",
+      "top1": 0.25,
+      "macro_f1": 0.0451,
+      "per_class": {
+        "apprehend": {
+          "support": 1,
+          "acc": 0.0
+        },
+        "jump": {
+          "support": 8,
+          "acc": 0.0
+        },
+        "sit": {
+          "support": 2,
+          "acc": 0.0
+        },
+        "stay": {
+          "support": 16,
+          "acc": 0.0
+        },
+        "track": {
+          "support": 4,
+          "acc": 0.0
+        },
+        "watch": {
+          "support": 14,
+          "acc": 0.9286
+        }
+      }
+    },
+    {
+      "arm": "scratch",
+      "spc": 2,
+      "seed": 43,
+      "n_seeds": 18,
+      "n_pool": 123,
+      "tau_star": 0.0005,
+      "rounds": 4,
+      "stop": "converged",
+      "top1": 0.25,
+      "macro_f1": 0.0451,
+      "per_class": {
+        "apprehend": {
+          "support": 1,
+          "acc": 0.0
+        },
+        "jump": {
+          "support": 8,
+          "acc": 0.0
+        },
+        "sit": {
+          "support": 2,
+          "acc": 0.0
+        },
+        "stay": {
+          "support": 16,
+          "acc": 0.0
+        },
+        "track": {
+          "support": 4,
+          "acc": 0.0
+        },
+        "watch": {
+          "support": 14,
+          "acc": 0.9286
+        }
+      }
+    },
+    {
+      "arm": "scratch",
+      "spc": 2,
+      "seed": 44,
+      "n_seeds": 18,
+      "n_pool": 123,
+      "tau_star": 0.0007,
+      "rounds": 4,
+      "stop": "converged",
+      "top1": 0.25,
+      "macro_f1": 0.0451,
+      "per_class": {
+        "apprehend": {
+          "support": 1,
+          "acc": 0.0
+        },
+        "jump": {
+          "support": 8,
+          "acc": 0.0
+        },
+        "sit": {
+          "support": 2,
+          "acc": 0.0
+        },
+        "stay": {
+          "support": 16,
+          "acc": 0.0
+        },
+        "track": {
+          "support": 4,
+          "acc": 0.0
+        },
+        "watch": {
+          "support": 14,
+          "acc": 0.9286
+        }
+      }
+    },
+    {
+      "arm": "warm",
+      "spc": 2,
+      "seed": 42,
+      "n_seeds": 18,
+      "n_pool": 96,
+      "tau_star": 0.1214,
+      "rounds": 3,
+      "stop": "precision_drop",
+      "top1": 0.2857,
+      "macro_f1": 0.0901,
+      "per_class": {
+        "apprehend": {
+          "support": 1,
+          "acc": 0.0
+        },
+        "jump": {
+          "support": 8,
+          "acc": 0.0
+        },
+        "sit": {
+          "support": 2,
+          "acc": 0.0
+        },
+        "stay": {
+          "support": 16,
+          "acc": 0.5
+        },
+        "track": {
+          "support": 4,
+          "acc": 0.0
+        },
+        "watch": {
+          "support": 14,
+          "acc": 0.5
+        }
+      },
+      "budget": "spc2"
+    },
+    {
+      "arm": "warm",
+      "spc": 2,
+      "seed": 43,
+      "n_seeds": 18,
+      "n_pool": 122,
+      "tau_star": 0.103,
+      "rounds": 7,
+      "stop": "budget",
+      "top1": 0.3393,
+      "macro_f1": 0.1465,
+      "per_class": {
+        "apprehend": {
+          "support": 1,
+          "acc": 0.0
+        },
+        "jump": {
+          "support": 8,
+          "acc": 0.0
+        },
+        "sit": {
+          "support": 2,
+          "acc": 0.5
+        },
+        "stay": {
+          "support": 16,
+          "acc": 0.5
+        },
+        "track": {
+          "support": 4,
+          "acc": 0.0
+        },
+        "watch": {
+          "support": 14,
+          "acc": 0.6429
+        }
+      },
+      "budget": "spc2"
+    },
+    {
+      "arm": "warm",
+      "spc": 2,
+      "seed": 44,
+      "n_seeds": 18,
+      "n_pool": 67,
+      "tau_star": 0.1746,
+      "rounds": 3,
+      "stop": "precision_drop",
+      "top1": 0.3036,
+      "macro_f1": 0.1365,
+      "per_class": {
+        "apprehend": {
+          "support": 1,
+          "acc": 0.0
+        },
+        "jump": {
+          "support": 8,
+          "acc": 0.0
+        },
+        "sit": {
+          "support": 2,
+          "acc": 0.5
+        },
+        "stay": {
+          "support": 16,
+          "acc": 0.625
+        },
+        "track": {
+          "support": 4,
+          "acc": 0.0
+        },
+        "watch": {
+          "support": 14,
+          "acc": 0.4286
+        }
+      },
+      "budget": "spc2"
+    },
+    {
+      "arm": "warm",
+      "spc": 4,
+      "seed": 42,
+      "n_seeds": 35,
+      "n_pool": 98,
+      "tau_star": 0.2242,
+      "rounds": 7,
+      "stop": "budget",
+      "top1": 0.3393,
+      "macro_f1": 0.1341,
+      "per_class": {
+        "apprehend": {
+          "support": 1,
+          "acc": 0.0
+        },
+        "jump": {
+          "support": 8,
+          "acc": 0.0
+        },
+        "sit": {
+          "support": 2,
+          "acc": 0.5
+        },
+        "stay": {
+          "support": 16,
+          "acc": 0.4375
+        },
+        "track": {
+          "support": 4,
+          "acc": 0.0
+        },
+        "watch": {
+          "support": 14,
+          "acc": 0.6429
+        }
+      },
+      "budget": "spc4"
+    },
+    {
+      "arm": "warm",
+      "spc": 4,
+      "seed": 43,
+      "n_seeds": 35,
+      "n_pool": 63,
+      "tau_star": 0.2311,
+      "rounds": 4,
+      "stop": "precision_drop",
+      "top1": 0.2857,
+      "macro_f1": 0.1473,
+      "per_class": {
+        "apprehend": {
+          "support": 1,
+          "acc": 1.0
+        },
+        "jump": {
+          "support": 8,
+          "acc": 0.0
+        },
+        "sit": {
+          "support": 2,
+          "acc": 0.5
+        },
+        "stay": {
+          "support": 16,
+          "acc": 0.3125
+        },
+        "track": {
+          "support": 4,
+          "acc": 0.0
+        },
+        "watch": {
+          "support": 14,
+          "acc": 0.6429
+        }
+      },
+      "budget": "spc4"
+    },
+    {
+      "arm": "warm",
+      "spc": 4,
+      "seed": 44,
+      "n_seeds": 35,
+      "n_pool": 92,
+      "tau_star": 0.1662,
+      "rounds": 6,
+      "stop": "precision_drop",
+      "top1": 0.3393,
+      "macro_f1": 0.1451,
+      "per_class": {
+        "apprehend": {
+          "support": 1,
+          "acc": 0.0
+        },
+        "jump": {
+          "support": 8,
+          "acc": 0.0
+        },
+        "sit": {
+          "support": 2,
+          "acc": 0.5
+        },
+        "stay": {
+          "support": 16,
+          "acc": 0.5
+        },
+        "track": {
+          "support": 4,
+          "acc": 0.0
+        },
+        "watch": {
+          "support": 14,
+          "acc": 0.6429
+        }
+      },
+      "budget": "spc4"
+    },
+    {
+      "arm": "warm",
+      "spc": -1,
+      "seed": 42,
+      "budget": "full",
+      "n_seeds": 141,
+      "n_pool": 0,
+      "tau_star": null,
+      "rounds": 0,
+      "stop": "full-supervision(no pseudo-label)",
+      "top1": 0.3393,
+      "macro_f1": 0.1465,
+      "per_class": {
+        "apprehend": {
+          "support": 1,
+          "acc": 0.0
+        },
+        "jump": {
+          "support": 8,
+          "acc": 0.0
+        },
+        "sit": {
+          "support": 2,
+          "acc": 0.5
+        },
+        "stay": {
+          "support": 16,
+          "acc": 0.5
+        },
+        "track": {
+          "support": 4,
+          "acc": 0.0
+        },
+        "watch": {
+          "support": 14,
+          "acc": 0.6429
+        }
+      }
+    },
+    {
+      "arm": "warm",
+      "spc": -1,
+      "seed": 43,
+      "budget": "full",
+      "n_seeds": 141,
+      "n_pool": 0,
+      "tau_star": null,
+      "rounds": 0,
+      "stop": "full-supervision(no pseudo-label)",
+      "top1": 0.3393,
+      "macro_f1": 0.1465,
+      "per_class": {
+        "apprehend": {
+          "support": 1,
+          "acc": 0.0
+        },
+        "jump": {
+          "support": 8,
+          "acc": 0.0
+        },
+        "sit": {
+          "support": 2,
+          "acc": 0.5
+        },
+        "stay": {
+          "support": 16,
+          "acc": 0.5
+        },
+        "track": {
+          "support": 4,
+          "acc": 0.0
+        },
+        "watch": {
+          "support": 14,
+          "acc": 0.6429
+        }
+      }
+    },
+    {
+      "arm": "warm",
+      "spc": -1,
+      "seed": 44,
+      "budget": "full",
+      "n_seeds": 141,
+      "n_pool": 0,
+      "tau_star": null,
+      "rounds": 0,
+      "stop": "full-supervision(no pseudo-label)",
+      "top1": 0.3393,
+      "macro_f1": 0.1465,
+      "per_class": {
+        "apprehend": {
+          "support": 1,
+          "acc": 0.0
+        },
+        "jump": {
+          "support": 8,
+          "acc": 0.0
+        },
+        "sit": {
+          "support": 2,
+          "acc": 0.5
+        },
+        "stay": {
+          "support": 16,
+          "acc": 0.5
+        },
+        "track": {
+          "support": 4,
+          "acc": 0.0
+        },
+        "watch": {
+          "support": 14,
+          "acc": 0.6429
+        }
+      }
+    }
+  ],
+  "agg": {
+    "warm_spc2": {
+      "n": 6,
+      "top1_mean": 0.3095,
+      "top1_std": 0.0223,
+      "macro_f1_mean": 0.1244,
+      "macro_f1_std": 0.0246
+    },
+    "warm_spc4": {
+      "n": 3,
+      "top1_mean": 0.3214,
+      "top1_std": 0.0253,
+      "macro_f1_mean": 0.1422,
+      "macro_f1_std": 0.0058
+    },
+    "warm_spc-1": {
+      "n": 3,
+      "top1_mean": 0.3393,
+      "top1_std": 0.0,
+      "macro_f1_mean": 0.1465,
+      "macro_f1_std": 0.0
+    },
+    "scratch_spc2": {
+      "n": 3,
+      "top1_mean": 0.25,
+      "top1_std": 0.0,
+      "macro_f1_mean": 0.0451,
+      "macro_f1_std": 0.0
+    },
+    "scratch_spc4": null,
+    "scratch_spc-1": null
+  },
+  "wall_clock_sec": 35.1
+}
