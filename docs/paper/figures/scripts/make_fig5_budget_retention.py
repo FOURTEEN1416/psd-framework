@@ -37,15 +37,16 @@ y_full = j("p05-stgcnbc-synthetic-100perclass-Y.json")
 
 pts = []
 # v1 public-real: spc2 = 18/141 anchors (9 classes with train coverage)
+# x dodged 12.8->13.9 to keep the v1 error whisker clear of the v2 spc4 marker (12.5->11.5)
 v1_full = p07["agg"]["warm_spc-1"]["top1_mean"]
 v1 = r16["summary"]["v1"]["warm_spc2"]
-pts.append((100 * 18 / 141, 100 * v1["top1_mean"] / v1_full, 100 * v1["top1_std"] / v1_full,
+pts.append((13.9, 100 * v1["top1_mean"] / v1_full, 100 * v1["top1_std"] / v1_full,
             "public-real v1", "o", "#0E7490"))
 # v2: spc2 = 16/256, spc4 = 32/256; supervised full reference from p12
 v2_full = p12["summary"]["warm_spc-1"]["top1_mean"]
-for spc, n_anc in ((2, 16), (4, 32)):
+for spc, n_anc, x_disp in ((2, 16, 6.2), (4, 32, 11.5)):
     s = r16["summary"]["v2"][f"warm_spc{spc}"]
-    pts.append((100 * n_anc / 256, 100 * s["top1_mean"] / v2_full, 100 * s["top1_std"] / v2_full,
+    pts.append((x_disp, 100 * s["top1_mean"] / v2_full, 100 * s["top1_std"] / v2_full,
                 "public-real v2", "s", "#C2410C"))
 # NTU E9 (corrected): 10% labels; supervised (c) reference from p14
 tb = [r["top1"] for r in r16ntu["arms"]["b_selftrain_10pct"]]
@@ -69,7 +70,7 @@ for frac, r, e, tier, mk, col in pts:
 ax.axhline(100, color=GRID_GRAY, linewidth=1.0, zorder=1)
 ax.set_xscale("log")
 ax.set_xlim(0.7, 120)
-ax.set_ylim(15, 112)
+ax.set_ylim(2, 112)
 ax.set_xlabel("Annotation budget (% of the tier's full-labeled pool, log)", fontsize=7)
 ax.set_ylabel("Retention of own full-budget top-1 (%)", fontsize=7)
 ax.grid(True, color=GRID_GRAY, linewidth=0.6, zorder=0)

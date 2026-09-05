@@ -68,7 +68,7 @@ for arm in SERIES:
 CHANCE_PCT = 4.5  # 22 类随机猜测基线（K9 实验，HANDOVER §7）
 
 # ---- 绘图 ----
-fig, axes = plt.subplots(2, 1, figsize=(3.42, 4.45), sharex=True)
+fig, axes = plt.subplots(2, 1, figsize=(3.42, 4.05), sharex=True)
 ax = axes[0]
 fig.patch.set_facecolor("white")
 ax.set_facecolor("white")
@@ -84,7 +84,7 @@ for arm, style in SERIES.items():
 
 # 随机猜测基线（22 类 -> 4.5%）
 ax.axhline(CHANCE_PCT, color=NOTE_GRAY, linewidth=1.2, linestyle=(0, (4, 3)), zorder=2)
-ax.text(203, 2.2, "random-guess baseline 4.5% (22 classes)",
+ax.text(203, 7.2, "random-guess baseline 4.5%",
         ha="right", va="center", fontsize=6.2, color=NOTE_GRAY,
         bbox=dict(facecolor="white", edgecolor="none", pad=1.0))
 
@@ -123,11 +123,8 @@ for arm, style in SERIES.items():
                  elinewidth=1.1, capsize=4, capthick=1.1,
                  label=style["label"], zorder=3)
 axb.axhline(CHANCE_PCT, color=NOTE_GRAY, linewidth=1.2, linestyle=(0, (4, 3)), zorder=2)
-axb.annotate("random leads by 4.2–5.0 pp\nfor $b \\geq 50$\n(b=20: shared initial set)",
-             xy=(200, wpay["curves"]["random"]["200"]["mean"] * 100.0), xytext=(60, 55),
-             fontsize=6.2, color=NOTE_GRAY, style="italic", ha="left", va="center",
-             arrowprops=dict(arrowstyle="-", color=NOTE_GRAY, linewidth=0.9,
-                             shrinkA=2, shrinkB=4))
+axb.text(15, 52, "random leads by 4.2–5.0 pp for $b \\geq 50$\n(b=20: shared initial set)",
+         fontsize=6.2, color=NOTE_GRAY, style="italic", ha="left", va="center")
 axb.set_xlabel("Annotation budget (labeled clips)", fontsize=7)
 axb.set_ylabel("Best validation accuracy (%)", fontsize=7)
 axb.set_title("(b) warm-started in-domain scorers", loc="left", fontsize=7)
@@ -140,7 +137,7 @@ for side in ('top', 'right'):
 for side in ('left', 'bottom'):
     axb.spines[side].set_linewidth(1.0)
 axb.tick_params(labelsize=6)
-axb.legend(loc="lower right", frameon=False, fontsize=6.2)
+axb.legend(loc="lower right", bbox_to_anchor=(1.0, 0.10), frameon=False, fontsize=6.2)
 fig.subplots_adjust(hspace=0.35)
 
 pdf_path = OUT_DIR / "fig4_al_efficiency.pdf"

@@ -28,7 +28,7 @@ N = 6
 CX, CY = 50.0, 42.0
 R = 25.0
 ST_W, ST_H = 23.0, 7.4
-HUB_W, HUB_H = 16.5, 9.0
+HUB_W, HUB_H = 18.5, 9.8
 
 STATIONS = [
     # (name, sublabel, spoke_label or None, focal, manual)
@@ -37,7 +37,7 @@ STATIONS = [
     ("Update $\\Omega$", "seeds $\\cup$ pool", "$\\Omega$", False, False),
     ("Re-estimate $P$", "each round", "$P$", False, False),
     ("AL queue", "human, $\\leq$B clips", None, False, True),
-    ("Verified seeds", "queue output", "$\\mathcal{A}$", False, True),
+    ("Verified seeds", "queue output", "$A$", False, True),
 ]
 
 fig, ax = plt.subplots(figsize=(3.42, 3.05))
@@ -97,20 +97,18 @@ for k, (name, sub, spoke_label, focal, manual) in enumerate(STATIONS):
     if spoke_label:
         ax.annotate("", xy=end, xytext=start,
                     arrowprops=dict(arrowstyle="-|>", color=SOFT, lw=0.9, linestyle=(0, (4, 3))))
-    if spoke_label:
-        lm = CX + u[0] * (d_hub + gap + 3.6)
-        lm_y = CY + u[1] * (d_hub + gap + 3.6)
-        ax.text(lm, lm_y, spoke_label, fontsize=5.6, color="#6B7280", ha="center", va="center",
-                fontweight="bold", zorder=8,
-                bbox=dict(facecolor=PAPER, edgecolor="none", pad=0.8))
+    # R18 judge 三轮：浮动 Ω/P/A 辐条标签反复与站盒角碰撞，且与 hub 文字、
+    # 站名（Update Ω / Re-estimate P）冗余——按 diagram-design 删除优先原则移除文字，保留写回箭头。
 
 # ---- hub（累积状态） ----
 ax.add_patch(FancyBboxPatch((CX - HUB_W / 2, CY - HUB_H / 2), HUB_W, HUB_H,
                             boxstyle="round,pad=0.12,rounding_size=1.0",
                             facecolor=INK, edgecolor=INK, linewidth=1.0, zorder=6))
-ax.text(CX, CY + 1.5, "Prototypes $P$", ha="center", va="center", fontsize=5.9,
+ax.text(CX, CY + 2.7, "Prototypes $P$", ha="center", va="center", fontsize=5.7,
         color=PAPER, fontweight="bold", zorder=7)
-ax.text(CX, CY - 1.6, "classifier $\\Omega$", ha="center", va="center", fontsize=5.9,
+ax.text(CX, CY + 0.0, "classifier $\\Omega$", ha="center", va="center", fontsize=5.7,
+        color=PAPER, zorder=7)
+ax.text(CX, CY - 2.7, "anchors $A$", ha="center", va="center", fontsize=5.7,
         color=PAPER, zorder=7)
 
 # ---- 站盒 ----

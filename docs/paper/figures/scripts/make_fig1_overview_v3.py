@@ -49,7 +49,7 @@ ax.text(56, 45, "embeddings + proposals", ha="center", va="center",
         fontsize=6.0, color="#374151", rotation=90)
 
 # ---- 物理层 ----
-box(4.5, 16.5, 39, 5.6, "Unlabeled streams $(T$, 24, 3)", C_PHYS_FILL, C_PHYS_EDGE, fs=6.4)
+box(4.0, 16.5, 40.5, 5.6, "Unlabeled streams $(T$, 24, 3)", C_PHYS_FILL, C_PHYS_EDGE, fs=5.9)
 box(4.5, 27.5, 19.5, 9.5, "SSL\npretraining", C_PHYS_FILL, C_PHYS_EDGE, fs=6.4)
 box(25, 27.5, 19.5, 9.5, "Motion words\nquantization", C_PHYS_FILL, C_PHYS_EDGE, fs=6.0)
 box(6, 42.5, 17, 7.5, "Dynamics\nembeddings", C_PHYS_FILL, C_PHYS_EDGE, fs=6.4)
@@ -60,10 +60,10 @@ arrow(14.25, 37.0, 14.4, 42.5)
 arrow(34.75, 37.0, 33.5, 42.5)
 arrow(14.5, 50.0, 14.5, 54.0); arrow(14.5, 54.0, 52.5, 54.0, lw=1.0)
 arrow(33.5, 50.0, 33.5, 57.0); arrow(33.5, 57.0, 52.5, 57.0, lw=1.0)
-arrow(59.5, 41.0, 66, 41.0, lw=1.0)  # interface -> clustering (first consumer per Sec 3.3.2)
+arrow(59.5, 39.0, 66, 39.0, lw=1.0)  # interface -> clustering (first consumer per Sec 3.3.2)
 
 # ---- 语义层 ----
-box(66, 16.5, 40, 5.6, "Rule-engine seeds (budget $B$)", C_SEM_FILL, C_SEM_EDGE, fs=6.4)
+box(65.5, 16.5, 41.5, 5.6, "Rule-engine seeds (budget $B$)", C_SEM_FILL, C_SEM_EDGE, fs=5.9)
 box(66, 26.5, 40, 5.6, "Anchor learning", C_SEM_FILL, C_SEM_EDGE, fs=6.4)
 box(66, 36.5, 40, 9.0, "Prototype clustering +\npseudo-labels", C_SEM_FILL, C_SEM_EDGE, fs=6.4)
 box(66, 49.5, 40, 7.0, "Semi-supervised\nself-training (warm start)", C_SEM_FILL, C_SEM_EDGE, fs=6.0)
@@ -72,9 +72,9 @@ arrow(86, 22.1, 86, 26.5)
 arrow(86, 32.1, 86, 36.5)
 arrow(86, 45.5, 86, 49.5)
 arrow(86, 56.5, 86, 60.5)
-ax.annotate("", xy=(70.2, 43.5), xytext=(70.2, 38.0),
+ax.annotate("", xy=(65.6, 44.6), xytext=(65.6, 40.8),
             arrowprops=dict(arrowstyle="-|>", color=C_ARROW, lw=0.8,
-                            connectionstyle="arc3,rad=-0.85"))
+                            connectionstyle="arc3,rad=-0.9"))
 
 # ---- 演化标注带 ----
 box(24, 2.0, 62, 6.0, "", "white", C_SEM_EDGE)

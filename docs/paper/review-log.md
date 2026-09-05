@@ -283,3 +283,14 @@ YOLO-PetX（IEEE CEECT 2025，全题名经 GitHub 全局代码检索锁定）、
 **anti-defensive-writing 分类（28 句 R16 新增文本）**：0 句第 1 类（不必要免责）；第 6 类冗余 2 处已删（"reported as-is"×3→1、K9 三重述）；其余全部命中保留条件（论断有效性/证据解释/范围/设计/读者正确使用）——修正轮文本以"加必要披露"为主，非防御性膨胀。
 **验证**：断言脚本扩至 70+ 项全过（新增 R17 回归项：0.043/0.024/14.7/7.83/9--12/matched absolute budget 等残留清零；0.023/0.049/0.012/88.7/19.33/14 of 256/gate 惰性句/新段落 在位）；编译 33 页 0 错误 0 未定义；遗留排版 2 项（标题页 overfull 117pt、fig4 float 超高 20pt）→R18。
 **教训（第 N+2 条）**：①评估器代码的**类索引假设**（标签=0..K-1 连续）是静默失真源——凡报 per-class/macro 指标必须核对标签空间与遍历域；②修复文本会引入新的内部史泄漏（"archived X is superseded"对首次投稿是噪声）——披露要一次性、在脚注、指向 released errata；③Holm 的"family"定义必须在工件元数据、代码、正文三处一致，否则"only significant"类措辞随族定义翻转。
+
+---
+
+## R18 图表视觉轮 + 恶意评审收尾（2026-09-05，scholar-critique-figures 程序化 + judge 四轮视觉门）
+
+**程序化检查**：pdfimages -list 五图全部零嵌入位图（纯矢量 ✅）；图页定位 p29-33（review 版浮动堆尾，与 R14 一致）。
+**judge 四轮收敛记录**：首轮 4/5 FAIL（fig1 底部两盒文字越界+自迭代弧入盒；fig2 hub 文字贴边+Ω/A 浮动标签挤站盒角+孤立 𝒜 字形无定义；Figure 4-budget v1 误差棒穿 v2 marker+下帽被 y-min 15 裁切+NTU 误差棒不可见；Figure 5-AL 基线标签压 spine 遮刻度+图例压虚线基线+引线穿蓝曲线）→ 第二轮 fig1/fig4 PASS、fig2/fig5 仍 FAIL（标签偏移不彻底；图例与注释新碰撞）→ 第三轮同因未收敛 → **决策：fig2 浮动辐条标签按 diagram-design 删除优先原则移除（与 hub 三行文字、站名冗余），hub 改三行 Prototypes P/classifier Ω/anchors A 并与 caption 定义对齐；fig5 panel(b) 注释压缩两行移左中空区**→ 第四轮 **5/5 全过，视觉门通过**。
+**排版遗留清零**：prelims 标题 117pt overfull（cas-sc 类缺陷：casprelimstitle 在 prelims 框内不自动折断）→ \renewcommand 手动断行修复（修复过程中再踩 heredoc \r 陷阱一次，Edit 工具落盘纠正——工程坑条款再次应验）；fig4-AL 降高 4.45→4.05in 解 Float too large 20pt；剩余 1 处 overfull 为 ORCID 空盒（作者区 USER 占位产物，不可见，用户定稿作者信息后自然消失——登记不处理）。
+**caption/图文一致性联动**：fig2 caption 补 anchor set A 定义；Figure 4 caption 补 x 避让与 NTU 误差棒说明；05 头注 FIGURE_SOURCE 版本同步 v0.6。
+**验证**：编译 33 页 0 错误 0 未定义引用；r16_assertions 全过；工件核验（四图 mtime+尺寸+渲染目检双通道）。
+**教训**：①视觉修复的"偏移参数"在短辐条/对角几何下不收敛时，删除冗余元素优于继续调参（judge 三轮同因打回=方向错误信号）；②图文一致性是双向的——caption 定义 A 则图内必须可见 A（hub 三行补齐）。

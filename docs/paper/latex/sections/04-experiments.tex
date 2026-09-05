@@ -52,7 +52,7 @@ This experiment tests whether absorbing a taxonomy change under decoupling costs
 \begin{figure}[t]
   \centering
   \includegraphics[width=\linewidth]{fig5_budget_retention.pdf}
-  \caption{Budget--retention summary: each point is one tier's PSD pipeline at a given fraction of that tier's full-labeled pool, plotted as the fraction of its own full-budget top-1 retained (error bars: seed std; corrected pseudo-label protocol). Tier groups are never connected or pooled. The pattern is tier-dependent: retention is high on the human benchmark (90.6\% at 10\% labels) and on the synthetic-offset tier, but collapses toward chance on the canine public-real tier at 13\%/5.5\% budgets (E7/E7b)---the low-resource behavior of iterated pseudo-labeling is bounded by pseudo-label quality, not by budget arithmetic.}\label{fig:budget}
+  \caption{Budget--retention summary: each point is one tier's PSD pipeline at a given fraction of that tier's full-labeled pool, plotted as the fraction of its own full-budget top-1 retained (error bars: seed std; corrected pseudo-label protocol; the NTU60 bar, $\pm$0.2\,pp, is smaller than its marker). Tier groups are never connected or pooled; points are dodged a few tenths of a percent along the log axis where budgets nearly coincide (v1 12.8\% shown at 13.9\%, v2 spc4 12.5\% shown at 11.5\%). The pattern is tier-dependent: retention is high on the human benchmark (90.6\% at 10\% labels) and on the synthetic-offset tier, but collapses toward chance on the canine public-real tier at 13\%/5.5\% budgets (E7/E7b)---the low-resource behavior of iterated pseudo-labeling is bounded by pseudo-label quality, not by budget arithmetic.}\label{fig:budget}
 \end{figure}
 
 \subsection{Comparison studies}\label{sec:comparison}
