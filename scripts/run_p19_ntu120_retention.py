@@ -26,7 +26,7 @@ REPO = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO))
 sys.path.insert(0, str(REPO / "scripts"))
 
-PKL = REPO / "data" / "ntu120" / "ntu120_3danno.pkl"
+PKL = REPO / "data" / "pyskl" / "ntu120_hrnet.pkl"
 CKPT = REPO / "runs" / "p19_ntu120" / "pretext_best.pt"
 OUT_DIR = REPO / "reports"
 SEEDS = (42, 43, 44)
@@ -76,15 +76,17 @@ def train_pretext(rows, epochs=150, batch=32, device="cuda"):
 
     def prep(r):
         kp = np.asarray(r["kp"], dtype=np.float32)
+        V = kp.shape[-2]  # auto-detect joints (NTU120 3D=25, HRNet 2D=17)
         T = kp.shape[0]
         if T < 30:
             idx = np.resize(np.arange(T), 30)
         else:
             idx = np.linspace(0, T - 1, 30, dtype=int)
         kp = kp[idx]
-        conf = np.ones((30, 17, 1), dtype=np.float32)
-        kp3 = np.concatenate([kp, conf], axis=2)  # (30,17,3)
-        return center_keypoints(kp3)
+        if kp.shape[-1] < 3:
+            conf = np.ones((30, V, 1), dtype=np.float32)
+            kp = np.concatenate([kp, conf], axis=2)
+        return center_keypoints(kp)
 
     train_rows = [r for r in rows if r["split"] == "train"]
     X = np.stack([prep(r) for r in train_rows[:8000]])  # 子集防 OOM（8k clips 快速 pretext）
@@ -120,7 +122,8 @@ def dump_features(model, rows, device="cuda", max_n=12000):
         kp = np.asarray(r["kp"], dtype=np.float32)
         T = kp.shape[0]
         idx = np.resize(np.arange(T), 30) if T < 30 else np.linspace(0, T - 1, 30, dtype=int)
-        kp = center_keypoints(np.concatenate([kp[idx], np.ones((30, 17, 1), np.float32)], axis=2))
+        V2 = kp.shape[-2]
+        kp = center_keypoints(np.concatenate([kp[idx], np.ones((30, V2, 1), np.float32)], axis=2)) if kp.shape[-1] < 3 else center_keypoints(kp[idx])
         feats.append(kp.astype(np.float32))
         labels.append(r["label"]); splits.append(r["split"]); keys.append(r["key"])
         if (i + 1) % 2000 == 0:

@@ -25,6 +25,10 @@
 - Pretext is from-scratch at 150 epochs (compute-limited), NOT the 300-epoch/official-weight setup used for NTU60 E9; the (c) reference arm absorbs backbone-quality differences, so the RETENTION RATIO remains the comparison target (as in E9's protocol-dependence disclosure).
 - This is NTU-family (same institution lineage as NTU60), so it is a replication-strength point, not a fully independent domain. A fully independent domain (Kinetics) remains blocked on download.
 
+## Amendment (2026-09-05, pre-run)
+
+Official NTU120 3D skeleton application was DENIED (registration review). Switching to the **HRNet 2D skeleton annotations** from the same PYSKL release (`ntu120_hrnet.pkl`, openmmlab CDN, no auth; 113,945 clips / 120 classes / 17 joints, same videos+labels as the 3D version, different skeleton extractor). This makes P5-B a 2D-skeleton replication (HRNet joints), which matches the PoseConv3D lineage of the PYSKL benchmark rather than the 3D Kinect modality of NTU60 E9. The retention-ratio protocol and decision rule are unchanged; backbone quality differences are absorbed by the (c) reference arm as before.
+
 ## 5. Reproduction
 
 `scripts/run_p19_ntu120_retention.py`; evidence `reports/p19-ntu120-retention-<date>.json`.
