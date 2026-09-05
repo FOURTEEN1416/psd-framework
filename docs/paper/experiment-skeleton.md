@@ -95,6 +95,8 @@
 ### E7 端到端管线有效性 → 支撑 C6（[R16 修正：本段"端到端量化"主张已撤回为负边界，见上方修订注] 低资源主张的端到端量化，冲击 PR 补强，2026-09-04 预注册 fb1a060）
 
 > **⚠️ R16 协议修正（2026-09-05）**：本节原报告臂的最终分类器在**池片段真标签**上重训（且 precision-drop 停止消费真标签）——"13% 标注达 94%"与实现不符，系对抗审稿实锤的协议错误。修正协议（最终头=种子真标签∪池伪标签；停止=收敛/预算，无 oracle）重跑结果：warm spc2 **9.8%±7.5**（chance 11.1%）、aimclr 15.2%±5.1、scratch 8.4%±10.7——AK 层端到端近随机，**低资源端到端主张在本层撤回为负边界发现**；head_calib 诊断（GT 无关逐轮再校准）不救（9–12%）。全监督参照 33.93% 为纯监督臂，不受影响。证据 `reports/r16-endtoend-pseudo-2026-09-05.json`；驱动 `scripts/run_r16_endtoend_pseudo.py`。下文原文保留为历史归档。
+>
+> **P1 标签对齐修正（2026-09-05，PSD-ALIGN-PREREG-001，NULL）**：针对本负边界的头路过拟合坍缩，预注册三 GT 无关对齐变体（V1 全类锚点共识门/V2 配额/V3 原型路主导）+V0 对照重跑 AK v1 spc2×10seeds——最优 V2 14.11%±6.65（对 V0 配对胜 8/10、p=0.13）、V3 池精度 0.21 vs V0 0.11，机制方向有效但**未达 20% 救援线，判据 NULL**；约束=种子锚定特征几何（r0 原型精度 ~0.30 封顶），非门控规则。证据 `reports/p15-label-alignment-2026-09-05.json`；驱动 `scripts/run_p15_align.py`；§5 消融段已入文。
 *This experiment tests whether the complete PSD pipeline, run end-to-end from a small annotation budget, approaches full-supervision accuracy on the public-real tier.*
 - 管线：Y/scratch backbone 特征 → 种子（每类 spc 个 clip）→ run_selftrain（锚点+原型聚类+置信过滤伪标签迭代）→ seeds∪pool 线性头 → val top-1。防泄漏：anchor_mask 与池宇宙严格限 train split，val(56) 全程隔离。
 - **端到端结果（公开真实层 AK full12，9 类有样本，3 seeds mean±std）**：

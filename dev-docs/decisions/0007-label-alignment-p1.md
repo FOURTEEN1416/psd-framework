@@ -1,6 +1,6 @@
 # ADR 0007 — P1 立项：标签对齐伪标签修正机制（label-alignment force）
 
-> 状态: **Accepted（用户 2026-09-05 裁决"立项！！！！冲！！！！！！！强化这个卖点必须"）**
+> 状态: **Accepted → 已执行，结果 NULL（2026-09-05，PSD-ALIGN-PREREG-001 冻结判据）**
 > 日期: 2026-09-05 | 关联: review-log R16/R17、experiment-skeleton v2.0、`docs/paper/label-alignment-preregistration.md`（PSD-ALIGN-PREREG-001）
 
 ## 背景
@@ -26,3 +26,7 @@ R16 端到端协议诚信修正后，犬科公开真实层（AK full12）的 C6 
 - 新增 `psd/training/tcl_selftrain.py` gate_mode 扩展（默认行为逐字不变，保 P0.4/R16 可复现）+ `scripts/run_p15_align.py`。
 - 无论成败都产出可发表的方法学证据：成功=低资源主张复活且有机制解释；失败="标签对齐力单独不足以救此层"的定量边界，与 L9 闭环。
 - 禁改已发表/已归档工件；新数字一律新 dated 工件。
+
+## 执行结果（2026-09-05，NULL）
+
+AK v1 spc2 × 10 seeds（`reports/p15-label-alignment-2026-09-05.json`）：最优臂 V2 配额 14.11%±6.65（对 V0 配对胜 8/10、均值 +4.29pp、Wilcoxon p=0.13），V3 原型路主导池精度 0.21（对照 0.11，翻倍）——**方向一致、机制有效，但绝对水平未达预注册 20% 救援线，判据返回 NULL**。按协议 §4 NULL 分支：负边界维持，V0-V3 降级为 §5 方法学消融（已入 05-ablation-analysis.tex），无任何救援主张。约束定位=种子锚定特征几何本身（r0 原型精度 ~0.30 封顶任何门控可选上限），非门控规则——与 L9 label-in-the-loop 诊断闭环。预注册纪律兑现：冒烟 seed42 V1=19.6% 系幸运种子，未据其挪门柱。

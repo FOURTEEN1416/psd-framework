@@ -1,0 +1,481 @@
+{
+  "date": "2026-09-05T12:44:45",
+  "protocol": "PSD-ALIGN-PREREG-001 primary endpoint (AK v1 spc2, 10 seeds, warm features)",
+  "arms": {
+    "V0_control": {
+      "standing_mode": "consensus",
+      "gate_mode": "standing"
+    },
+    "V1_consensus_all": {
+      "standing_mode": "none",
+      "gate_mode": "consensus_all"
+    },
+    "V2_consensus_quota": {
+      "standing_mode": "none",
+      "gate_mode": "consensus_all_quota"
+    },
+    "V3_proto_primary": {
+      "standing_mode": "none",
+      "gate_mode": "proto_primary"
+    }
+  },
+  "summary": {
+    "V0_control": {
+      "n": 10,
+      "top1_mean": 0.0982,
+      "top1_std": 0.0749,
+      "macro_f1_mean": 0.0532,
+      "n_pool_mean": 109.2,
+      "pool_prec_diag_mean": 0.1072
+    },
+    "V1_consensus_all": {
+      "n": 10,
+      "top1_mean": 0.1232,
+      "top1_std": 0.061,
+      "macro_f1_mean": 0.098,
+      "n_pool_mean": 63.5,
+      "pool_prec_diag_mean": 0.1124
+    },
+    "V2_consensus_quota": {
+      "n": 10,
+      "top1_mean": 0.1411,
+      "top1_std": 0.0665,
+      "macro_f1_mean": 0.1168,
+      "n_pool_mean": 26.0,
+      "pool_prec_diag_mean": 0.1425
+    },
+    "V3_proto_primary": {
+      "n": 10,
+      "top1_mean": 0.1357,
+      "top1_std": 0.0566,
+      "macro_f1_mean": 0.1038,
+      "n_pool_mean": 43.0,
+      "pool_prec_diag_mean": 0.2116
+    }
+  },
+  "paired_vs_V0": {
+    "V1_consensus_all": {
+      "mean_delta_pp": 2.5,
+      "wins_vs_V0": 7,
+      "losses_vs_V0": 2,
+      "wilcoxon_p": 0.2852
+    },
+    "V2_consensus_quota": {
+      "mean_delta_pp": 4.29,
+      "wins_vs_V0": 8,
+      "losses_vs_V0": 2,
+      "wilcoxon_p": 0.1348
+    },
+    "V3_proto_primary": {
+      "mean_delta_pp": 3.75,
+      "wins_vs_V0": 6,
+      "losses_vs_V0": 3,
+      "wilcoxon_p": 0.125
+    }
+  },
+  "decision": {
+    "best_arm": "V2_consensus_quota",
+    "best_mean_top1_pct": 14.11,
+    "wins_vs_V0": 8,
+    "verdict": "NULL",
+    "rule": "ALIGNS: mean>=20% & wins>=8/10; PARTIAL: 15-20% or wins 5-7; NULL: <15%"
+  },
+  "config_echo": {
+    "seeds": [
+      42,
+      43,
+      44,
+      45,
+      46,
+      47,
+      48,
+      49,
+      50,
+      51
+    ],
+    "classes": [
+      "apprehend",
+      "bark",
+      "bite",
+      "jump",
+      "retrieve",
+      "sit",
+      "stay",
+      "track",
+      "watch"
+    ],
+    "n_train": 141,
+    "n_val": 56
+  },
+  "runs": {
+    "V0_control": [
+      {
+        "seed": 42,
+        "n_pool": 119,
+        "rounds": 7,
+        "stop": "budget",
+        "pool_oracle_precision_diag": 0.0336,
+        "top1": 0.0357,
+        "macro_f1": 0.0153
+      },
+      {
+        "seed": 43,
+        "n_pool": 122,
+        "rounds": 7,
+        "stop": "budget",
+        "pool_oracle_precision_diag": 0.1967,
+        "top1": 0.2321,
+        "macro_f1": 0.0929
+      },
+      {
+        "seed": 44,
+        "n_pool": 119,
+        "rounds": 7,
+        "stop": "budget",
+        "pool_oracle_precision_diag": 0.1008,
+        "top1": 0.1786,
+        "macro_f1": 0.0973
+      },
+      {
+        "seed": 45,
+        "n_pool": 78,
+        "rounds": 7,
+        "stop": "budget",
+        "pool_oracle_precision_diag": 0.1538,
+        "top1": 0.1429,
+        "macro_f1": 0.0735
+      },
+      {
+        "seed": 46,
+        "n_pool": 110,
+        "rounds": 7,
+        "stop": "budget",
+        "pool_oracle_precision_diag": 0.0818,
+        "top1": 0.0714,
+        "macro_f1": 0.0869
+      },
+      {
+        "seed": 47,
+        "n_pool": 102,
+        "rounds": 7,
+        "stop": "budget",
+        "pool_oracle_precision_diag": 0.1078,
+        "top1": 0.0536,
+        "macro_f1": 0.0368
+      },
+      {
+        "seed": 48,
+        "n_pool": 115,
+        "rounds": 7,
+        "stop": "budget",
+        "pool_oracle_precision_diag": 0.1739,
+        "top1": 0.1607,
+        "macro_f1": 0.0594
+      },
+      {
+        "seed": 49,
+        "n_pool": 100,
+        "rounds": 7,
+        "stop": "budget",
+        "pool_oracle_precision_diag": 0.1,
+        "top1": 0.0714,
+        "macro_f1": 0.0463
+      },
+      {
+        "seed": 50,
+        "n_pool": 117,
+        "rounds": 7,
+        "stop": "budget",
+        "pool_oracle_precision_diag": 0.0598,
+        "top1": 0.0179,
+        "macro_f1": 0.0111
+      },
+      {
+        "seed": 51,
+        "n_pool": 110,
+        "rounds": 7,
+        "stop": "budget",
+        "pool_oracle_precision_diag": 0.0636,
+        "top1": 0.0179,
+        "macro_f1": 0.0123
+      }
+    ],
+    "V1_consensus_all": [
+      {
+        "seed": 42,
+        "n_pool": 75,
+        "rounds": 7,
+        "stop": "budget",
+        "pool_oracle_precision_diag": 0.2933,
+        "top1": 0.1964,
+        "macro_f1": 0.1397
+      },
+      {
+        "seed": 43,
+        "n_pool": 50,
+        "rounds": 7,
+        "stop": "budget",
+        "pool_oracle_precision_diag": 0.08,
+        "top1": 0.125,
+        "macro_f1": 0.1212
+      },
+      {
+        "seed": 44,
+        "n_pool": 67,
+        "rounds": 7,
+        "stop": "budget",
+        "pool_oracle_precision_diag": 0.0746,
+        "top1": 0.1071,
+        "macro_f1": 0.0787
+      },
+      {
+        "seed": 45,
+        "n_pool": 47,
+        "rounds": 7,
+        "stop": "budget",
+        "pool_oracle_precision_diag": 0.1064,
+        "top1": 0.2143,
+        "macro_f1": 0.1868
+      },
+      {
+        "seed": 46,
+        "n_pool": 77,
+        "rounds": 7,
+        "stop": "budget",
+        "pool_oracle_precision_diag": 0.1039,
+        "top1": 0.1607,
+        "macro_f1": 0.1514
+      },
+      {
+        "seed": 47,
+        "n_pool": 72,
+        "rounds": 7,
+        "stop": "budget",
+        "pool_oracle_precision_diag": 0.1111,
+        "top1": 0.1071,
+        "macro_f1": 0.0607
+      },
+      {
+        "seed": 48,
+        "n_pool": 77,
+        "rounds": 7,
+        "stop": "budget",
+        "pool_oracle_precision_diag": 0.0519,
+        "top1": 0.1607,
+        "macro_f1": 0.0995
+      },
+      {
+        "seed": 49,
+        "n_pool": 24,
+        "rounds": 7,
+        "stop": "budget",
+        "pool_oracle_precision_diag": 0.125,
+        "top1": 0.0893,
+        "macro_f1": 0.0932
+      },
+      {
+        "seed": 50,
+        "n_pool": 76,
+        "rounds": 7,
+        "stop": "budget",
+        "pool_oracle_precision_diag": 0.0921,
+        "top1": 0.0357,
+        "macro_f1": 0.0247
+      },
+      {
+        "seed": 51,
+        "n_pool": 70,
+        "rounds": 7,
+        "stop": "budget",
+        "pool_oracle_precision_diag": 0.0857,
+        "top1": 0.0357,
+        "macro_f1": 0.0241
+      }
+    ],
+    "V2_consensus_quota": [
+      {
+        "seed": 42,
+        "n_pool": 38,
+        "rounds": 7,
+        "stop": "budget",
+        "pool_oracle_precision_diag": 0.1842,
+        "top1": 0.1607,
+        "macro_f1": 0.1345
+      },
+      {
+        "seed": 43,
+        "n_pool": 33,
+        "rounds": 7,
+        "stop": "budget",
+        "pool_oracle_precision_diag": 0.0606,
+        "top1": 0.1071,
+        "macro_f1": 0.0932
+      },
+      {
+        "seed": 44,
+        "n_pool": 20,
+        "rounds": 6,
+        "stop": "converged",
+        "pool_oracle_precision_diag": 0.05,
+        "top1": 0.1429,
+        "macro_f1": 0.1078
+      },
+      {
+        "seed": 45,
+        "n_pool": 25,
+        "rounds": 7,
+        "stop": "budget",
+        "pool_oracle_precision_diag": 0.28,
+        "top1": 0.2143,
+        "macro_f1": 0.2022
+      },
+      {
+        "seed": 46,
+        "n_pool": 34,
+        "rounds": 7,
+        "stop": "budget",
+        "pool_oracle_precision_diag": 0.0882,
+        "top1": 0.2679,
+        "macro_f1": 0.2679
+      },
+      {
+        "seed": 47,
+        "n_pool": 25,
+        "rounds": 7,
+        "stop": "budget",
+        "pool_oracle_precision_diag": 0.08,
+        "top1": 0.0714,
+        "macro_f1": 0.0497
+      },
+      {
+        "seed": 48,
+        "n_pool": 25,
+        "rounds": 7,
+        "stop": "budget",
+        "pool_oracle_precision_diag": 0.12,
+        "top1": 0.1786,
+        "macro_f1": 0.0912
+      },
+      {
+        "seed": 49,
+        "n_pool": 10,
+        "rounds": 7,
+        "stop": "budget",
+        "pool_oracle_precision_diag": 0.2,
+        "top1": 0.125,
+        "macro_f1": 0.1023
+      },
+      {
+        "seed": 50,
+        "n_pool": 35,
+        "rounds": 7,
+        "stop": "budget",
+        "pool_oracle_precision_diag": 0.2286,
+        "top1": 0.0536,
+        "macro_f1": 0.0487
+      },
+      {
+        "seed": 51,
+        "n_pool": 15,
+        "rounds": 7,
+        "stop": "budget",
+        "pool_oracle_precision_diag": 0.1333,
+        "top1": 0.0893,
+        "macro_f1": 0.0702
+      }
+    ],
+    "V3_proto_primary": [
+      {
+        "seed": 42,
+        "n_pool": 43,
+        "rounds": 2,
+        "stop": "converged",
+        "pool_oracle_precision_diag": 0.3023,
+        "top1": 0.1429,
+        "macro_f1": 0.0899
+      },
+      {
+        "seed": 43,
+        "n_pool": 43,
+        "rounds": 2,
+        "stop": "converged",
+        "pool_oracle_precision_diag": 0.2558,
+        "top1": 0.1607,
+        "macro_f1": 0.1032
+      },
+      {
+        "seed": 44,
+        "n_pool": 43,
+        "rounds": 2,
+        "stop": "converged",
+        "pool_oracle_precision_diag": 0.2791,
+        "top1": 0.1429,
+        "macro_f1": 0.0911
+      },
+      {
+        "seed": 45,
+        "n_pool": 43,
+        "rounds": 2,
+        "stop": "converged",
+        "pool_oracle_precision_diag": 0.3488,
+        "top1": 0.2143,
+        "macro_f1": 0.1523
+      },
+      {
+        "seed": 46,
+        "n_pool": 43,
+        "rounds": 2,
+        "stop": "converged",
+        "pool_oracle_precision_diag": 0.093,
+        "top1": 0.1786,
+        "macro_f1": 0.1288
+      },
+      {
+        "seed": 47,
+        "n_pool": 43,
+        "rounds": 2,
+        "stop": "converged",
+        "pool_oracle_precision_diag": 0.1395,
+        "top1": 0.0893,
+        "macro_f1": 0.0638
+      },
+      {
+        "seed": 48,
+        "n_pool": 43,
+        "rounds": 2,
+        "stop": "converged",
+        "pool_oracle_precision_diag": 0.0698,
+        "top1": 0.1429,
+        "macro_f1": 0.1201
+      },
+      {
+        "seed": 49,
+        "n_pool": 43,
+        "rounds": 2,
+        "stop": "converged",
+        "pool_oracle_precision_diag": 0.3488,
+        "top1": 0.1786,
+        "macro_f1": 0.1603
+      },
+      {
+        "seed": 50,
+        "n_pool": 43,
+        "rounds": 2,
+        "stop": "converged",
+        "pool_oracle_precision_diag": 0.1163,
+        "top1": 0.0179,
+        "macro_f1": 0.0148
+      },
+      {
+        "seed": 51,
+        "n_pool": 43,
+        "rounds": 2,
+        "stop": "converged",
+        "pool_oracle_precision_diag": 0.1628,
+        "top1": 0.0893,
+        "macro_f1": 0.1142
+      }
+    ]
+  },
+  "wall_clock_sec": 115.1
+}
