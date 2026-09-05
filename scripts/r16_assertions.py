@@ -37,20 +37,41 @@ for pat, why in [
     ('12,000', 'Grimm old'), ('USD 12', 'Grimm old'), ('40,128', 'NTU official count'),
     (r'$\pm$ 4.45', 'E1 old std'), (r'$\pm$4.45', 'E1 old std'),
     (r'$\pm$0.5\,pp observed', '96.6 unsourced dispersion'),
-    ('0.012', 'old Holm family'), (r'corrected $0.047$', 'old Holm'),
+    (r'corrected $0.047$', 'old Holm'),
     (r'corrected $0.77$', 'old Holm'), ('1.71', 'old aimclr v2 mf1'),
     (r', $p=0.030$', 'E4 raw p alone'), (r'24.6\\%', 'old scratch'),
     ('matches the official reference', 'conclusion overclaim'),
     ('none exists there', 'E9 false no-GT claim'), ('head-estimated precision', 'E9 false stopping claim'),
+    # R17 regression: evaluator-bug & family-caliber & wording fixes
+    ('0.043', 'R17 per-tier Holm replaces combined'), ('0.024', 'R17 per-tier Holm v2'),
+    ('14.7', 'EP3 buggy-evaluator macro-F1'), ('7.83', 'EP3 buggy-evaluator macro-F1'),
+    (r'9--12\%', 'head_calib loose range'), ('matched absolute budget', 'v2 seeds 14 not 16'),
+    (r'6\% of the v2 training pool', 'v2 seed fraction'),
+    ('cold-start protocols remain near chance', 'intro unsupported clause'),
+    ('grows complete labeled coverage', '03 completeness wording'),
+    ('plus a full scan of the maintained', 'novelty double-count'),
+    ('requires a labeled reference', 'E7 stopping misdescription'),
+    ('reported as-is. These', 'abstract redundant tail'),
 ]:
     gone(pat, why)
+
+for pat, why in [
+    ('0.023', 'R17 v1 mf1 per-tier Holm'), ('0.049', 'R17 v1 spc4 per-tier Holm'),
+    ('0.012', 'R17 v2 per-tier Holm'), ('88.7', 'E9 linear-only retention context'),
+    ('19.33', 'corrected macro-F1'), ('14 of 256', 'v2 realized seeds'),
+    ('inert on this taxonomy', 'gate disclosure E7'), ('inert on the numeric NTU taxonomy', 'gate disclosure E9'),
+    ('Warm-start small-budget usability', 'warm-start paragraph'),
+    ('C2} is the novelty claim', 'claim-tag note'),
+    (r'13\%/5.5\%', 'fig5 caption fraction'),
+    ('run\\_r16\\_holm\\_p04.py', 'chain generator'),
+]:
+    present(pat, why)
 
 # ---- corrected numbers / disclosures present ----
 for pat, why in [
     ('90.6', 'E9 corrected retention'), ('67.5', 'E9 corrected top1'),
     ('9.8', 'E7 corrected warm'), ('15.2', 'E7 aimclr'), ('13.1', 'E7b warm v2'),
-    ('17.6', 'E7b aimclr v2'), ('0.043', 'v1 mf1 reversal Holm'), ('0.024', 'v2 mf1 Holm'),
-    ('0.090', 'E4 Holm corrected'), ('E6: taxonomy', 'E-numbering fixed'),
+    ('17.6', 'E7b aimclr v2'), ('0.090', 'E4 Holm corrected'), ('E6: taxonomy', 'E-numbering fixed'),
     ('never on pool ground truth', 'protocol fix disclosed'),
     ('solver-path noise', 'EP3 sensitivity'), (r'Figure~\ref{fig:budget}', 'fig5 referenced'),
     ('converge', 'stopping disclosure'), ('post-hoc diagnostic', 'oracle disclosure'),
