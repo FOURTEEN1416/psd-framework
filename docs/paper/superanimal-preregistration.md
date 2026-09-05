@@ -26,6 +26,10 @@ Full-supervision linear-probe top-1 on the re-extracted AK v1 val split (vs.\ 33
 - LABEL_BOTTLENECK → strengthen the negative boundary: "replacing the skeleton extractor with a stronger pretrained model did not lift the ceiling" is a powerful additional line of evidence that the constraint is the label pipeline, not the skeleton quality.
 - Either way, evidence goes to §5 (or a new §6 if a positive result emerges).
 
+## Amendment (2026-09-05, pre-run)
+
+Extractor changed from SuperAnimal-Quadruped (DLC framework) to **YOLO11x-pose** fine-tuned on the same dog-pose dataset (8476 images, 24 keypoints). Rationale: (a) identical 24-keypoint topology = zero adaptation cost; (b) same ultralytics inference pipeline = zero code change to extraction; (c) the hypothesis is unchanged—"a stronger pose estimator raises the ceiling"—only the specific extractor differs. SuperAnimal remains available as a future comparison if YOLO11x-pose also fails to move the ceiling.
+
 ## 5. Reproduction
 
 `scripts/run_p18_superanimal_extract.py` (extraction), `scripts/run_p18_superanimal_e7.py` (downstream); evidence `reports/p18-superanimal-<date>.json`.
