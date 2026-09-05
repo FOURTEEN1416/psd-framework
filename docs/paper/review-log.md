@@ -341,3 +341,12 @@ YOLO-PetX（IEEE CEECT 2025，全题名经 GitHub 全局代码检索锁定）、
 **F6 标题（用户终审项，不擅改）**：编辑 agent 指出标题"Low-Resource Animal Behavior Recognition"+关键词在动物层端到端为负后存在过度承诺风险，outline R2 早已预登记降级预案（"…with Scarce Supervision: A Tier-Dependent Study"）。标题是用户终审项，本轮只标记+已让摘要/结论/贡献句全面 tier-tagged 兜底，标题改否交用户。
 **验证**：编译 34 页 0 错误 0 未定义；r16 断言全过；citation_checker 0 错 0 警；R19 目标串（"rather than labeled behavior video"/"the premise of this paper"/"complete low-resource pipeline evaluated"/旧 C6 tag/"in our title"）全清零；highlights 两副本同步、字符 ≤85；overfull 仍仅 1（ORCID 空盒，USER 占位产物）。零实验数字改动。
 **教训（再固化）**：①我自己写"强化卖点"的重写最容易 overclaim——把"负结果"吹成"证明前提"是不可证伪的 post-hoc，审稿人一眼识破且反噬全篇诚信；诚实版本是"我们的证据归因于 X，是否为 Y 由预注册试点分离"；②绝对存在句（only/none/does not exist）必须 hedge+定义域，论文自己引了 MABe22 就是潜在反例；③框架层与结果层是两个发现面，单 agent 各盲一半，交叉对抗是硬要求。
+
+---
+
+## R20 标题终裁（2026-09-05，模拟 PR 审稿组定最优解，用户令"模拟审评给最优解"）
+
+**模拟审稿还原**：R1(方法学)最强攻击="标题承诺 low-resource 动物识别 vs §4.3 动物层端到端近随机"的标题-结果不匹配（framing 级拒稿面，R19 编辑 agent 的 F6 残余）；R2(新颖性)真正新且已交付的是解耦+演化准则(C1 实测 6.07×)，low-resource 本身不新；R3(应用)重诚实+跨域 NTU；AE 扫标题+摘要定送审。关键：outline R2 原预案是"E6 弱则砍演化准则半句"，但实测**弱的是 low-resource 端到端、强的是演化准则**——最优降级方向与预案相反。
+**最优解=选项C**：从标题移除 "Low-Resource" → "A Physics-Semantics Decoupled Framework for Animal Behavior Recognition under Evolving Evaluation Criteria"。卖点从已死的"低资源"迁到真正硬的"解耦+演化准则"；low-resource 作设计目标保留在摘要/正文/关键词（正文上下文即时限定，标题无法限定才是风险点）。§5"the word low-resource in our title"→"low-resource design goal"（不再依赖标题）。
+**验证**：34 页 0 错误 0 未定义；标题页渲染目检无溢出、"Low-Resource"已消失；断言全过；citation_checker 0/0；overfull 仍仅 ORCID 空盒（USER 占位）。零实验数字改动。R2 风险闭环。
+**置信度**：高——纯标题/措辞层，模拟审稿逻辑清晰（移除单点最大暴露面、保留诚实内容），渲染+编译+断言三重验证。剩余=用户人工项（作者/GenAI/资金/NTU 截图/真 K9 自采）。

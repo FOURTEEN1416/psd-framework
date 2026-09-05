@@ -34,16 +34,17 @@
 \def\textpagefraction{.001}
 
 %% ---------------- 前置区（Frontmatter）----------------
-\shorttitle{Physics-semantics decoupled framework for low-resource animal behavior recognition}
+\shorttitle{Physics-semantics decoupled framework for animal behavior recognition}
 %% 排版纪律 2: 前置区字段(shortauthors/author/ead/affiliation)会被类内 LaTeX3 机制全展开——
 %%   禁放任何自定义宏(含 \TODO/\textcolor)，只写纯文本占位；\TODO 仅用于正文区。
 \shortauthors{USER: surname et al.}
 
-% R2 标题终裁仍待用户（现 15 词，官方理想 10-15 词上沿）
-\title[mode = title]{A Physics-Semantics Decoupled Framework for Low-Resource Animal Behavior Recognition under Evolving Evaluation Criteria}
+% R20 标题终裁（模拟审稿最优解）：移除"Low-Resource"——动物层端到端低资源为负，标题词与结果不匹配是 framing 级拒稿面；
+%   卖点迁到已交付且新颖的"解耦+演化评估准则"。low-resource 作为设计目标保留在摘要/正文/关键词（上下文即时限定）。
+\title[mode = title]{A Physics-Semantics Decoupled Framework for Animal Behavior Recognition under Evolving Evaluation Criteria}
 %% R18: casprelimstitle 在 highlights/abstract prelims 框内不自动折断（类缺陷）——手动断行修复 117pt overfull
 
-\renewcommand{\casprelimstitle}{A Physics--Semantics Decoupled Framework for Low-Resource Animal Behavior\\ Recognition under Evolving Evaluation Criteria}
+\renewcommand{\casprelimstitle}{A Physics--Semantics Decoupled Framework for Animal Behavior Recognition\\ under Evolving Evaluation Criteria}
 
 %% 作者区 USER 终审项: 名单/单位/ORCID/通讯标记——结构按官方模板预留
 \author[1]{USER: Author One}
