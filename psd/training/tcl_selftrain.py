@@ -8,6 +8,10 @@
 GT 泄漏防线（本模块最高纪律）:
 - truth_all 仅用于评估指标计算，绝不进入任何训练/门控/阈值标定路径;
 - 温度 T 只在锚点侧标定; 类别先验只取自当前已标注集合（种子∪池）。
+- R16 修正: precision_stop=False 时，oracle 池精度只作诊断记录，
+  不进入停止控制路径（端到端臂无规则共识参照，熔断禁用）;
+  precision_stop=True（默认）保留 P0.4 语义——其 truth_all 为规则引擎
+  共识伪 GT（非人工标注），熔断消费的是该弱参照精度。
 
 口径: public_real_physics_prior（metric_layer 锁字段由装配层写入导出物）。
 """
@@ -194,6 +198,12 @@ def run_selftrain(
     max_iters: int = 6,
     converge_change_rate: float = 0.01,
     precision_drop_patience: int = 2,
+    precision_stop: bool = True,
+    # ↑ R16 协议修正: False 时 oracle 池精度仅作诊断记录，绝不进入停止控制路径
+    #   （端到端臂无规则共识参照，熔断禁用，停止=预算/收敛）
+    head_calib: bool = False,
+    # ↑ R16 诊断: 每轮对头路概率做锚点侧温度再校准（GT 无关），
+    #   使 κ 与 τ*（原型路校准尺度）可比——检验门控失效是否为尺度错配所致
 ) -> dict:
     """Algorithm 1 第 4-6 步迭代闭环。返回逐轮记录与最终池索引。
 
@@ -245,7 +255,7 @@ def run_selftrain(
         if extra:
             rec.update(extra)
         rounds.append(rec)
-        if rec["precision"] is not None:
+        if rec["precision"] is not None and precision_stop:
             precision_history.append(rec["precision"])
         return rec
 
@@ -288,6 +298,11 @@ def run_selftrain(
                              device=str(head_cfg.get("device", "cpu"))).fit(
                 emb_all[lab_idx], y_lab_id)
             h_probs = head.predict_proba(emb_all)
+            if head_calib:
+                # R16 诊断: 头路概率锚点侧温度再校准（只用锚点行的 margin 分布，GT 无关）
+                logp = np.log(np.clip(h_probs[anchor_idx], 1e-12, 1.0))
+                T = fit_temperature(logp, target_median=calib_target)
+                h_probs = softmax_temperature(np.log(np.clip(h_probs, 1e-12, 1.0)), T)
             h_top, h_margin = prob_margins(h_probs)
             h_pred = np.array([class_names[i] for i in h_top])
         else:

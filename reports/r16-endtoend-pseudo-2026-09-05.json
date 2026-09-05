@@ -1,0 +1,5345 @@
+{
+  "date": "2026-09-05T10:36:59",
+  "protocol": "R16 corrected end-to-end: final head = seeds(true) + pool(PSEUDO from final round); precision-drop stopping disabled (no oracle); full-supervision references unchanged",
+  "correction_note": "Supersedes p07/p08/p10/p12 end-to-end arms (those trained the reported head on TRUE labels of pool clips — a protocol error found in adversarial review R16).",
+  "layer": "public_real",
+  "summary": {
+    "v1": {
+      "warm_spc2": {
+        "n": 10,
+        "top1_mean": 0.0982,
+        "top1_std": 0.0749,
+        "macro_f1_mean": 0.0532,
+        "macro_f1_std": 0.0338,
+        "pool_oracle_precision_mean_diag": 0.1072,
+        "n_pool_mean": 109.2
+      },
+      "warm_spc4": {
+        "n": 10,
+        "top1_mean": 0.1089,
+        "top1_std": 0.0676,
+        "macro_f1_mean": 0.0728,
+        "macro_f1_std": 0.0378,
+        "pool_oracle_precision_mean_diag": 0.0972,
+        "n_pool_mean": 87.8
+      },
+      "aimclr_spc2": {
+        "n": 10,
+        "top1_mean": 0.1518,
+        "top1_std": 0.0514,
+        "macro_f1_mean": 0.1041,
+        "macro_f1_std": 0.0423,
+        "pool_oracle_precision_mean_diag": 0.1533,
+        "n_pool_mean": 107.1
+      },
+      "aimclr_spc4": {
+        "n": 10,
+        "top1_mean": 0.1589,
+        "top1_std": 0.0441,
+        "macro_f1_mean": 0.139,
+        "macro_f1_std": 0.0485,
+        "pool_oracle_precision_mean_diag": 0.1356,
+        "n_pool_mean": 81.3
+      },
+      "scratch_spc2": {
+        "n": 10,
+        "top1_mean": 0.0839,
+        "top1_std": 0.1065,
+        "macro_f1_mean": 0.0155,
+        "macro_f1_std": 0.0192,
+        "pool_oracle_precision_mean_diag": 0.1268,
+        "n_pool_mean": 123.0
+      },
+      "warm_full": {
+        "n": 1,
+        "top1_mean": 0.3393,
+        "top1_std": 0.0,
+        "macro_f1_mean": 0.165,
+        "macro_f1_std": 0.0,
+        "pool_oracle_precision_mean_diag": null,
+        "n_pool_mean": 0.0
+      }
+    },
+    "v2": {
+      "warm_spc2": {
+        "n": 10,
+        "top1_mean": 0.1313,
+        "top1_std": 0.0534,
+        "macro_f1_mean": 0.0758,
+        "macro_f1_std": 0.0249,
+        "pool_oracle_precision_mean_diag": 0.1869,
+        "n_pool_mean": 225.0
+      },
+      "warm_spc4": {
+        "n": 10,
+        "top1_mean": 0.1656,
+        "top1_std": 0.0678,
+        "macro_f1_mean": 0.0927,
+        "macro_f1_std": 0.0439,
+        "pool_oracle_precision_mean_diag": 0.1362,
+        "n_pool_mean": 216.5
+      },
+      "aimclr_spc2": {
+        "n": 10,
+        "top1_mean": 0.1761,
+        "top1_std": 0.0432,
+        "macro_f1_mean": 0.1305,
+        "macro_f1_std": 0.0398,
+        "pool_oracle_precision_mean_diag": 0.1783,
+        "n_pool_mean": 236.2
+      },
+      "aimclr_spc4": {
+        "n": 10,
+        "top1_mean": 0.1458,
+        "top1_std": 0.0374,
+        "macro_f1_mean": 0.1188,
+        "macro_f1_std": 0.0371,
+        "pool_oracle_precision_mean_diag": 0.1568,
+        "n_pool_mean": 220.3
+      },
+      "scratch_spc2": {
+        "n": 10,
+        "top1_mean": 0.1375,
+        "top1_std": 0.0564,
+        "macro_f1_mean": 0.0298,
+        "macro_f1_std": 0.0105,
+        "pool_oracle_precision_mean_diag": 0.1905,
+        "n_pool_mean": 242.0
+      },
+      "warm_full": {
+        "n": 1,
+        "top1_mean": 0.3542,
+        "top1_std": 0.0,
+        "macro_f1_mean": 0.1933,
+        "macro_f1_std": 0.0,
+        "pool_oracle_precision_mean_diag": null,
+        "n_pool_mean": 0.0
+      }
+    }
+  },
+  "paired_tests": {
+    "v1_warm_vs_aimclr_spc2_top1": {
+      "mean_delta_pp": -5.36,
+      "std_delta_pp": 6.94,
+      "wins": 2,
+      "losses": 7,
+      "ties": 1,
+      "wilcoxon_p": 0.0742,
+      "holm_adjusted": 0.5194
+    },
+    "v1_warm_vs_aimclr_spc2_macro_f1": {
+      "mean_delta_pp": -5.09,
+      "std_delta_pp": 4.41,
+      "wins": 1,
+      "losses": 9,
+      "ties": 0,
+      "wilcoxon_p": 0.0039,
+      "holm_adjusted": 0.0429
+    },
+    "v1_warm_vs_aimclr_spc4_top1": {
+      "mean_delta_pp": -5.0,
+      "std_delta_pp": 7.66,
+      "wins": 3,
+      "losses": 6,
+      "ties": 1,
+      "wilcoxon_p": 0.1445,
+      "holm_adjusted": 0.7225
+    },
+    "v1_warm_vs_aimclr_spc4_macro_f1": {
+      "mean_delta_pp": -6.62,
+      "std_delta_pp": 5.82,
+      "wins": 1,
+      "losses": 9,
+      "ties": 0,
+      "wilcoxon_p": 0.0098,
+      "holm_adjusted": 0.098
+    },
+    "v1_warm_vs_scratch_spc2_top1": {
+      "mean_delta_pp": 1.43,
+      "std_delta_pp": 15.92,
+      "wins": 6,
+      "losses": 4,
+      "ties": 0,
+      "wilcoxon_p": 0.7695,
+      "holm_adjusted": 1.0
+    },
+    "v1_warm_vs_scratch_spc2_macro_f1": {
+      "mean_delta_pp": 3.77,
+      "std_delta_pp": 4.41,
+      "wins": 8,
+      "losses": 2,
+      "ties": 0,
+      "wilcoxon_p": 0.0371,
+      "holm_adjusted": 0.2968
+    },
+    "v2_warm_vs_aimclr_spc2_top1": {
+      "mean_delta_pp": -4.48,
+      "std_delta_pp": 6.29,
+      "wins": 3,
+      "losses": 6,
+      "ties": 1,
+      "wilcoxon_p": 0.0938,
+      "holm_adjusted": 0.5628
+    },
+    "v2_warm_vs_aimclr_spc2_macro_f1": {
+      "mean_delta_pp": -5.47,
+      "std_delta_pp": 4.86,
+      "wins": 1,
+      "losses": 9,
+      "ties": 0,
+      "wilcoxon_p": 0.0137,
+      "holm_adjusted": 0.1233
+    },
+    "v2_warm_vs_aimclr_spc4_top1": {
+      "mean_delta_pp": 1.98,
+      "std_delta_pp": 7.02,
+      "wins": 6,
+      "losses": 4,
+      "ties": 0,
+      "wilcoxon_p": 0.3652,
+      "holm_adjusted": 1.0
+    },
+    "v2_warm_vs_aimclr_spc4_macro_f1": {
+      "mean_delta_pp": -2.62,
+      "std_delta_pp": 4.53,
+      "wins": 4,
+      "losses": 6,
+      "ties": 0,
+      "wilcoxon_p": 0.1602,
+      "holm_adjusted": 0.7225
+    },
+    "v2_warm_vs_scratch_spc2_top1": {
+      "mean_delta_pp": -0.63,
+      "std_delta_pp": 6.95,
+      "wins": 4,
+      "losses": 5,
+      "ties": 1,
+      "wilcoxon_p": 0.75,
+      "holm_adjusted": 1.0
+    },
+    "v2_warm_vs_scratch_spc2_macro_f1": {
+      "mean_delta_pp": 4.6,
+      "std_delta_pp": 2.01,
+      "wins": 10,
+      "losses": 0,
+      "ties": 0,
+      "wilcoxon_p": 0.002,
+      "holm_adjusted": 0.024
+    }
+  },
+  "diagnostics": {
+    "v1_warm_spc2_head_calib": [
+      {
+        "seed": 42,
+        "n_pool": 90,
+        "rounds": 7,
+        "stop": "budget",
+        "pool_oracle_precision": 0.1111,
+        "top1": 0.1071,
+        "macro_f1": 0.0573,
+        "per_class": {
+          "apprehend": {
+            "support": 4,
+            "acc": 0.0
+          },
+          "bite": {
+            "support": 2,
+            "acc": 0.0
+          },
+          "jump": {
+            "support": 9,
+            "acc": 0.1111
+          },
+          "retrieve": {
+            "support": 2,
+            "acc": 0.0
+          },
+          "sit": {
+            "support": 1,
+            "acc": 0.0
+          },
+          "stay": {
+            "support": 8,
+            "acc": 0.25
+          },
+          "track": {
+            "support": 16,
+            "acc": 0.0
+          },
+          "watch": {
+            "support": 14,
+            "acc": 0.2143
+          }
+        }
+      },
+      {
+        "seed": 43,
+        "n_pool": 78,
+        "rounds": 7,
+        "stop": "budget",
+        "pool_oracle_precision": 0.0897,
+        "top1": 0.125,
+        "macro_f1": 0.0833,
+        "per_class": {
+          "apprehend": {
+            "support": 4,
+            "acc": 0.0
+          },
+          "bite": {
+            "support": 2,
+            "acc": 0.5
+          },
+          "jump": {
+            "support": 9,
+            "acc": 0.3333
+          },
+          "retrieve": {
+            "support": 2,
+            "acc": 0.0
+          },
+          "sit": {
+            "support": 1,
+            "acc": 0.0
+          },
+          "stay": {
+            "support": 8,
+            "acc": 0.375
+          },
+          "track": {
+            "support": 16,
+            "acc": 0.0
+          },
+          "watch": {
+            "support": 14,
+            "acc": 0.0
+          }
+        }
+      },
+      {
+        "seed": 44,
+        "n_pool": 41,
+        "rounds": 7,
+        "stop": "budget",
+        "pool_oracle_precision": 0.122,
+        "top1": 0.0893,
+        "macro_f1": 0.0725,
+        "per_class": {
+          "apprehend": {
+            "support": 4,
+            "acc": 0.25
+          },
+          "bite": {
+            "support": 2,
+            "acc": 0.5
+          },
+          "jump": {
+            "support": 9,
+            "acc": 0.2222
+          },
+          "retrieve": {
+            "support": 2,
+            "acc": 0.0
+          },
+          "sit": {
+            "support": 1,
+            "acc": 0.0
+          },
+          "stay": {
+            "support": 8,
+            "acc": 0.0
+          },
+          "track": {
+            "support": 16,
+            "acc": 0.0
+          },
+          "watch": {
+            "support": 14,
+            "acc": 0.0714
+          }
+        }
+      }
+    ]
+  },
+  "holm": {
+    "families": "per-tier warm-vs-aimclr(spc2/spc4 × top1/mf1) + warm-vs-scratch(spc2 × top1/mf1)",
+    "adjusted": {
+      "v2_warm_vs_scratch_spc2_macro_f1": {
+        "raw_p": 0.002,
+        "holm_adjusted": 0.024
+      },
+      "v1_warm_vs_aimclr_spc2_macro_f1": {
+        "raw_p": 0.0039,
+        "holm_adjusted": 0.0429
+      },
+      "v1_warm_vs_aimclr_spc4_macro_f1": {
+        "raw_p": 0.0098,
+        "holm_adjusted": 0.098
+      },
+      "v2_warm_vs_aimclr_spc2_macro_f1": {
+        "raw_p": 0.0137,
+        "holm_adjusted": 0.1233
+      },
+      "v1_warm_vs_scratch_spc2_macro_f1": {
+        "raw_p": 0.0371,
+        "holm_adjusted": 0.2968
+      },
+      "v1_warm_vs_aimclr_spc2_top1": {
+        "raw_p": 0.0742,
+        "holm_adjusted": 0.5194
+      },
+      "v2_warm_vs_aimclr_spc2_top1": {
+        "raw_p": 0.0938,
+        "holm_adjusted": 0.5628
+      },
+      "v1_warm_vs_aimclr_spc4_top1": {
+        "raw_p": 0.1445,
+        "holm_adjusted": 0.7225
+      },
+      "v2_warm_vs_aimclr_spc4_macro_f1": {
+        "raw_p": 0.1602,
+        "holm_adjusted": 0.7225
+      },
+      "v2_warm_vs_aimclr_spc4_top1": {
+        "raw_p": 0.3652,
+        "holm_adjusted": 1.0
+      },
+      "v2_warm_vs_scratch_spc2_top1": {
+        "raw_p": 0.75,
+        "holm_adjusted": 1.0
+      },
+      "v1_warm_vs_scratch_spc2_top1": {
+        "raw_p": 0.7695,
+        "holm_adjusted": 1.0
+      }
+    }
+  },
+  "runs": {
+    "v1": {
+      "warm_spc2": [
+        {
+          "arm": "warm",
+          "spc": 2,
+          "seed": 42,
+          "n_seeds": 18,
+          "n_pool": 119,
+          "n_pseudo": 119,
+          "tau_star": 0.1214,
+          "rounds": 7,
+          "stop": "budget",
+          "pool_oracle_precision_diag": 0.0336,
+          "top1": 0.0357,
+          "macro_f1": 0.0153,
+          "per_class": {
+            "apprehend": {
+              "support": 4,
+              "acc": 0.5
+            },
+            "bite": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "jump": {
+              "support": 9,
+              "acc": 0.0
+            },
+            "retrieve": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "sit": {
+              "support": 1,
+              "acc": 0.0
+            },
+            "stay": {
+              "support": 8,
+              "acc": 0.0
+            },
+            "track": {
+              "support": 16,
+              "acc": 0.0
+            },
+            "watch": {
+              "support": 14,
+              "acc": 0.0
+            }
+          }
+        },
+        {
+          "arm": "warm",
+          "spc": 2,
+          "seed": 43,
+          "n_seeds": 18,
+          "n_pool": 122,
+          "n_pseudo": 122,
+          "tau_star": 0.103,
+          "rounds": 7,
+          "stop": "budget",
+          "pool_oracle_precision_diag": 0.1967,
+          "top1": 0.2321,
+          "macro_f1": 0.0929,
+          "per_class": {
+            "apprehend": {
+              "support": 4,
+              "acc": 0.0
+            },
+            "bite": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "jump": {
+              "support": 9,
+              "acc": 0.0
+            },
+            "retrieve": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "sit": {
+              "support": 1,
+              "acc": 0.0
+            },
+            "stay": {
+              "support": 8,
+              "acc": 0.5
+            },
+            "track": {
+              "support": 16,
+              "acc": 0.5625
+            },
+            "watch": {
+              "support": 14,
+              "acc": 0.0
+            }
+          }
+        },
+        {
+          "arm": "warm",
+          "spc": 2,
+          "seed": 44,
+          "n_seeds": 18,
+          "n_pool": 119,
+          "n_pseudo": 119,
+          "tau_star": 0.1746,
+          "rounds": 7,
+          "stop": "budget",
+          "pool_oracle_precision_diag": 0.1008,
+          "top1": 0.1786,
+          "macro_f1": 0.0973,
+          "per_class": {
+            "apprehend": {
+              "support": 4,
+              "acc": 0.25
+            },
+            "bite": {
+              "support": 2,
+              "acc": 0.5
+            },
+            "jump": {
+              "support": 9,
+              "acc": 0.3333
+            },
+            "retrieve": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "sit": {
+              "support": 1,
+              "acc": 0.0
+            },
+            "stay": {
+              "support": 8,
+              "acc": 0.0
+            },
+            "track": {
+              "support": 16,
+              "acc": 0.3125
+            },
+            "watch": {
+              "support": 14,
+              "acc": 0.0
+            }
+          }
+        },
+        {
+          "arm": "warm",
+          "spc": 2,
+          "seed": 45,
+          "n_seeds": 18,
+          "n_pool": 78,
+          "n_pseudo": 78,
+          "tau_star": 0.2051,
+          "rounds": 7,
+          "stop": "budget",
+          "pool_oracle_precision_diag": 0.1538,
+          "top1": 0.1429,
+          "macro_f1": 0.0735,
+          "per_class": {
+            "apprehend": {
+              "support": 4,
+              "acc": 0.0
+            },
+            "bite": {
+              "support": 2,
+              "acc": 0.5
+            },
+            "jump": {
+              "support": 9,
+              "acc": 0.0
+            },
+            "retrieve": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "sit": {
+              "support": 1,
+              "acc": 0.0
+            },
+            "stay": {
+              "support": 8,
+              "acc": 0.125
+            },
+            "track": {
+              "support": 16,
+              "acc": 0.0
+            },
+            "watch": {
+              "support": 14,
+              "acc": 0.4286
+            }
+          }
+        },
+        {
+          "arm": "warm",
+          "spc": 2,
+          "seed": 46,
+          "n_seeds": 18,
+          "n_pool": 110,
+          "n_pseudo": 110,
+          "tau_star": 0.1311,
+          "rounds": 7,
+          "stop": "budget",
+          "pool_oracle_precision_diag": 0.0818,
+          "top1": 0.0714,
+          "macro_f1": 0.0869,
+          "per_class": {
+            "apprehend": {
+              "support": 4,
+              "acc": 0.25
+            },
+            "bite": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "jump": {
+              "support": 9,
+              "acc": 0.2222
+            },
+            "retrieve": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "sit": {
+              "support": 1,
+              "acc": 1.0
+            },
+            "stay": {
+              "support": 8,
+              "acc": 0.0
+            },
+            "track": {
+              "support": 16,
+              "acc": 0.0
+            },
+            "watch": {
+              "support": 14,
+              "acc": 0.0
+            }
+          }
+        },
+        {
+          "arm": "warm",
+          "spc": 2,
+          "seed": 47,
+          "n_seeds": 18,
+          "n_pool": 102,
+          "n_pseudo": 102,
+          "tau_star": 0.282,
+          "rounds": 7,
+          "stop": "budget",
+          "pool_oracle_precision_diag": 0.1078,
+          "top1": 0.0536,
+          "macro_f1": 0.0368,
+          "per_class": {
+            "apprehend": {
+              "support": 4,
+              "acc": 0.0
+            },
+            "bite": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "jump": {
+              "support": 9,
+              "acc": 0.1111
+            },
+            "retrieve": {
+              "support": 2,
+              "acc": 0.5
+            },
+            "sit": {
+              "support": 1,
+              "acc": 0.0
+            },
+            "stay": {
+              "support": 8,
+              "acc": 0.0
+            },
+            "track": {
+              "support": 16,
+              "acc": 0.0
+            },
+            "watch": {
+              "support": 14,
+              "acc": 0.0714
+            }
+          }
+        },
+        {
+          "arm": "warm",
+          "spc": 2,
+          "seed": 48,
+          "n_seeds": 18,
+          "n_pool": 115,
+          "n_pseudo": 115,
+          "tau_star": 0.1171,
+          "rounds": 7,
+          "stop": "budget",
+          "pool_oracle_precision_diag": 0.1739,
+          "top1": 0.1607,
+          "macro_f1": 0.0594,
+          "per_class": {
+            "apprehend": {
+              "support": 4,
+              "acc": 0.0
+            },
+            "bite": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "jump": {
+              "support": 9,
+              "acc": 0.0
+            },
+            "retrieve": {
+              "support": 2,
+              "acc": 0.5
+            },
+            "sit": {
+              "support": 1,
+              "acc": 0.0
+            },
+            "stay": {
+              "support": 8,
+              "acc": 0.0
+            },
+            "track": {
+              "support": 16,
+              "acc": 0.0
+            },
+            "watch": {
+              "support": 14,
+              "acc": 0.5714
+            }
+          }
+        },
+        {
+          "arm": "warm",
+          "spc": 2,
+          "seed": 49,
+          "n_seeds": 18,
+          "n_pool": 100,
+          "n_pseudo": 100,
+          "tau_star": 0.3574,
+          "rounds": 7,
+          "stop": "budget",
+          "pool_oracle_precision_diag": 0.1,
+          "top1": 0.0714,
+          "macro_f1": 0.0463,
+          "per_class": {
+            "apprehend": {
+              "support": 4,
+              "acc": 0.0
+            },
+            "bite": {
+              "support": 2,
+              "acc": 0.5
+            },
+            "jump": {
+              "support": 9,
+              "acc": 0.0
+            },
+            "retrieve": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "sit": {
+              "support": 1,
+              "acc": 0.0
+            },
+            "stay": {
+              "support": 8,
+              "acc": 0.25
+            },
+            "track": {
+              "support": 16,
+              "acc": 0.0
+            },
+            "watch": {
+              "support": 14,
+              "acc": 0.0714
+            }
+          }
+        },
+        {
+          "arm": "warm",
+          "spc": 2,
+          "seed": 50,
+          "n_seeds": 18,
+          "n_pool": 117,
+          "n_pseudo": 117,
+          "tau_star": 0.1292,
+          "rounds": 7,
+          "stop": "budget",
+          "pool_oracle_precision_diag": 0.0598,
+          "top1": 0.0179,
+          "macro_f1": 0.0111,
+          "per_class": {
+            "apprehend": {
+              "support": 4,
+              "acc": 0.0
+            },
+            "bite": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "jump": {
+              "support": 9,
+              "acc": 0.1111
+            },
+            "retrieve": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "sit": {
+              "support": 1,
+              "acc": 0.0
+            },
+            "stay": {
+              "support": 8,
+              "acc": 0.0
+            },
+            "track": {
+              "support": 16,
+              "acc": 0.0
+            },
+            "watch": {
+              "support": 14,
+              "acc": 0.0
+            }
+          }
+        },
+        {
+          "arm": "warm",
+          "spc": 2,
+          "seed": 51,
+          "n_seeds": 18,
+          "n_pool": 110,
+          "n_pseudo": 110,
+          "tau_star": 0.2075,
+          "rounds": 7,
+          "stop": "budget",
+          "pool_oracle_precision_diag": 0.0636,
+          "top1": 0.0179,
+          "macro_f1": 0.0123,
+          "per_class": {
+            "apprehend": {
+              "support": 4,
+              "acc": 0.0
+            },
+            "bite": {
+              "support": 2,
+              "acc": 0.5
+            },
+            "jump": {
+              "support": 9,
+              "acc": 0.0
+            },
+            "retrieve": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "sit": {
+              "support": 1,
+              "acc": 0.0
+            },
+            "stay": {
+              "support": 8,
+              "acc": 0.0
+            },
+            "track": {
+              "support": 16,
+              "acc": 0.0
+            },
+            "watch": {
+              "support": 14,
+              "acc": 0.0
+            }
+          }
+        }
+      ],
+      "warm_spc4": [
+        {
+          "arm": "warm",
+          "spc": 4,
+          "seed": 42,
+          "n_seeds": 35,
+          "n_pool": 98,
+          "n_pseudo": 98,
+          "tau_star": 0.2242,
+          "rounds": 7,
+          "stop": "budget",
+          "pool_oracle_precision_diag": 0.051,
+          "top1": 0.0536,
+          "macro_f1": 0.0782,
+          "per_class": {
+            "apprehend": {
+              "support": 4,
+              "acc": 0.0
+            },
+            "bite": {
+              "support": 2,
+              "acc": 0.5
+            },
+            "jump": {
+              "support": 9,
+              "acc": 0.1111
+            },
+            "retrieve": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "sit": {
+              "support": 1,
+              "acc": 1.0
+            },
+            "stay": {
+              "support": 8,
+              "acc": 0.0
+            },
+            "track": {
+              "support": 16,
+              "acc": 0.0
+            },
+            "watch": {
+              "support": 14,
+              "acc": 0.0
+            }
+          }
+        },
+        {
+          "arm": "warm",
+          "spc": 4,
+          "seed": 43,
+          "n_seeds": 35,
+          "n_pool": 91,
+          "n_pseudo": 91,
+          "tau_star": 0.2311,
+          "rounds": 7,
+          "stop": "budget",
+          "pool_oracle_precision_diag": 0.1538,
+          "top1": 0.125,
+          "macro_f1": 0.0657,
+          "per_class": {
+            "apprehend": {
+              "support": 4,
+              "acc": 0.0
+            },
+            "bite": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "jump": {
+              "support": 9,
+              "acc": 0.3333
+            },
+            "retrieve": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "sit": {
+              "support": 1,
+              "acc": 0.0
+            },
+            "stay": {
+              "support": 8,
+              "acc": 0.25
+            },
+            "track": {
+              "support": 16,
+              "acc": 0.0
+            },
+            "watch": {
+              "support": 14,
+              "acc": 0.1429
+            }
+          }
+        },
+        {
+          "arm": "warm",
+          "spc": 4,
+          "seed": 44,
+          "n_seeds": 35,
+          "n_pool": 95,
+          "n_pseudo": 95,
+          "tau_star": 0.1662,
+          "rounds": 7,
+          "stop": "budget",
+          "pool_oracle_precision_diag": 0.0842,
+          "top1": 0.0893,
+          "macro_f1": 0.0561,
+          "per_class": {
+            "apprehend": {
+              "support": 4,
+              "acc": 0.0
+            },
+            "bite": {
+              "support": 2,
+              "acc": 0.5
+            },
+            "jump": {
+              "support": 9,
+              "acc": 0.0
+            },
+            "retrieve": {
+              "support": 2,
+              "acc": 0.5
+            },
+            "sit": {
+              "support": 1,
+              "acc": 0.0
+            },
+            "stay": {
+              "support": 8,
+              "acc": 0.0
+            },
+            "track": {
+              "support": 16,
+              "acc": 0.0
+            },
+            "watch": {
+              "support": 14,
+              "acc": 0.2143
+            }
+          }
+        },
+        {
+          "arm": "warm",
+          "spc": 4,
+          "seed": 45,
+          "n_seeds": 35,
+          "n_pool": 95,
+          "n_pseudo": 95,
+          "tau_star": 0.1179,
+          "rounds": 7,
+          "stop": "budget",
+          "pool_oracle_precision_diag": 0.1368,
+          "top1": 0.0893,
+          "macro_f1": 0.0675,
+          "per_class": {
+            "apprehend": {
+              "support": 4,
+              "acc": 0.0
+            },
+            "bite": {
+              "support": 2,
+              "acc": 0.5
+            },
+            "jump": {
+              "support": 9,
+              "acc": 0.0
+            },
+            "retrieve": {
+              "support": 2,
+              "acc": 0.5
+            },
+            "sit": {
+              "support": 1,
+              "acc": 0.0
+            },
+            "stay": {
+              "support": 8,
+              "acc": 0.25
+            },
+            "track": {
+              "support": 16,
+              "acc": 0.0625
+            },
+            "watch": {
+              "support": 14,
+              "acc": 0.0
+            }
+          }
+        },
+        {
+          "arm": "warm",
+          "spc": 4,
+          "seed": 46,
+          "n_seeds": 35,
+          "n_pool": 84,
+          "n_pseudo": 84,
+          "tau_star": 0.2569,
+          "rounds": 7,
+          "stop": "budget",
+          "pool_oracle_precision_diag": 0.0476,
+          "top1": 0.1607,
+          "macro_f1": 0.1053,
+          "per_class": {
+            "apprehend": {
+              "support": 4,
+              "acc": 0.0
+            },
+            "bite": {
+              "support": 2,
+              "acc": 0.5
+            },
+            "jump": {
+              "support": 9,
+              "acc": 0.3333
+            },
+            "retrieve": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "sit": {
+              "support": 1,
+              "acc": 0.0
+            },
+            "stay": {
+              "support": 8,
+              "acc": 0.0
+            },
+            "track": {
+              "support": 16,
+              "acc": 0.125
+            },
+            "watch": {
+              "support": 14,
+              "acc": 0.2143
+            }
+          }
+        },
+        {
+          "arm": "warm",
+          "spc": 4,
+          "seed": 47,
+          "n_seeds": 35,
+          "n_pool": 87,
+          "n_pseudo": 87,
+          "tau_star": 0.2275,
+          "rounds": 7,
+          "stop": "budget",
+          "pool_oracle_precision_diag": 0.1149,
+          "top1": 0.0893,
+          "macro_f1": 0.0835,
+          "per_class": {
+            "apprehend": {
+              "support": 4,
+              "acc": 0.0
+            },
+            "bite": {
+              "support": 2,
+              "acc": 0.5
+            },
+            "jump": {
+              "support": 9,
+              "acc": 0.0
+            },
+            "retrieve": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "sit": {
+              "support": 1,
+              "acc": 1.0
+            },
+            "stay": {
+              "support": 8,
+              "acc": 0.0
+            },
+            "track": {
+              "support": 16,
+              "acc": 0.125
+            },
+            "watch": {
+              "support": 14,
+              "acc": 0.0714
+            }
+          }
+        },
+        {
+          "arm": "warm",
+          "spc": 4,
+          "seed": 48,
+          "n_seeds": 35,
+          "n_pool": 68,
+          "n_pseudo": 68,
+          "tau_star": 0.1436,
+          "rounds": 7,
+          "stop": "budget",
+          "pool_oracle_precision_diag": 0.0441,
+          "top1": 0.0179,
+          "macro_f1": 0.0159,
+          "per_class": {
+            "apprehend": {
+              "support": 4,
+              "acc": 0.0
+            },
+            "bite": {
+              "support": 2,
+              "acc": 0.5
+            },
+            "jump": {
+              "support": 9,
+              "acc": 0.0
+            },
+            "retrieve": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "sit": {
+              "support": 1,
+              "acc": 0.0
+            },
+            "stay": {
+              "support": 8,
+              "acc": 0.0
+            },
+            "track": {
+              "support": 16,
+              "acc": 0.0
+            },
+            "watch": {
+              "support": 14,
+              "acc": 0.0
+            }
+          }
+        },
+        {
+          "arm": "warm",
+          "spc": 4,
+          "seed": 49,
+          "n_seeds": 35,
+          "n_pool": 102,
+          "n_pseudo": 102,
+          "tau_star": 0.1261,
+          "rounds": 7,
+          "stop": "budget",
+          "pool_oracle_precision_diag": 0.2255,
+          "top1": 0.25,
+          "macro_f1": 0.0838,
+          "per_class": {
+            "apprehend": {
+              "support": 4,
+              "acc": 0.0
+            },
+            "bite": {
+              "support": 2,
+              "acc": 0.5
+            },
+            "jump": {
+              "support": 9,
+              "acc": 0.0
+            },
+            "retrieve": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "sit": {
+              "support": 1,
+              "acc": 0.0
+            },
+            "stay": {
+              "support": 8,
+              "acc": 0.0
+            },
+            "track": {
+              "support": 16,
+              "acc": 0.75
+            },
+            "watch": {
+              "support": 14,
+              "acc": 0.0714
+            }
+          }
+        },
+        {
+          "arm": "warm",
+          "spc": 4,
+          "seed": 50,
+          "n_seeds": 35,
+          "n_pool": 60,
+          "n_pseudo": 60,
+          "tau_star": 0.3683,
+          "rounds": 7,
+          "stop": "budget",
+          "pool_oracle_precision_diag": 0.0833,
+          "top1": 0.1607,
+          "macro_f1": 0.1477,
+          "per_class": {
+            "apprehend": {
+              "support": 4,
+              "acc": 0.0
+            },
+            "bite": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "jump": {
+              "support": 9,
+              "acc": 0.2222
+            },
+            "retrieve": {
+              "support": 2,
+              "acc": 0.5
+            },
+            "sit": {
+              "support": 1,
+              "acc": 1.0
+            },
+            "stay": {
+              "support": 8,
+              "acc": 0.0
+            },
+            "track": {
+              "support": 16,
+              "acc": 0.1875
+            },
+            "watch": {
+              "support": 14,
+              "acc": 0.1429
+            }
+          }
+        },
+        {
+          "arm": "warm",
+          "spc": 4,
+          "seed": 51,
+          "n_seeds": 35,
+          "n_pool": 98,
+          "n_pseudo": 98,
+          "tau_star": 0.0928,
+          "rounds": 7,
+          "stop": "budget",
+          "pool_oracle_precision_diag": 0.0306,
+          "top1": 0.0536,
+          "macro_f1": 0.0243,
+          "per_class": {
+            "apprehend": {
+              "support": 4,
+              "acc": 0.0
+            },
+            "bite": {
+              "support": 2,
+              "acc": 1.0
+            },
+            "jump": {
+              "support": 9,
+              "acc": 0.0
+            },
+            "retrieve": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "sit": {
+              "support": 1,
+              "acc": 0.0
+            },
+            "stay": {
+              "support": 8,
+              "acc": 0.0
+            },
+            "track": {
+              "support": 16,
+              "acc": 0.0
+            },
+            "watch": {
+              "support": 14,
+              "acc": 0.0714
+            }
+          }
+        }
+      ],
+      "aimclr_spc2": [
+        {
+          "arm": "aimclr",
+          "spc": 2,
+          "seed": 42,
+          "n_seeds": 18,
+          "n_pool": 109,
+          "n_pseudo": 109,
+          "tau_star": 0.1225,
+          "rounds": 7,
+          "stop": "budget",
+          "pool_oracle_precision_diag": 0.0917,
+          "top1": 0.0536,
+          "macro_f1": 0.0316,
+          "per_class": {
+            "apprehend": {
+              "support": 4,
+              "acc": 0.25
+            },
+            "bite": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "jump": {
+              "support": 9,
+              "acc": 0.0
+            },
+            "retrieve": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "sit": {
+              "support": 1,
+              "acc": 0.0
+            },
+            "stay": {
+              "support": 8,
+              "acc": 0.0
+            },
+            "track": {
+              "support": 16,
+              "acc": 0.0
+            },
+            "watch": {
+              "support": 14,
+              "acc": 0.1429
+            }
+          }
+        },
+        {
+          "arm": "aimclr",
+          "spc": 2,
+          "seed": 43,
+          "n_seeds": 18,
+          "n_pool": 107,
+          "n_pseudo": 107,
+          "tau_star": 0.2396,
+          "rounds": 7,
+          "stop": "budget",
+          "pool_oracle_precision_diag": 0.0935,
+          "top1": 0.2321,
+          "macro_f1": 0.163,
+          "per_class": {
+            "apprehend": {
+              "support": 4,
+              "acc": 0.25
+            },
+            "bite": {
+              "support": 2,
+              "acc": 0.5
+            },
+            "jump": {
+              "support": 9,
+              "acc": 0.6667
+            },
+            "retrieve": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "sit": {
+              "support": 1,
+              "acc": 0.0
+            },
+            "stay": {
+              "support": 8,
+              "acc": 0.25
+            },
+            "track": {
+              "support": 16,
+              "acc": 0.1875
+            },
+            "watch": {
+              "support": 14,
+              "acc": 0.0
+            }
+          }
+        },
+        {
+          "arm": "aimclr",
+          "spc": 2,
+          "seed": 44,
+          "n_seeds": 18,
+          "n_pool": 93,
+          "n_pseudo": 93,
+          "tau_star": 0.6184,
+          "rounds": 7,
+          "stop": "budget",
+          "pool_oracle_precision_diag": 0.1828,
+          "top1": 0.1429,
+          "macro_f1": 0.1016,
+          "per_class": {
+            "apprehend": {
+              "support": 4,
+              "acc": 0.0
+            },
+            "bite": {
+              "support": 2,
+              "acc": 0.5
+            },
+            "jump": {
+              "support": 9,
+              "acc": 0.0
+            },
+            "retrieve": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "sit": {
+              "support": 1,
+              "acc": 1.0
+            },
+            "stay": {
+              "support": 8,
+              "acc": 0.25
+            },
+            "track": {
+              "support": 16,
+              "acc": 0.0
+            },
+            "watch": {
+              "support": 14,
+              "acc": 0.2857
+            }
+          }
+        },
+        {
+          "arm": "aimclr",
+          "spc": 2,
+          "seed": 45,
+          "n_seeds": 18,
+          "n_pool": 108,
+          "n_pseudo": 108,
+          "tau_star": 0.2716,
+          "rounds": 7,
+          "stop": "budget",
+          "pool_oracle_precision_diag": 0.1296,
+          "top1": 0.1071,
+          "macro_f1": 0.0728,
+          "per_class": {
+            "apprehend": {
+              "support": 4,
+              "acc": 0.25
+            },
+            "bite": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "jump": {
+              "support": 9,
+              "acc": 0.1111
+            },
+            "retrieve": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "sit": {
+              "support": 1,
+              "acc": 0.0
+            },
+            "stay": {
+              "support": 8,
+              "acc": 0.375
+            },
+            "track": {
+              "support": 16,
+              "acc": 0.0625
+            },
+            "watch": {
+              "support": 14,
+              "acc": 0.0
+            }
+          }
+        },
+        {
+          "arm": "aimclr",
+          "spc": 2,
+          "seed": 46,
+          "n_seeds": 18,
+          "n_pool": 118,
+          "n_pseudo": 118,
+          "tau_star": 0.1912,
+          "rounds": 7,
+          "stop": "budget",
+          "pool_oracle_precision_diag": 0.1525,
+          "top1": 0.125,
+          "macro_f1": 0.1008,
+          "per_class": {
+            "apprehend": {
+              "support": 4,
+              "acc": 0.25
+            },
+            "bite": {
+              "support": 2,
+              "acc": 0.5
+            },
+            "jump": {
+              "support": 9,
+              "acc": 0.0
+            },
+            "retrieve": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "sit": {
+              "support": 1,
+              "acc": 0.0
+            },
+            "stay": {
+              "support": 8,
+              "acc": 0.375
+            },
+            "track": {
+              "support": 16,
+              "acc": 0.0
+            },
+            "watch": {
+              "support": 14,
+              "acc": 0.1429
+            }
+          }
+        },
+        {
+          "arm": "aimclr",
+          "spc": 2,
+          "seed": 47,
+          "n_seeds": 18,
+          "n_pool": 106,
+          "n_pseudo": 106,
+          "tau_star": 0.2648,
+          "rounds": 7,
+          "stop": "budget",
+          "pool_oracle_precision_diag": 0.1604,
+          "top1": 0.1429,
+          "macro_f1": 0.0983,
+          "per_class": {
+            "apprehend": {
+              "support": 4,
+              "acc": 0.75
+            },
+            "bite": {
+              "support": 2,
+              "acc": 0.5
+            },
+            "jump": {
+              "support": 9,
+              "acc": 0.1111
+            },
+            "retrieve": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "sit": {
+              "support": 1,
+              "acc": 0.0
+            },
+            "stay": {
+              "support": 8,
+              "acc": 0.125
+            },
+            "track": {
+              "support": 16,
+              "acc": 0.0
+            },
+            "watch": {
+              "support": 14,
+              "acc": 0.1429
+            }
+          }
+        },
+        {
+          "arm": "aimclr",
+          "spc": 2,
+          "seed": 48,
+          "n_seeds": 18,
+          "n_pool": 107,
+          "n_pseudo": 107,
+          "tau_star": 0.4003,
+          "rounds": 7,
+          "stop": "budget",
+          "pool_oracle_precision_diag": 0.1495,
+          "top1": 0.1964,
+          "macro_f1": 0.1435,
+          "per_class": {
+            "apprehend": {
+              "support": 4,
+              "acc": 0.5
+            },
+            "bite": {
+              "support": 2,
+              "acc": 0.5
+            },
+            "jump": {
+              "support": 9,
+              "acc": 0.0
+            },
+            "retrieve": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "sit": {
+              "support": 1,
+              "acc": 0.0
+            },
+            "stay": {
+              "support": 8,
+              "acc": 0.25
+            },
+            "track": {
+              "support": 16,
+              "acc": 0.25
+            },
+            "watch": {
+              "support": 14,
+              "acc": 0.1429
+            }
+          }
+        },
+        {
+          "arm": "aimclr",
+          "spc": 2,
+          "seed": 49,
+          "n_seeds": 18,
+          "n_pool": 114,
+          "n_pseudo": 114,
+          "tau_star": 0.2934,
+          "rounds": 7,
+          "stop": "budget",
+          "pool_oracle_precision_diag": 0.1842,
+          "top1": 0.1964,
+          "macro_f1": 0.1236,
+          "per_class": {
+            "apprehend": {
+              "support": 4,
+              "acc": 0.25
+            },
+            "bite": {
+              "support": 2,
+              "acc": 0.5
+            },
+            "jump": {
+              "support": 9,
+              "acc": 0.2222
+            },
+            "retrieve": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "sit": {
+              "support": 1,
+              "acc": 0.0
+            },
+            "stay": {
+              "support": 8,
+              "acc": 0.25
+            },
+            "track": {
+              "support": 16,
+              "acc": 0.3125
+            },
+            "watch": {
+              "support": 14,
+              "acc": 0.0
+            }
+          }
+        },
+        {
+          "arm": "aimclr",
+          "spc": 2,
+          "seed": 50,
+          "n_seeds": 18,
+          "n_pool": 96,
+          "n_pseudo": 96,
+          "tau_star": 0.2895,
+          "rounds": 7,
+          "stop": "budget",
+          "pool_oracle_precision_diag": 0.1146,
+          "top1": 0.1786,
+          "macro_f1": 0.15,
+          "per_class": {
+            "apprehend": {
+              "support": 4,
+              "acc": 0.75
+            },
+            "bite": {
+              "support": 2,
+              "acc": 0.5
+            },
+            "jump": {
+              "support": 9,
+              "acc": 0.1111
+            },
+            "retrieve": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "sit": {
+              "support": 1,
+              "acc": 0.0
+            },
+            "stay": {
+              "support": 8,
+              "acc": 0.25
+            },
+            "track": {
+              "support": 16,
+              "acc": 0.1875
+            },
+            "watch": {
+              "support": 14,
+              "acc": 0.0
+            }
+          }
+        },
+        {
+          "arm": "aimclr",
+          "spc": 2,
+          "seed": 51,
+          "n_seeds": 18,
+          "n_pool": 113,
+          "n_pseudo": 113,
+          "tau_star": 0.1403,
+          "rounds": 7,
+          "stop": "budget",
+          "pool_oracle_precision_diag": 0.2743,
+          "top1": 0.1429,
+          "macro_f1": 0.0558,
+          "per_class": {
+            "apprehend": {
+              "support": 4,
+              "acc": 0.0
+            },
+            "bite": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "jump": {
+              "support": 9,
+              "acc": 0.0
+            },
+            "retrieve": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "sit": {
+              "support": 1,
+              "acc": 0.0
+            },
+            "stay": {
+              "support": 8,
+              "acc": 0.25
+            },
+            "track": {
+              "support": 16,
+              "acc": 0.0
+            },
+            "watch": {
+              "support": 14,
+              "acc": 0.4286
+            }
+          }
+        }
+      ],
+      "aimclr_spc4": [
+        {
+          "arm": "aimclr",
+          "spc": 4,
+          "seed": 42,
+          "n_seeds": 35,
+          "n_pool": 48,
+          "n_pseudo": 48,
+          "tau_star": 0.8278,
+          "rounds": 7,
+          "stop": "budget",
+          "pool_oracle_precision_diag": 0.2708,
+          "top1": 0.1071,
+          "macro_f1": 0.0922,
+          "per_class": {
+            "apprehend": {
+              "support": 4,
+              "acc": 0.0
+            },
+            "bite": {
+              "support": 2,
+              "acc": 0.5
+            },
+            "jump": {
+              "support": 9,
+              "acc": 0.0
+            },
+            "retrieve": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "sit": {
+              "support": 1,
+              "acc": 1.0
+            },
+            "stay": {
+              "support": 8,
+              "acc": 0.125
+            },
+            "track": {
+              "support": 16,
+              "acc": 0.0
+            },
+            "watch": {
+              "support": 14,
+              "acc": 0.2143
+            }
+          }
+        },
+        {
+          "arm": "aimclr",
+          "spc": 4,
+          "seed": 43,
+          "n_seeds": 35,
+          "n_pool": 90,
+          "n_pseudo": 90,
+          "tau_star": 0.2612,
+          "rounds": 7,
+          "stop": "budget",
+          "pool_oracle_precision_diag": 0.0889,
+          "top1": 0.125,
+          "macro_f1": 0.1074,
+          "per_class": {
+            "apprehend": {
+              "support": 4,
+              "acc": 0.25
+            },
+            "bite": {
+              "support": 2,
+              "acc": 0.5
+            },
+            "jump": {
+              "support": 9,
+              "acc": 0.1111
+            },
+            "retrieve": {
+              "support": 2,
+              "acc": 0.5
+            },
+            "sit": {
+              "support": 1,
+              "acc": 0.0
+            },
+            "stay": {
+              "support": 8,
+              "acc": 0.375
+            },
+            "track": {
+              "support": 16,
+              "acc": 0.0
+            },
+            "watch": {
+              "support": 14,
+              "acc": 0.0
+            }
+          }
+        },
+        {
+          "arm": "aimclr",
+          "spc": 4,
+          "seed": 44,
+          "n_seeds": 35,
+          "n_pool": 92,
+          "n_pseudo": 92,
+          "tau_star": 0.2271,
+          "rounds": 7,
+          "stop": "budget",
+          "pool_oracle_precision_diag": 0.0543,
+          "top1": 0.1964,
+          "macro_f1": 0.1483,
+          "per_class": {
+            "apprehend": {
+              "support": 4,
+              "acc": 0.5
+            },
+            "bite": {
+              "support": 2,
+              "acc": 0.5
+            },
+            "jump": {
+              "support": 9,
+              "acc": 0.2222
+            },
+            "retrieve": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "sit": {
+              "support": 1,
+              "acc": 0.0
+            },
+            "stay": {
+              "support": 8,
+              "acc": 0.375
+            },
+            "track": {
+              "support": 16,
+              "acc": 0.0625
+            },
+            "watch": {
+              "support": 14,
+              "acc": 0.1429
+            }
+          }
+        },
+        {
+          "arm": "aimclr",
+          "spc": 4,
+          "seed": 45,
+          "n_seeds": 35,
+          "n_pool": 88,
+          "n_pseudo": 88,
+          "tau_star": 0.2057,
+          "rounds": 7,
+          "stop": "budget",
+          "pool_oracle_precision_diag": 0.1932,
+          "top1": 0.125,
+          "macro_f1": 0.1158,
+          "per_class": {
+            "apprehend": {
+              "support": 4,
+              "acc": 0.5
+            },
+            "bite": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "jump": {
+              "support": 9,
+              "acc": 0.0
+            },
+            "retrieve": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "sit": {
+              "support": 1,
+              "acc": 1.0
+            },
+            "stay": {
+              "support": 8,
+              "acc": 0.25
+            },
+            "track": {
+              "support": 16,
+              "acc": 0.0625
+            },
+            "watch": {
+              "support": 14,
+              "acc": 0.0714
+            }
+          }
+        },
+        {
+          "arm": "aimclr",
+          "spc": 4,
+          "seed": 46,
+          "n_seeds": 35,
+          "n_pool": 94,
+          "n_pseudo": 94,
+          "tau_star": 0.2465,
+          "rounds": 7,
+          "stop": "budget",
+          "pool_oracle_precision_diag": 0.0638,
+          "top1": 0.1429,
+          "macro_f1": 0.1697,
+          "per_class": {
+            "apprehend": {
+              "support": 4,
+              "acc": 0.5
+            },
+            "bite": {
+              "support": 2,
+              "acc": 0.5
+            },
+            "jump": {
+              "support": 9,
+              "acc": 0.1111
+            },
+            "retrieve": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "sit": {
+              "support": 1,
+              "acc": 1.0
+            },
+            "stay": {
+              "support": 8,
+              "acc": 0.25
+            },
+            "track": {
+              "support": 16,
+              "acc": 0.0625
+            },
+            "watch": {
+              "support": 14,
+              "acc": 0.0
+            }
+          }
+        },
+        {
+          "arm": "aimclr",
+          "spc": 4,
+          "seed": 47,
+          "n_seeds": 35,
+          "n_pool": 88,
+          "n_pseudo": 88,
+          "tau_star": 0.2069,
+          "rounds": 7,
+          "stop": "budget",
+          "pool_oracle_precision_diag": 0.1818,
+          "top1": 0.25,
+          "macro_f1": 0.2566,
+          "per_class": {
+            "apprehend": {
+              "support": 4,
+              "acc": 0.25
+            },
+            "bite": {
+              "support": 2,
+              "acc": 0.5
+            },
+            "jump": {
+              "support": 9,
+              "acc": 0.0
+            },
+            "retrieve": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "sit": {
+              "support": 1,
+              "acc": 1.0
+            },
+            "stay": {
+              "support": 8,
+              "acc": 0.5
+            },
+            "track": {
+              "support": 16,
+              "acc": 0.125
+            },
+            "watch": {
+              "support": 14,
+              "acc": 0.3571
+            }
+          }
+        },
+        {
+          "arm": "aimclr",
+          "spc": 4,
+          "seed": 48,
+          "n_seeds": 35,
+          "n_pool": 58,
+          "n_pseudo": 58,
+          "tau_star": 0.6911,
+          "rounds": 7,
+          "stop": "budget",
+          "pool_oracle_precision_diag": 0.1207,
+          "top1": 0.1607,
+          "macro_f1": 0.1357,
+          "per_class": {
+            "apprehend": {
+              "support": 4,
+              "acc": 0.25
+            },
+            "bite": {
+              "support": 2,
+              "acc": 1.0
+            },
+            "jump": {
+              "support": 9,
+              "acc": 0.0
+            },
+            "retrieve": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "sit": {
+              "support": 1,
+              "acc": 0.0
+            },
+            "stay": {
+              "support": 8,
+              "acc": 0.375
+            },
+            "track": {
+              "support": 16,
+              "acc": 0.0625
+            },
+            "watch": {
+              "support": 14,
+              "acc": 0.1429
+            }
+          }
+        },
+        {
+          "arm": "aimclr",
+          "spc": 4,
+          "seed": 49,
+          "n_seeds": 35,
+          "n_pool": 79,
+          "n_pseudo": 79,
+          "tau_star": 0.4696,
+          "rounds": 7,
+          "stop": "budget",
+          "pool_oracle_precision_diag": 0.1899,
+          "top1": 0.1964,
+          "macro_f1": 0.1545,
+          "per_class": {
+            "apprehend": {
+              "support": 4,
+              "acc": 0.5
+            },
+            "bite": {
+              "support": 2,
+              "acc": 0.5
+            },
+            "jump": {
+              "support": 9,
+              "acc": 0.0
+            },
+            "retrieve": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "sit": {
+              "support": 1,
+              "acc": 1.0
+            },
+            "stay": {
+              "support": 8,
+              "acc": 0.25
+            },
+            "track": {
+              "support": 16,
+              "acc": 0.0
+            },
+            "watch": {
+              "support": 14,
+              "acc": 0.3571
+            }
+          }
+        },
+        {
+          "arm": "aimclr",
+          "spc": 4,
+          "seed": 50,
+          "n_seeds": 35,
+          "n_pool": 88,
+          "n_pseudo": 88,
+          "tau_star": 0.2465,
+          "rounds": 7,
+          "stop": "budget",
+          "pool_oracle_precision_diag": 0.1136,
+          "top1": 0.125,
+          "macro_f1": 0.1058,
+          "per_class": {
+            "apprehend": {
+              "support": 4,
+              "acc": 0.5
+            },
+            "bite": {
+              "support": 2,
+              "acc": 0.5
+            },
+            "jump": {
+              "support": 9,
+              "acc": 0.1111
+            },
+            "retrieve": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "sit": {
+              "support": 1,
+              "acc": 0.0
+            },
+            "stay": {
+              "support": 8,
+              "acc": 0.0
+            },
+            "track": {
+              "support": 16,
+              "acc": 0.0625
+            },
+            "watch": {
+              "support": 14,
+              "acc": 0.1429
+            }
+          }
+        },
+        {
+          "arm": "aimclr",
+          "spc": 4,
+          "seed": 51,
+          "n_seeds": 35,
+          "n_pool": 88,
+          "n_pseudo": 88,
+          "tau_star": 0.543,
+          "rounds": 7,
+          "stop": "budget",
+          "pool_oracle_precision_diag": 0.0795,
+          "top1": 0.1607,
+          "macro_f1": 0.1041,
+          "per_class": {
+            "apprehend": {
+              "support": 4,
+              "acc": 0.5
+            },
+            "bite": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "jump": {
+              "support": 9,
+              "acc": 0.1111
+            },
+            "retrieve": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "sit": {
+              "support": 1,
+              "acc": 0.0
+            },
+            "stay": {
+              "support": 8,
+              "acc": 0.25
+            },
+            "track": {
+              "support": 16,
+              "acc": 0.25
+            },
+            "watch": {
+              "support": 14,
+              "acc": 0.0
+            }
+          }
+        }
+      ],
+      "scratch_spc2": [
+        {
+          "arm": "scratch",
+          "spc": 2,
+          "seed": 42,
+          "n_seeds": 18,
+          "n_pool": 123,
+          "n_pseudo": 123,
+          "tau_star": 0.0005,
+          "rounds": 4,
+          "stop": "converged",
+          "pool_oracle_precision_diag": 0.0407,
+          "top1": 0.0,
+          "macro_f1": 0.0,
+          "per_class": {
+            "apprehend": {
+              "support": 4,
+              "acc": 0.0
+            },
+            "bite": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "jump": {
+              "support": 9,
+              "acc": 0.0
+            },
+            "retrieve": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "sit": {
+              "support": 1,
+              "acc": 0.0
+            },
+            "stay": {
+              "support": 8,
+              "acc": 0.0
+            },
+            "track": {
+              "support": 16,
+              "acc": 0.0
+            },
+            "watch": {
+              "support": 14,
+              "acc": 0.0
+            }
+          }
+        },
+        {
+          "arm": "scratch",
+          "spc": 2,
+          "seed": 43,
+          "n_seeds": 18,
+          "n_pool": 123,
+          "n_pseudo": 123,
+          "tau_star": 0.0008,
+          "rounds": 5,
+          "stop": "converged",
+          "pool_oracle_precision_diag": 0.0325,
+          "top1": 0.0357,
+          "macro_f1": 0.0077,
+          "per_class": {
+            "apprehend": {
+              "support": 4,
+              "acc": 0.0
+            },
+            "bite": {
+              "support": 2,
+              "acc": 1.0
+            },
+            "jump": {
+              "support": 9,
+              "acc": 0.0
+            },
+            "retrieve": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "sit": {
+              "support": 1,
+              "acc": 0.0
+            },
+            "stay": {
+              "support": 8,
+              "acc": 0.0
+            },
+            "track": {
+              "support": 16,
+              "acc": 0.0
+            },
+            "watch": {
+              "support": 14,
+              "acc": 0.0
+            }
+          }
+        },
+        {
+          "arm": "scratch",
+          "spc": 2,
+          "seed": 44,
+          "n_seeds": 18,
+          "n_pool": 123,
+          "n_pseudo": 123,
+          "tau_star": 0.0008,
+          "rounds": 5,
+          "stop": "converged",
+          "pool_oracle_precision_diag": 0.0407,
+          "top1": 0.0,
+          "macro_f1": 0.0,
+          "per_class": {
+            "apprehend": {
+              "support": 4,
+              "acc": 0.0
+            },
+            "bite": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "jump": {
+              "support": 9,
+              "acc": 0.0
+            },
+            "retrieve": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "sit": {
+              "support": 1,
+              "acc": 0.0
+            },
+            "stay": {
+              "support": 8,
+              "acc": 0.0
+            },
+            "track": {
+              "support": 16,
+              "acc": 0.0
+            },
+            "watch": {
+              "support": 14,
+              "acc": 0.0
+            }
+          }
+        },
+        {
+          "arm": "scratch",
+          "spc": 2,
+          "seed": 45,
+          "n_seeds": 18,
+          "n_pool": 123,
+          "n_pseudo": 123,
+          "tau_star": 0.0008,
+          "rounds": 4,
+          "stop": "converged",
+          "pool_oracle_precision_diag": 0.0407,
+          "top1": 0.0,
+          "macro_f1": 0.0,
+          "per_class": {
+            "apprehend": {
+              "support": 4,
+              "acc": 0.0
+            },
+            "bite": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "jump": {
+              "support": 9,
+              "acc": 0.0
+            },
+            "retrieve": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "sit": {
+              "support": 1,
+              "acc": 0.0
+            },
+            "stay": {
+              "support": 8,
+              "acc": 0.0
+            },
+            "track": {
+              "support": 16,
+              "acc": 0.0
+            },
+            "watch": {
+              "support": 14,
+              "acc": 0.0
+            }
+          }
+        },
+        {
+          "arm": "scratch",
+          "spc": 2,
+          "seed": 46,
+          "n_seeds": 18,
+          "n_pool": 123,
+          "n_pseudo": 123,
+          "tau_star": 0.001,
+          "rounds": 4,
+          "stop": "converged",
+          "pool_oracle_precision_diag": 0.122,
+          "top1": 0.1607,
+          "macro_f1": 0.0308,
+          "per_class": {
+            "apprehend": {
+              "support": 4,
+              "acc": 0.0
+            },
+            "bite": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "jump": {
+              "support": 9,
+              "acc": 1.0
+            },
+            "retrieve": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "sit": {
+              "support": 1,
+              "acc": 0.0
+            },
+            "stay": {
+              "support": 8,
+              "acc": 0.0
+            },
+            "track": {
+              "support": 16,
+              "acc": 0.0
+            },
+            "watch": {
+              "support": 14,
+              "acc": 0.0
+            }
+          }
+        },
+        {
+          "arm": "scratch",
+          "spc": 2,
+          "seed": 47,
+          "n_seeds": 18,
+          "n_pool": 123,
+          "n_pseudo": 123,
+          "tau_star": 0.0005,
+          "rounds": 4,
+          "stop": "converged",
+          "pool_oracle_precision_diag": 0.0407,
+          "top1": 0.0,
+          "macro_f1": 0.0,
+          "per_class": {
+            "apprehend": {
+              "support": 4,
+              "acc": 0.0
+            },
+            "bite": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "jump": {
+              "support": 9,
+              "acc": 0.0
+            },
+            "retrieve": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "sit": {
+              "support": 1,
+              "acc": 0.0
+            },
+            "stay": {
+              "support": 8,
+              "acc": 0.0
+            },
+            "track": {
+              "support": 16,
+              "acc": 0.0
+            },
+            "watch": {
+              "support": 14,
+              "acc": 0.0
+            }
+          }
+        },
+        {
+          "arm": "scratch",
+          "spc": 2,
+          "seed": 48,
+          "n_seeds": 18,
+          "n_pool": 123,
+          "n_pseudo": 123,
+          "tau_star": 0.0006,
+          "rounds": 4,
+          "stop": "converged",
+          "pool_oracle_precision_diag": 0.0407,
+          "top1": 0.0,
+          "macro_f1": 0.0,
+          "per_class": {
+            "apprehend": {
+              "support": 4,
+              "acc": 0.0
+            },
+            "bite": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "jump": {
+              "support": 9,
+              "acc": 0.0
+            },
+            "retrieve": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "sit": {
+              "support": 1,
+              "acc": 0.0
+            },
+            "stay": {
+              "support": 8,
+              "acc": 0.0
+            },
+            "track": {
+              "support": 16,
+              "acc": 0.0
+            },
+            "watch": {
+              "support": 14,
+              "acc": 0.0
+            }
+          }
+        },
+        {
+          "arm": "scratch",
+          "spc": 2,
+          "seed": 49,
+          "n_seeds": 18,
+          "n_pool": 123,
+          "n_pseudo": 123,
+          "tau_star": 0.0006,
+          "rounds": 4,
+          "stop": "converged",
+          "pool_oracle_precision_diag": 0.3902,
+          "top1": 0.25,
+          "macro_f1": 0.0444,
+          "per_class": {
+            "apprehend": {
+              "support": 4,
+              "acc": 0.0
+            },
+            "bite": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "jump": {
+              "support": 9,
+              "acc": 0.0
+            },
+            "retrieve": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "sit": {
+              "support": 1,
+              "acc": 0.0
+            },
+            "stay": {
+              "support": 8,
+              "acc": 0.0
+            },
+            "track": {
+              "support": 16,
+              "acc": 0.0
+            },
+            "watch": {
+              "support": 14,
+              "acc": 1.0
+            }
+          }
+        },
+        {
+          "arm": "scratch",
+          "spc": 2,
+          "seed": 50,
+          "n_seeds": 18,
+          "n_pool": 123,
+          "n_pseudo": 123,
+          "tau_star": 0.0005,
+          "rounds": 4,
+          "stop": "converged",
+          "pool_oracle_precision_diag": 0.1301,
+          "top1": 0.1429,
+          "macro_f1": 0.0278,
+          "per_class": {
+            "apprehend": {
+              "support": 4,
+              "acc": 0.0
+            },
+            "bite": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "jump": {
+              "support": 9,
+              "acc": 0.0
+            },
+            "retrieve": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "sit": {
+              "support": 1,
+              "acc": 0.0
+            },
+            "stay": {
+              "support": 8,
+              "acc": 1.0
+            },
+            "track": {
+              "support": 16,
+              "acc": 0.0
+            },
+            "watch": {
+              "support": 14,
+              "acc": 0.0
+            }
+          }
+        },
+        {
+          "arm": "scratch",
+          "spc": 2,
+          "seed": 51,
+          "n_seeds": 18,
+          "n_pool": 123,
+          "n_pseudo": 123,
+          "tau_star": 0.0007,
+          "rounds": 5,
+          "stop": "converged",
+          "pool_oracle_precision_diag": 0.3902,
+          "top1": 0.25,
+          "macro_f1": 0.0444,
+          "per_class": {
+            "apprehend": {
+              "support": 4,
+              "acc": 0.0
+            },
+            "bite": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "jump": {
+              "support": 9,
+              "acc": 0.0
+            },
+            "retrieve": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "sit": {
+              "support": 1,
+              "acc": 0.0
+            },
+            "stay": {
+              "support": 8,
+              "acc": 0.0
+            },
+            "track": {
+              "support": 16,
+              "acc": 0.0
+            },
+            "watch": {
+              "support": 14,
+              "acc": 1.0
+            }
+          }
+        }
+      ],
+      "warm_full": [
+        {
+          "arm": "warm",
+          "spc": -1,
+          "seed": 42,
+          "budget": "full",
+          "n_seeds": 141,
+          "n_pool": 0,
+          "n_pseudo": 0,
+          "tau_star": null,
+          "rounds": 0,
+          "stop": "full-supervision(no pseudo-label)",
+          "pool_oracle_precision_diag": null,
+          "top1": 0.3393,
+          "macro_f1": 0.165,
+          "per_class": {
+            "apprehend": {
+              "support": 4,
+              "acc": 0.0
+            },
+            "bite": {
+              "support": 2,
+              "acc": 0.5
+            },
+            "jump": {
+              "support": 9,
+              "acc": 0.1111
+            },
+            "retrieve": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "sit": {
+              "support": 1,
+              "acc": 0.0
+            },
+            "stay": {
+              "support": 8,
+              "acc": 0.0
+            },
+            "track": {
+              "support": 16,
+              "acc": 0.5
+            },
+            "watch": {
+              "support": 14,
+              "acc": 0.6429
+            }
+          }
+        }
+      ]
+    },
+    "v2": {
+      "warm_spc2": [
+        {
+          "arm": "warm",
+          "spc": 2,
+          "seed": 42,
+          "n_seeds": 14,
+          "n_pool": 229,
+          "n_pseudo": 229,
+          "tau_star": 0.1151,
+          "rounds": 7,
+          "stop": "budget",
+          "pool_oracle_precision_diag": 0.2489,
+          "top1": 0.1146,
+          "macro_f1": 0.0683,
+          "per_class": {
+            "apprehend": {
+              "support": 6,
+              "acc": 0.0
+            },
+            "bite": {
+              "support": 10,
+              "acc": 0.1
+            },
+            "jump": {
+              "support": 11,
+              "acc": 0.4545
+            },
+            "retrieve": {
+              "support": 4,
+              "acc": 0.0
+            },
+            "sit": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "stay": {
+              "support": 9,
+              "acc": 0.0
+            },
+            "track": {
+              "support": 33,
+              "acc": 0.0
+            },
+            "watch": {
+              "support": 21,
+              "acc": 0.2381
+            }
+          }
+        },
+        {
+          "arm": "warm",
+          "spc": 2,
+          "seed": 43,
+          "n_seeds": 14,
+          "n_pool": 220,
+          "n_pseudo": 220,
+          "tau_star": 0.2431,
+          "rounds": 7,
+          "stop": "budget",
+          "pool_oracle_precision_diag": 0.2955,
+          "top1": 0.2083,
+          "macro_f1": 0.1049,
+          "per_class": {
+            "apprehend": {
+              "support": 6,
+              "acc": 0.0
+            },
+            "bite": {
+              "support": 10,
+              "acc": 0.0
+            },
+            "jump": {
+              "support": 11,
+              "acc": 0.7273
+            },
+            "retrieve": {
+              "support": 4,
+              "acc": 0.5
+            },
+            "sit": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "stay": {
+              "support": 9,
+              "acc": 0.0
+            },
+            "track": {
+              "support": 33,
+              "acc": 0.0
+            },
+            "watch": {
+              "support": 21,
+              "acc": 0.4762
+            }
+          }
+        },
+        {
+          "arm": "warm",
+          "spc": 2,
+          "seed": 44,
+          "n_seeds": 14,
+          "n_pool": 232,
+          "n_pseudo": 232,
+          "tau_star": 0.1725,
+          "rounds": 7,
+          "stop": "budget",
+          "pool_oracle_precision_diag": 0.2716,
+          "top1": 0.1354,
+          "macro_f1": 0.0786,
+          "per_class": {
+            "apprehend": {
+              "support": 6,
+              "acc": 0.0
+            },
+            "bite": {
+              "support": 10,
+              "acc": 0.1
+            },
+            "jump": {
+              "support": 11,
+              "acc": 0.1818
+            },
+            "retrieve": {
+              "support": 4,
+              "acc": 0.0
+            },
+            "sit": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "stay": {
+              "support": 9,
+              "acc": 0.0
+            },
+            "track": {
+              "support": 33,
+              "acc": 0.1818
+            },
+            "watch": {
+              "support": 21,
+              "acc": 0.1905
+            }
+          }
+        },
+        {
+          "arm": "warm",
+          "spc": 2,
+          "seed": 45,
+          "n_seeds": 14,
+          "n_pool": 200,
+          "n_pseudo": 200,
+          "tau_star": 0.4136,
+          "rounds": 7,
+          "stop": "budget",
+          "pool_oracle_precision_diag": 0.245,
+          "top1": 0.2188,
+          "macro_f1": 0.1089,
+          "per_class": {
+            "apprehend": {
+              "support": 6,
+              "acc": 0.0
+            },
+            "bite": {
+              "support": 10,
+              "acc": 0.0
+            },
+            "jump": {
+              "support": 11,
+              "acc": 0.3636
+            },
+            "retrieve": {
+              "support": 4,
+              "acc": 0.5
+            },
+            "sit": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "stay": {
+              "support": 9,
+              "acc": 0.0
+            },
+            "track": {
+              "support": 33,
+              "acc": 0.4242
+            },
+            "watch": {
+              "support": 21,
+              "acc": 0.0476
+            }
+          }
+        },
+        {
+          "arm": "warm",
+          "spc": 2,
+          "seed": 46,
+          "n_seeds": 14,
+          "n_pool": 212,
+          "n_pseudo": 212,
+          "tau_star": 0.3891,
+          "rounds": 7,
+          "stop": "budget",
+          "pool_oracle_precision_diag": 0.0236,
+          "top1": 0.0938,
+          "macro_f1": 0.0814,
+          "per_class": {
+            "apprehend": {
+              "support": 6,
+              "acc": 0.8333
+            },
+            "bite": {
+              "support": 10,
+              "acc": 0.0
+            },
+            "jump": {
+              "support": 11,
+              "acc": 0.1818
+            },
+            "retrieve": {
+              "support": 4,
+              "acc": 0.5
+            },
+            "sit": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "stay": {
+              "support": 9,
+              "acc": 0.0
+            },
+            "track": {
+              "support": 33,
+              "acc": 0.0
+            },
+            "watch": {
+              "support": 21,
+              "acc": 0.0
+            }
+          }
+        },
+        {
+          "arm": "warm",
+          "spc": 2,
+          "seed": 47,
+          "n_seeds": 14,
+          "n_pool": 238,
+          "n_pseudo": 238,
+          "tau_star": 0.1357,
+          "rounds": 7,
+          "stop": "budget",
+          "pool_oracle_precision_diag": 0.1261,
+          "top1": 0.0938,
+          "macro_f1": 0.0685,
+          "per_class": {
+            "apprehend": {
+              "support": 6,
+              "acc": 0.5
+            },
+            "bite": {
+              "support": 10,
+              "acc": 0.0
+            },
+            "jump": {
+              "support": 11,
+              "acc": 0.3636
+            },
+            "retrieve": {
+              "support": 4,
+              "acc": 0.0
+            },
+            "sit": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "stay": {
+              "support": 9,
+              "acc": 0.1111
+            },
+            "track": {
+              "support": 33,
+              "acc": 0.0303
+            },
+            "watch": {
+              "support": 21,
+              "acc": 0.0
+            }
+          }
+        },
+        {
+          "arm": "warm",
+          "spc": 2,
+          "seed": 48,
+          "n_seeds": 14,
+          "n_pool": 234,
+          "n_pseudo": 234,
+          "tau_star": 0.1652,
+          "rounds": 7,
+          "stop": "budget",
+          "pool_oracle_precision_diag": 0.1368,
+          "top1": 0.0729,
+          "macro_f1": 0.0405,
+          "per_class": {
+            "apprehend": {
+              "support": 6,
+              "acc": 0.0
+            },
+            "bite": {
+              "support": 10,
+              "acc": 0.0
+            },
+            "jump": {
+              "support": 11,
+              "acc": 0.2727
+            },
+            "retrieve": {
+              "support": 4,
+              "acc": 0.0
+            },
+            "sit": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "stay": {
+              "support": 9,
+              "acc": 0.1111
+            },
+            "track": {
+              "support": 33,
+              "acc": 0.0909
+            },
+            "watch": {
+              "support": 21,
+              "acc": 0.0
+            }
+          }
+        },
+        {
+          "arm": "warm",
+          "spc": 2,
+          "seed": 49,
+          "n_seeds": 14,
+          "n_pool": 223,
+          "n_pseudo": 223,
+          "tau_star": 0.5015,
+          "rounds": 6,
+          "stop": "converged",
+          "pool_oracle_precision_diag": 0.1525,
+          "top1": 0.1771,
+          "macro_f1": 0.0675,
+          "per_class": {
+            "apprehend": {
+              "support": 6,
+              "acc": 0.0
+            },
+            "bite": {
+              "support": 10,
+              "acc": 0.9
+            },
+            "jump": {
+              "support": 11,
+              "acc": 0.0
+            },
+            "retrieve": {
+              "support": 4,
+              "acc": 0.0
+            },
+            "sit": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "stay": {
+              "support": 9,
+              "acc": 0.0
+            },
+            "track": {
+              "support": 33,
+              "acc": 0.0
+            },
+            "watch": {
+              "support": 21,
+              "acc": 0.381
+            }
+          }
+        },
+        {
+          "arm": "warm",
+          "spc": 2,
+          "seed": 50,
+          "n_seeds": 14,
+          "n_pool": 233,
+          "n_pseudo": 233,
+          "tau_star": 0.1228,
+          "rounds": 7,
+          "stop": "budget",
+          "pool_oracle_precision_diag": 0.133,
+          "top1": 0.0729,
+          "macro_f1": 0.0373,
+          "per_class": {
+            "apprehend": {
+              "support": 6,
+              "acc": 0.1667
+            },
+            "bite": {
+              "support": 10,
+              "acc": 0.0
+            },
+            "jump": {
+              "support": 11,
+              "acc": 0.0
+            },
+            "retrieve": {
+              "support": 4,
+              "acc": 0.0
+            },
+            "sit": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "stay": {
+              "support": 9,
+              "acc": 0.0
+            },
+            "track": {
+              "support": 33,
+              "acc": 0.0303
+            },
+            "watch": {
+              "support": 21,
+              "acc": 0.2381
+            }
+          }
+        },
+        {
+          "arm": "warm",
+          "spc": 2,
+          "seed": 51,
+          "n_seeds": 14,
+          "n_pool": 229,
+          "n_pseudo": 229,
+          "tau_star": 0.1769,
+          "rounds": 7,
+          "stop": "budget",
+          "pool_oracle_precision_diag": 0.2358,
+          "top1": 0.125,
+          "macro_f1": 0.102,
+          "per_class": {
+            "apprehend": {
+              "support": 6,
+              "acc": 0.3333
+            },
+            "bite": {
+              "support": 10,
+              "acc": 0.2
+            },
+            "jump": {
+              "support": 11,
+              "acc": 0.1818
+            },
+            "retrieve": {
+              "support": 4,
+              "acc": 0.0
+            },
+            "sit": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "stay": {
+              "support": 9,
+              "acc": 0.1111
+            },
+            "track": {
+              "support": 33,
+              "acc": 0.0
+            },
+            "watch": {
+              "support": 21,
+              "acc": 0.2381
+            }
+          }
+        }
+      ],
+      "warm_spc4": [
+        {
+          "arm": "warm",
+          "spc": 4,
+          "seed": 42,
+          "n_seeds": 28,
+          "n_pool": 215,
+          "n_pseudo": 215,
+          "tau_star": 0.3239,
+          "rounds": 6,
+          "stop": "converged",
+          "pool_oracle_precision_diag": 0.0837,
+          "top1": 0.1146,
+          "macro_f1": 0.0478,
+          "per_class": {
+            "apprehend": {
+              "support": 6,
+              "acc": 0.0
+            },
+            "bite": {
+              "support": 10,
+              "acc": 0.3
+            },
+            "jump": {
+              "support": 11,
+              "acc": 0.0
+            },
+            "retrieve": {
+              "support": 4,
+              "acc": 0.0
+            },
+            "sit": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "stay": {
+              "support": 9,
+              "acc": 0.8889
+            },
+            "track": {
+              "support": 33,
+              "acc": 0.0
+            },
+            "watch": {
+              "support": 21,
+              "acc": 0.0
+            }
+          }
+        },
+        {
+          "arm": "warm",
+          "spc": 4,
+          "seed": 43,
+          "n_seeds": 28,
+          "n_pool": 225,
+          "n_pseudo": 225,
+          "tau_star": 0.1684,
+          "rounds": 7,
+          "stop": "budget",
+          "pool_oracle_precision_diag": 0.1511,
+          "top1": 0.2188,
+          "macro_f1": 0.1073,
+          "per_class": {
+            "apprehend": {
+              "support": 6,
+              "acc": 0.0
+            },
+            "bite": {
+              "support": 10,
+              "acc": 0.1
+            },
+            "jump": {
+              "support": 11,
+              "acc": 0.0909
+            },
+            "retrieve": {
+              "support": 4,
+              "acc": 0.0
+            },
+            "sit": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "stay": {
+              "support": 9,
+              "acc": 0.8889
+            },
+            "track": {
+              "support": 33,
+              "acc": 0.3333
+            },
+            "watch": {
+              "support": 21,
+              "acc": 0.0
+            }
+          }
+        },
+        {
+          "arm": "warm",
+          "spc": 4,
+          "seed": 44,
+          "n_seeds": 28,
+          "n_pool": 228,
+          "n_pseudo": 228,
+          "tau_star": 0.1468,
+          "rounds": 7,
+          "stop": "budget",
+          "pool_oracle_precision_diag": 0.0702,
+          "top1": 0.0417,
+          "macro_f1": 0.0244,
+          "per_class": {
+            "apprehend": {
+              "support": 6,
+              "acc": 0.3333
+            },
+            "bite": {
+              "support": 10,
+              "acc": 0.1
+            },
+            "jump": {
+              "support": 11,
+              "acc": 0.0
+            },
+            "retrieve": {
+              "support": 4,
+              "acc": 0.0
+            },
+            "sit": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "stay": {
+              "support": 9,
+              "acc": 0.1111
+            },
+            "track": {
+              "support": 33,
+              "acc": 0.0
+            },
+            "watch": {
+              "support": 21,
+              "acc": 0.0
+            }
+          }
+        },
+        {
+          "arm": "warm",
+          "spc": 4,
+          "seed": 45,
+          "n_seeds": 28,
+          "n_pool": 221,
+          "n_pseudo": 221,
+          "tau_star": 0.1204,
+          "rounds": 7,
+          "stop": "budget",
+          "pool_oracle_precision_diag": 0.1674,
+          "top1": 0.1979,
+          "macro_f1": 0.1631,
+          "per_class": {
+            "apprehend": {
+              "support": 6,
+              "acc": 0.1667
+            },
+            "bite": {
+              "support": 10,
+              "acc": 0.2
+            },
+            "jump": {
+              "support": 11,
+              "acc": 0.3636
+            },
+            "retrieve": {
+              "support": 4,
+              "acc": 0.0
+            },
+            "sit": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "stay": {
+              "support": 9,
+              "acc": 0.2222
+            },
+            "track": {
+              "support": 33,
+              "acc": 0.2121
+            },
+            "watch": {
+              "support": 21,
+              "acc": 0.1429
+            }
+          }
+        },
+        {
+          "arm": "warm",
+          "spc": 4,
+          "seed": 46,
+          "n_seeds": 28,
+          "n_pool": 224,
+          "n_pseudo": 224,
+          "tau_star": 0.2371,
+          "rounds": 6,
+          "stop": "converged",
+          "pool_oracle_precision_diag": 0.0893,
+          "top1": 0.1042,
+          "macro_f1": 0.0435,
+          "per_class": {
+            "apprehend": {
+              "support": 6,
+              "acc": 0.0
+            },
+            "bite": {
+              "support": 10,
+              "acc": 0.1
+            },
+            "jump": {
+              "support": 11,
+              "acc": 0.0
+            },
+            "retrieve": {
+              "support": 4,
+              "acc": 0.0
+            },
+            "sit": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "stay": {
+              "support": 9,
+              "acc": 0.8889
+            },
+            "track": {
+              "support": 33,
+              "acc": 0.0303
+            },
+            "watch": {
+              "support": 21,
+              "acc": 0.0
+            }
+          }
+        },
+        {
+          "arm": "warm",
+          "spc": 4,
+          "seed": 47,
+          "n_seeds": 28,
+          "n_pool": 217,
+          "n_pseudo": 217,
+          "tau_star": 0.1091,
+          "rounds": 7,
+          "stop": "budget",
+          "pool_oracle_precision_diag": 0.0691,
+          "top1": 0.2188,
+          "macro_f1": 0.1404,
+          "per_class": {
+            "apprehend": {
+              "support": 6,
+              "acc": 0.1667
+            },
+            "bite": {
+              "support": 10,
+              "acc": 0.1
+            },
+            "jump": {
+              "support": 11,
+              "acc": 0.0
+            },
+            "retrieve": {
+              "support": 4,
+              "acc": 0.5
+            },
+            "sit": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "stay": {
+              "support": 9,
+              "acc": 0.7778
+            },
+            "track": {
+              "support": 33,
+              "acc": 0.303
+            },
+            "watch": {
+              "support": 21,
+              "acc": 0.0
+            }
+          }
+        },
+        {
+          "arm": "warm",
+          "spc": 4,
+          "seed": 48,
+          "n_seeds": 28,
+          "n_pool": 217,
+          "n_pseudo": 217,
+          "tau_star": 0.1271,
+          "rounds": 7,
+          "stop": "budget",
+          "pool_oracle_precision_diag": 0.1797,
+          "top1": 0.2708,
+          "macro_f1": 0.1201,
+          "per_class": {
+            "apprehend": {
+              "support": 6,
+              "acc": 0.0
+            },
+            "bite": {
+              "support": 10,
+              "acc": 0.1
+            },
+            "jump": {
+              "support": 11,
+              "acc": 0.5455
+            },
+            "retrieve": {
+              "support": 4,
+              "acc": 0.0
+            },
+            "sit": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "stay": {
+              "support": 9,
+              "acc": 0.0
+            },
+            "track": {
+              "support": 33,
+              "acc": 0.5455
+            },
+            "watch": {
+              "support": 21,
+              "acc": 0.0476
+            }
+          }
+        },
+        {
+          "arm": "warm",
+          "spc": 4,
+          "seed": 49,
+          "n_seeds": 28,
+          "n_pool": 215,
+          "n_pseudo": 215,
+          "tau_star": 0.187,
+          "rounds": 7,
+          "stop": "budget",
+          "pool_oracle_precision_diag": 0.0233,
+          "top1": 0.1458,
+          "macro_f1": 0.091,
+          "per_class": {
+            "apprehend": {
+              "support": 6,
+              "acc": 0.3333
+            },
+            "bite": {
+              "support": 10,
+              "acc": 0.8
+            },
+            "jump": {
+              "support": 11,
+              "acc": 0.0
+            },
+            "retrieve": {
+              "support": 4,
+              "acc": 1.0
+            },
+            "sit": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "stay": {
+              "support": 9,
+              "acc": 0.0
+            },
+            "track": {
+              "support": 33,
+              "acc": 0.0
+            },
+            "watch": {
+              "support": 21,
+              "acc": 0.0
+            }
+          }
+        },
+        {
+          "arm": "warm",
+          "spc": 4,
+          "seed": 50,
+          "n_seeds": 28,
+          "n_pool": 218,
+          "n_pseudo": 218,
+          "tau_star": 0.14,
+          "rounds": 7,
+          "stop": "budget",
+          "pool_oracle_precision_diag": 0.3119,
+          "top1": 0.1979,
+          "macro_f1": 0.092,
+          "per_class": {
+            "apprehend": {
+              "support": 6,
+              "acc": 0.0
+            },
+            "bite": {
+              "support": 10,
+              "acc": 0.0
+            },
+            "jump": {
+              "support": 11,
+              "acc": 0.5455
+            },
+            "retrieve": {
+              "support": 4,
+              "acc": 0.0
+            },
+            "sit": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "stay": {
+              "support": 9,
+              "acc": 0.0
+            },
+            "track": {
+              "support": 33,
+              "acc": 0.2121
+            },
+            "watch": {
+              "support": 21,
+              "acc": 0.2857
+            }
+          }
+        },
+        {
+          "arm": "warm",
+          "spc": 4,
+          "seed": 51,
+          "n_seeds": 28,
+          "n_pool": 185,
+          "n_pseudo": 185,
+          "tau_star": 0.3762,
+          "rounds": 7,
+          "stop": "budget",
+          "pool_oracle_precision_diag": 0.2162,
+          "top1": 0.1458,
+          "macro_f1": 0.0971,
+          "per_class": {
+            "apprehend": {
+              "support": 6,
+              "acc": 0.1667
+            },
+            "bite": {
+              "support": 10,
+              "acc": 0.2
+            },
+            "jump": {
+              "support": 11,
+              "acc": 0.0
+            },
+            "retrieve": {
+              "support": 4,
+              "acc": 0.0
+            },
+            "sit": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "stay": {
+              "support": 9,
+              "acc": 0.1111
+            },
+            "track": {
+              "support": 33,
+              "acc": 0.0
+            },
+            "watch": {
+              "support": 21,
+              "acc": 0.4762
+            }
+          }
+        }
+      ],
+      "aimclr_spc2": [
+        {
+          "arm": "aimclr",
+          "spc": 2,
+          "seed": 42,
+          "n_seeds": 14,
+          "n_pool": 237,
+          "n_pseudo": 237,
+          "tau_star": 0.2256,
+          "rounds": 5,
+          "stop": "converged",
+          "pool_oracle_precision_diag": 0.1646,
+          "top1": 0.1875,
+          "macro_f1": 0.1529,
+          "per_class": {
+            "apprehend": {
+              "support": 6,
+              "acc": 0.0
+            },
+            "bite": {
+              "support": 10,
+              "acc": 0.2
+            },
+            "jump": {
+              "support": 11,
+              "acc": 0.2727
+            },
+            "retrieve": {
+              "support": 4,
+              "acc": 0.5
+            },
+            "sit": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "stay": {
+              "support": 9,
+              "acc": 0.5556
+            },
+            "track": {
+              "support": 33,
+              "acc": 0.0606
+            },
+            "watch": {
+              "support": 21,
+              "acc": 0.1905
+            }
+          }
+        },
+        {
+          "arm": "aimclr",
+          "spc": 2,
+          "seed": 43,
+          "n_seeds": 14,
+          "n_pool": 239,
+          "n_pseudo": 239,
+          "tau_star": 0.2121,
+          "rounds": 7,
+          "stop": "budget",
+          "pool_oracle_precision_diag": 0.1548,
+          "top1": 0.1979,
+          "macro_f1": 0.1543,
+          "per_class": {
+            "apprehend": {
+              "support": 6,
+              "acc": 0.3333
+            },
+            "bite": {
+              "support": 10,
+              "acc": 0.1
+            },
+            "jump": {
+              "support": 11,
+              "acc": 0.0
+            },
+            "retrieve": {
+              "support": 4,
+              "acc": 0.25
+            },
+            "sit": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "stay": {
+              "support": 9,
+              "acc": 0.5556
+            },
+            "track": {
+              "support": 33,
+              "acc": 0.1515
+            },
+            "watch": {
+              "support": 21,
+              "acc": 0.2381
+            }
+          }
+        },
+        {
+          "arm": "aimclr",
+          "spc": 2,
+          "seed": 44,
+          "n_seeds": 14,
+          "n_pool": 229,
+          "n_pseudo": 229,
+          "tau_star": 0.5162,
+          "rounds": 5,
+          "stop": "converged",
+          "pool_oracle_precision_diag": 0.1266,
+          "top1": 0.2396,
+          "macro_f1": 0.1815,
+          "per_class": {
+            "apprehend": {
+              "support": 6,
+              "acc": 0.3333
+            },
+            "bite": {
+              "support": 10,
+              "acc": 0.3
+            },
+            "jump": {
+              "support": 11,
+              "acc": 0.2727
+            },
+            "retrieve": {
+              "support": 4,
+              "acc": 0.25
+            },
+            "sit": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "stay": {
+              "support": 9,
+              "acc": 0.0
+            },
+            "track": {
+              "support": 33,
+              "acc": 0.2727
+            },
+            "watch": {
+              "support": 21,
+              "acc": 0.2381
+            }
+          }
+        },
+        {
+          "arm": "aimclr",
+          "spc": 2,
+          "seed": 45,
+          "n_seeds": 14,
+          "n_pool": 235,
+          "n_pseudo": 235,
+          "tau_star": 0.2055,
+          "rounds": 7,
+          "stop": "budget",
+          "pool_oracle_precision_diag": 0.1745,
+          "top1": 0.1771,
+          "macro_f1": 0.1275,
+          "per_class": {
+            "apprehend": {
+              "support": 6,
+              "acc": 0.0
+            },
+            "bite": {
+              "support": 10,
+              "acc": 0.1
+            },
+            "jump": {
+              "support": 11,
+              "acc": 0.1818
+            },
+            "retrieve": {
+              "support": 4,
+              "acc": 0.5
+            },
+            "sit": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "stay": {
+              "support": 9,
+              "acc": 0.1111
+            },
+            "track": {
+              "support": 33,
+              "acc": 0.303
+            },
+            "watch": {
+              "support": 21,
+              "acc": 0.0476
+            }
+          }
+        },
+        {
+          "arm": "aimclr",
+          "spc": 2,
+          "seed": 46,
+          "n_seeds": 14,
+          "n_pool": 238,
+          "n_pseudo": 238,
+          "tau_star": 0.2408,
+          "rounds": 6,
+          "stop": "converged",
+          "pool_oracle_precision_diag": 0.1807,
+          "top1": 0.1354,
+          "macro_f1": 0.107,
+          "per_class": {
+            "apprehend": {
+              "support": 6,
+              "acc": 0.0
+            },
+            "bite": {
+              "support": 10,
+              "acc": 0.2
+            },
+            "jump": {
+              "support": 11,
+              "acc": 0.0
+            },
+            "retrieve": {
+              "support": 4,
+              "acc": 0.25
+            },
+            "sit": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "stay": {
+              "support": 9,
+              "acc": 0.5556
+            },
+            "track": {
+              "support": 33,
+              "acc": 0.0
+            },
+            "watch": {
+              "support": 21,
+              "acc": 0.2381
+            }
+          }
+        },
+        {
+          "arm": "aimclr",
+          "spc": 2,
+          "seed": 47,
+          "n_seeds": 14,
+          "n_pool": 239,
+          "n_pseudo": 239,
+          "tau_star": 0.1334,
+          "rounds": 7,
+          "stop": "budget",
+          "pool_oracle_precision_diag": 0.1632,
+          "top1": 0.1667,
+          "macro_f1": 0.1402,
+          "per_class": {
+            "apprehend": {
+              "support": 6,
+              "acc": 0.0
+            },
+            "bite": {
+              "support": 10,
+              "acc": 0.0
+            },
+            "jump": {
+              "support": 11,
+              "acc": 0.1818
+            },
+            "retrieve": {
+              "support": 4,
+              "acc": 0.25
+            },
+            "sit": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "stay": {
+              "support": 9,
+              "acc": 0.5556
+            },
+            "track": {
+              "support": 33,
+              "acc": 0.0909
+            },
+            "watch": {
+              "support": 21,
+              "acc": 0.2381
+            }
+          }
+        },
+        {
+          "arm": "aimclr",
+          "spc": 2,
+          "seed": 48,
+          "n_seeds": 14,
+          "n_pool": 227,
+          "n_pseudo": 227,
+          "tau_star": 0.4745,
+          "rounds": 5,
+          "stop": "converged",
+          "pool_oracle_precision_diag": 0.2159,
+          "top1": 0.125,
+          "macro_f1": 0.0664,
+          "per_class": {
+            "apprehend": {
+              "support": 6,
+              "acc": 0.1667
+            },
+            "bite": {
+              "support": 10,
+              "acc": 0.0
+            },
+            "jump": {
+              "support": 11,
+              "acc": 0.0
+            },
+            "retrieve": {
+              "support": 4,
+              "acc": 0.0
+            },
+            "sit": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "stay": {
+              "support": 9,
+              "acc": 0.1111
+            },
+            "track": {
+              "support": 33,
+              "acc": 0.2727
+            },
+            "watch": {
+              "support": 21,
+              "acc": 0.0476
+            }
+          }
+        },
+        {
+          "arm": "aimclr",
+          "spc": 2,
+          "seed": 49,
+          "n_seeds": 14,
+          "n_pool": 237,
+          "n_pseudo": 237,
+          "tau_star": 0.1431,
+          "rounds": 7,
+          "stop": "budget",
+          "pool_oracle_precision_diag": 0.2574,
+          "top1": 0.1771,
+          "macro_f1": 0.1287,
+          "per_class": {
+            "apprehend": {
+              "support": 6,
+              "acc": 0.0
+            },
+            "bite": {
+              "support": 10,
+              "acc": 0.0
+            },
+            "jump": {
+              "support": 11,
+              "acc": 0.0909
+            },
+            "retrieve": {
+              "support": 4,
+              "acc": 0.25
+            },
+            "sit": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "stay": {
+              "support": 9,
+              "acc": 0.5556
+            },
+            "track": {
+              "support": 33,
+              "acc": 0.0909
+            },
+            "watch": {
+              "support": 21,
+              "acc": 0.3333
+            }
+          }
+        },
+        {
+          "arm": "aimclr",
+          "spc": 2,
+          "seed": 50,
+          "n_seeds": 14,
+          "n_pool": 240,
+          "n_pseudo": 240,
+          "tau_star": 0.144,
+          "rounds": 7,
+          "stop": "budget",
+          "pool_oracle_precision_diag": 0.1375,
+          "top1": 0.2396,
+          "macro_f1": 0.1763,
+          "per_class": {
+            "apprehend": {
+              "support": 6,
+              "acc": 0.0
+            },
+            "bite": {
+              "support": 10,
+              "acc": 0.3
+            },
+            "jump": {
+              "support": 11,
+              "acc": 0.1818
+            },
+            "retrieve": {
+              "support": 4,
+              "acc": 0.25
+            },
+            "sit": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "stay": {
+              "support": 9,
+              "acc": 0.5556
+            },
+            "track": {
+              "support": 33,
+              "acc": 0.3333
+            },
+            "watch": {
+              "support": 21,
+              "acc": 0.0476
+            }
+          }
+        },
+        {
+          "arm": "aimclr",
+          "spc": 2,
+          "seed": 51,
+          "n_seeds": 14,
+          "n_pool": 241,
+          "n_pseudo": 241,
+          "tau_star": 0.1979,
+          "rounds": 6,
+          "stop": "converged",
+          "pool_oracle_precision_diag": 0.2075,
+          "top1": 0.1146,
+          "macro_f1": 0.0697,
+          "per_class": {
+            "apprehend": {
+              "support": 6,
+              "acc": 0.0
+            },
+            "bite": {
+              "support": 10,
+              "acc": 0.0
+            },
+            "jump": {
+              "support": 11,
+              "acc": 0.1818
+            },
+            "retrieve": {
+              "support": 4,
+              "acc": 0.25
+            },
+            "sit": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "stay": {
+              "support": 9,
+              "acc": 0.0
+            },
+            "track": {
+              "support": 33,
+              "acc": 0.1818
+            },
+            "watch": {
+              "support": 21,
+              "acc": 0.0952
+            }
+          }
+        }
+      ],
+      "aimclr_spc4": [
+        {
+          "arm": "aimclr",
+          "spc": 4,
+          "seed": 42,
+          "n_seeds": 28,
+          "n_pool": 220,
+          "n_pseudo": 220,
+          "tau_star": 0.2869,
+          "rounds": 7,
+          "stop": "budget",
+          "pool_oracle_precision_diag": 0.1682,
+          "top1": 0.1458,
+          "macro_f1": 0.1203,
+          "per_class": {
+            "apprehend": {
+              "support": 6,
+              "acc": 0.0
+            },
+            "bite": {
+              "support": 10,
+              "acc": 0.3
+            },
+            "jump": {
+              "support": 11,
+              "acc": 0.1818
+            },
+            "retrieve": {
+              "support": 4,
+              "acc": 0.25
+            },
+            "sit": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "stay": {
+              "support": 9,
+              "acc": 0.5556
+            },
+            "track": {
+              "support": 33,
+              "acc": 0.0606
+            },
+            "watch": {
+              "support": 21,
+              "acc": 0.0476
+            }
+          }
+        },
+        {
+          "arm": "aimclr",
+          "spc": 4,
+          "seed": 43,
+          "n_seeds": 28,
+          "n_pool": 225,
+          "n_pseudo": 225,
+          "tau_star": 0.1759,
+          "rounds": 7,
+          "stop": "budget",
+          "pool_oracle_precision_diag": 0.1511,
+          "top1": 0.1771,
+          "macro_f1": 0.181,
+          "per_class": {
+            "apprehend": {
+              "support": 6,
+              "acc": 0.0
+            },
+            "bite": {
+              "support": 10,
+              "acc": 0.3
+            },
+            "jump": {
+              "support": 11,
+              "acc": 0.2727
+            },
+            "retrieve": {
+              "support": 4,
+              "acc": 0.75
+            },
+            "sit": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "stay": {
+              "support": 9,
+              "acc": 0.5556
+            },
+            "track": {
+              "support": 33,
+              "acc": 0.0909
+            },
+            "watch": {
+              "support": 21,
+              "acc": 0.0
+            }
+          }
+        },
+        {
+          "arm": "aimclr",
+          "spc": 4,
+          "seed": 44,
+          "n_seeds": 28,
+          "n_pool": 222,
+          "n_pseudo": 222,
+          "tau_star": 0.2668,
+          "rounds": 7,
+          "stop": "budget",
+          "pool_oracle_precision_diag": 0.1036,
+          "top1": 0.1042,
+          "macro_f1": 0.073,
+          "per_class": {
+            "apprehend": {
+              "support": 6,
+              "acc": 0.0
+            },
+            "bite": {
+              "support": 10,
+              "acc": 0.2
+            },
+            "jump": {
+              "support": 11,
+              "acc": 0.0909
+            },
+            "retrieve": {
+              "support": 4,
+              "acc": 0.5
+            },
+            "sit": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "stay": {
+              "support": 9,
+              "acc": 0.5556
+            },
+            "track": {
+              "support": 33,
+              "acc": 0.0
+            },
+            "watch": {
+              "support": 21,
+              "acc": 0.0
+            }
+          }
+        },
+        {
+          "arm": "aimclr",
+          "spc": 4,
+          "seed": 45,
+          "n_seeds": 28,
+          "n_pool": 225,
+          "n_pseudo": 225,
+          "tau_star": 0.1216,
+          "rounds": 7,
+          "stop": "budget",
+          "pool_oracle_precision_diag": 0.1511,
+          "top1": 0.1458,
+          "macro_f1": 0.1393,
+          "per_class": {
+            "apprehend": {
+              "support": 6,
+              "acc": 0.1667
+            },
+            "bite": {
+              "support": 10,
+              "acc": 0.2
+            },
+            "jump": {
+              "support": 11,
+              "acc": 0.0909
+            },
+            "retrieve": {
+              "support": 4,
+              "acc": 0.5
+            },
+            "sit": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "stay": {
+              "support": 9,
+              "acc": 0.2222
+            },
+            "track": {
+              "support": 33,
+              "acc": 0.0909
+            },
+            "watch": {
+              "support": 21,
+              "acc": 0.1429
+            }
+          }
+        },
+        {
+          "arm": "aimclr",
+          "spc": 4,
+          "seed": 46,
+          "n_seeds": 28,
+          "n_pool": 217,
+          "n_pseudo": 217,
+          "tau_star": 0.2425,
+          "rounds": 7,
+          "stop": "budget",
+          "pool_oracle_precision_diag": 0.1106,
+          "top1": 0.1979,
+          "macro_f1": 0.1381,
+          "per_class": {
+            "apprehend": {
+              "support": 6,
+              "acc": 0.0
+            },
+            "bite": {
+              "support": 10,
+              "acc": 0.2
+            },
+            "jump": {
+              "support": 11,
+              "acc": 0.0
+            },
+            "retrieve": {
+              "support": 4,
+              "acc": 0.0
+            },
+            "sit": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "stay": {
+              "support": 9,
+              "acc": 0.5556
+            },
+            "track": {
+              "support": 33,
+              "acc": 0.2727
+            },
+            "watch": {
+              "support": 21,
+              "acc": 0.1429
+            }
+          }
+        },
+        {
+          "arm": "aimclr",
+          "spc": 4,
+          "seed": 47,
+          "n_seeds": 28,
+          "n_pool": 225,
+          "n_pseudo": 225,
+          "tau_star": 0.1066,
+          "rounds": 7,
+          "stop": "budget",
+          "pool_oracle_precision_diag": 0.0889,
+          "top1": 0.1771,
+          "macro_f1": 0.1323,
+          "per_class": {
+            "apprehend": {
+              "support": 6,
+              "acc": 0.3333
+            },
+            "bite": {
+              "support": 10,
+              "acc": 0.0
+            },
+            "jump": {
+              "support": 11,
+              "acc": 0.3636
+            },
+            "retrieve": {
+              "support": 4,
+              "acc": 0.25
+            },
+            "sit": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "stay": {
+              "support": 9,
+              "acc": 0.6667
+            },
+            "track": {
+              "support": 33,
+              "acc": 0.1212
+            },
+            "watch": {
+              "support": 21,
+              "acc": 0.0
+            }
+          }
+        },
+        {
+          "arm": "aimclr",
+          "spc": 4,
+          "seed": 48,
+          "n_seeds": 28,
+          "n_pool": 199,
+          "n_pseudo": 199,
+          "tau_star": 0.4034,
+          "rounds": 7,
+          "stop": "budget",
+          "pool_oracle_precision_diag": 0.1457,
+          "top1": 0.1562,
+          "macro_f1": 0.1318,
+          "per_class": {
+            "apprehend": {
+              "support": 6,
+              "acc": 0.1667
+            },
+            "bite": {
+              "support": 10,
+              "acc": 0.3
+            },
+            "jump": {
+              "support": 11,
+              "acc": 0.0909
+            },
+            "retrieve": {
+              "support": 4,
+              "acc": 0.0
+            },
+            "sit": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "stay": {
+              "support": 9,
+              "acc": 0.5556
+            },
+            "track": {
+              "support": 33,
+              "acc": 0.0
+            },
+            "watch": {
+              "support": 21,
+              "acc": 0.2381
+            }
+          }
+        },
+        {
+          "arm": "aimclr",
+          "spc": 4,
+          "seed": 49,
+          "n_seeds": 28,
+          "n_pool": 226,
+          "n_pseudo": 226,
+          "tau_star": 0.1242,
+          "rounds": 6,
+          "stop": "converged",
+          "pool_oracle_precision_diag": 0.2478,
+          "top1": 0.1042,
+          "macro_f1": 0.0781,
+          "per_class": {
+            "apprehend": {
+              "support": 6,
+              "acc": 0.0
+            },
+            "bite": {
+              "support": 10,
+              "acc": 0.3
+            },
+            "jump": {
+              "support": 11,
+              "acc": 0.1818
+            },
+            "retrieve": {
+              "support": 4,
+              "acc": 0.25
+            },
+            "sit": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "stay": {
+              "support": 9,
+              "acc": 0.0
+            },
+            "track": {
+              "support": 33,
+              "acc": 0.0
+            },
+            "watch": {
+              "support": 21,
+              "acc": 0.1905
+            }
+          }
+        },
+        {
+          "arm": "aimclr",
+          "spc": 4,
+          "seed": 50,
+          "n_seeds": 28,
+          "n_pool": 219,
+          "n_pseudo": 219,
+          "tau_star": 0.2941,
+          "rounds": 7,
+          "stop": "budget",
+          "pool_oracle_precision_diag": 0.1918,
+          "top1": 0.0833,
+          "macro_f1": 0.0605,
+          "per_class": {
+            "apprehend": {
+              "support": 6,
+              "acc": 0.0
+            },
+            "bite": {
+              "support": 10,
+              "acc": 0.2
+            },
+            "jump": {
+              "support": 11,
+              "acc": 0.2727
+            },
+            "retrieve": {
+              "support": 4,
+              "acc": 0.0
+            },
+            "sit": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "stay": {
+              "support": 9,
+              "acc": 0.0
+            },
+            "track": {
+              "support": 33,
+              "acc": 0.0
+            },
+            "watch": {
+              "support": 21,
+              "acc": 0.1429
+            }
+          }
+        },
+        {
+          "arm": "aimclr",
+          "spc": 4,
+          "seed": 51,
+          "n_seeds": 28,
+          "n_pool": 225,
+          "n_pseudo": 225,
+          "tau_star": 0.1197,
+          "rounds": 7,
+          "stop": "budget",
+          "pool_oracle_precision_diag": 0.2089,
+          "top1": 0.1667,
+          "macro_f1": 0.1339,
+          "per_class": {
+            "apprehend": {
+              "support": 6,
+              "acc": 0.1667
+            },
+            "bite": {
+              "support": 10,
+              "acc": 0.2
+            },
+            "jump": {
+              "support": 11,
+              "acc": 0.0
+            },
+            "retrieve": {
+              "support": 4,
+              "acc": 0.5
+            },
+            "sit": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "stay": {
+              "support": 9,
+              "acc": 0.2222
+            },
+            "track": {
+              "support": 33,
+              "acc": 0.1818
+            },
+            "watch": {
+              "support": 21,
+              "acc": 0.1429
+            }
+          }
+        }
+      ],
+      "scratch_spc2": [
+        {
+          "arm": "scratch",
+          "spc": 2,
+          "seed": 42,
+          "n_seeds": 14,
+          "n_pool": 242,
+          "n_pseudo": 242,
+          "tau_star": 0.0008,
+          "rounds": 4,
+          "stop": "converged",
+          "pool_oracle_precision_diag": 0.095,
+          "top1": 0.0938,
+          "macro_f1": 0.0214,
+          "per_class": {
+            "apprehend": {
+              "support": 6,
+              "acc": 0.0
+            },
+            "bite": {
+              "support": 10,
+              "acc": 0.0
+            },
+            "jump": {
+              "support": 11,
+              "acc": 0.0
+            },
+            "retrieve": {
+              "support": 4,
+              "acc": 0.0
+            },
+            "sit": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "stay": {
+              "support": 9,
+              "acc": 1.0
+            },
+            "track": {
+              "support": 33,
+              "acc": 0.0
+            },
+            "watch": {
+              "support": 21,
+              "acc": 0.0
+            }
+          }
+        },
+        {
+          "arm": "scratch",
+          "spc": 2,
+          "seed": 43,
+          "n_seeds": 14,
+          "n_pool": 242,
+          "n_pseudo": 242,
+          "tau_star": 0.0011,
+          "rounds": 4,
+          "stop": "converged",
+          "pool_oracle_precision_diag": 0.0496,
+          "top1": 0.1042,
+          "macro_f1": 0.0236,
+          "per_class": {
+            "apprehend": {
+              "support": 6,
+              "acc": 0.0
+            },
+            "bite": {
+              "support": 10,
+              "acc": 1.0
+            },
+            "jump": {
+              "support": 11,
+              "acc": 0.0
+            },
+            "retrieve": {
+              "support": 4,
+              "acc": 0.0
+            },
+            "sit": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "stay": {
+              "support": 9,
+              "acc": 0.0
+            },
+            "track": {
+              "support": 33,
+              "acc": 0.0
+            },
+            "watch": {
+              "support": 21,
+              "acc": 0.0
+            }
+          }
+        },
+        {
+          "arm": "scratch",
+          "spc": 2,
+          "seed": 44,
+          "n_seeds": 14,
+          "n_pool": 242,
+          "n_pseudo": 242,
+          "tau_star": 0.0011,
+          "rounds": 4,
+          "stop": "converged",
+          "pool_oracle_precision_diag": 0.0496,
+          "top1": 0.1042,
+          "macro_f1": 0.0236,
+          "per_class": {
+            "apprehend": {
+              "support": 6,
+              "acc": 0.0
+            },
+            "bite": {
+              "support": 10,
+              "acc": 1.0
+            },
+            "jump": {
+              "support": 11,
+              "acc": 0.0
+            },
+            "retrieve": {
+              "support": 4,
+              "acc": 0.0
+            },
+            "sit": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "stay": {
+              "support": 9,
+              "acc": 0.0
+            },
+            "track": {
+              "support": 33,
+              "acc": 0.0
+            },
+            "watch": {
+              "support": 21,
+              "acc": 0.0
+            }
+          }
+        },
+        {
+          "arm": "scratch",
+          "spc": 2,
+          "seed": 45,
+          "n_seeds": 14,
+          "n_pool": 242,
+          "n_pseudo": 242,
+          "tau_star": 0.0011,
+          "rounds": 4,
+          "stop": "converged",
+          "pool_oracle_precision_diag": 0.4587,
+          "top1": 0.2188,
+          "macro_f1": 0.0449,
+          "per_class": {
+            "apprehend": {
+              "support": 6,
+              "acc": 0.0
+            },
+            "bite": {
+              "support": 10,
+              "acc": 0.0
+            },
+            "jump": {
+              "support": 11,
+              "acc": 0.0
+            },
+            "retrieve": {
+              "support": 4,
+              "acc": 0.0
+            },
+            "sit": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "stay": {
+              "support": 9,
+              "acc": 0.0
+            },
+            "track": {
+              "support": 33,
+              "acc": 0.0
+            },
+            "watch": {
+              "support": 21,
+              "acc": 1.0
+            }
+          }
+        },
+        {
+          "arm": "scratch",
+          "spc": 2,
+          "seed": 46,
+          "n_seeds": 14,
+          "n_pool": 242,
+          "n_pseudo": 242,
+          "tau_star": 0.0014,
+          "rounds": 4,
+          "stop": "converged",
+          "pool_oracle_precision_diag": 0.4587,
+          "top1": 0.2188,
+          "macro_f1": 0.0449,
+          "per_class": {
+            "apprehend": {
+              "support": 6,
+              "acc": 0.0
+            },
+            "bite": {
+              "support": 10,
+              "acc": 0.0
+            },
+            "jump": {
+              "support": 11,
+              "acc": 0.0
+            },
+            "retrieve": {
+              "support": 4,
+              "acc": 0.0
+            },
+            "sit": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "stay": {
+              "support": 9,
+              "acc": 0.0
+            },
+            "track": {
+              "support": 33,
+              "acc": 0.0
+            },
+            "watch": {
+              "support": 21,
+              "acc": 1.0
+            }
+          }
+        },
+        {
+          "arm": "scratch",
+          "spc": 2,
+          "seed": 47,
+          "n_seeds": 14,
+          "n_pool": 242,
+          "n_pseudo": 242,
+          "tau_star": 0.0008,
+          "rounds": 5,
+          "stop": "converged",
+          "pool_oracle_precision_diag": 0.1405,
+          "top1": 0.1146,
+          "macro_f1": 0.0257,
+          "per_class": {
+            "apprehend": {
+              "support": 6,
+              "acc": 0.0
+            },
+            "bite": {
+              "support": 10,
+              "acc": 0.0
+            },
+            "jump": {
+              "support": 11,
+              "acc": 1.0
+            },
+            "retrieve": {
+              "support": 4,
+              "acc": 0.0
+            },
+            "sit": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "stay": {
+              "support": 9,
+              "acc": 0.0
+            },
+            "track": {
+              "support": 33,
+              "acc": 0.0
+            },
+            "watch": {
+              "support": 21,
+              "acc": 0.0
+            }
+          }
+        },
+        {
+          "arm": "scratch",
+          "spc": 2,
+          "seed": 48,
+          "n_seeds": 14,
+          "n_pool": 242,
+          "n_pseudo": 242,
+          "tau_star": 0.0011,
+          "rounds": 4,
+          "stop": "converged",
+          "pool_oracle_precision_diag": 0.095,
+          "top1": 0.0938,
+          "macro_f1": 0.0214,
+          "per_class": {
+            "apprehend": {
+              "support": 6,
+              "acc": 0.0
+            },
+            "bite": {
+              "support": 10,
+              "acc": 0.0
+            },
+            "jump": {
+              "support": 11,
+              "acc": 0.0
+            },
+            "retrieve": {
+              "support": 4,
+              "acc": 0.0
+            },
+            "sit": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "stay": {
+              "support": 9,
+              "acc": 1.0
+            },
+            "track": {
+              "support": 33,
+              "acc": 0.0
+            },
+            "watch": {
+              "support": 21,
+              "acc": 0.0
+            }
+          }
+        },
+        {
+          "arm": "scratch",
+          "spc": 2,
+          "seed": 49,
+          "n_seeds": 14,
+          "n_pool": 242,
+          "n_pseudo": 242,
+          "tau_star": 0.0008,
+          "rounds": 4,
+          "stop": "converged",
+          "pool_oracle_precision_diag": 0.0496,
+          "top1": 0.1042,
+          "macro_f1": 0.0236,
+          "per_class": {
+            "apprehend": {
+              "support": 6,
+              "acc": 0.0
+            },
+            "bite": {
+              "support": 10,
+              "acc": 1.0
+            },
+            "jump": {
+              "support": 11,
+              "acc": 0.0
+            },
+            "retrieve": {
+              "support": 4,
+              "acc": 0.0
+            },
+            "sit": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "stay": {
+              "support": 9,
+              "acc": 0.0
+            },
+            "track": {
+              "support": 33,
+              "acc": 0.0
+            },
+            "watch": {
+              "support": 21,
+              "acc": 0.0
+            }
+          }
+        },
+        {
+          "arm": "scratch",
+          "spc": 2,
+          "seed": 50,
+          "n_seeds": 14,
+          "n_pool": 242,
+          "n_pseudo": 242,
+          "tau_star": 0.0015,
+          "rounds": 4,
+          "stop": "converged",
+          "pool_oracle_precision_diag": 0.0496,
+          "top1": 0.1042,
+          "macro_f1": 0.0236,
+          "per_class": {
+            "apprehend": {
+              "support": 6,
+              "acc": 0.0
+            },
+            "bite": {
+              "support": 10,
+              "acc": 1.0
+            },
+            "jump": {
+              "support": 11,
+              "acc": 0.0
+            },
+            "retrieve": {
+              "support": 4,
+              "acc": 0.0
+            },
+            "sit": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "stay": {
+              "support": 9,
+              "acc": 0.0
+            },
+            "track": {
+              "support": 33,
+              "acc": 0.0
+            },
+            "watch": {
+              "support": 21,
+              "acc": 0.0
+            }
+          }
+        },
+        {
+          "arm": "scratch",
+          "spc": 2,
+          "seed": 51,
+          "n_seeds": 14,
+          "n_pool": 242,
+          "n_pseudo": 242,
+          "tau_star": 0.0015,
+          "rounds": 4,
+          "stop": "converged",
+          "pool_oracle_precision_diag": 0.4587,
+          "top1": 0.2188,
+          "macro_f1": 0.0449,
+          "per_class": {
+            "apprehend": {
+              "support": 6,
+              "acc": 0.0
+            },
+            "bite": {
+              "support": 10,
+              "acc": 0.0
+            },
+            "jump": {
+              "support": 11,
+              "acc": 0.0
+            },
+            "retrieve": {
+              "support": 4,
+              "acc": 0.0
+            },
+            "sit": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "stay": {
+              "support": 9,
+              "acc": 0.0
+            },
+            "track": {
+              "support": 33,
+              "acc": 0.0
+            },
+            "watch": {
+              "support": 21,
+              "acc": 1.0
+            }
+          }
+        }
+      ],
+      "warm_full": [
+        {
+          "arm": "warm",
+          "spc": -1,
+          "seed": 42,
+          "budget": "full",
+          "n_seeds": 256,
+          "n_pool": 0,
+          "n_pseudo": 0,
+          "tau_star": null,
+          "rounds": 0,
+          "stop": "full-supervision(no pseudo-label)",
+          "pool_oracle_precision_diag": null,
+          "top1": 0.3542,
+          "macro_f1": 0.1933,
+          "per_class": {
+            "apprehend": {
+              "support": 6,
+              "acc": 0.0
+            },
+            "bite": {
+              "support": 10,
+              "acc": 0.1
+            },
+            "jump": {
+              "support": 11,
+              "acc": 0.4545
+            },
+            "retrieve": {
+              "support": 4,
+              "acc": 0.0
+            },
+            "sit": {
+              "support": 2,
+              "acc": 0.0
+            },
+            "stay": {
+              "support": 9,
+              "acc": 0.0
+            },
+            "track": {
+              "support": 33,
+              "acc": 0.5152
+            },
+            "watch": {
+              "support": 21,
+              "acc": 0.5238
+            }
+          }
+        }
+      ]
+    }
+  },
+  "wall_clock_sec": 512.2
+}

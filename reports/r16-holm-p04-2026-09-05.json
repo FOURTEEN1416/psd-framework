@@ -1,0 +1,25 @@
+{
+  "date": "2026-09-05",
+  "protocol": "R16 statistics artifact: Holm-Bonferroni over the P0.4 (E4) first-to-last paired-t family (m=3), closing the R16 finding that E4 printed a raw p while Section 4.2 promises corrected values",
+  "family": {
+    "main_calib_consensus_alpha1": 0.03,
+    "B2off_no_consensus": 0.143,
+    "alpha0_control": 0.033
+  },
+  "adjusted": {
+    "main_calib_consensus_alpha1": {
+      "raw_p": 0.03,
+      "holm_adjusted": 0.09
+    },
+    "alpha0_control": {
+      "raw_p": 0.033,
+      "holm_adjusted": 0.09
+    },
+    "B2off_no_consensus": {
+      "raw_p": 0.143,
+      "holm_adjusted": 0.143
+    }
+  },
+  "source": "reports/p04-tcl-2026-08-24.md section 4 (paired t=5.65 p=0.030; B-2-off p=0.143; alpha=0 p=0.033)",
+  "note": "main-test corrected p=0.090: the r0-to-last pool-precision gain is direction-consistent but NOT significant after family correction; the peak r0-to-r1 +17.88pp is a separate untested caliber"
+}

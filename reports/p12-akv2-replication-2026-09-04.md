@@ -46,3 +46,10 @@
 
 - §3 "EP3 判据触发 DATA_BOTTLENECK_CONFIRMED" 修复：原始 +3.57pp 差值被类别空间混淆（12→8 类 chance 位移 +4.17pp 更大）。补同空间对照：v1 full 在 8 类子空间重算=25.96% → 同空间差 **+11.54pp**（above-chance 13.5→25.0pp）——数据瓶颈归因于 top-1 修复后成立；macro-F1 反向（14.7→7.8，sit n=2 驱动）双指标并报。协议 §7 追加 dated 修订。
 - Y_CKPT 源视频泄漏披露按协议 §5 承诺补入正文（E7b 段）。
+
+
+---
+
+## Errata (2026-09-05, R16 adversarial review)
+
+The end-to-end arms reported in this file trained the FINAL classifier on the true labels of the pseudo-labeled pool clips (and the iteration's precision-drop stopping consumed training-split labels). This is a protocol error: the reported budget percentages (13%/6%/10%) describe the seeds only, while the reported head consumed 60–99% (AK) / ≈96% (NTU) of training labels. The paper's end-to-end numbers are superseded by the corrected protocol: `reports/r16-endtoend-pseudo-2026-09-05.json` (AK v1/v2) and `reports/r16-ntu-pseudo-2026-09-05.json` (NTU). Pure-supervised arms (full-budget references, the EP3 ceiling test, the fine-tune controls) remain valid as archived. See `docs/paper/review-log.md` R16.

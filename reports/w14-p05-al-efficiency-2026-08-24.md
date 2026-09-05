@@ -91,3 +91,10 @@ active_learning.py ×2、计划文档 ×1、configs/p05_al_short.yaml ×1；另�
 
 - 本窗未触碰：`docs/paper/**`、`dev-docs/decisions/**`、`*ntu*` 文件（遵守禁触令）。
 - 并行窗口的 docs/paper 修改与 AK 转换脚本未纳入本窗提交范围。
+
+
+---
+
+## Errata (2026-09-05, R16)
+
+§3.1 states "3/3 seeds 同向" for b=100; per-seed values in `reports/p05-al-efficiency-short-2026-08-24.json` show random > entropy at only **2/3** seeds at b=100 (seed 43: entropy 0.7909 > random 0.7818); 3/3 holds at b=200. The paper text already uses 2/3 (R13). Corrected here for archive consistency.

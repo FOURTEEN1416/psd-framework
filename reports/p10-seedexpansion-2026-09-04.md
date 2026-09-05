@@ -28,3 +28,10 @@
 2. **macro-F1 反转消解**: n=3 时 AimCLR spc2 反超（15.21 vs 12.44）在 n=10 下收敛为统计持平（p=0.77）——原"多数类锐化权衡"叙事降级为"种子噪声"，论文措辞已同步（tab3 行 + §4.4 段）。
 3. **E7 主数字刷新**: warm@spc2 = 31.96±2.45（n=10），占全监督 33.93% 的 **94%**（原 91%）；scratch = 24.64±1.64；Abstract/Intro/§4.3/tab2 联动更新。
 4. 措辞纪律: p=0.002/0.016 可写 significant；macro-F1 spc4 p=0.084 仍禁写显著。
+
+
+---
+
+## Errata (2026-09-05, R16 adversarial review)
+
+The end-to-end arms reported in this file trained the FINAL classifier on the true labels of the pseudo-labeled pool clips (and the iteration's precision-drop stopping consumed training-split labels). This is a protocol error: the reported budget percentages (13%/6%/10%) describe the seeds only, while the reported head consumed 60–99% (AK) / ≈96% (NTU) of training labels. The paper's end-to-end numbers are superseded by the corrected protocol: `reports/r16-endtoend-pseudo-2026-09-05.json` (AK v1/v2) and `reports/r16-ntu-pseudo-2026-09-05.json` (NTU). Pure-supervised arms (full-budget references, the EP3 ceiling test, the fine-tune controls) remain valid as archived. See `docs/paper/review-log.md` R16.

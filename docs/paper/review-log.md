@@ -251,3 +251,24 @@ YOLO-PetX（IEEE CEECT 2025，全题名经 GitHub 全局代码检索锁定）、
 - **hedge 补齐**：3 处裸"never/No existing"加 to our knowledge（与 L56 自洽）；"is bounded"→mitigated；"grows a complete taxonomy"→labeled coverage；"overviews"→illustrates；caliber/tier 混用修正；摘要压缩至 ~205 词并删冗余；nocite 脚手架删除；highlights 两副本同步 synthetic-offset。
 - **验证**：31 项残留断言清零（1 项误报为其他条目合法 2025 年份）；编译 0 错误 0 未定义引用；本轮无图改动（视觉门维持 R14 的 5/5）。
 - **教训**：逐行审计与主题审计发现面几乎不重叠——R15 抓出的 03-method 五条高危全是前四轮"增量打击"盲区（方法节自 R7 后未被逐行攻击过）。
+
+---
+
+## R16 端到端协议诚信修正轮（2026-09-05，ars-adversarial-reviewer 三人格 + 实现真源三角核对；本轮为学术诚信级）
+
+**触发**：Saboteur 人格攻击"论文描述的方法 vs 实际跑的方法"，命中两发 CRITICAL（逐行读码亲验，非 agent 单源采信）：
+- **CRITICAL-1 端到端头消费真标签**：p07/p08/p10/p12/p14 的最终分类器在**池片段真标签**上重训（run_p07 L137-139 `train_linear_head(emb, labels, anchor|pool)`），伪标签仅做选择——"94%@13%/99.5%@10%/88.6%@6%"头条主张与实现不符（实际消费 60-99%/96% 训练标签；warm-spc2 seed43 池 122/123→140/141 真标签，top1=0.3393 与全监督臂逐位同——铁证）。
+- **CRITICAL-2 停止规则 oracle + 披露反写**：`_record` 的池精度（消费 truth_all=真标签）驱动 precision-drop 停止；E9 正文却披露"NTU 无真值、停止用 head-estimated precision"——双重失实。
+**处置（修复轮自身按铁律逐句回验）**：
+- 实现侧：`tcl_selftrain.py` 增 `precision_stop`（False=oracle 精度仅诊断不入控制路径；默认 True 保 P0.4 共识语义）与 `head_calib`（GT 无关锚点侧逐轮再校准，诊断用）。
+- 新驱动 `run_r16_endtoend_pseudo.py`/`run_r16_ntu_pseudo.py`：最终头=种子真标签∪池伪标签；停止=收敛/预算；纯监督参照不动。重跑 v1/v2×10seeds + NTU×3seeds（工件 `r16-endtoend-pseudo-2026-09-05.json`/`r16-ntu-pseudo-2026-09-05.json`）。
+- **修正后结果**：AK v1 warm spc2 **9.8%±7.5**（chance 11.1%）/aimclr 15.2/scratch 8.4——端到端低资源主张在犬科层**撤回为负边界**；v2 同（13.1/17.6/13.8 vs chance 12.5）；head_calib 诊断不救（池精度 9-12%）→失败归因伪标签质量非门控尺度。**NTU 修正后 67.5%±0.15=保留率 90.6%≥预注册 90% 线——GENERALIZES 判据在更严诚实协议下存活**（增益 +8.1→+1.4pp）。
+- 论文联动：摘要/Intro/E7/E7b/E9/tab2/tab3 行2+段落/L1/L9/L11/fig5（重绘 tier-dependent 叙事）全装配；E4 补自家 Holm（校正后 p=0.090，工件 `r16-holm-p04`）；EP3 披露求解器路径噪声（标签重编码 37.50→35.42，归因锚定同空间对照）。
+- 协议文档：**只追加 dated 修订**（NTU §7、AKv2 §8），零静默改；p08/p10/p12/p14/w14 报告追加勘误节。
+**同轮其余发现（三人格+New-Hire+引用实查 agent 并行，逐条验证后处置）**：
+- MAJOR：E 编号与 owner 台账冲突（tex E5=transition vs skeleton E6；"released pre-registration ledger" 假指针→改真实台账措辞+E5/E8 去向注）；L10 "decaying monotonically" R15 修复未传播残留→改；tab3 锚点行 "≤1pp at operating K" 与 E3 K=14 −2.4pp 矛盾→如实分列（并纠 R15 引入的 "main-run K=14" 错标——主跑是 class_mean）；03 "is ablated" vs 05 "not yet run" 自相矛盾→registered；共识门 AK/NTU 恒惰性（STANDING_LABEL 不在类空间）→方法+实验双披露；五臂段 frozen 臂错标 §4.3→改 full-budget head-retrain；伦理句 "canine pose corpora cited in §4.1" 假指针→改写；复现链缺 run_p05_public_real_full12_endtoend.py→补；附录段 5 处 overfull hbox→\sloppy 清零；fig5 脚本 syn_full 硬编码回退恒触发→真读 summary 键；skeleton E1 ±4.45/AL 3/3 两处 stale→同步（w14 勘误：b=100 实为 2/3，seed43 熵 0.7909>随机 0.7818）。
+- MINOR：main.tex `\end{document}` 后重复 bib 块（编辑事故）删；novelty 段重复句删；TIP 年份表内删（bib 2024 经 DOI 实证，日志 2025 为 outlier）；"; A motion-word"/"a five new arms"/"and left to future work" 语法；"legal views"→valid；"untested"→not significance-tested；top1--top2→top1$-$top2 统一；"three data calibers"→两 exercised tiers+human benchmark；"confirms matches official reference"→meets pre-registered criterion；96.6% ±0.5pp 无源→删（single run, seed 42）；"released-checkpoint table"→official repo linear-eval table（AimCLR-v2 README 实证）；BCST-GCN "self-collected"→"compiled from online public videos"（原文自述网络公开平台采集）；DA 补 \ref{app:repro}；main.tex 注释 stale（六行/作者待补）更新。
+- **外部数字原文 PDF 核验（引用实查 agent，pymupdf 全文检索）**：ASBAR 75.3% ✅（eLife PDF 摘要命中，PoseConv3D/PanAf500 大猿）；BCST-GCN 95.36% ✅（Frontiers PDF Table 9）；AimCLR 78.9% ✅（arXiv 2112.03590 Table 2 3s-linear-eval）；79.18% ✅（官方 README Trained models）；80.9% ✅（AimCLR-v2 README Linear Eval 表——provenance 措辞已修）；APTv2 2,749/41,235 ✅（arXiv PDF 摘要逐字）；33,099 ✅（=Animal Kingdom 论文表格，tex 归属句已明确）；Grimm 特稿 ✅（tens of thousands/>half/服务犬主体三子检查全过，"service or assistance dog" 忠实）；InterPet4D 伦理三句 ✅ 逐字（HF raw README L167-169）；残留扫描 82.7/94.43/77.2/12,000/40,128 零命中 ✅。
+**验证**：断言脚本 `scripts/r16_assertions.py` 全过（48 残留清零+15 新数字在位+refs/cites 结构）；编译 32 页 0 错误 0 未定义 0 overfull；fig5 工件核验 mtime+pymupdf 刻度抽取。
+**判定**：R16 前论文处于**拒稿级隐患**（头条数字与实现不符+披露失实）；修正后证据-主张对齐恢复，代价=低资源端到端主张收缩为"跨域 NTU 90.6%（预注册线存活）+犬科层负边界"——诚实叙事与 L9 机制诊断闭环。
+**教训（第 N+1 条）**：①组件级对账全绿≠管线级协议诚实——"最终头用什么标签"这类**数据流问题**只有读驱动代码才能暴露，数字对账与主题审计都覆盖不到；②oracle 停止规则会**掩盖**而非修复迭代退化（p07 的 precision_drop 恰好在坍缩前刹车，使真标签头看起来正常）；③修复轮文本（R15 的 "main-run K=14"、"released pre-registration ledger"）本身继续产幻觉——每句修复文本落盘前对真源回验纪律不豁免。
