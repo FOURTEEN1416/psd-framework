@@ -54,7 +54,7 @@ Unlabeled proposals from Section~\ref{ssec:segmentation} are embedded by $\Phi$ 
   \State $L_{\mathrm{high}} \leftarrow \{u : \kappa(u) \geq \tau\}$; re-filter the pseudo-labeled pool (replacement)
   \State update $\Omega$ on seeds $\cup$ pseudo-labeled pool
   \State re-estimate $P$ from embedded features
-\Until{proposal assignment stabilizes, the iteration budget is reached, or pool precision against the consensus reference drops for two consecutive rounds}
+\Until{proposal assignment stabilizes, the iteration budget is reached, or (where a rule-derived consensus reference exists; Section~\ref{ssec:proto}) pool precision against it drops for two consecutive rounds}
 \end{algorithmic}
 \end{algorithm}
 

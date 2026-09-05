@@ -44,7 +44,7 @@ pts.append((13.9, 100 * v1["top1_mean"] / v1_full, 100 * v1["top1_std"] / v1_ful
             "public-real v1", "o", "#0E7490"))
 # v2: spc2 = 16/256, spc4 = 32/256; supervised full reference from p12
 v2_full = p12["summary"]["warm_spc-1"]["top1_mean"]
-for spc, n_anc, x_disp in ((2, 16, 6.2), (4, 32, 11.5)):
+for spc, n_anc, x_disp in ((2, 14, 5.5), (4, 28, 11.5)):
     s = r16["summary"]["v2"][f"warm_spc{spc}"]
     pts.append((x_disp, 100 * s["top1_mean"] / v2_full, 100 * s["top1_std"] / v2_full,
                 "public-real v2", "s", "#C2410C"))
@@ -55,9 +55,9 @@ ret = 100 * np.mean(tb) / c_ref
 err = 100 * np.std(tb, ddof=1) / c_ref
 pts.append((10.0, ret, err, "human benchmark (NTU60)", "D", "#6B7280"))
 # synthetic-offset: 20 clips / 2200 full-budget train; warm 82.0 vs full 96.6
-syn_full = y_full["summary"]["best_val_acc"]
+syn_full = w23["curves"]["random"]["200"]["mean"]  # offset-tier full-budget (same warm-start protocol), NOT base-tier 96.6%
 syn = w23["curves"]["random"]["20"]  # warm-start b=20 arm mean (same JSON holds warm curves under random/entropy at b=20 identical)
-pts.append((100 * 20 / 2200, 100 * syn["mean"] / syn_full, 100 * syn["std"] / syn_full,
+pts.append((100 * 20 / 220, 100 * syn["mean"] / syn_full, 100 * syn["std"] / syn_full,
             "synthetic-offset", "^", "#374151"))
 
 fig, ax = plt.subplots(figsize=(3.42, 2.95))

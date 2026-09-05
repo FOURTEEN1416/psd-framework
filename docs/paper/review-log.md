@@ -350,3 +350,17 @@ YOLO-PetX（IEEE CEECT 2025，全题名经 GitHub 全局代码检索锁定）、
 **最优解=选项C**：从标题移除 "Low-Resource" → "A Physics-Semantics Decoupled Framework for Animal Behavior Recognition under Evolving Evaluation Criteria"。卖点从已死的"低资源"迁到真正硬的"解耦+演化准则"；low-resource 作设计目标保留在摘要/正文/关键词（正文上下文即时限定，标题无法限定才是风险点）。§5"the word low-resource in our title"→"low-resource design goal"（不再依赖标题）。
 **验证**：34 页 0 错误 0 未定义；标题页渲染目检无溢出、"Low-Resource"已消失；断言全过；citation_checker 0/0；overfull 仍仅 ORCID 空盒（USER 占位）。零实验数字改动。R2 风险闭环。
 **置信度**：高——纯标题/措辞层，模拟审稿逻辑清晰（移除单点最大暴露面、保留诚实内容），渲染+编译+断言三重验证。剩余=用户人工项（作者/GenAI/资金/NTU 截图/真 K9 自采）。
+
+---
+
+## R21 统计严谨性 + 框架回归交叉对抗轮（2026-09-05，工具箱 ars-statistical-analyst 视角 + 新鲜眼恶意 agent + scholar-presubmit-checks + anti_ai_detector）
+
+**工具箱新工具**：anti_ai_detector.py 判正文 AI 风险**低 17.75%**（模板词 0%/连接词 0%/被动 1.5%，唯一"压缩比"高是术语复现，非 AI 特征）——Elsevier 政策面安全。scholar-presubmit-checks 门禁：五图纯矢量、引用 0 错 0 警、交叉引用全解析。
+**双 agent 收敛抓出 2 CRITICAL（均我选项2/前轮亲手引入，已亲自验工件确认）**：
+- **CRITICAL-1 跨层混用**：warm-start 82.0% 是 offset 层（pool 220），却拿 base 层 96.6%（pool 2200）当分母；fig5 x 用 20/2200=0.9%（应 20/220=9.1%）。且 w23 meta 明令"与 W14 冷启动绝对值不可互比"。修正：分母改 offset 自身 full-budget 95.7%（warm b=200，实测），对比改同分布 frozen-on-offset 41.2%（"20 片段 warm-start 微调把未适配模型的 41.2% 翻倍到 82.0%"——更强且诚实）；fig5 重生成 9.1%→85.7%。
+- **CRITICAL-2 标签粒度自相矛盾**：§4.1 明写 AK "34,772 frame-level annotation rows"+E7b per-frame 门，但 §2.1/intro 写"video-level 而非段对齐"——被自己 §4.1 打脸。修正：稀缺定义为"skeleton-registered"（AK 有 frame 级动作标签但无 3D 骨架，须自提取），非"时间标签不存在"。
+**MAJOR 修复**：tab3 行2 p=0.049 错挂在 top-1 对上（实为 macro-F1，top-1 spc4 Holm=0.289 不显著）→ 分离标注；±4.81 是 ddof=0（§4.2 声明 ddof~1）→ 改 ±5.9（L7/L9/E4 三处，L9 结论不变）；E2 分割 ± 是 4 episode 总体 std（口径异于 ddof~1）→ §4.2 补 caliber 句；E7b 微调句仍引已弃 37.50→补"35.42 re-encoded"；§4.1"no public dataset"加 hedge；"only usable structure"→"dominant at smallest budgets"；**新增 L12（过渡成本仅合成层实测——标题级主张的缺失限定）**，"Eleven"→"Twelve"；结论首句去"low-resource animal"改镜像标题；intro ¶4 加"designed for low-resource settings"限定。
+**MINOR 修复**：P1 raw p=0.13 标"not significant"；§5 预算曲线"14.1→22.1"标明是 V2 臂非 V0；"net-harmful"→"adds no measurable value"；"not rescuable"→"not rescued by any lever we tested"；"provably"→"demonstrably"；L5"confirmed"→"reproduced"；"full tier"→"synthetic tier"；Algorithm 1 停止子句加"(where consensus exists)"限定；firstness 18→"nineteen including re-verification"；"each experiment"→"each numbered experiment"；"every method above"→"every behavior classifier above"（排除 DeepLabCut/SLEAP 姿态器）；bullet3 补 fixed-grid parity；fig5 v2 锚点 16/32→14/28。
+**工程坑再应验**：Bash heredoc 把 `\approx` 吃成 `\a`=BEL(U+0007) 注入 06——字节级扫描+Write 工具修复，全 tex 控制字符归零。
+**验证**：34 页 0 错误 0 未定义；R21 残留 13 项全清零；断言全过；citation_checker 0/0；L12 渲染确认 p25。零实验数字改动（仅修正错误归属/口径/限定/新增诚实限定）。
+**教训**：①跨层分母是三层口径铁律的隐蔽违例——"retention"的分母必须与被测臂同分布同协议，96.6(base)≠offset 的自身 full-budget；②"video-level vs frame-level"这类标签粒度描述必须与 §4.1 数据描述逐字一致，否则被自己打脸；③ddof 口径要全文一致（§4.2 声明 ddof~1 则所有 ± 要么遵守要么显式标 caliber）；④标题级主张（过渡成本）也要有对应 limitation（L12），不能只给次要主张配限定。
