@@ -44,10 +44,10 @@ ARMS = {
 }
 
 
-def run_one_align(emb, labels_str, splits, class_names, arm_kwargs, seed):
+def run_one_align(emb, labels_str, splits, class_names, arm_kwargs, seed, spc=2):
     from sklearn.linear_model import LogisticRegression
     rng = np.random.default_rng(seed)
-    anchor_mask = _pick_seeds_str(labels_str, splits, 2, rng)
+    anchor_mask = _pick_seeds_str(labels_str, splits, spc, rng)
     universe = (splits == "train") & ~anchor_mask
     kw = dict(KW)
     kw["precision_stop"] = False
