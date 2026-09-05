@@ -15,6 +15,9 @@ Pose-based methods first extract keypoints, then classify dynamics. DeepLabCut~\
 
 Sensor-based methods use accelerometers or IMUs. They capture coarse daily activities reliably~\citep{plosone2023imu} but cannot resolve fine-grained behaviors that differ mainly in body configuration rather than global motion.
 
+\paragraph{Public data landscape.}
+The scarcity that motivates this work is visible in the data that actually exists. The only large-scale real animal-behavior video benchmark with action labels is Animal Kingdom~\citep{ng2022animalkingdom}, in which dogs appear as a sparsely-labeled subset; canine-specific resources are otherwise wearable inertial time series with ethogram-annotated behaviors~\citep{vehkaoja2022dogsensor,plosone2023imu}, synthetic dog videos built for pose estimation~\citep{shooter2024sydogvideo}, or pose-only still images. None provides real working-dog behavior as skeleton sequences with per-segment expert action labels at benchmark scale. This is precisely why our public-real tier is assembled by self-extraction from Animal Kingdom (Section~\ref{sec:datasets}) and why the target-domain real-K9 tier is pre-registered yet left unexercised: the data it would require does not exist in public form. The negative end-to-end boundary we report on the canine tier (Section~\ref{sec:experiments}) is therefore evidence of the domain's genuine data scarcity---the premise of this paper---rather than an artifact of a poorly chosen dataset.
+
 \paragraph{Gap.}
 Current animal pipelines assume a fixed taxonomy and supervision-heavy training. Few exploit unlabeled streams---domain-adaptive pretraining improves primate behavior recognition~\citep{primateda2025}, and self-supervised video pretraining extends to multi-animal settings~\citep{mabe22,beast2025}---and none of the surveyed systems is designed so that changing evaluation criteria can be absorbed without re-annotating the corpus.
 
