@@ -176,6 +176,26 @@ def _proto_path(cl: PrototypeClusterer, emb_all: np.ndarray, calib_on: bool,
     return np.asarray(pred), np.asarray(margin, dtype=np.float64)
 
 
+def _apply_seed_prior_quota(pool_new: np.ndarray, assigner_pred: np.ndarray,
+                            kappa: np.ndarray, n_eligible: int,
+                            seed_priors: dict, quota_coverage: float) -> np.ndarray:
+    """V2 配额（GT 无关）: 每伪类按 κ 降序保留 top-K_c，K_c=max(1,round(cov·|U|·π_c))，
+    π_c 为 r0 冻结的种子类先验——防多数类池膨胀淹没少数类（确认偏置的另一半）。"""
+    keep = pool_new.copy()
+    idx = np.where(pool_new)[0]
+    by_cls: dict[str, list] = {}
+    for i in idx:
+        by_cls.setdefault(str(assigner_pred[i]), []).append(int(i))
+    for c, ids in by_cls.items():
+        k_c = max(1, int(round(float(quota_coverage) * n_eligible * float(seed_priors.get(c, 0.0)))))
+        if len(ids) <= k_c:
+            continue
+        ids.sort(key=lambda i: -float(kappa[i]))
+        for i in ids[k_c:]:
+            keep[i] = False
+    return keep
+
+
 def run_selftrain(
     emb_all: np.ndarray,
     truth_all: np.ndarray,                 # ⚠️ 仅评估用，绝不进入训练/门控路径
@@ -204,6 +224,13 @@ def run_selftrain(
     head_calib: bool = False,
     # ↑ R16 诊断: 每轮对头路概率做锚点侧温度再校准（GT 无关），
     #   使 κ 与 τ*（原型路校准尺度）可比——检验门控失效是否为尺度错配所致
+    gate_mode: str = "standing",
+    # ↑ P1 (PSD-ALIGN-PREREG-001): 标签对齐力变体，默认 standing 保持既有行为逐字不变
+    #   standing            = 现状（standing-only 共识门，AK/NTU 类空间恒惰性）
+    #   consensus_all       = V1 全类锚点共识门: 头路与原型路 top-1 一致方可入池
+    #   consensus_all_quota = V2 V1 + 种子先验配额（每伪类按 κ 降序取 top-K_c）
+    #   proto_primary       = V3 原型路主导: 分配恒走原型路，头只训练不分配
+    quota_coverage: float = 0.35,
 ) -> dict:
     """Algorithm 1 第 4-6 步迭代闭环。返回逐轮记录与最终池索引。
 
@@ -219,6 +246,8 @@ def run_selftrain(
         raise ValueError(f"未知 calib_method: {calib_method}")
     if standing_mode not in ("none", "consensus", "subcluster"):
         raise ValueError(f"未知 standing_mode: {standing_mode}")
+    if gate_mode not in ("standing", "consensus_all", "consensus_all_quota", "proto_primary"):
+        raise ValueError(f"未知 gate_mode: {gate_mode}")
 
     anchor_idx = np.where(anchor_mask)[0]
     if pool_universe_mask is None:
@@ -317,7 +346,11 @@ def run_selftrain(
 
         # 门控（GT 无关）
         keep = np.ones(N, dtype=bool)
-        if standing_mode == "consensus" and calib_on:
+        if gate_mode == "consensus_all" or gate_mode == "consensus_all_quota":
+            # V1/V2 全类锚点共识门: 头路与原型路 top-1 一致方可入池（标签对齐力）
+            if calib_on:
+                keep &= (h_pred == p_pred)
+        elif standing_mode == "consensus" and calib_on:
             keep &= consensus_gate(h_pred, p_pred, STANDING_LABEL)
         elif standing_mode == "subcluster" and calib_on:
             cand = np.where(h_pred == STANDING_LABEL)[0]
@@ -331,15 +364,21 @@ def run_selftrain(
         elif standing_mode != "none":
             pass  # 原型路自迭代行无双路可共识——治理门自然失效，如实记录于报告
 
-        # κ 口径: 校准开 → 头路概率 margin（天然 [0,1]）; 关 → 原型路原始余弦 margin
-        kappa_r = h_margin if calib_on else p_margin
-        assigner_pred = h_pred if calib_on else p_pred
+        # κ 口径: V3 恒走原型路; 否则校准开→头路 margin, 关→原型路原始余弦 margin
+        if gate_mode == "proto_primary" and calib_on:
+            kappa_r, assigner_pred = p_margin, p_pred
+        else:
+            kappa_r = h_margin if calib_on else p_margin
+            assigner_pred = h_pred if calib_on else p_pred
 
         priors_r = label_priors(np.asarray([train_label_str[i] for i in lab_idx]))
         thr_r = frequency_aware_thresholds(tau_star, priors_r, alpha=alpha)
         pool_new = (eligible & keep &
                     (kappa_r >= np.array([thr_r.get(str(l), tau_star)
                                           for l in assigner_pred])))
+        if gate_mode == "consensus_all_quota":
+            pool_new = _apply_seed_prior_quota(
+                pool_new, assigner_pred, kappa_r, int(eligible.sum()), priors0, quota_coverage)
 
         change_rate = float(np.mean(assigner_pred != prev_pred_full))
         _record(assigner_pred, kappa_r, pool_new, f"r{rounds_done + 1}_selftrain",
