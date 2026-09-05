@@ -54,6 +54,19 @@ c_ref = p14["arms"]["c_full_linear"]["top1"]
 ret = 100 * np.mean(tb) / c_ref
 err = 100 * np.std(tb, ddof=1) / c_ref
 pts.append((10.0, ret, err, "human benchmark (NTU60)", "D", "#6B7280"))
+# E9b NTU120 / E9c UCF101 (P5, corrected protocol): 10% labels each;
+# x dodged along the log axis (10.0 -> 11.5 / 8.8) so the three 10% markers and
+# their error whiskers stay disjoint (same dodge convention as v1/v2 points)
+p5b_ntu = j("p5b-ntu120-retention-2026-09-05.json")
+p5b_ucf = j("p5b-ucf101-retention-2026-09-05.json")
+tb120 = p5b_ntu["b_arms"]
+ret120 = 100 * np.mean(tb120) / p5b_ntu["full_ref"]
+err120 = 100 * np.std(tb120, ddof=1) / p5b_ntu["full_ref"]
+pts.append((11.5, ret120, err120, "human benchmark (NTU120, HRNet 2D)", "v", "#4B5563"))
+tbucf = p5b_ucf["b_arms"]
+retucf = 100 * np.mean(tbucf) / p5b_ucf["full_ref"]
+errucf = 100 * np.std(tbucf, ddof=1) / p5b_ucf["full_ref"]
+pts.append((8.8, retucf, errucf, "independent benchmark (UCF101, HRNet 2D)", "P", "#9CA3AF"))
 # synthetic-offset: 20 clips / 2200 full-budget train; warm 82.0 vs full 96.6
 syn_full = w23["curves"]["random"]["200"]["mean"]  # offset-tier full-budget (same warm-start protocol), NOT base-tier 96.6%
 syn = w23["curves"]["random"]["20"]  # warm-start b=20 arm mean (same JSON holds warm curves under random/entropy at b=20 identical)
