@@ -328,3 +328,16 @@ YOLO-PetX（IEEE CEECT 2025，全题名经 GitHub 全局代码检索锁定）、
 **选项2 执行**：§2.1 新增"Public data landscape"段（引 AK 唯一大规模基准 + Vehkaoja 传感器 + SyDog 合成 + 姿态图像，明说无真实工作犬骨架行为集，把"负边界=数据稀缺=论文前提"讲透）；§1 稀缺句加公开地形从句；refs.bib 加 2 条官方页实证引用（vehkaoja2022dogsensor/shooter2024sydogvideo）。**零实验数字改动**（诚信红线：不借"重写动机"偷渡任何结果主张）。
 **验证**：编译 34 页 0 错误 0 未定义；两条新引用解析进 bbl；citation_checker 门禁 0 错 0 警；r16 断言全过。
 **教训**：①搜索分域纪律——单一工具限流即换（WebSearch→firecrawl→anysearch→crawl4ai→官方 API 直查），我这次被用户纠正才补上，应内化为本能；②"记忆里的数据集名"必须证伪/证实再引用（PawCraft 教训，与 R8 TCL 假引用同源）；③负结果的最强用法是把它接到论文前提上（数据稀缺=动机），而非藏起来。
+
+---
+
+## R19 交叉对抗审稿·框架一致性轮（2026-09-05，编辑级 Reviewer-2 + 事实核验双 agent；本轮抓出选项2 自引入的 CRITICAL）
+
+**双 agent 对立结论=交叉价值**：事实核验 agent 判结果层零 CRITICAL/MAJOR（9 个修正数字全可溯源、16 项残留清零、引用/交叉引用全解析、§5 P1/P2/P3 数字逐位对工件）；编辑级 agent 判**框架层 2 CRITICAL + 6 MAJOR**，且两个 CRITICAL 全是我在选项2 亲手写进 §1/§2.1 的自我矛盾——"逐行审计与主题审计发现面不重叠"（R15 教训）+ "修复轮自身是幻觉高发区"（R13 教训）在我自己的新编辑上再次应验。
+**CRITICAL 修复**：
+- F1：§1 我写的"公开犬数据集是传感器/合成/姿态图，**而非带标签行为视频**"被论文自己 §4.1 打脸（AK 犬子集 329 视频 34772 标注行就是带标签行为视频，论文拿它训练评估）→ 改为"…或标签为视频级而非段对齐的稀疏标注视频"。
+- F2：§2.1 我写的"负边界=数据稀缺的证据=论文前提，而非选错数据集"是 post-hoc 合理化，且与 §5/L9 自己的诊断（约束=数据质量/标签错位、K9 试点测 adequate-quality 数据）直接矛盾 → 删除"proves scarcity/而非选错"的因果越界，改为"按我们自己的证据，负边界归因于唯一公开源的标签错位与提取质量；是否同时反映真实稀缺，正是预注册 K9 试点要分离的问题"。
+**MAJOR 修复**：F3 §2.1 三处绝对句加 hedge（"among datasets we could identify"/"to our knowledge"）+ 定义"scarce"=段对齐骨架注册专家标签（F8 前提张力：方法本身消费 AK 视频级标签，须精确定义稀缺含义，不偷换）；F4 C6 claim-tag 从"approaching full supervision at low budgets"改 tier-dependent；F5 摘要"made usable at small budgets"加 synthetic-offset 限定；F7 贡献 bullet4"complete pipeline evaluated"改"evaluate…reporting boundary as finding"+补 human-benchmark 归属；F9 highlight1 限定 synthetic tier（两副本同步）；F10 §5"quantifies low-resource in our title"改"synthetic regime that the animal tier does not yet confirm"。agent2 MINOR-1 fig caption ±0.2→±0.15 对齐正文。
+**F6 标题（用户终审项，不擅改）**：编辑 agent 指出标题"Low-Resource Animal Behavior Recognition"+关键词在动物层端到端为负后存在过度承诺风险，outline R2 早已预登记降级预案（"…with Scarce Supervision: A Tier-Dependent Study"）。标题是用户终审项，本轮只标记+已让摘要/结论/贡献句全面 tier-tagged 兜底，标题改否交用户。
+**验证**：编译 34 页 0 错误 0 未定义；r16 断言全过；citation_checker 0 错 0 警；R19 目标串（"rather than labeled behavior video"/"the premise of this paper"/"complete low-resource pipeline evaluated"/旧 C6 tag/"in our title"）全清零；highlights 两副本同步、字符 ≤85；overfull 仍仅 1（ORCID 空盒，USER 占位产物）。零实验数字改动。
+**教训（再固化）**：①我自己写"强化卖点"的重写最容易 overclaim——把"负结果"吹成"证明前提"是不可证伪的 post-hoc，审稿人一眼识破且反噬全篇诚信；诚实版本是"我们的证据归因于 X，是否为 Y 由预注册试点分离"；②绝对存在句（only/none/does not exist）必须 hedge+定义域，论文自己引了 MABe22 就是潜在反例；③框架层与结果层是两个发现面，单 agent 各盲一半，交叉对抗是硬要求。
