@@ -1,0 +1,24 @@
+{
+  "date": "2026-09-05T22:36:37",
+  "protocol": "PSD-UCF101-PREREG-001",
+  "full_ref": 0.2311,
+  "linear_10pct": 0.1404,
+  "b_arms": [
+    0.1274,
+    0.1447,
+    0.162
+  ],
+  "retention": 0.6262,
+  "linear_retention": 0.6075,
+  "verdict": "FAILS",
+  "config_echo": {
+    "n_used": 10000,
+    "classes": 101,
+    "seeds": [
+      42,
+      43,
+      44
+    ]
+  },
+  "wall_clock_sec": 1056.1
+}

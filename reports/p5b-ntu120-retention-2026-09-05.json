@@ -1,0 +1,24 @@
+{
+  "date": "2026-09-05T22:30:20",
+  "protocol": "PSD-NTU120-PREREG-001",
+  "full_ref": 0.5434,
+  "linear_10pct": 0.4542,
+  "b_arms": [
+    0.4836,
+    0.4965,
+    0.4748
+  ],
+  "retention": 0.8924,
+  "linear_retention": 0.8358,
+  "verdict": "PARTIAL",
+  "config_echo": {
+    "n_used": 12000,
+    "classes": 60,
+    "seeds": [
+      42,
+      43,
+      44
+    ]
+  },
+  "wall_clock_sec": 678.9
+}

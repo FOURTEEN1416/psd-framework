@@ -131,6 +131,19 @@
 - 诚实边界: 池 ~34.4k/seed（近恢复全训练集即机制本身）；NTU 无伪 GT 故池精度未单独评估——主张限于预算保留行为。
 - 来源: `reports/p14-ntu-lowres-2026-09-04.md` + `.json`；驱动 `scripts/run_p14_ntu_featuredump.py` + `run_p14_ntu_lowres.py`；协议 `docs/paper/ntu-lowres-preregistration.md`。
 
+### E9b NTU120 跨域第二点（HRNet 2D）→ 支撑 C6（PSD-NTU120-PREREG-001，2026-09-05 实验前冻结；ADR 0009）
+
+> **⚠️ 首跑缺陷披露（修复先于读数）**：首轮 b 臂评分将字符串预测与整数标签比较（恒 False），伪记 b=0.0/FAILS；经"精确零不可能"检查定位，修为字符串域评分后重跑——臂/预算/种子/判据零改动，重跑为首次有效读数。协议偏离（pretext 由冻结的 ST-GCN 150ep 改为 joint-level MLP 80ep，适配 17 关节 HRNet 拓扑跨数据集一致）已入协议 Amendment 2。
+- **结果（n=12000 clips，60 类有样本，seeds 42/43/44）**: (c) 全预算参照 **54.34%**；(a) 10% 线性 **45.42%**（线性保留 83.58%）；(b) PSD 语义管线 **48.36/49.65/47.48 → mean 48.50% = 保留率 89.24% → 预注册判据 PARTIAL（85–90% 带）**；PSD 臂对裸线性 +3.1pp（3/3 种子同向）。
+- 解读: 犬层导出的语义管线在第二个人体基准上保留率落入 PARTIAL 带，弱于 NTU60 的 90.6% 但仍支持预算保留行为；弱化与参照臂质量衰减（74.3→54.3）同向。
+- 来源: `reports/p5b-ntu120-retention-2026-09-05.json`；驱动 `scripts/run_p5b_generic_retention.py`；协议 `docs/paper/ntu120-preregistration.md`。
+
+### E9c UCF101 独立第三域（HRNet 2D, YouTube）→ 预算行为负边界（PSD-UCF101-PREREG-001，2026-09-05 实验前冻结；ADR 0009）
+
+- **结果（n=10000 clips，101 类，seeds 42/43/44）**: (c) 全预算参照 **23.11%**；(a) 10% 线性 **14.04%**（线性保留 60.75%）；(b) PSD 语义管线 **12.74/14.47/16.20 → mean 14.47% = 保留率 62.62% → 预注册判据 FAILS（<85%）**；PSD 臂对裸线性仅 +0.4pp。
+- 诚实上报（按冻结判据）: 预算保留行为随域收窄，E9 主张限于其已测域。跨域梯度 NTU60 90.6% → NTU120 89.2% → UCF101 62.6% 与参照质量 74.3% → 54.3% → 23.1% 单调对应——**pretext 特征质量是保留率的主导因素**；与 R16 犬科负边界（warm-start 增益以"pretext 学到类可分特征"为前提）同构，入限制段与负边界叙事。
+- 来源: `reports/p5b-ucf101-retention-2026-09-05.json`；驱动 `scripts/run_p5b_generic_retention.py`；协议 `docs/paper/ucf101-preregistration.md`。
+
 ## 4.4 对比研究（Comparison Studies）
 
 | 对照轴 | 基线 | 状态 |
@@ -218,6 +231,7 @@
 | v1.5 | 2026-09-04 | **E7b AK v2 预注册复现轮**（把天花板归因变成检验）：协议 PSD-AKV2-PREREG-001 构建前冻结→多段重提取 352 clips（8 类空间，bark/sit 门失败如实披露）→**EP3 触发 DATA_BOTTLENECK_CONFIRMED（v2 full 37.50% = v1+3.57pp ≥ +3.0pp 冻结线）**；EP2 复现增强：warm spc2 33.23（88.6% 保留@6% 预算）、warm vs aimclr **双指标 10-0-0 p=0.002**（v1 macro-F1 持平判定为单片段标签结构伪影，AimCLR v2 坍缩至 1.71%）；§4.1 数据集句+§4.3 E7b 段+tab2 v2 行+E7 天花板句升级装配；v1 数字零替换；驱动 `scripts/run_p11_ak_v2_build.py` + `run_p12_ak_v2_replicate.py`；`reports/p12-akv2-replication-2026-09-04.md` |
 | v1.6 | 2026-09-04 | **P1.3 端到端微调诊断对照轮**（回答『绝对精度为何不刷』）：v2 解冻骨干端到端 full **32.99±3.94 < 冻结头 37.50**（过拟合吞先验）/ spc2 **9.72** vs warm 33.23=3.4× 坍缩——『天花板非冻结所致+解耦实证更优』入 §4.3 E7b 段末（control 措辞非预注册终点）；驱动 `scripts/run_p13_v2_finetune.py`；`reports/p13-v2-finetune-2026-09-04.md` |
 | v1.7 | 2026-09-04 | **E9 NTU 低资源保留率轮（重炮命中）**：PSD-NTU-PREREG-001 实验前冻结→冻结 pretext 探针三臂——10%+selftrain **74.11±0.13 = 保留率 99.5%**（参照 74.45，判据 GENERALIZES≥90%）；10% 纯线性 66.05（伪标签迭代 +8.0pp）；对照 TCL 保留率 93.3% 仅比行为不比绝对值；参照臂 74.45 vs 官方 LE 74.30 保真自检过；§4.4 E9 段+tab2 行+Intro Para6 半句装配；驱动 `run_p14_ntu_featuredump/lowres.py`；`reports/p14-ntu-lowres-2026-09-04.md` |
+| v2.1 | 2026-09-05 | **P5 跨域双点轮（ADR 0009）**：E9b NTU120（HRNet 2D）retention **89.24% → PARTIAL**（PSD 臂 48.50% vs 10% 线性 45.42%，+3.1pp，3/3 种子）；E9c UCF101（独立第三域）**62.62% → FAILS**（PSD 臂 +0.4pp 仅方向一致）——跨域梯度与参照臂质量单调对应，pretext 特征质量=保留率主导因素，与 R16 犬科负边界同构入限制叙事。学术诚信注：首轮 b 臂 str/int 评分错配伪记 0.0/FAILS，经"精确零不可能"检查定位修复后重跑（臂/预算/种子/判据零改动），修复先于读数，两协议 Amendment 落档；pretext 协议偏离（ST-GCN→joint-level MLP 适配任意关节数）入 Amendment 2。驱动 `run_p5b_generic_retention.py`（NTU120 679s / UCF101 850s）。 |
 | v2.0 | 2026-09-05 | **R17 回归审计轮**：①macro-F1 评估器类索引 bug 发现并修正传播（EP3"反向"与微调对照"反向"两条披露撤回，修正后双指标同向）；②Holm 族口径统一为逐层（m=6，工件重算：v1 mf1 spc2 0.023/spc4 0.049、v2 scratch-mf1 0.012）；③E7b v2 种子数如实 14/256≈5.5%（sit 无训练段）；④chance 口径调和（名义 8.33→12.5 vs 实现 11.1）；⑤E9 补 linear-only 88.7% 对照语境；⑥共识门惰性披露补入 E7/E9；⑦五臂 macro-F1 12-slot 口径披露；⑧p07 勘误文件+评估器 bug 注记。 |
 | v1.9 | 2026-09-05 | **R16 端到端协议诚信修正轮（学术诚信级）**：对抗审稿实锤 E7/E7b/E9/P0.8/P1.0 最终头消费池真标签+precision-drop 停止消费 oracle——"94%@13%/99.5%@10%/88.6%@6%"与实现不符；修正协议（种子真标签∪池伪标签头；无 oracle 停止）重跑：AK v1/v2 近随机（负边界入文），NTU 90.6% 仍过预注册 90% 线（GENERALIZES 存活）；head_calib GT 无关诊断排除门控尺度解释；E4 首末配对 p 补 Holm（校正后 0.090，工件 r16-holm-p04）；E1 ±4.45→±4.04 与 tab3 AL 2/3 seeds 同步；两预注册协议追加 dated §7/§8；p08/p10/p12/p14/w14 报告追加勘误；fig5 重绘（tier-dependent 叙事）。 |
 | v1.8 | 2026-09-04 | **R8 对抗审稿+引用实查修复轮（学术诚信级）**：①TCL 82.7%/88.6%/NTU60 经原文 PDF 全文检索证伪（NTU 0 命中），系池内继承假引用——正文 E4/E9/Intro 全链删除，bib 作者修正（Ankit Singh/Abir Das），outline/method/related-work/skeleton 同步清污；②E7b 类别空间混淆修复：8 类同空间对照 v1(8cls)=25.96% → 同空间差 +11.54pp（数据瓶颈归因修复后于 top-1 成立，macro-F1 反向双报）；③E9 修复：30× 不可解释数字删除、8.0→8.1pp、ceiling→reference、单子集/适配/协议依赖披露补全、TCL 对比删除；④Y_CKPT 源视频泄漏披露补全+independent→pre-registered parallel；⑤微调句 macro-F1 反向双报+ superiority 限定双指标一致区；⑥tab3 (10 seeds) full 列限定、both-arms-beat-scratch 限定 spc2、only-backbone→+预处理、artifact→hypothesis、geometry 断言降格、Abstract 94% 补绝对锚点、Intro ten-seeds 修饰语修正、13% 口径澄清；⑦AimCLR++ 77.2→80.9（官方仓库证伪）、79.18 归属措辞、NTU60 补引 Shahroudy2016、aimclrpp 题名按 CrossRef；⑧两预注册协议追加 dated 修订节（非静默改）。审稿 agent 判定 Major Revision→修复后证据-主张对齐恢复 |
