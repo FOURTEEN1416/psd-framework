@@ -115,3 +115,6 @@ We hypothesize that $C_{\text{decoupled}} < C_{\text{full}}$ at matched accuracy
 | v0.1 | 2026-08-23 | W5 窗口框架稿：四小节结构 + 算法 1 伪代码 + 占位符体系 |
 | v0.2 | 2026-08-23 | 对抗评审加固：迁移非平凡性论证段 + 解耦成本函数形式化（matched accuracy 条件显式化） |
 | v0.3 | 2026-08-25 | **W36 终填轮**：§3.2.2 证据块终填（IoU 0.458±0.049 vs ≈0.30 null + F1 0.343）并按 W34 勘误修正 "sliding-window baseline" 误标为等段数随机切分 null；§3.3.2 证据块终填（purity 0.5339/1.62×、噪声 30% 仅降 3.1pp、种子比饱和 ≤1pp）+ AL 验证措辞合规化；§3.3.3 换轨定稿（标题改 Small-Budget Initialization、82.0%@20 clips 入证据块、AL 负结果指向 §5、三层主结果指针）；§3.4 [CLAIM NEEDS EVIDENCE] → 证据块（6.07×/31.1s vs 188.7s/同 seed 最小 4.00×/统计等效 −0.91pp/+2.27pp/标注单元打平 1760/440）；§3.2.1 尾 PENDING 改显式 scope 声明（AimCLR++ 与延长调度不在本版范围）；头部状态与自审记录同步 |
+
+## R15 对齐注记（2026-09-05）
+LaTeX 装配版已按实现真源（tcl_selftrain.py/tcl_head.py）逐行校正：主线分配器=分类头 Ω（原型路=共识第二意见/回退配置）；τ 首轮 quantile 定标后冻结、类级频率缩放；池每轮重过滤（REPLACE）；precision-drop 停止监控共识伪 GT 代理精度（patience=2，已在 §3.3.3/L1 披露）；TCL 时序对比步骤未实现（动机引用）；warm-start=同分类树全监督模型 + noise-offset 协议（ADR 0005）。本 md 正文相应句以 LaTeX 版为准，md 回写留待下轮文档整理。

@@ -240,3 +240,14 @@ YOLO-PetX（IEEE CEECT 2025，全题名经 GitHub 全局代码检索锁定）、
 **R14 视觉终验（judge 三轮）**：第一轮 4/5 fail（fig1 弧钩残留/fig2 hub 裁切+站名溢出/fig4 y 轴 `\%`+图例碰撞/fig5 注释穿线+caption 溢出）→ 修复中踩坑：**副题删除正则误吞 PDF savefig 行**（PNG 更新 PDF 未写，judge 正确报"未落地"——复验再次证明工件时间戳/内容核验不可省）；第二轮 fig4 图例右上仍撞（窄图内无空位）→ 移轴外下方两列；第三轮 **5/5 全过，视觉门通过**。页脚 -1 偏移为 cas-sc 首页不编号既有行为，非缺陷。
 
 **编译**：31 页零错误零未定义引用。
+
+---
+
+## R15 全文逐行审计轮（2026-09-05，四 agent 并行逐行覆盖全部 tex + 实现真源交叉核对）
+
+**性质**：首轮真正的逐行地毯式审计（此前均为增量/主题式）。共 60+ 发现，全部验证后处置，最重一批：
+- **03-method 实现-描述失配（5 高）**：①伪代码/正文写"最近原型分配"，主线实现是**分类头 Ω 分配+原型路共识门**（tcl_selftrain.py L321）→ 改写双路结构；②"round-adaptive τ"与实现相反（τ* 首轮冻结、类级频率缩放）→ 改"fixed once...scaled per class"；③池"add"实为 REPLACE 重过滤 → 改"re-filter (replacement)"；④precision-drop 停止消费**共识伪 GT 精度**且 patience=2 → 伪代码与 §3.3.3 如实披露（并挂实现侧防火墙冲突为已知问题）；⑤"temporal contrastive self-training in the spirit of TCL"——实现无时序对比（tcl_head 纯 CE，TCL 对比为 stretch goal）→ 降级为"iterative retraining...tradition motivated by TCL (step not used here)"；⑥warm-start 三修饰语（this stage/previous taxonomy/same distribution）均为 R13 我加的未经背书润色，与 ADR 0005（noise-offset）矛盾 → 回真源+精确化。
+- **数字/归属（R15a/c/d）**：intro 7.8% 直接对比违反 W23 comparability 护栏→回定性措辞；79.18% 归属错（系官方仓复测非 journal-extension）；"19 table rows"实为 19 候选 8 行；"never below 4.00×"严格为假（最小 3.9993）→3.99×；"official split lists 40,128"无一手源→删具体数；"restrict all public-real claims"与 E7/E7b 自相矛盾→限定该聚合分数；"≤1pp at operating K"在 K=14 实为 −2.4pp→如实分列；L5"all three seeds"（06 漏改）→2/3；33,099"disclosed in inventory report"虚假指针→disclosed here；不平衡开关"is evaluated"虚构完成态→registered (not yet run)；L7 train 支持数错标→full-list/train 分列；L9 自矛盾→legitimate gain；L2 primates 与 NTU 冲突→限定 real animal data；"decays monotonically"与 +0.15 回升矛盾→to statistical equivalence；variance→std 3.8×；tab2 caption"every public-real aggregate"过度→four-class；E6/E8 编号缺口加 ledger 说明句；C6/C7 映射对齐 ledger；ddof 约定入 §4.2；TP-CanineNet 年份 CrossRef 实证 2026+题名回正。
+- **hedge 补齐**：3 处裸"never/No existing"加 to our knowledge（与 L56 自洽）；"is bounded"→mitigated；"grows a complete taxonomy"→labeled coverage；"overviews"→illustrates；caliber/tier 混用修正；摘要压缩至 ~205 词并删冗余；nocite 脚手架删除；highlights 两副本同步 synthetic-offset。
+- **验证**：31 项残留断言清零（1 项误报为其他条目合法 2025 年份）；编译 0 错误 0 未定义引用；本轮无图改动（视觉门维持 R14 的 5/5）。
+- **教训**：逐行审计与主题审计发现面几乎不重叠——R15 抓出的 03-method 五条高危全是前四轮"增量打击"盲区（方法节自 R7 后未被逐行攻击过）。
