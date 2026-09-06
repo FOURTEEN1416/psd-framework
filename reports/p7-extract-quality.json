@@ -1,0 +1,33 @@
+{
+  "date": "2026-09-07T00:32:50",
+  "model": "D:\\Desktop\\k9-training-system\\runs\\pose\\runs\\p7_ape_pose\\weights\\best.pt",
+  "n_videos": 500,
+  "det_rate_mean": 0.821,
+  "det_rate_min": 0.047,
+  "mean_conf_over_detected": 0.588,
+  "label_distribution": {
+    "hanging": 28,
+    "standing": 96,
+    "sitting": 161,
+    "walking": 183,
+    "climbing_up": 13,
+    "climbing_down": 3,
+    "running": 7,
+    "sitting_on_back": 3,
+    "camera_interaction": 6
+  },
+  "behavior_taxonomy": [
+    "sitting",
+    "standing",
+    "walking",
+    "running",
+    "climbing_up",
+    "climbing_down",
+    "hanging",
+    "sitting_on_back",
+    "camera_interaction"
+  ],
+  "mapping": "AP17_TO_PSD24 (17 mapped slots / 7 dead slots 18-23 + throat)",
+  "pkl": "D:\\Desktop\\psd-framework\\runs\\p7_asbar\\panaf500_T30.pkl",
+  "wall_clock_sec": 9583.9
+}
