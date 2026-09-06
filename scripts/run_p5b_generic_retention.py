@@ -138,7 +138,11 @@ def main():
     ap.add_argument("--pkl", required=True, help="PYSKL pkl path")
     ap.add_argument("--name", required=True, help="experiment name (ntu120/ucf101)")
     ap.add_argument("--max", type=int, default=12000)
+    ap.add_argument("--seeds", type=int, default=3, help="3 or 10 (E9-series expansion)")
     args = ap.parse_args()
+    global SEEDS
+    if args.seeds == 10:
+        SEEDS = tuple(range(42, 52))
     import torch
     from psd.training.tcl_selftrain import run_selftrain
     from sklearn.linear_model import LogisticRegression

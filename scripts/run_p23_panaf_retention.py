@@ -21,6 +21,7 @@ from datetime import datetime
 from pathlib import Path
 
 import numpy as np
+import torch
 
 REPO = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO)); sys.path.insert(0, str(REPO / "scripts"))
@@ -116,6 +117,14 @@ class ScaledLR:
 
 
 def main():
+    import argparse
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--seeds", type=int, default=3, help="selftrain seeds count (3 or 10)")
+    ap.add_argument("--with-test", action="store_true", help="add test-split secondary number")
+    args = ap.parse_args()
+    global SEEDS
+    if args.seeds == 10:
+        SEEDS = tuple(range(42, 52))
     import torch
     from psd.training.tcl_selftrain import run_selftrain
 
@@ -146,19 +155,22 @@ def main():
     acc_a = float(np.mean(ScaledLR().fit(feats[tr_idx[mask_a]], labels_str[tr_idx[mask_a]]).predict(feats[vm]) == labels_str[vm]))
     print(f"[a] 10% linear: {acc_a:.4f}")
 
-    # (b) 10% + PSD 语义管线（修正协议）
+    # (b) 10% + PSD 语义管线（修正协议）——类集与 (a) 一致：只遍历 train 中存在的类
+    # （9 类长尾中有的类仅出现在 val/test，train 无样本则 anchor 无处可抽，如实跳过）
+    classes_tr = sorted(set(labels_str[tr].tolist()))
     accs_b, pools = [], []
     for seed in SEEDS:
         anchor = np.zeros(len(labels_str), dtype=bool)
         rng2 = np.random.default_rng(seed)
-        for c in classes:
+        for c in classes_tr:
             ci = np.where((labels_str == c) & tr)[0]
             k = max(1, int(round(len(ci) * BUDGET_FRAC)))
             anchor[rng2.choice(ci, size=k, replace=False)] = True
         universe = tr & ~anchor
-        r = run_selftrain(feats, labels_str, anchor, run_seed=seed, class_names=classes,
+        r = run_selftrain(feats, labels_str, anchor, run_seed=seed, class_names=classes_tr,
                           head_cfg={"hidden_dim": 64, "epochs": 100, "lr": 1e-3,
-                                    "weight_decay": 1e-4, "batch_size": 128, "device": "cpu"},
+                                    "weight_decay": 1e-4, "batch_size": 128,
+                                    "device": "cuda" if torch.cuda.is_available() else "cpu"},
                           pool_universe_mask=universe, **KW)
         pool_idx = r["final_pool_idx"]
         tm2 = anchor.copy(); tm2[pool_idx] = True
@@ -173,6 +185,12 @@ def main():
 
     ret = float(np.mean(accs_b)) / ref
     verdict = "CONFIRMS" if ret >= 0.90 else ("PARTIAL" if ret >= 0.85 else "FAILS")
+    # 预注册 §2: test split 次级数字（非判据），用全预算参照模型报告一次
+    test_num = None
+    if args.with_test:
+        tm = splits == "test"
+        test_num = round(float(np.mean(ScaledLR().fit(feats[tr], labels_str[tr]).predict(feats[tm]) == labels_str[tm])), 4)
+        print(f"[test] secondary (non-decision): {test_num}")
     result = {
         "date": datetime.now().isoformat(timespec="seconds"),
         "protocol": "PSD-PANAF-PREREG-001",
@@ -180,6 +198,7 @@ def main():
         "b_arms": [round(a, 4) for a in accs_b],
         "pools": pools, "linear_retention": round(acc_a / ref, 4),
         "retention": round(ret, 4), "verdict": verdict,
+        "test_secondary_nondecision": test_num,
         "config_echo": {"n_clips": int(len(labels)), "classes": n_cls, "seeds": list(SEEDS),
                         "budget": BUDGET_FRAC, "longtail": "minority classes contribute 1 seed clip each"},
         "wall_clock_sec": round(time.time() - t0, 1),
