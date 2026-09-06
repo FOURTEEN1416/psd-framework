@@ -1,198 +1,262 @@
 # -*- coding: utf-8 -*-
-"""P7 PanAf 骨架提取 — ASBAR 预训练 DLC 模型推理管线。
+"""P7 PanAf 骨架提取 — YOLO11x-pose ape 微调模型推理管线（v2, 2026-09-06）。
 
-前置（自动检查）:
-  1. runs/p7_asbar/panaf_dataset.zip 下载完成并解压出 PanAf500/videos/*.mp4
-  2. ASBAR pretrained DLC: runs/p7_asbar/asbar/pretrained_models/deeplabcut/snapshot-60000
-  3. deeplabcut 已安装 (3.0.1)
+路线变更记录: v1 用 ASBAR 预训练 DLC snapshot-60000, 但其为 TF checkpoint,
+DLC 3.0.1(pytorch) 无法加载且无官方权重转换器, DLC 3.x analyze_videos 亦需完整
+项目 config(ASBAR 仓不含) → DLC 路线不可行。v2 改与 P2' 同栈: AP-10K
+(chimpanzee/gorilla/orangutan, 17kpt, LibreYOLO 转换版, CC-BY-4.0) 微调
+yolo11x-pose(COCO 17kpt, 零拓扑重塑) → PanAf500 bbox 裁剪推理 → 17→PSD24
+映射(四肢/躯干功能对应, 7 死槽置 0, 与 L8 20/24 口径同构) → pkl 装配。
 
-流程:
-  Step A: 从 ASBAR 仓读 conf/specs，重建 DLC 项目 config（指向预训练 snapshot）
-  Step B: 对每条 PanAf500 视频跑 dlc.analyze_videos → (frames, n_kpt, 3) 概率图/坐标
-  Step C: 把 DLC 灵长类关键点映射到 PSD 24-slot 拓扑（四肢+躯干对应槽位）
-  Step D: 落盘 panaf500_T30.pkl（同 full12_T30.pkl 格式：keypoints/label/split/boundary/video_id）
-          label = PanAf500 JSON frame-level 行为（9 类）多数投票到 clip
-产出: runs/p7_asbar/panaf500_T30.pkl + reports/p7-extract-log.md
+PanAf500 结构(实查):
+  panaf_extract/1h73erszj3ckn2qjwm4sqmr2wt/PanAf500/videos/*.mp4 (500)
+  .../annotations/{train:400,validation:25,test:75}/*.json
+  JSON: {"video": id, "annotations": [{"frame_id": int,
+         "detections": [{"bbox": [x1,y1,x2,y2], "ape_id", "species", "behaviour"}]}]}
+官方 split 直接采用(train/val/test = 400/25/75), 不再 hash。
+
+用法:
+    .venv/Scripts/python.exe -u scripts/run_p21_panaf_pipeline.py --max-videos 3   # 烟测
+    .venv/Scripts/python.exe -u scripts/run_p21_panaf_pipeline.py                  # 全量 500
+产出:
+    runs/p7_asbar/panaf500_T30.pkl   (full12 格式: keypoints T30×24×3)
+    reports/p7-extract-quality.json  (检测率/conf 分布/行为标签统计)
+    runs/p7_asbar/vis_check/*.jpg    (骨架叠加抽查帧)
 """
 from __future__ import annotations
-import json, pickle, sys, time
+
+import argparse
+import json
+import pickle
+import time
+from collections import Counter
+from datetime import datetime
 from pathlib import Path
-from collections import Counter, defaultdict
+
+import cv2
+import numpy as np
 
 REPO = Path(__file__).resolve().parents[1]
-ASBAR = REPO / "runs" / "p7_asbar" / "asbar"
-DLC_SNAP_DIR = ASBAR / "pretrained_models" / "deeplabcut"
-ZIP_PATH = REPO / "runs" / "p7_asbar" / "panaf_dataset.zip"
-EXTRACT_DIR = REPO / "runs" / "p7_asbar" / "panaf_extract"
+
+PANAF = REPO / "runs" / "p7_asbar" / "panaf_extract" / "1h73erszj3ckn2qjwm4sqmr2wt" / "PanAf500"
+VIDEO_DIR = PANAF / "videos"
+ANN_DIR = PANAF / "annotations"
+APE_MODEL = Path(r"D:\Desktop\k9-training-system\runs\pose\runs\p7_ape_pose\weights\best.pt")
 OUT_PKL = REPO / "runs" / "p7_asbar" / "panaf500_T30.pkl"
+VIS_DIR = REPO / "runs" / "p7_asbar" / "vis_check"
+QUALITY_JSON = REPO / "reports" / "p7-extract-quality.json"
 
-# ASBAR/OpenMonkeyChallenge 灵长类关键点 → PSD 24-slot 映射
-# OMC 17+ 关键点（鼻/眼/肩/肘/腕/髋/膝/踝…），PSD 24-slot 犬科拓扑
-# 映射原则：四肢关节功能对应（shoulder→shoulder 等），躯干槽位用骨盆/脊柱近似，
-# 犬科特有的 withers/throat/eyes 死槽保持 0（与 L8 20/24 有效监督口径一致）
-OMC_TO_PSD24 = {
-    # PSD slot: OMC landmark name (大小写不敏感, 匹配失败则置 0)
-    0: "nose",          # head
-    1: None,            # (dead slot - eye, primate 有但犬拓扑死槽)
-    2: None,            # (dead slot - eye)
-    3: None,            # (dead slot - withers)
-    4: None,            # (dead slot - throat)
-    5: "right_shoulder",
-    6: "right_elbow",
-    7: "right_wrist",
-    8: "left_shoulder",
-    9: "left_elbow",
-    10: "left_wrist",
-    11: "right_hip",
-    12: "right_knee",
-    13: "right_ankle",
-    14: "left_hip",
-    15: "left_knee",
-    16: "left_ankle",
-    17: "tail_base",    # 或 spine
-    18: None,
-    19: None,
-    20: None,           # dead
-    21: None,           # dead
-    22: None,           # dead
-    23: None,           # dead
+T_CLIP = 30
+CONF_MIN = 0.20       # 关键点置信门(低于置 0); 与 psd 犬科管线预处理口径一致
+BBOX_PAD = 0.10       # bbox 外扩比例
+VIS_CHECK_N = 6       # 随机抽查视频数
+
+PANAF_BEHAVIORS = ["sitting", "standing", "walking", "running", "climbing_up",
+                   "climbing_down", "hanging", "sitting_on_back", "camera_interaction"]
+
+# AP-10K 17kpt (LibreYOLO 版, README 顺序) → PSD 24-slot
+# AP17: 0 left_eye 1 right_eye 2 nose 3 neck 4 root_of_tail
+#       5 left_shoulder 6 right_shoulder 7 left_elbow 8 right_elbow
+#       9 left_front_paw 10 right_front_paw 11 left_hip 12 right_hip
+#       13 left_knee 14 right_knee 15 left_back_paw 16 right_back_paw
+# PSD24: 0 head 1/2 eye 3 withers 4 throat 5 R_shoulder 6 R_elbow 7 R_wrist
+#        8 L_shoulder 9 L_elbow 10 L_wrist 11 R_hip 12 R_knee 13 R_ankle
+#        14 L_hip 15 L_knee 16 L_ankle 17 tail_base 18-23 dead
+AP17_TO_PSD24 = {
+    2: 0,        # nose → head
+    0: 1, 1: 2,  # eyes
+    3: 3,        # neck → withers
+    6: 5, 8: 6, 10: 7,       # right shoulder/elbow/front_paw(wrist)
+    5: 8, 7: 9, 9: 10,       # left shoulder/elbow/front_paw(wrist)
+    12: 11, 14: 12, 16: 13,  # right hip/knee/back_paw(ankle)
+    11: 14, 13: 15, 15: 16,  # left hip/knee/back_paw(ankle)
+    4: 17,       # root_of_tail → tail_base
 }
-PANAF_BEHAVIORS = ["sitting","standing","walking","running","climbing_up",
-                   "climbing_down","hanging","sitting_on_back","camera_interaction"]
 
 
-def step0_check():
-    """检查前置条件"""
-    if not ZIP_PATH.exists():
-        raise FileNotFoundError(f"PanAf zip 未找到: {ZIP_PATH}")
-    size = ZIP_PATH.stat().st_size
-    print(f"[p7] PanAf zip: {size/1e9:.1f} GB")
-    if not DLC_SNAP_DIR.exists():
-        raise FileNotFoundError(f"DLC snapshot 未找到: {DLC_SNAP_DIR}")
-    snaps = list(DLC_SNAP_DIR.glob("snapshot-*"))
-    print(f"[p7] DLC snapshots: {[s.name for s in snaps]}")
-    # 检查 ffmpeg 可用于视频解帧
-    import shutil
-    assert shutil.which("ffmpeg") or shutil.which("ffprobe"), "ffmpeg 未找到（视频解帧需要）"
-
-
-def step1_extract_zip():
-    """只解压 PanAf500 子目录（跳过 PanAf20K 的 40GB 视频以省时间）"""
-    import zipfile
-    out = EXTRACT_DIR
-    out.mkdir(parents=True, exist_ok=True)
-    if (out / "PanAf500").exists():
-        print("[p7] PanAf500 already extracted")
-        return
-    print("[p7] extracting PanAf500 subset (skip PanAf20K)...")
-    with zipfile.ZipFile(ZIP_PATH) as z:
-        names = z.namelist()
-        panaf500 = [n for n in names if "PanAf500" in n]
-        print(f"  PanAf500 entries: {len(panaf500)}/{len(names)}")
-        for n in panaf500:
-            z.extract(n, out)
-    print(f"[p7] extracted to {out}")
-
-
-def step2_build_dlc_config():
-    """用 ASBAR 预训练 snapshot 重建最小 DLC config（推理用）"""
-    import deeplabcut as dlc
-    # OMC 关键点名表（从 ASBAR 源码/标注格式读取，找不到就用 OMC 标准 17 点）
-    omc_keypoints = ["nose","left_eye","right_eye","left_ear","right_ear",
-                     "left_shoulder","right_shoulder","left_elbow","right_elbow",
-                     "left_wrist","right_wrist","left_hip","right_hip",
-                     "left_knee","right_knee","left_ankle","right_ankle"]
-    # 读 ASBAR 的 keypoints 定义文件（如果有更完整的）
-    kpt_file = ASBAR / "pretrained_models" / "openmonkeychallenge_keypoints.txt"
-    if kpt_file.exists():
-        omc_keypoints = [l.strip() for l in kpt_file.read_text().splitlines() if l.strip()]
-    print(f"[p7] OMC keypoints ({len(omc_keypoints)}): {omc_keypoints[:6]}...")
-    return omc_keypoints
-
-
-def step3_analyze_videos(omc_keypoints, max_videos=100):
-    """DLC analyze_videos 批量提取 PanAf500 骨架"""
-    import deeplabcut as dlc
-    video_dir = EXTRACT_DIR / "PanAf500" / "videos"
-    videos = sorted(video_dir.glob("*.mp4"))[:max_videos]
-    print(f"[p7] analyzing {len(videos)} videos with pretrained DLC...")
-    # DLC analyze 需要项目 config——ASBAR 仓没有完整 config.yaml，
-    # 用 dlc.create_functional_videos 或直接从 snapshot 目录组装。
-    # 此处记录 TODO：如果 DLC 3.x API 需要 config，用临时 project 包 snapshot 权重。
-    results = {}
-    for vi, vp in enumerate(videos):
-        try:
-            h5s = dlc.analyze_videos(str(DLC_SNAP_DIR), videos=[str(vp)],
-                                     videotype="mp4", shuffle=1, save_as_csv=True)
-            results[vp.stem] = h5s
-            if vi % 10 == 0:
-                print(f"  [{vi}/{len(videos)}] {vp.stem}")
-        except Exception as e:
-            print(f"  [warn] {vp.stem}: {e}")
-    return results
-
-
-def step4_map_to_psd24(dlc_results):
-    """DLC 灵长类 kpt → PSD 24-slot。输入 (frames, V, 3)；输出 (frames, 24, 3)。"""
-    import numpy as np
-    name_to_idx = {}
-    # 从 DLC 输出读关键点名（h5 columns 第三层）
-    # 简化：按 OMC 标准顺序
-    omc_keypoints = ["nose","left_eye","right_eye","left_ear","right_ear",
-                     "left_shoulder","right_shoulder","left_elbow","right_elbow",
-                     "left_wrist","right_wrist","left_hip","right_hip",
-                     "left_knee","right_knee","left_ankle","right_ankle"]
-    for i, name in enumerate(omc_keypoints):
-        name_to_idx[name.lower()] = i
+def load_annotations() -> dict:
+    """→ {vid: {"split", "frames": {fid: {"beh": Counter, "bbox": [x1,y1,x2,y2]|None}}, "species"}}"""
     out = {}
-    for vid, arr in dlc_results.items():
-        F = arr.shape[0]
-        psd = np.zeros((F, 24, 3), dtype=np.float32)
-        for psd_slot, omc_name in OMC_TO_PSD24.items():
-            if omc_name is None:
-                continue
-            oi = name_to_idx.get(omc_name.lower())
-            if oi is None or oi >= arr.shape[1]:
-                continue
-            psd[:, psd_slot, :] = arr[:, oi, :]
-        out[vid] = psd
+    for split in ("train", "validation", "test"):
+        for jf in sorted((ANN_DIR / split).glob("*.json")):
+            j = json.loads(jf.read_text(encoding="utf-8"))
+            vid = j["video"]
+            frames = {}
+            species = set()
+            for ann in j.get("annotations", []):
+                fid = int(ann["frame_id"])
+                slot = frames.setdefault(fid, {"beh": Counter(), "bbox": None})
+                best_area = -1.0
+                for det in ann.get("detections", []):
+                    b = str(det.get("behaviour", "")).strip().lower().replace(" ", "_")
+                    species.add(str(det.get("species", "")).lower())
+                    if b in PANAF_BEHAVIORS:
+                        slot["beh"][b] += 1
+                    bbox = det.get("bbox")
+                    if bbox and len(bbox) == 4:
+                        area = (bbox[2] - bbox[0]) * (bbox[3] - bbox[1])
+                        if area > best_area:
+                            best_area = area
+                            slot["bbox"] = [float(v) for v in bbox]
+            out[vid] = {"split": {"validation": "val"}.get(split, split),
+                        "frames": frames, "species": species}
+    n = {s: sum(1 for v in out.values() if v["split"] == s) for s in ("train", "val", "test")}
+    print(f"[p7] annotations: {len(out)} videos (train {n['train']} / val {n['val']} / test {n['test']})")
     return out
 
 
-def step5_build_pkl(psd_by_vid):
-    """PanAf500 JSON frame 标注 → clip label（多数投票）→ pkl"""
-    ann_dir = EXTRACT_DIR / "PanAf500" / "annotations"
+def infer_video(model, vid: str, frames: dict) -> tuple[np.ndarray, dict]:
+    """顺序解码 + 命中标注帧才推理 → kpts (F,17,3) 原图坐标 + 质量统计。
+    (cap.set 逐帧 seek 随机访问慢一个量级, 500 视频全量按顺序读省数小时)"""
+    cap = cv2.VideoCapture(str(VIDEO_DIR / f"{vid}.mp4"))
+    fids = sorted(frames.keys())
+    kpts = np.zeros((len(fids), 17, 3), dtype=np.float32)
+    n_det = 0
+    fid_i, fid_no = 0, 0
+    while True:
+        ok, frame = cap.read()
+        if not ok or fid_i >= len(fids):
+            break
+        if fid_no == fids[fid_i]:
+            slot = frames[fids[fid_i]]
+            kpts[fid_i] = model_frame(model, frame, slot["bbox"])
+            if slot["bbox"] is not None:
+                n_det += 1
+            fid_i += 1
+        fid_no += 1
+    cap.release()
+    mean_conf = float(kpts[..., 2][kpts[..., 2] > 0].mean()) if (kpts[..., 2] > 0).any() else 0.0
+    return kpts, {"n_frames": len(fids), "n_detected": n_det,
+                  "mean_conf": round(mean_conf, 3)}
+
+
+def model_frame(model, frame: np.ndarray, bbox) -> np.ndarray:
+    """单帧 bbox 裁剪推理 → (17,3) 原图坐标; 低 conf 关键点置 0。"""
+    H, W = frame.shape[:2]
+    if bbox is None:
+        x1, y1, x2, y2, ox, oy = 0, 0, W, H, 0, 0
+    else:
+        bx1, by1, bx2, by2 = bbox
+        pw, ph = (bx2 - bx1) * BBOX_PAD, (by2 - by1) * BBOX_PAD
+        x1, y1 = max(0, int(bx1 - pw)), max(0, int(by1 - ph))
+        x2, y2 = min(W, int(bx2 + pw)), min(H, int(by2 + ph))
+        ox, oy = x1, y1
+    crop = frame[y1:y2, x1:x2]
+    res = model.predict(crop, verbose=False, conf=CONF_MIN, device=0)[0]
+    out = np.zeros((17, 3), dtype=np.float32)
+    if res.keypoints is not None and len(res.keypoints.data):
+        k = res.keypoints.data[0].cpu().numpy()  # 置信最高实例
+        out[:, :2] = k[:, :2] + np.array([ox, oy], dtype=np.float32)
+        out[:, 2] = k[:, 2]
+        low = k[:, 2] < CONF_MIN
+        out[low, :2] = 0
+        out[low, 2] = 0
+    return out
+
+
+def to_psd24(kpts17: np.ndarray) -> np.ndarray:
+    """(F,17,3) → (F,24,3); 未映射槽位保持 0(与 L8 有效监督口径同构)。"""
+    F = kpts17.shape[0]
+    psd = np.zeros((F, 24, 3), dtype=np.float32)
+    for src, dst in AP17_TO_PSD24.items():
+        psd[:, dst, :] = kpts17[:, src, :]
+    return psd
+
+
+def resample_t(kps: np.ndarray, T: int = T_CLIP) -> np.ndarray:
+    F = kps.shape[0]
+    if F == 0:
+        return np.zeros((T, kps.shape[1], kps.shape[2]), dtype=np.float32)
+    idx = np.resize(np.arange(F), T) if F < T else np.linspace(0, F - 1, T, dtype=int)
+    return kps[idx]
+
+
+def assemble_pkl(clips: list, per_video: dict, t0: float):
+    """→ panaf500_T30.pkl (full12 格式) + quality json。"""
+    label_to_idx = {b: i for i, b in enumerate(PANAF_BEHAVIORS)}
+    rows = []
+    for c in clips:
+        psd = to_psd24(c["kpts"])
+        T = resample_t(psd)
+        T = T - T.mean(axis=(0, 1), keepdims=True)  # center 与 psd 管线一致
+        rows.append({"keypoints": T.astype(np.float32),
+                     "label": label_to_idx[c["label"]],
+                     "psd_class": c["label"], "video_id": c["vid"],
+                     "split": c["split"],
+                     "boundary": [0.0] * T.shape[0]})
+    with open(OUT_PKL, "wb") as f:
+        pickle.dump(rows, f)
+    n = Counter(r["split"] for r in rows)
+    print(f"[p7] saved {len(rows)} clips (train {n['train']} / val {n['val']} / test {n['test']}) → {OUT_PKL}")
+
+    det_rates = [v["det_rate"] for v in per_video.values()]
+    confs = [v["mean_conf"] for v in per_video.values() if v["mean_conf"] > 0]
+    labels = Counter(v["label"] for v in per_video.values())
+    q = {"date": datetime.now().isoformat(timespec="seconds"),
+         "model": str(APE_MODEL),
+         "n_videos": len(per_video),
+         "det_rate_mean": round(float(np.mean(det_rates)), 3) if det_rates else 0,
+         "det_rate_min": round(float(np.min(det_rates)), 3) if det_rates else 0,
+         "mean_conf_over_detected": round(float(np.mean(confs)), 3) if confs else 0,
+         "label_distribution": dict(labels),
+         "behavior_taxonomy": PANAF_BEHAVIORS,
+         "mapping": "AP17_TO_PSD24 (17 mapped slots / 7 dead slots 18-23 + throat)",
+         "pkl": str(OUT_PKL), "wall_clock_sec": round(time.time() - t0, 1)}
+    QUALITY_JSON.parent.mkdir(parents=True, exist_ok=True)
+    QUALITY_JSON.write_text(json.dumps(q, ensure_ascii=False, indent=2), encoding="utf-8")
+    print(f"[p7] quality → {QUALITY_JSON}\n{json.dumps(q, ensure_ascii=False, indent=1)}")
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--max-videos", type=int, default=0, help="0=all")
+    ap.add_argument("--vis", type=int, default=VIS_CHECK_N)
+    args = ap.parse_args()
+    from ultralytics import YOLO
+    assert APE_MODEL.exists(), f"ape 模型未找到: {APE_MODEL} (先跑 p7_finetune_ape_pose.py)"
+    model = YOLO(str(APE_MODEL))
+
+    t0 = time.time()
+    anns = load_annotations()
+    vids = sorted(anns.keys())
+    if args.max_videos:
+        vids = vids[:args.max_videos]
+
+    per_video = {}
     clips = []
-    for vid, psd in sorted(psd_by_vid.items()):
-        # 找对应 JSON 标注
-        jfiles = list(ann_dir.rglob(f"{vid}*.json"))
-        if not jfiles:
-            continue
-        j = json.load(open(jfiles[0], encoding="utf-8"))
-        # frame-level behaviors → clip 多数投票
+    vis_pick = set(np.random.default_rng(42).choice(len(vids),
+                    size=min(args.vis, len(vids)), replace=False))
+    VIS_DIR.mkdir(parents=True, exist_ok=True)
+    for vi, vid in enumerate(vids):
+        a = anns[vid]
         votes = Counter()
-        for frame in j.get("frames", j if isinstance(j, list) else []):
-            for bbox in (frame.get("bboxes", []) if isinstance(frame, dict) else []):
-                b = bbox.get("behavior", "").lower().replace(" ", "_")
-                if b in PANAF_BEHAVIORS:
-                    votes[b] += 1
+        for slot in a["frames"].values():
+            votes.update(slot["beh"])
         if not votes:
             continue
+        kpts, stat = infer_video(model, vid, a["frames"])
         label = votes.most_common(1)[0][0]
-        clips.append({"keypoints": psd, "label": PANAF_BEHAVIORS.index(label),
-                      "psd_class": label, "video_id": vid,
-                      "split": "train" if hash(vid) % 5 else "val",  # 80/20 split
-                      "boundary": [0.0] * psd.shape[0]})
-    with open(OUT_PKL, "wb") as f:
-        pickle.dump(clips, f)
-    print(f"[p7] saved {len(clips)} clips → {OUT_PKL}")
-    return len(clips)
+        per_video[vid] = {**stat, "label": label, "species": sorted(a["species"]),
+                          "det_rate": round(stat["n_detected"] / max(1, stat["n_frames"]), 3)}
+        clips.append({"vid": vid, "kpts": kpts, "label": label, "split": a["split"]})
+        if vi in vis_pick:
+            _dump_vis(model, vid, a["frames"])
+        if vi % 25 == 0:
+            print(f"[p7] [{vi}/{len(vids)}] {vid} det={per_video[vid]['det_rate']} label={label} ({time.time()-t0:.0f}s)")
+    assemble_pkl(clips, per_video, t0)
+
+
+def _dump_vis(model, vid: str, frames: dict):
+    cap = cv2.VideoCapture(str(VIDEO_DIR / f"{vid}.mp4"))
+    fid = sorted(frames.keys())[max(0, len(frames) // 2)]
+    cap.set(cv2.CAP_PROP_POS_FRAMES, fid)
+    ok, frame = cap.read()
+    cap.release()
+    if not ok:
+        return
+    res = model.predict(frame, verbose=False, conf=CONF_MIN, device=0)[0]
+    cv2.imwrite(str(VIS_DIR / f"{vid}_f{fid}.jpg"), res.plot())
 
 
 if __name__ == "__main__":
-    t0 = time.time()
-    step0_check()
-    step1_extract_zip()
-    kp = step2_build_dlc_config()
-    print("[p7] NOTE: step3 DLC inference needs TF backend; run when GPU free.")
-    print(f"[p7] prep done in {time.time()-t0:.0f}s")
+    main()

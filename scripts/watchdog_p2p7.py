@@ -45,6 +45,19 @@ LOCK = RUNS / "watchdog_p2p7.lock"
 STATUS = RUNS / "watchdog_p2p7_status.json"
 LOG = RUNS / "watchdog_p2p7.log"
 
+# P7 链式门控（dog 完成 → ape 烟测 → ape 正式微调 → PanAf 推理）
+K9_POSE = Path(r"D:\Desktop\k9-training-system\runs\pose\runs")
+APE_SMOKE = K9_POSE / "p7_ape_smoke"
+APE_FINETUNE = K9_POSE / "p7_ape_pose"
+P7_PKL = RUNS / "p7_asbar" / "panaf500_T30.pkl"
+M_SMOKE_START = RUNS / "p7_asbar" / "SMOKE_STARTED"
+M_SMOKE_OK = RUNS / "p7_asbar" / "SMOKE_OK"
+M_FT_START = RUNS / "p7_asbar" / "FINETUNE_STARTED"
+M_FT_DONE = RUNS / "p7_asbar" / "FINETUNE_DONE"
+M_INFER_START = RUNS / "p7_asbar" / "INFER_STARTED"
+M_P7_DONE = RUNS / "p7_asbar" / "P7_DONE"
+P7_LOG = RUNS / "p7_watchdog.log"
+
 YOLO_STALE_MIN = 40      # > 2 epoch 周期(~30min/ep)
 DL_STALE_MIN = 20
 PANAF_N_TOTAL = 89       # x_pose_dog-3 目标 epoch 数
@@ -182,6 +195,79 @@ def check_panaf(actions: list):
     return "RESTARTED (aria2 -c)"
 
 
+def csv_rows(p: Path) -> int:
+    try:
+        return sum(1 for _ in open(p, encoding="utf-8", errors="ignore"))
+    except OSError:
+        return 0
+
+
+def marker_age_min(p: Path) -> float:
+    return (time.time() - p.stat().st_mtime) / 60 if p.exists() else -1.0
+
+
+def check_p7_chain(actions: list) -> str:
+    """dog 完成 → ape 烟测 → ape 正式微调 → PanAf 推理。每步标记防重, 停滞熔断不自动重试。"""
+    now = datetime.now().isoformat(timespec="seconds")
+    if M_P7_DONE.exists():
+        return "P7_DONE"
+    if not yolo_epoch_done():
+        return "WAITING_YOLO"
+
+    # 步骤 1: 烟测(2ep, 验证数据格式/API)
+    if not M_SMOKE_OK.exists():
+        if not M_SMOKE_START.exists():
+            detached([str(PY), "-u", str(REPO / "scripts" / "p7_finetune_ape_pose.py"), "--smoke"], P7_LOG, cwd=str(REPO))
+            M_SMOKE_START.write_text(now, encoding="utf-8")
+            actions.append("p7: ape smoke started")
+            return "SMOKE_STARTED"
+        r = APE_SMOKE / "results.csv"
+        if (APE_SMOKE / "weights" / "last.pt").exists() and r.exists() and csv_rows(r) >= 3:
+            M_SMOKE_OK.write_text(now, encoding="utf-8")
+            actions.append("p7: smoke OK → finetune next")
+        elif marker_age_min(M_SMOKE_START) > 40:
+            return "FATAL_SMOKE_STALL"
+        else:
+            return "SMOKE_RUNNING"
+
+    # 步骤 2: 正式微调(100ep, 280 图低内存)
+    if not M_FT_DONE.exists():
+        if not M_FT_START.exists():
+            detached([str(PY), "-u", str(REPO / "scripts" / "p7_finetune_ape_pose.py")], P7_LOG, cwd=str(REPO))
+            M_FT_START.write_text(now, encoding="utf-8")
+            actions.append("p7: ape finetune started")
+            return "FINETUNE_STARTED"
+        r = APE_FINETUNE / "results.csv"
+        best = APE_FINETUNE / "weights" / "best.pt"
+        if best.exists() and r.exists():
+            if csv_rows(r) >= 101:
+                M_FT_DONE.write_text(now, encoding="utf-8")
+                actions.append("p7: finetune DONE → inference next")
+            elif marker_age_min(r) > 25:
+                M_FT_DONE.write_text(now, encoding="utf-8")
+                actions.append(f"p7: finetune DONE early-stop ({csv_rows(r)-1} ep) → inference next")
+            else:
+                return "FINETUNE_RUNNING"
+        elif marker_age_min(M_FT_START) > 360:
+            return "FATAL_FINETUNE_STALL"
+        else:
+            return "FINETUNE_RUNNING"
+
+    # 步骤 3: PanAf500 全量推理 → pkl + 质量报告
+    if not M_INFER_START.exists():
+        detached([str(PY), "-u", str(REPO / "scripts" / "run_p21_panaf_pipeline.py")], P7_LOG, cwd=str(REPO))
+        M_INFER_START.write_text(now, encoding="utf-8")
+        actions.append("p7: panaf inference started")
+        return "INFER_STARTED"
+    if P7_PKL.exists():
+        M_P7_DONE.write_text(now, encoding="utf-8")
+        actions.append("p7: P7_DONE (panaf500_T30.pkl produced)")
+        return "P7_DONE"
+    if marker_age_min(M_INFER_START) > 720:
+        return "FATAL_INFER_STALL"
+    return "INFER_RUNNING"
+
+
 def main():
     # 单实例锁
     if LOCK.exists():
@@ -197,6 +283,7 @@ def main():
         actions: list = []
         yolo_state = check_yolo(actions)
         panaf_state = check_panaf(actions)
+        p7_state = check_p7_chain(actions)
         for a in actions:
             log(a)
         status = {
@@ -206,9 +293,13 @@ def main():
             "panaf": {"state": panaf_state,
                       "extract_done": EXTRACT_DONE.exists(),
                       "extract_dir": str(EXTRACT_DIR)},
+            "p7_chain": {"state": p7_state,
+                         "smoke_ok": M_SMOKE_OK.exists(),
+                         "finetune_done": M_FT_DONE.exists(),
+                         "pkl": str(P7_PKL)},
             "actions": actions,
             "next_action_hint": (
-                "DLC inference (run_p21) after BOTH: yolo DONE + panaf EXTRACTED"
+                "chain: yolo DONE → ape smoke → ape finetune → panaf inference → P7_DONE"
             ),
         }
         STATUS.write_text(json.dumps(status, ensure_ascii=False, indent=2), encoding="utf-8")
