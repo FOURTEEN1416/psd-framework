@@ -17,6 +17,7 @@ from __future__ import annotations
 
 import pickle
 import sys
+import time
 from pathlib import Path
 
 import numpy as np
@@ -109,6 +110,8 @@ def step1_extract():
                     kpts = result.keypoints[best_dog]  # (24, 2) or (24, 3)
                     if hasattr(kpts, 'data'):
                         kpts = kpts.data.cpu().numpy()
+                    while kpts.ndim > 2:  # 防批量维残留 (1,24,3)→(24,3)
+                        kpts = kpts[0]
                     frame_idx = r_idx  # 视频 predict 逐帧顺序产出, 枚举序即帧序
                     n_hit += 1
                     new_keypoints.setdefault(vid, {})[frame_idx] = kpts
@@ -167,6 +170,8 @@ def step2_rerun_e7():
     """Step 2: 用新骨架重跑 E7 修正协议全臂。"""
     import json
     from datetime import datetime
+    t0 = time.time()
+    sys.path.insert(0, str(REPO / "scripts"))
     sys.path.insert(0, str(REPO))
     sys.path.insert(0, str(REPO / "scripts"))
     from run_p07_endtoend_ak import extract_features, load_dataset, HEAD_CFG, KW

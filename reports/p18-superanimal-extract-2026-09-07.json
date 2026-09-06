@@ -1,0 +1,12 @@
+{
+  "date": "2026-09-07T06:32:00",
+  "protocol": "PSD-SA-PREREG-001",
+  "full_ref_old": 0.3393,
+  "full_ref_new": 0.3036,
+  "delta_pp": -3.57,
+  "verdict": "LABEL_BOTTLENECK",
+  "results": {
+    "note": "full-supervision did not improve ≥3pp; skipping low-budget per protocol"
+  },
+  "wall_clock_sec": 6.1
+}

@@ -1,0 +1,31 @@
+{
+  "date": "2026-09-07T06:17:48",
+  "protocol": "PSD-PANAF-PREREG-001",
+  "full_ref": 0.6,
+  "linear_10pct": 0.52,
+  "b_arms": [
+    0.6,
+    0.56,
+    0.52
+  ],
+  "pools": [
+    358,
+    357,
+    358
+  ],
+  "linear_retention": 0.8667,
+  "retention": 0.9333,
+  "verdict": "CONFIRMS",
+  "config_echo": {
+    "n_clips": 500,
+    "classes": 9,
+    "seeds": [
+      42,
+      43,
+      44
+    ],
+    "budget": 0.1,
+    "longtail": "minority classes contribute 1 seed clip each"
+  },
+  "wall_clock_sec": 12.6
+}
