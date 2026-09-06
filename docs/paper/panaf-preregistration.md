@@ -30,3 +30,7 @@
 ## 5. Reproduction
 
 Driver: `scripts/run_p23_panaf_retention.py`; evidence: `reports/p23-panaf-retention-<date>.json`.
+
+## Amendment (2026-09-07, seed expansion, post 3-seed readout)
+
+Initial readout used the frozen 3 seeds (42/43/44): b=60/56/52 → retention 93.33% CONFIRMS (logged in ledger v2.2, commit 8ddb3d1). Following the E9-series convention (n=3→n=10 seed expansion before any claim is assembled into the manuscript), the b arm was re-run at 10 seeds (42–51): mean 53.2% → **retention 88.67% → PARTIAL**. The decision rule, arms, budget, and pretext are unchanged; the 3-seed CONFIRMS is retained in git history as the pre-expansion readout and is superseded by the 10-seed PARTIAL as the reported number. Test-split secondary (non-decision): 56%. The four-point cross-domain gradient (NTU60 90.6 / NTU120 89.2 / PanAf 88.7 / UCF101 62.6) is monotone in the full-budget reference quality (74.3 / 54.3 / 60 / 23.1 — PanAf's reference sits between NTU120's and UCF101's, as does its retention).
