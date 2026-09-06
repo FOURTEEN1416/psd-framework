@@ -24,15 +24,18 @@ import numpy as np
 REPO = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO))
 
-# AK 视频目录（k9 仓）
-AK_VIDEO_DIR = Path(r"D:\Desktop\k9-training-system\data\animal_kingdom\action_recognition\dataset\video")
+# AK 视频目录（k9 仓）+ v1 补抽缓存（run_p05_public_real_pipeline.py 的 85 视频缓存）
+AK_VIDEO_DIRS = [
+    Path(r"D:\Desktop\k9-training-system\data\animal_kingdom\action_recognition\dataset\video"),
+    REPO / "runs" / "public_real_video_cache",
+]
 # 旧 pkl（拿 video_id/split/psd_class/boundary 元数据）
 OLD_PKL = REPO / "runs" / "public_real_dataset" / "full12_T30.pkl"
-# 新 YOLO11x-pose 模型
-NEW_MODEL_GLOB = str(REPO / "runs" / "p18_yolox_finetune" / "x_pose_dog" / "weights" / "best.pt")
+# 新 YOLO11x-pose 模型（实际路径：k9 仓 x_pose_dog-3，2026-09-06 dog-pose 100ep 微调完成）
+NEW_MODEL = Path(r"D:\Desktop\k9-training-system\runs\pose\runs\p18_yolox_finetune\x_pose_dog-3\weights\best.pt")
 # 输出
 OUT_PKL = REPO / "runs" / "public_real_dataset" / "full12_T30_yolox.pkl"
-OUT_JSON = REPO / "reports" / "p18-superanimal-extract-" + "2026-09-05" + ".json"
+OUT_JSON = REPO / "reports" / f"p18-superanimal-extract-{__import__('datetime').date.today()}.json"
 
 
 def step1_extract():
@@ -40,13 +43,13 @@ def step1_extract():
     from ultralytics import YOLO
     import glob
 
-    model_path = Path(NEW_MODEL_GLOB)
+    model_path = NEW_MODEL
     if not model_path.exists():
-        # search
-        candidates = glob.glob(str(REPO / "runs" / "p18_yolox_finetune" / "**" / "best.pt"), recursive=True)
+        import glob
+        candidates = sorted(glob.glob(str(Path(r"D:\Desktop\k9-training-system\runs\pose\runs\p18_yolox_finetune\**\best.pt")), recursive=True))
         if not candidates:
             raise FileNotFoundError("YOLO11x-pose best.pt not found — fine-tune may not be done")
-        model_path = Path(candidates[0])
+        model_path = Path(candidates[-1])  # 取最新（-3 优先于 -2）
 
     model = YOLO(str(model_path))
     print(f"[p18] loaded YOLO11x-pose from {model_path}")
@@ -65,15 +68,20 @@ def step1_extract():
 
     # 找对应视频文件
     video_files = {}
-    for vf in AK_VIDEO_DIR.rglob("*.mp4"):
-        video_files[vf.stem] = vf
-    for vf in AK_VIDEO_DIR.rglob("*.avi"):
-        video_files[vf.stem] = vf
-    for vf in AK_VIDEO_DIR.rglob("*.webm"):
-        video_files[vf.stem] = vf
+    for vdir in AK_VIDEO_DIRS:
+        for vf in vdir.rglob("*.mp4"):
+            video_files[vf.stem] = vf
+        for vf in vdir.rglob("*.avi"):
+            video_files[vf.stem] = vf
+        for vf in vdir.rglob("*.webm"):
+            video_files[vf.stem] = vf
 
     matched = sum(1 for vid in video_clips if vid in video_files)
     print(f"[p18] matched videos: {matched}/{len(video_clips)}")
+    if matched < len(video_clips):
+        raise RuntimeError(
+            f"视频匹配不全 {matched}/{len(video_clips)} — 缺失 {sorted(set(video_clips)-set(video_files))[:5]}...; "
+            "禁止用部分数据出判据结果（防假结果熔断）")
 
     # 重新提取：对每个视频跑 YOLO11x-pose，提取 24-keypoint 序列
     # 然后按 boundary 切 clip，resample 到 T=30
@@ -84,15 +92,16 @@ def step1_extract():
         if vi % 20 == 0:
             print(f"  [{vi}/{len(videos_to_process)}] {vid}")
         try:
-            results = model.predict(str(vpath), save=False, verbose=False, show_conf=True,
-                                    keypoint_conf=0.001)  # 低阈值保留更多关键点
+            results = model.predict(str(vpath), save=False, verbose=False,
+                                    conf=0.001)  # 低检测阈值保留更多帧
+            n_hit = 0
             for r_idx, result in enumerate(results):
                 if result.keypoints is None or len(result.keypoints) == 0:
                     continue
                 # 取最高置信度的犬（class=16 in COCO）
                 if result.boxes is not None and len(result.boxes):
-                    confs = result.boxes.conf.numpy()
-                    dog_mask = result.boxes.cls.numpy() == 16  # COCO dog class
+                    confs = result.boxes.conf.cpu().numpy()
+                    dog_mask = result.boxes.cls.cpu().numpy() == 16  # COCO dog class
                     if dog_mask.any():
                         best_dog = np.where(dog_mask)[0][np.argmax(confs[dog_mask])]
                     else:
@@ -100,10 +109,14 @@ def step1_extract():
                     kpts = result.keypoints[best_dog]  # (24, 2) or (24, 3)
                     if hasattr(kpts, 'data'):
                         kpts = kpts.data.cpu().numpy()
-                    frame_idx = int(result.path.split('_')[-1].split('.')[0]) if '_' in str(result.path) else r_idx
+                    frame_idx = r_idx  # 视频 predict 逐帧顺序产出, 枚举序即帧序
+                    n_hit += 1
                     new_keypoints.setdefault(vid, {})[frame_idx] = kpts
         except Exception as e:
             print(f"  [warn] {vid}: {e}")
+            continue
+        if n_hit == 0:
+            print(f"  [warn] {vid}: 0 frames with keypoints — will fall back to old skeleton")
 
     # 按 clip boundary 切骨架并 resample T=30
     new_data = []
