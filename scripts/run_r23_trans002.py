@@ -353,18 +353,19 @@ def main():
         dump_penultimate(PRETEXT_CKPT, "val", budget, val_npz_d)
 
     for seed in seeds:
-        cfg = write_cfg(seed, budget, epochs, WORK / f"c_{budget}_s{seed}")
+        run_tag = f"c_{budget}_s{seed}_{datetime.now().strftime('%H%M%S')}"
+        cfg = write_cfg(seed, budget, epochs, WORK / run_tag)
         gpu_before = gpu_snapshot("pre")
         t = time.time()
         acc_c = run_supervised(cfg, seed)
         wall_c = round(time.time() - t, 1)
         gpu_after = gpu_snapshot("post")
-        ck_c = WORK / f"c_{budget}_s{seed}" / "best_model.pt"
+        ck_c = WORK / run_tag / "best_model.pt"
         print(f"[C'] {budget} s{seed}: acc={acc_c:.4f} wall={wall_c}s", flush=True)
 
-        tr_npz_c = WORK / f"train_feat_{budget}_c_s{seed}.npz"
+        tr_npz_c = WORK / f"train_feat_{budget}_c_s{seed}_{run_tag[-6:]}.npz"
         tr_npz_d = WORK / f"train_feat_{budget}_d_s{seed}.npz"
-        val_npz_c = WORK / f"val_feat_{budget}_c_s{seed}.npz"
+        val_npz_c = WORK / f"val_feat_{budget}_c_s{seed}_{run_tag[-6:]}.npz"
         dump_penultimate(ck_c, "train", budget, tr_npz_c)
         dump_penultimate(ck_c, "val", budget, val_npz_c)
         dump_penultimate(PRETEXT_CKPT, "train", budget, tr_npz_d)
