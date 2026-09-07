@@ -41,7 +41,7 @@
 
 % R20 标题终裁（模拟审稿最优解）：移除"Low-Resource"——动物层端到端低资源为负，标题词与结果不匹配是 framing 级拒稿面；
 %   卖点迁到已交付且新颖的"解耦+演化评估准则"。low-resource 作为设计目标保留在摘要/正文/关键词（上下文即时限定）。
-\title[mode = title]{A Physics-Semantics Decoupled Framework for Animal Behavior Recognition under Evolving Evaluation Criteria}
+\title[mode = title]{A Physics--Semantics Decoupled Framework for Animal Behavior Recognition under Evolving Evaluation Criteria}
 %% R18: casprelimstitle 在 highlights/abstract prelims 框内不自动折断（类缺陷）——手动断行修复 117pt overfull
 
 \renewcommand{\casprelimstitle}{A Physics--Semantics Decoupled Framework for Animal Behavior Recognition\\ under Evolving Evaluation Criteria}
@@ -59,16 +59,16 @@
 
 %% ---------------- 摘要（introduction.md v0.3 W36 合并定稿逐字搬运）----------------
 \begin{abstract}
-Behavior recognition in animals underpins welfare monitoring and working-dog training, yet behavior annotation is scarce and evaluation criteria evolve with operational needs. Existing recognition pipelines couple representation learning to a fixed label set, so every taxonomy change forces re-annotation and retraining. We propose PSD, a physics--semantics decoupled framework that separates \emph{how skeletons move} from \emph{what behaviors are called}. A label-free physics layer combines self-supervised pretraining with unsupervised motion-word segmentation; a lightweight semantic layer expands rule-engine seeds toward full taxonomy coverage through anchor-guided prototype clustering with iterated confidence-filtered pseudo-labeling, consolidated by semi-supervised self-training and, on the synthetic-offset tier, made usable at small annotation budgets by warm-started semantic-layer initialization. On public real animal-skeleton data, pretraining alone yields subject-identification $k$-NN top-1 of \textbf{20.89\% versus an 8.33\% random baseline (2.51$\times$; representation probe)}. On the synthetic-offset tier, the warm-started semantic layer reaches \textbf{82.0\% top-1 on 22 classes from only 20 labeled clips} (the marginal budget on top of a fully labeled source domain); On the synthetic tier, a taxonomy transition is absorbed at \textbf{$\geq$3$\times$ lower retraining cost} than full-pipeline retraining (conservative bound; a pre-registered real-domain replication fails the wall-clock endpoint at small-backbone scale while confirming an accuracy advantage for the decoupled path). On the human-domain benchmark, the end-to-end pipeline retains \textbf{90.7\% of full-budget linear-probe accuracy at 10\% of the labels} under a pre-registered protocol (a linear head on the frozen features alone retains 88.7\%); on the canine tier the same corrected protocol stays near chance at a 13\% budget---a tier-dependent boundary. These results indicate that decoupling turns evolving evaluation criteria from a re-annotation burden into a routine semantic-layer update, and that low-resource behavior is tier- and protocol-dependent rather than uniform.
+Behavior recognition in animals underpins welfare monitoring and working-dog training, yet behavior annotation is scarce and evaluation criteria evolve with operational needs. Existing recognition pipelines couple representation learning to a fixed label set, so every taxonomy change forces re-annotation and retraining. We propose PSD, a physics--semantics decoupled framework that separates \emph{how skeletons move} from \emph{what behaviors are called}. A label-free physics layer combines self-supervised pretraining with unsupervised motion-word segmentation; a lightweight semantic layer expands rule-engine seeds toward full taxonomy coverage through anchor-guided prototype clustering with iterated confidence-filtered pseudo-labeling, consolidated by semi-supervised self-training and, on the synthetic-offset tier, made usable at small annotation budgets by warm-started semantic-layer initialization. On public real animal-skeleton data, pretraining alone yields subject-identification $k$-NN top-1 of \textbf{20.89\% versus an 8.33\% random baseline (2.51$\times$; representation probe)}. On the synthetic-offset tier, the warm-started semantic layer reaches \textbf{82.0\% top-1 on 22 classes from only 20 labeled clips} (the marginal budget on top of a fully labeled source domain); on the synthetic tier, a taxonomy transition is absorbed at \textbf{$\geq$3$\times$ lower retraining cost} than full-pipeline retraining (conservative bound; a pre-registered real-domain replication fails the wall-clock endpoint at small-backbone scale while showing an accuracy advantage for the decoupled path, measured under a disclosed solver-family confound). On the human-domain benchmark, the end-to-end pipeline retains \textbf{90.7\% of full-budget linear-probe accuracy at 10\% of the labels} under a pre-registered protocol (a linear head on the frozen features alone retains 88.7\%); on the canine tier the same corrected protocol stays near chance at a 13\% budget---a tier-dependent boundary. These results indicate that decoupling turns evolving evaluation criteria from a re-annotation burden into a routine semantic-layer update, and that low-resource behavior is tier- and protocol-dependent rather than uniform.
 \end{abstract}
 
 %% Highlights 同步维护两处: 此处（版内）+ highlights.tex（投稿系统独立可编辑文件）
 \begin{highlights}
 \item Decoupled framework absorbs taxonomy evolution cheaply (synthetic tier)
-\item Taxonomy transitions cost $\geq$3x less wall clock on a synthetic benchmark
-\item First, to our knowledge, anchor--cluster pseudo-label transfer to skeletons
-\item Label-free pretraining reaches 2.51x random kNN on real quadruped skeletons
-\item Warm start makes a 20-clip budget usable: 82.0\% top-1 (synthetic-offset)
+\item Taxonomy transitions cost $\geq$3$	imes$ less wall clock (synthetic tier)
+\item First, to our knowledge, anchor--cluster pseudo-label loop on skeletons (combination)
+\item Pretraining: 2.51$	imes$ random kNN on quadruped skeletons (subject-ID probe)
+\item Warm start: 82.0\% top-1 from 20 clips (synthetic-offset; marginal budget)
 \end{highlights}
 
 %% 关键词（建议稿 F6，1-7 个允许）
@@ -84,7 +84,7 @@ animal behavior recognition \sep skeleton-based action recognition \sep self-sup
 \input{sections/03-method}                % <= method.md
 \input{sections/04-experiments}           % <= experiment-skeleton.md §4 (三层口径铁律随行)
 \input{sections/05-ablation-analysis}     % <= experiment-skeleton.md §5 (tab3 七行零 PENDING)
-\input{sections/06-conclusion-limitations}% <= conclusion-limitations.md v0.7 (Limitations 十一条: W36 八条 + W46 L9 + W45 L10 + R8 L11)
+\input{sections/06-conclusion-limitations}% <= conclusion-limitations.md (Limitations 十二条: L1-L12; 终审 2026-09-07 勘正条数)
 
 %% fig1 已迁至 01-introduction.tex §1 尾（hero 图按 figure-specs 落位）
 
@@ -137,7 +137,7 @@ Table~\ref{tab:novelty} records the repository-scale survey behind the firstness
 \hline
 Candidate & Domain / paradigm & Difference from our combination & Niche? \\
 \hline
-MAC-Learning (TPAMI 2022) & human skel., anchor contrastive & anchors are contrastive sample pairs; no seed-annotated anchors, no cluster pseudo-label loop & no \\
+MAC-Learning (TPAMI 2023) & human skel., anchor contrastive & anchors are contrastive sample pairs; no seed-annotated anchors, no cluster pseudo-label loop & no \\
 Momentum-contrastive teacher (TIP); GRA (TNNLS) & human skel., semi-sup. & consistency/alignment regularization; no anchors, no taxonomy framing & no \\
 PSP-Learning / X-Invariant / Decouple-and-Squeeze / joint-bone fusion (2022) & human skel., semi-sup. & NTU consistency paradigms; none couples seeds+clustering+iteration & no \\
 PAINet (ICCV 2023); HAA4D; ISBFSAR; FICAMA; SMAM; UMEG-Net; SkelHCC & human skel., few/zero-shot & episode/metric learning; no pseudo-label expansion & no \\
