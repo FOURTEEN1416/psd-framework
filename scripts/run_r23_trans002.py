@@ -179,14 +179,25 @@ def run_supervised(cfg_path: Path, seed: int) -> float:
             self.inner = self._Inner(*a, **k)
 
         def forward(self, _ignored, x):
+            self.inner.train()  # FT train() 锁 eval()——含 BN 的模型必须强制回 train 态（官方处理器只测过无 BN 模型）
             return self.inner(x)
+
+    # FT_Processor.train() 第一行写死 self.model.eval() 且从不切回——含 BatchNorm 的模型在
+    # eval 模式下 BN 不更新 running stats、前向恒定, loss 永久卡 ln(49)≈3.89（首跑实证:
+    # 80ep train loss 3.834 不动, best_model 的 running_var=1.0）。子类一行修复。
+    class _FixedFT(FT_Processor):
+        def train(self, epoch):
+            # super().train(epoch) 第一行 self.model.eval()——必须在其后重设 train()
+            result = super().train(epoch)
+            self.model.train()
+            return result
 
     _original_model_cls = _stgcn_mod.Model
     _stgcn_mod.Model = _AdapterShim
     try:
         import os
         os.chdir(REPO)
-        proc = FT_Processor(["--config", str(cfg_path.resolve()), "--device", "0"])
+        proc = _FixedFT(["--config", str(cfg_path.resolve()), "--device", "0"])
         proc.start()
     finally:
         _stgcn_mod.Model = _original_model_cls  # 恢复原类——eval_49 需裸 STGCNModel
