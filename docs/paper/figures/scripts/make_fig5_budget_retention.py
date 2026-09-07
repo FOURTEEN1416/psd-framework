@@ -41,7 +41,7 @@ v1_full = p07["agg"]["warm_spc-1"]["top1_mean"]
 v1 = r16["summary"]["v1"]["warm_spc2"]
 pts.append((13.9, 100 * v1["top1_mean"] / v1_full, 100 * v1["top1_std"] / v1_full,
             "public-real v1", "o", "#0E7490"))
-# v2: spc2 = 16/256, spc4 = 32/256; supervised full reference from p12
+# v2: spc2 = 14/256 (5.5%), spc4 = 28/256 (10.9%); supervised full reference from p12
 v2_full = p12["summary"]["warm_spc-1"]["top1_mean"]
 for spc, n_anc, x_disp in ((2, 14, 5.5), (4, 28, 11.5)):
     s = r16["summary"]["v2"][f"warm_spc{spc}"]
@@ -72,7 +72,7 @@ tbpan = p23_panaf["b_arms"]
 retpan = 100 * np.mean(tbpan) / p23_panaf["full_ref"]
 errpan = 100 * np.std(tbpan, ddof=1) / p23_panaf["full_ref"]
 pts.append((12.5, retpan, errpan, "animal public benchmark (PanAf500)", "X", "#1F2937"))
-# synthetic-offset: 20 clips / 2200 full-budget train; warm 82.0 vs full 96.6
+# synthetic-offset: 20 clips of the 220-clip offset pool; warm 82.0 vs full-budget(offset) 95.7
 syn_full = w23["curves"]["random"]["200"]["mean"]  # offset-tier full-budget (same warm-start protocol), NOT base-tier 96.6%
 syn = w23["curves"]["random"]["20"]  # warm-start b=20 arm mean (same JSON holds warm curves under random/entropy at b=20 identical)
 pts.append((100 * 20 / 220, 100 * syn["mean"] / syn_full, 100 * syn["std"] / syn_full,
