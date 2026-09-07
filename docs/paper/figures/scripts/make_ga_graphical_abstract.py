@@ -77,7 +77,7 @@ ax.text(54.5, 10.6, r"taxonomy evolves $\mathcal{Y}\to\mathcal{Y}'$: only $\Omeg
 # ---- ③ 保留率微条 ----
 PANEL_X0, BAR_X0, BAR_MAX = 71.5, 81.5, 17.5   # 100% → 17.5 单位
 rows = [
-    ("NTU60", 90.6, False),
+    ("NTU60", 90.7, False),
     ("NTU120", 88.9, False),
     ("canine", 28.9, True),   # E7 v1 @13.9% budget;绝对精度近随机→斜纹条+文字,不标保留率数
 ]

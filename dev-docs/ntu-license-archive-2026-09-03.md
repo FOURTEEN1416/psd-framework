@@ -16,8 +16,8 @@ NTU RGB+D 由南洋理工大学 ROSE Lab 发布。官方 §6 Terms & Conditions 
 - 获取渠道: 官方申请口径（consortium 版本经标准 research-use 条款获取）
 - 论文用途: 实现等价性验证（NTU60 xsub 三流线性评估）+ 跨域保留率复现（E9/E9b/TRANS-001），非商业
 - 再分发: 论文 DA 声明明示派生骨架不随包分发，仅提供管线脚本（合规于 §6 禁再分发条款）
-- 引用: Shahroudy 2016 + Liu 2020 均在引用池
-- **官方 §7 ack 语录已补入正文**（main.tex Acknowledgements 节，官方原文逐字，2026-09-07）——该合规缺口由本次截图行动发现并闭合
+- 引用: Shahroudy 2016 + Liu 2020 均在引用池（**2026-09-07 R23a 勘误并修复**: liu2020ntu 此前实际缺失,已补入 refs.bib + E9b 段 \citep——NTU120 数据被使用故 TPAMI 条目为许可 §7 强制项）
+- **官方 §7 ack 语录已补入正文**（main.tex Acknowledgements 节,官方原文逐字,2026-09-07）——该合规缺口由本次截图行动发现并闭合。官方 §7 逐字模板（留档为未来验证基准）: "(Portions of) the research in this paper used the NTU RGB+D (or NTU RGB+D 120) Action Recognition Dataset made available by the ROSE Lab at the Nanyang Technological University, Singapore."（正文因两数据集均使用而取 "(and)" 适配）
 
 ## 遗留动作
 

@@ -47,7 +47,7 @@ Sincerely,
 
 - 规格：Elsevier GA 建议 ≤531×131 pt（约 7.4×1.82 in），≥250 dpi，单图讲清"冻结物理层+可修订语义层+演化吸收"。
 - 脚本：`docs/paper/figures/scripts/make_ga_graphical_abstract.py`（diagram-design 密度 4/10 原则 + 印刷尺寸 1:1 铁律；输出 PDF+PNG 600dpi）。
-- 内容三元素：①双层框（青=物理冻结/橙=语义可修订，与 fig1 同谱系）②Y→Y′ 演化箭头只穿语义层 ③右下角保留率微条（human 90.6 / NTU120 88.9 / canine 边界如实）。
+- 内容三元素：①双层框（青=物理冻结/橙=语义可修订，与 fig1 同谱系）②Y→Y′ 演化箭头只穿语义层 ③右下角保留率微条（human 90.7 / NTU120 88.9 / canine 边界如实）。
 
 ---
 
