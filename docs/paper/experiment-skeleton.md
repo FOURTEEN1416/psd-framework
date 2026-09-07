@@ -123,7 +123,7 @@
 
 ### E9 NTU 低资源保留率 → 支撑 C6 跨域泛化（PSD-NTU-PREREG-001，2026-09-04 实验前冻结）
 
-> **⚠️ R16 协议修正（2026-09-05）**：臂 (b) 修正重跑（伪标签最终头+无 oracle 停止）：top1 **67.5%±0.15**，保留率 **90.6%**——**预注册 ≥90% GENERALIZES 判据仍成立**；伪标签迭代增益 +1.4pp（原 +8.1pp 系真标签头产物）；池对官方标签精度 ≈0.69 仅作事后诊断。协议修订见 `ntu-lowres-preregistration.md` §7。证据 `reports/r16-ntu-pseudo-2026-09-05.json`。
+> **⚠️ R16 协议修正（2026-09-05）**：臂 (b) 修正重跑（伪标签最终头+无 oracle 停止）：top1 **67.5%±0.15**，保留率 **90.6%**——**预注册 ≥90% GENERALIZES 判据仍成立**；伪标签迭代增益 +1.4pp（原 +8.1pp 系真标签头产物）；池对官方标签精度 ≈0.69 仅作事后诊断。协议修订见 `ntu-lowres-preregistration.md` §7。证据 `reports/r16-ntu-pseudo-2026-09-05.json`。**[2026-09-07 10-seed 终口径]** 按 E9 系列惯例扩至 10 seeds（42–51）：top1 **67.53%±0.24 → 保留率 90.7% GENERALIZES 维持**（迭代增益 +1.48pp，10/10 种子高于线性臂，t p<1e-6/Wilcoxon p=0.002）；(a)/(c) 与 09-05 工件逐位一致。协议 §8 Amendment；证据 `reports/r16-ntu-pseudo-10seed-2026-09-07.json`。
 *This experiment tests whether the low-resource retention behavior generalizes to the human domain where a published budget reference exists.*
 - 设置: NTU60 xsub joint 流，冻结 epoch300 pretext 骨干 256d 特征（官方 Feeder_single 无增强口径，p14a 导出 40091+16487）；10% 分层子集 seed42 固定=4009 clips；三臂 (c)100% 线性头参照 /(a)10% 线性头 /(b)10%+run_selftrain（与 E7 同函数同参，适配 #1 device=cuda、#2 StandardScaler+LR tol=1e-3 披露随行）。
 - **结果**: (c) **74.45%**（vs 官方 LE 74.30%，Δ0.15pp——管线保真自检通过）；(a) 66.05%（保留 88.7%）；(b) **74.01/74.06/74.25，mean 74.11±0.13 = 保留率 99.5%**。
@@ -135,13 +135,13 @@
 
 > **⚠️ 首跑缺陷披露（修复先于读数）**：首轮 b 臂评分将字符串预测与整数标签比较（恒 False），伪记 b=0.0/FAILS；经"精确零不可能"检查定位，修为字符串域评分后重跑——臂/预算/种子/判据零改动，重跑为首次有效读数。协议偏离（pretext 由冻结的 ST-GCN 150ep 改为 joint-level MLP 80ep，适配 17 关节 HRNet 拓扑跨数据集一致）已入协议 Amendment 2。
 - **结果（n=12000 clips，60 类有样本；10-seed 终口径 seeds 42–51，E9 系列扩容先例，2026-09-07）**: (c) 全预算参照 **54.34%**；(a) 10% 线性 **45.42%**（线性保留 83.58%）；(b) PSD 语义管线 **mean 48.29% ± 0.76 = 保留率 88.86% → 预注册判据 PARTIAL（85–90% 带）**；PSD 臂对裸线性 +2.9pp（10/10 种子臂高于线性臂）。3-seed 初读（48.36/49.65/47.48 → 89.24% PARTIAL）留档协议文件，判据/臂/预算零改动。
-- 解读: 犬层导出的语义管线在第二个人体基准上保留率落入 PARTIAL 带，弱于 NTU60 的 90.6% 但仍支持预算保留行为；弱化与参照臂质量衰减（74.3→54.3）同向。
+- 解读: 犬层导出的语义管线在第二个人体基准上保留率落入 PARTIAL 带，弱于 NTU60 的 90.7% 但仍支持预算保留行为；弱化与参照臂质量衰减（74.3→54.3）同向。
 - 来源: `reports/p5b-ntu120-retention-2026-09-07.json`（10-seed 终口径；09-05 3-seed 文件留档）；驱动 `scripts/run_p5b_generic_retention.py`；协议 `docs/paper/ntu120-preregistration.md`（Amendment 3）。
 
 ### E9c UCF101 独立第三域（HRNet 2D, YouTube）→ 预算行为负边界（PSD-UCF101-PREREG-001，2026-09-05 实验前冻结；ADR 0009）
 
 - **结果（n=10000 clips，101 类；10-seed 终口径 seeds 42–51，E9 系列扩容先例，2026-09-07）**: (c) 全预算参照 **23.11%**；(a) 10% 线性 **14.04%**（线性保留 60.75%）；(b) PSD 语义管线 **mean 15.40% ± 1.89 = 保留率 66.64% → 预注册判据 FAILS（<85%）**；PSD 臂对裸线性 +1.4pp（2/10 种子低于线性臂，不做同向声明）。3-seed 初读（12.74/14.47/16.20 → 62.62% FAILS）留档协议文件，判据/臂/预算零改动，方向未翻转。
-- 诚实上报（按冻结判据）: 预算保留行为随域收窄，E9 主张限于其已测域。跨域梯度 NTU60 90.6% → NTU120 88.9% → UCF101 66.6% 与参照质量 74.3% → 54.3% → 23.1% 单调对应——**pretext 特征质量是保留率的主导因素**；与 R16 犬科负边界（warm-start 增益以"pretext 学到类可分特征"为前提）同构，入限制段与负边界叙事。
+- 诚实上报（按冻结判据）: 预算保留行为随域收窄，E9 主张限于其已测域。跨域梯度 NTU60 90.7% → NTU120 88.9% → UCF101 66.6% 与参照质量 74.3% → 54.3% → 23.1% 单调对应——**pretext 特征质量是保留率的主导因素**；与 R16 犬科负边界（warm-start 增益以"pretext 学到类可分特征"为前提）同构，入限制段与负边界叙事。
 - 来源: `reports/p5b-ucf101-retention-2026-09-07.json`（10-seed 终口径；09-05 3-seed 文件留档）；驱动 `scripts/run_p5b_generic_retention.py`；协议 `docs/paper/ucf101-preregistration.md`（Amendment 2）。
 
 ### E9d PanAf500 首个动物域公共基准（P7，YOLO11x-pose 模型提取骨架）→ C6 跨域第四点（PSD-PANAF-PREREG-001，2026-09-06 实验前冻结；ADR 0009）
@@ -181,7 +181,7 @@
 | − 主动学习（改随机采样） | 达标预算超 200 片段 | C7↓（裁决①探索性发现） | ✅ 可填（**负结果如实**）：合成层短预算档熵采样未显示优势——b=100 随机 +7.9pp（2/3 seeds 同向，seed43 反向）/ b=200 随机 +7.1pp（3/3 seeds 同向）；"达标预算"假设被反向证据覆盖且 C7 经裁决①降级，本行以探索性发现形式呈现。【合成层/W14】来源：`reports/w14-p05-al-efficiency-2026-08-24.md` §3.1 + `reports/p05-al-efficiency-short-2026-08-24.json` |
 | **种子噪声注入（v0.3 新增）** | 向规则引擎种子注入 {10%, 20%, 30%} 标签噪声，验证伪标签迭代不放大种子错误——语义层鲁棒性防线（对应 method.md §3.3.2 设计决策） | C5 | ✅ 可填：purity q=0% **0.5339** → 10% 0.5267±.0013 → 20% 0.5201±.0013 → **30% 仅降 3.1pp 至 0.5025±0.0063**（仍为随机基线 1.52×，≥1.5 门保持）。【公开真实层/P0.3】来源：`reports/p03-jia-phasea-2026-08-24.md` §4.3 |
 
-> **R16 修订注（2026-09-05）**：−语义 warm-start 行与 E7/E7b/E9 端到端数字产出于协议错误（最终头消费池真标签+oracle 停止），已被修正协议重跑 supersede：AK v1/v2 低预算臂近随机（v1 warm 9.8±7.5 vs aimclr 15.2±5.1，macro-F1 aimclr 占优 Holm 0.043——warm 全预算占优主张在低预算端反转）；NTU 保留率 90.6% 仍过预注册 90% 线；全监督参照与纯监督对照（EP3、五臂、微调对照）不受影响。证据 `reports/r16-endtoend-pseudo-2026-09-05.json` + `reports/r16-ntu-pseudo-2026-09-05.json`；论文 04/05 已按修正数字装配。
+> **R16 修订注（2026-09-05）**：−语义 warm-start 行与 E7/E7b/E9 端到端数字产出于协议错误（最终头消费池真标签+oracle 停止），已被修正协议重跑 supersede：AK v1/v2 低预算臂近随机（v1 warm 9.8±7.5 vs aimclr 15.2±5.1，macro-F1 aimclr 占优 Holm 0.043——warm 全预算占优主张在低预算端反转）；NTU 保留率 90.6% 仍过预注册 90% 线（2026-09-07 10-seed 终口径 90.7%，见 §4.4 E9 块注）；全监督参照与纯监督对照（EP3、五臂、微调对照）不受影响。证据 `reports/r16-endtoend-pseudo-2026-09-05.json` + `reports/r16-ntu-pseudo-2026-09-05.json`；论文 04/05 已按修正数字装配。
 
 敏感性扫描：种子比例 / 聚类数 K / 置信度阈值 τ / 迭代轮数 / 类别不平衡处理（frequency-aware margin vs 重采样 vs 无处理）/ **样本量梯度 samples_per_class（已落地四档，见下方叙事段）**。
 分析段统一采用四步结构（observe→interpret→implicate→next），异常值显式标记不静默剔除。

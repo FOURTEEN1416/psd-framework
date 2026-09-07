@@ -28,7 +28,7 @@ def j(name):
 
 # ---- 各层点: (label_fraction_pct, retention_pct, err_pp, tier) ----
 r16 = j("r16-endtoend-pseudo-2026-09-05.json")
-r16ntu = j("r16-ntu-pseudo-2026-09-05.json")
+r16ntu = j("r16-ntu-pseudo-10seed-2026-09-07.json")
 p07 = j("p07-endtoend-ak-full12-2026-09-04.json")   # supervised full reference only
 p12 = j("p12-akv2-replication-2026-09-04.json")     # supervised full reference only
 p14 = j("p14-ntu-lowres-2026-09-04.json")           # supervised (c) reference only
