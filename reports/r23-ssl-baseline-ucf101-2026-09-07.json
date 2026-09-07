@@ -1,0 +1,93 @@
+{
+  "date": "2026-09-07T13:53:16",
+  "protocol": "PSD-SSL-BASE-001 Amendment 1 (Mean-Teacher second domain, UCF101 E9c harness)",
+  "consistency_check": {
+    "a_linear": 0.1404,
+    "expect": 0.1404,
+    "ok": true
+  },
+  "arms": {
+    "a_linear_10pct": 0.1404,
+    "b_psd_ref": {
+      "mean": 0.15399000000000002,
+      "std": 0.0189
+    },
+    "mt_mean": 0.1417,
+    "mt_std": 0.0087,
+    "mt_rows": [
+      {
+        "seed": 42,
+        "top1": 0.1469,
+        "n_pool_confident": 1474
+      },
+      {
+        "seed": 43,
+        "top1": 0.121,
+        "n_pool_confident": 1474
+      },
+      {
+        "seed": 44,
+        "top1": 0.149,
+        "n_pool_confident": 1474
+      },
+      {
+        "seed": 45,
+        "top1": 0.1404,
+        "n_pool_confident": 1474
+      },
+      {
+        "seed": 46,
+        "top1": 0.1382,
+        "n_pool_confident": 1474
+      },
+      {
+        "seed": 47,
+        "top1": 0.1361,
+        "n_pool_confident": 1474
+      },
+      {
+        "seed": 48,
+        "top1": 0.1425,
+        "n_pool_confident": 1474
+      },
+      {
+        "seed": 49,
+        "top1": 0.1469,
+        "n_pool_confident": 1474
+      },
+      {
+        "seed": 50,
+        "top1": 0.1512,
+        "n_pool_confident": 1474
+      },
+      {
+        "seed": 51,
+        "top1": 0.1447,
+        "n_pool_confident": 1474
+      }
+    ]
+  },
+  "verdict": {
+    "b_wins": "8/10",
+    "wilcoxon_p": 0.0469
+  },
+  "config_echo": {
+    "tau": 0.95,
+    "rounds": 5,
+    "seeds": [
+      42,
+      43,
+      44,
+      45,
+      46,
+      47,
+      48,
+      49,
+      50,
+      51
+    ],
+    "n_used": 10000,
+    "classes": 101
+  },
+  "wall_clock_sec": 134.2
+}

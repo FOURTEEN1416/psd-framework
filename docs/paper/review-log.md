@@ -387,3 +387,14 @@ YOLO-PetX（IEEE CEECT 2025，全题名经 GitHub 全局代码检索锁定）、
 **R22b#5 补充处置（2026-09-07 追加）**：查证 run_c1_decouple.py 确认 decouple 臂结构上=冻结骨干+头重训（load Y ckpt→freeze_backbone→trainer.fit），R22b 要求的"通用冻结对照"与 decouple 臂架构重合——故修复走归因披露而非新实验：§4.3 E6 段补 "An honest attribution boundary: the wall-clock ratio reflects the frozen-versus-retrained architecture distinction, available to any frozen-backbone design; what the decoupled design contributes is the frozen path's accuracy and label economics (seeds+proposals 而非 Y′ 全量重标注——E6 同标注单元双臂，种子预算优势由小预算臂行使)。" 真域转换实验（NTU60 类合并，baseline 臂需数天 GPU 300ep×3流重训）=第三轮实验候选，**用户决策项**（成本/收益：直接回应标题结构攻击 vs 多天算力）。
 
 **R22b#5 最终处置（2026-09-07 转换实验收官）**：PSD-NTU-TRANS-001 冻结执行完毕——成本端点双档 FAILS 如实入文（MLP 尺度下耦合臂 35s 全重训，无成本可省；E6 缩放警示语印证）；精度端点预注册预测命中（D 全档 +3.9pp/10% +11.3pp 出带）。L12 重写为"成本仅合成层+真域复现 FAILS 成本端点但确认精度价值"，正文新装 E6-real 段（solver 族未冻结如实披露，拒绝 post-hoc 匹配重跑）。处置性质：预注册跑前冻结的 FAILS 结果按冻结规则如实上报——论文的诚实性主张经受了第三次实战检验（PanAf 翻转/R16 修正/本次 FAILS）。攻击面"标题结构仅合成层背书"被替换为"标题结构有真域复现且 FAILS 如实披露"——诚实叙事升级。
+
+## R23 三审轮（2026-09-07，论文完善阶段·串行单智能体约束）
+
+**构成与方法论**（科研工具箱 ars-adversarial-reviewer 三人格方法论 + scholar-presubmit-checks 清单 + anti-defensive-writing 纪律）：
+- **R23a 交叉审稿**（逐行回归）：4 发现全修——最重=**refs.bib 缺 liu2020ntu**（NTU120 被使用而 TPAMI 条目缺失=许可§7 强制双引用违规，由 NTU 截图合规行动交叉暴露）；intro ≥3× 未限定（与 E6-real/L12 矛盾）；GA 旧 90.6；L12 标题自洽。
+- **R23b 对抗审稿**（Saboteur/New Hire/Security Auditor 三人格）：CONCERNS，15 发现全修——**S1=TRANS-001"精度预测命中"是假出处**（冻结协议 §4 原文写 full 档 C 臂可能占优,实际 D 全胜=方向反转非确认），E6-real/L12/intro 三处改正为"did not materialize"；摘要补真域成本端点失败；Holm 校正值打印（E9 系列）；synthetic-offset 定义入 §4.1；post-hoc 标注（same-space 控制）；E7c 单次运行口径；fig5 注释勘误；1.99× 非 doubles；冷启动 8.0±3.0 溯源入文；r12 工件块指向+holm 块审计留痕说明。热修：\minus 未定义控制序列。
+- **R23c 恶意审稿**（残余面攻击）：Major（内部门），8 发现全修——**Holm-6 统一族**（3 tiers×2 statistics=6 检验,校正值全打印+结论族不变声明,修掉 E9"单检验免校正"vs E9b/c"4 检验族"的双重标准）；方向句四处统一；**梯度可证伪化**（≥70% 参考+<85% 保留=破坏条件；K9 试点 Phase-A 门=样本外检验）；E9d 样本外声明（注册后于梯度可观测/先于运行——原被埋没的最强牌）；PanAf 线性头承载如实；E7c 粒度归因与参考可分性梯度统一；E7b 同批披露上移 §4.2；crossover 与 E6-real 用法模式调和。
+
+**压制项#1 攻坚（同轮完成）**：PSD-SSL-BASE-001 预注册（跑前冻结 v1.0:Mean-Teacher 式池蒸馏,τ=0.95,5 轮互馈,10 seeds,三方向判据不筛选）→ 执行 → **mt 46.79%±0.61 vs PSD 67.53%±0.24 = +20.7pp,10/10 配对胜,Wilcoxon p=0.002（Holm-6 校正 0.008）**。"无外部基线"攻击面消灭且方向绝对有利；mt 池接受 15.8k/36.1k vs PSD 近全收=机制一致解释入 E9 段；L11 扩展 harness 限定（隔离池恢复机制 vs 端到端 SSL 仍超范围）。
+
+**三审校准**：R23c 终判"the gauntlet has converged; what remains is consistency surgery on the honesty passages themselves, not new science"——数值脊柱三轮全对账（R23b 逐数核到小数位），残余均为措辞手术。论文进入投稿就绪态。

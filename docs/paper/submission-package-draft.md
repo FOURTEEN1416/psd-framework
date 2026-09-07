@@ -1,6 +1,6 @@
 # 投稿包草稿 v0.1（2026-09-07，审计窗代拟）
 
-> **状态**：UCF101 10-seed 在飞、E9b/c 口径切换与 R22 审计未完成——本稿数字以**当前 36 页摘要**为准，链完后按最终版刷新一次（占位符已标注）。
+> **状态**：v0.2（2026-09-07 R23 三审轮后终检刷新）——E9 系列四点 10-seed 终口径、TRANS-001 真域转换（成本 FAILS 如实+精度优势）、SSL 外部基线（+20.7pp）全部入稿；master=9ce81ff 编译零错。
 > 纪律：所有数字必须能在 main.tex/摘要/reports 工件中逐字找到；审稿人可验证性优先于修辞。
 
 ---
@@ -15,13 +15,14 @@ Working-animal behavior recognition is unusual among pattern-recognition tasks i
 
 Three properties of the evidence we believe fit Pattern Recognition's scope:
 
-1. **Pre-registration discipline.** Six protocols (working-dog pilot, dataset expansion, and four budget-retention studies on NTU60, NTU120, PanAf500, and UCF101) were frozen — decision rules and thresholds included — before the experiments ran. Where a pre-registered verdict flipped under the frozen protocol (a 3-seed confirmation becoming a 10-seed partial at PanAf500; a canine-tier retention claim that does not survive protocol correction), the paper reports the reversal and the boundary, not the favorable reading. All reported p-values are Holm-Bonferroni corrected within their experiment families.
-2. **Cross-domain budget retention with an honest boundary.** On the human benchmark the pipeline retains 90.7% of full-budget linear-probe accuracy at 10% of the labels (ten seeds, pre-registered); on NTU120 the same protocol retains 88.9%; on the public canine tier the corrected protocol stays near chance at a 13% budget — a tier- and label-granularity-dependent boundary we analyze rather than hide (a companion experiment shows a stronger pose extractor does not raise the ceiling, localizing the bottleneck to label alignment).
-3. **Verifiable attribution.** Implementation equivalence is checked against the official reference (three-stream NTU60 fusion 77.97% vs a pre-registered 77.18% line); the taxonomy-transition cost claim (≥3× lower wall-clock, measured 6.07×) is paired with an accuracy-equivalence test inside a pre-registered noise band; and an end-to-end fine-tuning control shows the frozen-physics design is superior where both metrics agree, not merely cheaper.
+1. **Pre-registration discipline.** Eight protocols (working-dog pilot, dataset expansion, four budget-retention studies on NTU60, NTU120, PanAf500, and UCF101, a real-domain taxonomy-transition replication, and an external semi-supervised baseline) were frozen — decision rules and thresholds included — before the experiments ran. Where a pre-registered verdict flipped or failed under the frozen protocol (a 3-seed confirmation becoming a 10-seed partial at PanAf500; a canine-tier retention claim that does not survive protocol correction; the real-domain transition cost endpoint failing where the synthetic-tier claim held), the paper reports the reversal, the failure, and the boundary — not the favorable reading. All reported p-values are Holm-Bonferroni corrected within declared families (corrected values printed alongside raw).
+2. **An external semi-supervised baseline, run rather than cited.** On the NTU60 10%-budget harness (same frozen features, same subset, same evaluation), a Mean-Teacher-style pool-distillation baseline reaches 46.79% ± 0.61 against the PSD pipeline's 67.53% ± 0.24 — a +20.7pp margin with 10/10 paired seed wins (Wilcoxon p=0.002, corrected 0.008). The comparison is harness-limited (frozen features; disclosed) and its mechanism is consistent with the paper's central claim: the external baseline's confidence mask admits only 15,758 of 36,082 pool clips, while near-full pool restoration is exactly what the pipeline does.
+3. **Cross-domain budget retention with a falsifiable mechanism.** On the human benchmark the pipeline retains 90.7% of full-budget linear-probe accuracy at 10% of the labels (ten seeds, pre-registered); on NTU120 the same protocol retains 88.9%; on PanAf500 — the only animal-domain public benchmark — 88.7%, a pre-registered out-of-sample test of the retention mechanism; on the public canine tier the corrected protocol stays near chance at a 13% budget. The gradient is stated in falsifiable form (any tier with a strongly separable full-budget reference yet <85% retention would break it), and a companion experiment shows a stronger pose extractor does not raise the canine ceiling, localizing the bottleneck to label alignment.
+4. **Verifiable attribution, including the failures.** Implementation equivalence is checked against the official reference (three-stream NTU60 fusion 77.97% vs a pre-registered 77.18% line); the synthetic-tier taxonomy-transition cost claim (≥3×, measured 6.07×) is paired with an accuracy-equivalence test inside a pre-registered noise band — and its pre-registered real-domain replication, which fails the wall-clock endpoint at small-backbone scale, is reported as a failure with the accuracy advantage it does establish, solver-family confound disclosed.
 
 All datasets are public; derived skeletons are not redistributed and regenerate from provider data via released scripts; every number in the paper traces to a committed artifact in the public repository (github.com/FOURTEEN1416/psd-framework, tag review-snapshot).
 
-The manuscript is original, not under review elsewhere, and all authors have approved it. [FUNDING/GENAI: 按最终声明段同步]
+The manuscript is original, not under review elsewhere, and all authors have approved it. Funding: none (declared in the manuscript); GenAI use is disclosed in the manuscript's declaration section.
 
 Sincerely,
 [通讯作者 — 待用户填]
@@ -41,7 +42,11 @@ Sincerely,
 | 动物行为计算方向：B. Mohler 系（InterPet4D 相关）或 B. Behav. 期刊编委 | 动物行为标注 | peng2026interpet4d 作者群 | 是否愿评 ML 方法稿 |
 | Nikos Komodakis (U. Crete/Noah's) | 半监督/对比学习 | TCL 系领域资深 | COI |
 
-> 注：AimCLR 作者与本文有基线比较关系，按多数期刊 COI 规则应**排除**而非推荐；上表保留仅为记录理由。最终 3-5 名由用户圈定，建议补 1 名动物福利领域（非 CV）审稿人以覆盖应用线。
+> 注（v0.2 更新）：①AimCLR 作者（Tianyu Guo）行已删除——COI 明确（基线比较对象），不保留占位；②新增第 7 行 SSL/一致性方向候选（R23 SSL 基线轮新增的比较域）；③R23 后引用池新增 liu2020ntu（NTU120 TPAMI 一作 Jun Liu 同为 NTU 数据集方——推荐其审稿属常见做法但需声明其数据集作者身份，提交时如实用）。最终 3-5 名由用户圈定，建议补 1 名动物福利领域（非 CV）审稿人覆盖应用线。
+
+| 候选（新增） | 领域线 | 依据 | 提交前核实 |
+|---|---|---|---|
+| SSL/一致性蒸馏方向资深学者（须**非** Mean-Teacher 原作者群——Rasmus/Kahn/Virtanen 系为方法比较对象 COI） | 外部 SSL 基线 | PSD-SSL-BASE-001 对照方法所属领域 | 具体人选待用户圈定 |
 
 ## 3. Graphical Abstract（规格 + 脚本指针）
 
