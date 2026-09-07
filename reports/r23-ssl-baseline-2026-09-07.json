@@ -1,0 +1,90 @@
+{
+  "date": "2026-09-07T13:31:12",
+  "protocol": "PSD-SSL-BASE-001 (external SSL baseline, Mean-Teacher-style pool distillation, frozen v1.0)",
+  "arms": {
+    "a_linear_10pct": 0.6605,
+    "b_psd_pipeline_ref": {
+      "retention_b_over_c": 0.907,
+      "verdict": "GENERALIZES (retention >= 90%)",
+      "linear_only_retention_a_over_c": 0.8872,
+      "pseudo_iteration_gain_pp": 1.48
+    },
+    "mt_mean": 0.4679,
+    "mt_std": 0.0061,
+    "mt_rows": [
+      {
+        "seed": 42,
+        "top1": 0.4743,
+        "n_pool_confident": 15758
+      },
+      {
+        "seed": 43,
+        "top1": 0.4762,
+        "n_pool_confident": 15758
+      },
+      {
+        "seed": 44,
+        "top1": 0.4599,
+        "n_pool_confident": 15758
+      },
+      {
+        "seed": 45,
+        "top1": 0.4696,
+        "n_pool_confident": 15758
+      },
+      {
+        "seed": 46,
+        "top1": 0.469,
+        "n_pool_confident": 15758
+      },
+      {
+        "seed": 47,
+        "top1": 0.4595,
+        "n_pool_confident": 15758
+      },
+      {
+        "seed": 48,
+        "top1": 0.4682,
+        "n_pool_confident": 15758
+      },
+      {
+        "seed": 49,
+        "top1": 0.4628,
+        "n_pool_confident": 15758
+      },
+      {
+        "seed": 50,
+        "top1": 0.4749,
+        "n_pool_confident": 15758
+      },
+      {
+        "seed": 51,
+        "top1": 0.4647,
+        "n_pool_confident": 15758
+      }
+    ]
+  },
+  "verdict": {
+    "b_wins": "10/10",
+    "wilcoxon_p": 0.002,
+    "parity_band_1pp": false
+  },
+  "config_echo": {
+    "tau": 0.95,
+    "rounds": 5,
+    "seeds": [
+      42,
+      43,
+      44,
+      45,
+      46,
+      47,
+      48,
+      49,
+      50,
+      51
+    ],
+    "n_pool": 36082
+  },
+  "wall_clock_sec": 450.9
+}
