@@ -1,0 +1,320 @@
+{
+ "date": "2026-09-07T22:26:28",
+ "protocol": "PSD-POOLDECOMP-PREREG-001 (2x2 filtering x pool-size decomposition, post-hoc mechanism diagnostic)",
+ "layer": "public_human_benchmark",
+ "harness": "identical to E9: frozen features_joint_ep300.npz, seed-42 10% subset, r16 corrected protocol; pseudo-labels from the SAME clustering pipeline (run_selftrain final_pred_full), only pool composition differs (gate on/off x full/random-subset)",
+ "arms": {
+  "F0_Psel": {
+   "mean": 0.6753,
+   "std": 0.0024,
+   "rows": [
+    {
+     "seed": 42,
+     "n_pool": 35387,
+     "pool_oracle_precision_diag": 0.6908,
+     "top1": 0.6753,
+     "macro_f1": 0.673
+    },
+    {
+     "seed": 43,
+     "n_pool": 35359,
+     "pool_oracle_precision_diag": 0.6912,
+     "top1": 0.6759,
+     "macro_f1": 0.6728
+    },
+    {
+     "seed": 44,
+     "n_pool": 35534,
+     "pool_oracle_precision_diag": 0.6898,
+     "top1": 0.6731,
+     "macro_f1": 0.671
+    },
+    {
+     "seed": 45,
+     "n_pool": 35371,
+     "pool_oracle_precision_diag": 0.6908,
+     "top1": 0.6733,
+     "macro_f1": 0.6714
+    },
+    {
+     "seed": 46,
+     "n_pool": 35553,
+     "pool_oracle_precision_diag": 0.6908,
+     "top1": 0.6787,
+     "macro_f1": 0.6761
+    },
+    {
+     "seed": 47,
+     "n_pool": 35630,
+     "pool_oracle_precision_diag": 0.6861,
+     "top1": 0.6722,
+     "macro_f1": 0.6695
+    },
+    {
+     "seed": 48,
+     "n_pool": 35515,
+     "pool_oracle_precision_diag": 0.6935,
+     "top1": 0.6781,
+     "macro_f1": 0.6755
+    },
+    {
+     "seed": 49,
+     "n_pool": 35481,
+     "pool_oracle_precision_diag": 0.6916,
+     "top1": 0.6772,
+     "macro_f1": 0.6745
+    },
+    {
+     "seed": 50,
+     "n_pool": 35326,
+     "pool_oracle_precision_diag": 0.6922,
+     "top1": 0.6766,
+     "macro_f1": 0.6738
+    },
+    {
+     "seed": 51,
+     "n_pool": 35535,
+     "pool_oracle_precision_diag": 0.6885,
+     "top1": 0.6725,
+     "macro_f1": 0.6688
+    }
+   ]
+  },
+  "F0_Pfull": {
+   "mean": 0.6756,
+   "std": 0.0025,
+   "rows": [
+    {
+     "seed": 42,
+     "n_pool": 36082,
+     "pool_oracle_precision_diag": 0.6831,
+     "top1": 0.6739,
+     "macro_f1": 0.6715
+    },
+    {
+     "seed": 43,
+     "n_pool": 36082,
+     "pool_oracle_precision_diag": 0.6836,
+     "top1": 0.6756,
+     "macro_f1": 0.6724
+    },
+    {
+     "seed": 44,
+     "n_pool": 36082,
+     "pool_oracle_precision_diag": 0.6841,
+     "top1": 0.6749,
+     "macro_f1": 0.6725
+    },
+    {
+     "seed": 45,
+     "n_pool": 36082,
+     "pool_oracle_precision_diag": 0.6828,
+     "top1": 0.6748,
+     "macro_f1": 0.6725
+    },
+    {
+     "seed": 46,
+     "n_pool": 36082,
+     "pool_oracle_precision_diag": 0.6846,
+     "top1": 0.6801,
+     "macro_f1": 0.6775
+    },
+    {
+     "seed": 47,
+     "n_pool": 36082,
+     "pool_oracle_precision_diag": 0.6813,
+     "top1": 0.672,
+     "macro_f1": 0.6692
+    },
+    {
+     "seed": 48,
+     "n_pool": 36082,
+     "pool_oracle_precision_diag": 0.6874,
+     "top1": 0.6776,
+     "macro_f1": 0.6749
+    },
+    {
+     "seed": 49,
+     "n_pool": 36082,
+     "pool_oracle_precision_diag": 0.6851,
+     "top1": 0.6781,
+     "macro_f1": 0.6751
+    },
+    {
+     "seed": 50,
+     "n_pool": 36082,
+     "pool_oracle_precision_diag": 0.6836,
+     "top1": 0.6764,
+     "macro_f1": 0.6736
+    },
+    {
+     "seed": 51,
+     "n_pool": 36082,
+     "pool_oracle_precision_diag": 0.6818,
+     "top1": 0.6727,
+     "macro_f1": 0.6687
+    }
+   ]
+  },
+  "F1_Pfull": {
+   "mean": 0.6756,
+   "std": 0.0025,
+   "rows": [
+    {
+     "seed": 42,
+     "n_pool": 36082,
+     "pool_oracle_precision_diag": 0.6831,
+     "top1": 0.6739,
+     "macro_f1": 0.6715
+    },
+    {
+     "seed": 43,
+     "n_pool": 36082,
+     "pool_oracle_precision_diag": 0.6836,
+     "top1": 0.6756,
+     "macro_f1": 0.6724
+    },
+    {
+     "seed": 44,
+     "n_pool": 36082,
+     "pool_oracle_precision_diag": 0.6841,
+     "top1": 0.6749,
+     "macro_f1": 0.6725
+    },
+    {
+     "seed": 45,
+     "n_pool": 36082,
+     "pool_oracle_precision_diag": 0.6828,
+     "top1": 0.6748,
+     "macro_f1": 0.6725
+    },
+    {
+     "seed": 46,
+     "n_pool": 36082,
+     "pool_oracle_precision_diag": 0.6846,
+     "top1": 0.6801,
+     "macro_f1": 0.6775
+    },
+    {
+     "seed": 47,
+     "n_pool": 36082,
+     "pool_oracle_precision_diag": 0.6813,
+     "top1": 0.672,
+     "macro_f1": 0.6692
+    },
+    {
+     "seed": 48,
+     "n_pool": 36082,
+     "pool_oracle_precision_diag": 0.6874,
+     "top1": 0.6776,
+     "macro_f1": 0.6749
+    },
+    {
+     "seed": 49,
+     "n_pool": 36082,
+     "pool_oracle_precision_diag": 0.6851,
+     "top1": 0.6781,
+     "macro_f1": 0.6751
+    },
+    {
+     "seed": 50,
+     "n_pool": 36082,
+     "pool_oracle_precision_diag": 0.6836,
+     "top1": 0.6764,
+     "macro_f1": 0.6736
+    },
+    {
+     "seed": 51,
+     "n_pool": 36082,
+     "pool_oracle_precision_diag": 0.6818,
+     "top1": 0.6727,
+     "macro_f1": 0.6687
+    }
+   ]
+  },
+  "F1_Psel": {
+   "mean": 0.6758,
+   "std": 0.0025,
+   "rows": [
+    {
+     "seed": 42,
+     "n_pool": 35387,
+     "pool_oracle_precision_diag": 0.6828,
+     "top1": 0.6741,
+     "macro_f1": 0.6718
+    },
+    {
+     "seed": 43,
+     "n_pool": 35359,
+     "pool_oracle_precision_diag": 0.6833,
+     "top1": 0.6747,
+     "macro_f1": 0.6713
+    },
+    {
+     "seed": 44,
+     "n_pool": 35534,
+     "pool_oracle_precision_diag": 0.6837,
+     "top1": 0.6747,
+     "macro_f1": 0.6723
+    },
+    {
+     "seed": 45,
+     "n_pool": 35371,
+     "pool_oracle_precision_diag": 0.683,
+     "top1": 0.6768,
+     "macro_f1": 0.6743
+    },
+    {
+     "seed": 46,
+     "n_pool": 35553,
+     "pool_oracle_precision_diag": 0.6841,
+     "top1": 0.6803,
+     "macro_f1": 0.6778
+    },
+    {
+     "seed": 47,
+     "n_pool": 35630,
+     "pool_oracle_precision_diag": 0.6813,
+     "top1": 0.6746,
+     "macro_f1": 0.6717
+    },
+    {
+     "seed": 48,
+     "n_pool": 35515,
+     "pool_oracle_precision_diag": 0.6871,
+     "top1": 0.6773,
+     "macro_f1": 0.6746
+    },
+    {
+     "seed": 49,
+     "n_pool": 35481,
+     "pool_oracle_precision_diag": 0.685,
+     "top1": 0.677,
+     "macro_f1": 0.674
+    },
+    {
+     "seed": 50,
+     "n_pool": 35326,
+     "pool_oracle_precision_diag": 0.6834,
+     "top1": 0.6771,
+     "macro_f1": 0.6744
+    },
+    {
+     "seed": 51,
+     "n_pool": 35535,
+     "pool_oracle_precision_diag": 0.6816,
+     "top1": 0.6711,
+     "macro_f1": 0.6672
+    }
+   ]
+  }
+ },
+ "effects": {
+  "filter_main_effect_pp": -0.02,
+  "size_main_effect_pp": 0.0,
+  "abs_ratio_size_over_filter": 0.2,
+  "reading": "filter dominates (|filter| > |size|)"
+ },
+ "decision_rule_note": "exploratory diagnostic (registered after E9 results visible); per-arm Wilcoxon vs E9 arm intentionally NOT claimed as significance; 3x dominance reading is a mechanism statement only",
+ "wall_clock_sec": 10090.5
+}
