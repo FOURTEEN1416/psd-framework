@@ -29,3 +29,7 @@ Driver: `scripts/run_r23_extbase_anchor.py`（待写；特征提取复用官方 
 | 版本 | 日期 | 说明 |
 |---|---|---|
 | v1.0 | 2026-09-07 | FROZEN：AimCLR++ checkpoint → E9 (a)/(c) 臂描述性锚点。 |
+
+## Amendment 1 (2026-09-07, dated, frozen before any download completed)
+
+Investigation of `Levigty/AimCLR-v2` found **no released AimCLR++ checkpoint** (the journal repo has no model-release section; its README points only to dataset mirrors). Per the FAIL-TO-RUN clause, the anchor target is switched to the **official released AimCLR (AAAI 2022) NTU60 xsub joint checkpoint** from the conference repo's `released_model` folder (Google Drive, file id `14rayAgGWAHFL-JdeCJQOwP4cJ-fHglJS`, recorded at download time with SHA-256). Rationale: the anchor's purpose is "a published method's public checkpoint under our harness" — the conference AimCLR is the direct ancestor of our physics layer and equally qualifies; the AimCLR++ inaccessibility is disclosed verbatim in the evidence JSON. The paper's §2/§4 wording must say "official released AimCLR checkpoint" (not AimCLR++).
