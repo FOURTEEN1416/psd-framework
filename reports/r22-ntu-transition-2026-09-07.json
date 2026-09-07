@@ -1,0 +1,244 @@
+{
+  "date": "2026-09-07T10:55:59",
+  "protocol": "PSD-NTU-TRANS-001 (real-domain taxonomy-transition cost replication, R22b#5)",
+  "layer": "public_human_benchmark",
+  "y_prime": {
+    "n_classes": 49,
+    "merge_groups": [
+      [
+        "drink water",
+        "eat meal/snack"
+      ],
+      [
+        "brushing teeth",
+        "brushing hair"
+      ],
+      [
+        "sitting down",
+        "standing up (from sitting position)"
+      ],
+      [
+        "wear jacket",
+        "take off jacket"
+      ],
+      [
+        "wear a shoe",
+        "take off a shoe"
+      ],
+      [
+        "wear on glasses",
+        "take off glasses"
+      ],
+      [
+        "put on a hat/cap",
+        "take off a hat/cap"
+      ],
+      [
+        "nod head/bow",
+        "shake head"
+      ],
+      [
+        "punching/slapping other person",
+        "kicking other person",
+        "pushing other person"
+      ],
+      [
+        "walking towards each other",
+        "walking apart from each other"
+      ]
+    ],
+    "yp_names": [
+      "consume",
+      "groom-brush",
+      "sit-stand transition",
+      "jacket on/off",
+      "shoe on/off",
+      "glasses on/off",
+      "hat on/off",
+      "head gesture",
+      "strike other person",
+      "bidirectional walk",
+      "drop",
+      "pick up",
+      "throw",
+      "clapping",
+      "reading",
+      "writing",
+      "tear up paper",
+      "cheer up",
+      "hand waving",
+      "kicking something",
+      "reach into pocket",
+      "hopping",
+      "jump up",
+      "phone call",
+      "play with phone/tablet",
+      "type on a keyboard",
+      "point to something",
+      "taking a selfie",
+      "check time (from watch)",
+      "rub two hands together",
+      "wipe face",
+      "salute",
+      "put the palms together",
+      "cross hands in front",
+      "sneeze/cough",
+      "staggering",
+      "falling",
+      "touch head",
+      "touch chest",
+      "touch back",
+      "touch neck",
+      "nausea or vomiting",
+      "use a fan (with hand or paper)/feeling warm",
+      "pat on back of other person",
+      "point finger at the other person",
+      "hugging other person",
+      "giving something to other person",
+      "touch other person's pocket",
+      "handshaking"
+    ]
+  },
+  "arms_note": "D = frozen Y-pretext MLP penultimate + linear head retrain on Y' (transition cost = head only); C = same architecture end-to-end supervised from scratch on Y' (transition cost = full 80ep). D-pretext trained once on Y labels (80ep) and amortized across transitions: pretext wall 56.6s disclosed, excluded from D per-transition cost per protocol §3.",
+  "runs": [
+    {
+      "arm": "D",
+      "budget": "full",
+      "seed": 42,
+      "wall_clock_sec": 465.89,
+      "val_acc": 0.6613,
+      "gpu_before": "24 %, 2354 MiB",
+      "gpu_after": "3 %, 2784 MiB"
+    },
+    {
+      "arm": "D",
+      "budget": "full",
+      "seed": 43,
+      "wall_clock_sec": 341.67,
+      "val_acc": 0.6613,
+      "gpu_before": "24 %, 2354 MiB",
+      "gpu_after": "3 %, 2784 MiB"
+    },
+    {
+      "arm": "D",
+      "budget": "full",
+      "seed": 44,
+      "wall_clock_sec": 481.58,
+      "val_acc": 0.6613,
+      "gpu_before": "24 %, 2354 MiB",
+      "gpu_after": "3 %, 2784 MiB"
+    },
+    {
+      "arm": "D",
+      "budget": "10pct",
+      "seed": 42,
+      "wall_clock_sec": 16.05,
+      "val_acc": 0.6227,
+      "gpu_before": "24 %, 2354 MiB",
+      "gpu_after": "3 %, 2784 MiB"
+    },
+    {
+      "arm": "D",
+      "budget": "10pct",
+      "seed": 43,
+      "wall_clock_sec": 8.63,
+      "val_acc": 0.6227,
+      "gpu_before": "24 %, 2354 MiB",
+      "gpu_after": "3 %, 2784 MiB"
+    },
+    {
+      "arm": "D",
+      "budget": "10pct",
+      "seed": 44,
+      "wall_clock_sec": 8.56,
+      "val_acc": 0.6227,
+      "gpu_before": "24 %, 2354 MiB",
+      "gpu_after": "3 %, 2784 MiB"
+    },
+    {
+      "arm": "C",
+      "budget": "full",
+      "seed": 42,
+      "wall_clock_sec": 34.54,
+      "val_acc": 0.6172,
+      "gpu_before": "9 %, 2927 MiB",
+      "gpu_after": "73 %, 3141 MiB"
+    },
+    {
+      "arm": "C",
+      "budget": "full",
+      "seed": 43,
+      "wall_clock_sec": 35.13,
+      "val_acc": 0.6216,
+      "gpu_before": "73 %, 3117 MiB",
+      "gpu_after": "77 %, 3326 MiB"
+    },
+    {
+      "arm": "C",
+      "budget": "full",
+      "seed": 44,
+      "wall_clock_sec": 34.94,
+      "val_acc": 0.6272,
+      "gpu_before": "77 %, 3088 MiB",
+      "gpu_after": "75 %, 3092 MiB"
+    },
+    {
+      "arm": "C",
+      "budget": "10pct",
+      "seed": 42,
+      "wall_clock_sec": 3.55,
+      "val_acc": 0.5267,
+      "gpu_before": "75 %, 2854 MiB",
+      "gpu_after": "77 %, 2858 MiB"
+    },
+    {
+      "arm": "C",
+      "budget": "10pct",
+      "seed": 43,
+      "wall_clock_sec": 3.83,
+      "val_acc": 0.509,
+      "gpu_before": "77 %, 2854 MiB",
+      "gpu_after": "16 %, 2854 MiB"
+    },
+    {
+      "arm": "C",
+      "budget": "10pct",
+      "seed": 44,
+      "wall_clock_sec": 4.11,
+      "val_acc": 0.4935,
+      "gpu_before": "16 %, 2850 MiB",
+      "gpu_after": "16 %, 2440 MiB"
+    }
+  ],
+  "verdicts": {
+    "full": {
+      "median_ratio_D_over_C": 0.07,
+      "acc_D_mean": 0.6613,
+      "acc_C_mean": 0.622,
+      "acc_gap_pp_D_minus_C": 3.93,
+      "band_pp": 2.3,
+      "verdict": "FAILS"
+    },
+    "10pct": {
+      "median_ratio_D_over_C": 0.44,
+      "acc_D_mean": 0.6227,
+      "acc_C_mean": 0.5097,
+      "acc_gap_pp_D_minus_C": 11.3,
+      "band_pp": 2.3,
+      "verdict": "FAILS"
+    }
+  },
+  "config_echo": {
+    "epochs": 80,
+    "seeds": [
+      42,
+      43,
+      44
+    ],
+    "budget_frac": 0.1,
+    "device": "cuda",
+    "n_train": 40091,
+    "n_val": 16487
+  },
+  "wall_clock_sec": 1512.4
+}

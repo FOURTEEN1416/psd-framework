@@ -385,3 +385,5 @@ YOLO-PetX（IEEE CEECT 2025，全题名经 GitHub 全局代码检索锁定）、
 **R22b 总评校准**（采纳为修复方向）：诚信与溯源优于 PR 中位数；短板=无外部基线比较、标题结构仅合成层背书、真实动物端到端为负结果、两个摘要核心数字的披露依赖。修复策略=弱化声明+内联披露+补检验，不动标题（R20 用户终裁）。
 
 **R22b#5 补充处置（2026-09-07 追加）**：查证 run_c1_decouple.py 确认 decouple 臂结构上=冻结骨干+头重训（load Y ckpt→freeze_backbone→trainer.fit），R22b 要求的"通用冻结对照"与 decouple 臂架构重合——故修复走归因披露而非新实验：§4.3 E6 段补 "An honest attribution boundary: the wall-clock ratio reflects the frozen-versus-retrained architecture distinction, available to any frozen-backbone design; what the decoupled design contributes is the frozen path's accuracy and label economics (seeds+proposals 而非 Y′ 全量重标注——E6 同标注单元双臂，种子预算优势由小预算臂行使)。" 真域转换实验（NTU60 类合并，baseline 臂需数天 GPU 300ep×3流重训）=第三轮实验候选，**用户决策项**（成本/收益：直接回应标题结构攻击 vs 多天算力）。
+
+**R22b#5 最终处置（2026-09-07 转换实验收官）**：PSD-NTU-TRANS-001 冻结执行完毕——成本端点双档 FAILS 如实入文（MLP 尺度下耦合臂 35s 全重训，无成本可省；E6 缩放警示语印证）；精度端点预注册预测命中（D 全档 +3.9pp/10% +11.3pp 出带）。L12 重写为"成本仅合成层+真域复现 FAILS 成本端点但确认精度价值"，正文新装 E6-real 段（solver 族未冻结如实披露，拒绝 post-hoc 匹配重跑）。处置性质：预注册跑前冻结的 FAILS 结果按冻结规则如实上报——论文的诚实性主张经受了第三次实战检验（PanAf 翻转/R16 修正/本次 FAILS）。攻击面"标题结构仅合成层背书"被替换为"标题结构有真域复现且 FAILS 如实披露"——诚实叙事升级。
