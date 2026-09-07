@@ -87,3 +87,7 @@ Disclosures: (1) the artifact field `median_ratio_D_over_C` stores the cost-redu
 ### Correction (2026-09-07, independent final audit; dated amendment — §8 numbers and verdicts above are unchanged)
 
 The interpretation sentence "The pre-registered accuracy-asymmetry prediction (§4) is confirmed" is imprecise. §4 anticipated that the **coupled** arm may dominate at full budget (per the L10 gradient) while the decoupled arm may dominate at 10% labels; the observed outcome was **decoupled-arm dominance at BOTH budgets** (+3.93 pp full, +11.30 pp at 10%, both outside the ±2.3 pp band) — the full-budget half of the anticipation **did not materialize**. "Confirmed" overstates a two-sided possibility into a confirmation and is exactly the wording the manuscript corrected (R23b S1: E6-real / intro / L12 all state "did not materialize"). This file's results table, verdicts, and disclosures are unaffected; only the interpretation sentence is superseded by the manuscript's wording.
+
+## 9. Downstream replication (2026-09-07, dated pointer — this file is not modified further)
+
+The MLP-scale design's cost endpoint was arithmetically unpassable (coupled arm retrains in ~35 s). A ST-GCN-scale three-arm replication with a matched-solver control is registered as **PSD-NTU-TRANS-002** (`ntu-transition-002-preregistration.md`, FROZEN v1.0 2026-09-07); its outcome, once run, supersedes the L12 wording direction per its own frozen rule. This file's v1.0/v1.1 content is retained unchanged.

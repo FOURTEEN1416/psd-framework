@@ -119,12 +119,14 @@ class ScaledLR:
 def main():
     import argparse
     ap = argparse.ArgumentParser()
-    ap.add_argument("--seeds", type=int, default=3, help="selftrain seeds count (3 or 10)")
+    ap.add_argument("--seeds", type=int, default=3, help="selftrain seeds count (3, 10, or 30)")
     ap.add_argument("--with-test", action="store_true", help="add test-split secondary number")
     args = ap.parse_args()
     global SEEDS
     if args.seeds == 10:
         SEEDS = tuple(range(42, 52))
+    elif args.seeds == 30:
+        SEEDS = tuple(range(42, 72))
     import torch
     from psd.training.tcl_selftrain import run_selftrain
 
