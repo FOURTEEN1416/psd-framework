@@ -40,6 +40,10 @@ Two deviations from the frozen method, both disclosed before any result was used
 
 **Result (2026-09-05, n=12000 clips, 60 classes present, seeds 42/43/44)**: (c) full ref 54.34%; (a) 10% linear 45.42% (linear retention 83.58%); (b) PSD semantic pipeline 48.36/49.65/47.48 → mean 48.50%, **retention 89.24% → PARTIAL** (pre-registered 85–90% band). PSD arm exceeds the 10% linear arm by +3.1pp (all 3 seeds).
 
+## Amendment 3 (2026-09-07, seed expansion, post 3-seed readout)
+
+Initial readout used the frozen 3 seeds (42/43/44): mean 48.50%, retention 89.24% PARTIAL (logged in Amendment 2). Following the E9-series convention (n=3→n=10 seed expansion before any claim is assembled into the manuscript; applied identically to E9d/PanAf500), the b arm was re-run at 10 seeds (42–51), arms, budget, pretext, and decision rule unchanged: b mean 48.29% ± 0.76 → **retention 88.86% → PARTIAL** (verdict unchanged). Every seed arm still exceeds the (a) linear arm (min 46.90% vs 45.42%; +2.9pp on mean). The (a)/(c) arms are unchanged (deterministic given the fixed seed-42 subset). The 3-seed readout above is retained in this file and superseded by the 10-seed number as the reported caliber. Evidence: `reports/p5b-ntu120-retention-2026-09-07.json`.
+
 ## 5. Reproduction
 
-Executed: `scripts/run_p5b_generic_retention.py --pkl data/pyskl/ntu120_hrnet.pkl --name ntu120 --max 12000`; evidence `reports/p5b-ntu120-retention-2026-09-05.json` (2026-09-05 re-run post-bugfix).
+Executed: `scripts/run_p5b_generic_retention.py --pkl data/pyskl/ntu120_hrnet.pkl --name ntu120 --max 12000`; evidence `reports/p5b-ntu120-retention-2026-09-07.json` (10-seed terminal caliber; the 2026-09-05 3-seed file is retained as the pre-expansion readout).

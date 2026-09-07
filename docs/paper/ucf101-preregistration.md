@@ -32,6 +32,10 @@
 
 **Result (2026-09-05, n=10000 clips, 101 classes, seeds 42/43/44)**: (c) full ref 23.11%; (a) 10% linear 14.04% (linear retention 60.75%); (b) PSD semantic pipeline 12.74/14.47/16.20 → mean 14.47%, **retention 62.62% → FAILS** (<85% line). PSD arm exceeds 10% linear by only +0.4pp. Honest report per the frozen rule: budget behavior narrows further; E9's claim is scoped to its measured domains. Cross-domain gradient (NTU60 90.6% → NTU120 89.2% → UCF101 62.6%) tracks the (c)-reference quality (74.3% → 54.3% → 23.1%), indicating pretext feature quality is the dominant factor in retention.
 
+## Amendment 2 (2026-09-07, seed expansion, post 3-seed readout)
+
+Initial readout used the frozen 3 seeds (42/43/44): mean 14.47%, retention 62.62% FAILS (logged in Amendment 1). Following the E9-series convention (n=3→n=10 seed expansion before any claim is assembled into the manuscript; applied identically to E9b/E9d), the b arm was re-run at 10 seeds (42–51), arms, budget, pretext, and decision rule unchanged: b mean 15.40% ± 1.89 → **retention 66.64% → FAILS** (verdict and direction unchanged; still below the 85% line, still reported as a negative boundary). The mean-vs-linear gap widens slightly (+1.4pp vs +0.4pp) but 2 of 10 seed arms remain below the (a) linear arm (12.74/13.39 vs 14.04), so no per-seed uniformity is claimed. The (a)/(c) arms are unchanged (deterministic given the fixed seed-42 subset). The 3-seed readout above is retained in this file and superseded by the 10-seed number as the reported caliber. Evidence: `reports/p5b-ucf101-retention-2026-09-07.json`.
+
 ## 5. Reproduction
 
-Executed: `scripts/run_p5b_generic_retention.py --pkl data/pyskl/ucf101_hrnet.pkl --name ucf101 --max 10000`; evidence `reports/p5b-ucf101-retention-2026-09-05.json`.
+Executed: `scripts/run_p5b_generic_retention.py --pkl data/pyskl/ucf101_hrnet.pkl --name ucf101 --max 10000`; evidence `reports/p5b-ucf101-retention-2026-09-07.json` (10-seed terminal caliber; the 2026-09-05 3-seed file is retained as the pre-expansion readout).
