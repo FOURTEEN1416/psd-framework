@@ -364,3 +364,22 @@ YOLO-PetX（IEEE CEECT 2025，全题名经 GitHub 全局代码检索锁定）、
 **工程坑再应验**：Bash heredoc 把 `\approx` 吃成 `\a`=BEL(U+0007) 注入 06——字节级扫描+Write 工具修复，全 tex 控制字符归零。
 **验证**：34 页 0 错误 0 未定义；R21 残留 13 项全清零；断言全过；citation_checker 0/0；L12 渲染确认 p25。零实验数字改动（仅修正错误归属/口径/限定/新增诚实限定）。
 **教训**：①跨层分母是三层口径铁律的隐蔽违例——"retention"的分母必须与被测臂同分布同协议，96.6(base)≠offset 的自身 full-budget；②"video-level vs frame-level"这类标签粒度描述必须与 §4.1 数据描述逐字一致，否则被自己打脸；③ddof 口径要全文一致（§4.2 声明 ddof~1 则所有 ± 要么遵守要么显式标 caliber）；④标题级主张（过渡成本）也要有对应 limitation（L12），不能只给次要主张配限定。
+
+## R22 审计轮（2026-09-07，审计窗）
+
+**触发**：种子扩容链收官（E9b/c 10-seed 口径切换）+ 用户指令"继续执行审计"。
+**构成**：R22a 逐行数字一致性（独立 agent）+ R22b 恶意审稿人新视角（独立 agent，REJECT 建议 10 发现=1 CRITICAL+7 MAJOR+2 MINOR）+ 审计窗机械核查。
+
+**R22b 发现与处置**：
+1. CRITICAL E9 NTU60 3-seed 与 E9 系列惯例不一致（旗舰 90.6% 距线仅 0.6pp）→ **修复在飞**：10-seed 扩容已上 GPU（(a)/(c) 与 09-05 工件逐位一致自检过），收官后按判据切换。
+2. MAJOR 90.6% 缺 linear-only 88.7% 语境 + 无正式检验 → **已修**：摘要/结论/intro 贡献 4 补 "(a linear head on the frozen features alone retains 88.7%)"；E9b/c 补 one-sample t + Wilcoxon（NTU120 t=12.0 p<1e-5 / W p=0.002 显著；UCF101 t p=0.049 / W p=0.053 均不过族校正，正文如实写 direction-consistent not significant）；工件 r22-e9bc-gap-tests-2026-09-07.json。
+3. MAJOR 82.0%@20-clips 教师预算核算模糊 → **已修+查证**：教师=clean 合成层全预算（configs/p05_stgcn_bc_full.yaml：syn_22class_100per_class，2200 clips，noise 0；offset 零微调仅 41.2%）。§4.3 补全账目句（"marginal cost on top of a fully labeled source domain...quantifies adaptation under distribution shift—not learning a taxonomy from 20 clips alone"）；摘要同步 "(the marginal budget on top of a fully labeled source domain)"。
+4. MAJOR generic SSL 在两个真实层 ≥ PSD → **已修（措辞）**：intro 贡献 4 内联 "a generic-SSL control matches or exceeds the task-pretrained initialization at low budget on both real tiers tested"；§5 原有如实段落核实无改。
+5. MAJOR ≥3× 与稻草人对照（缺冻结通用骨干第三臂）→ **待决**：第三臂实验廉价可排（GPU 空闲后评估）；或按论文 design-claim 定位在 L12 内说明。
+6. MAJOR 单调梯度近循环 + 犬科粒度归因与 PanAf 矛盾 → **已修**：E7c 归因收窄为 "video-level single-label annotation protocol (one label per clip over multi-behavior footage)——a tier-specific diagnosis, not a claim that coarse granularity is universally prohibitive (PanAf500 reaches high retention under frame-level majority-voted labels)"。
+7. MAJOR 预注册自证无外部时间戳 → **用户人工项**（OSF/AsPredicted 或修订信说明），已入 submission-package 刷新清单。
+8. MAJOR E9 系列判定无正式检验 + Holm 族定义自由度 → **已修（E9b/c）**：两检验+族内 Holm 校正+族定义写入工件；NTU60 等扩容收官后同口径补。
+9. MINOR fig5 caption "a few tenths of a percent" 与实际位移（10→16.5）不符 → **已修**：改 "displaced along the log axis for legibility and the displacement is listed per point...retention values, error bars, and ordinal spacing unaffected"。
+10. MINOR claim-then-caveat 结构 → **已修（部分）**：#2/#3/#4 的修复均采用"披露内联进声明"式（警告后声明），摘要三处已重写。
+
+**R22b 总评校准**（采纳为修复方向）：诚信与溯源优于 PR 中位数；短板=无外部基线比较、标题结构仅合成层背书、真实动物端到端为负结果、两个摘要核心数字的披露依赖。修复策略=弱化声明+内联披露+补检验，不动标题（R20 用户终裁）。

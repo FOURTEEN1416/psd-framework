@@ -1,0 +1,31 @@
+{
+  "date": "2026-09-07",
+  "purpose": "R22b#8: formal paired-arm tests for the E9b/E9c pipeline-vs-linear gaps (10-seed caliber), requested by the stats-protocol commitment in manuscript section 4.2",
+  "tests": "one-sample t-test and Wilcoxon signed-rank of arm-(b) per-seed top-1 against the deterministic arm-(a) linear value; arm (a) is deterministic given the fixed seed-42 stratified subset, so the pairing is b-seed vs the single (a) value",
+  "family_note": "Family = the two E9b/E9c gap tests reported here (m=2); a Holm step-down within this family keeps both qualitative readings unchanged (NTU120 both tests pass at m=1 and m=2 thresholds; UCF101 passes neither at corrected thresholds). The E9d PanAf gap (+1.2pp, 5/10 wins) is not tested here because its b-arm distribution spans ties with the linear arm at near-chance separation on a long-tailed 9-class space; reported as directional only, per the manuscript.",
+  "results": {
+    "E9b_NTU120": {
+      "b_mean": 0.48291,
+      "linear_a": 0.4542,
+      "delta_pp": 2.87,
+      "one_sample_t": {"t": 12.0, "df": 9, "p": 0.0000006, "significant": true},
+      "wilcoxon_signed_rank": {"W": 0.0, "p": 0.002, "significant": true},
+      "seed_wins": "10/10",
+      "reading": "the semantic pipeline's margin over a budget-restricted linear head is statistically robust at the 10-seed caliber"
+    },
+    "E9c_UCF101": {
+      "b_mean": 0.15401,
+      "linear_a": 0.1404,
+      "delta_pp": 1.36,
+      "one_sample_t": {"t": 2.27, "df": 9, "p": 0.0494, "significant": false, "note": "nominally below 0.05 but does not survive any within-family correction"},
+      "wilcoxon_signed_rank": {"W": 8.5, "p": 0.0527, "significant": false},
+      "seed_wins": "8/10",
+      "reading": "direction-consistent but not statistically significant under either test; the manuscript must not claim a significant pipeline advantage on this tier"
+    }
+  },
+  "evidence_inputs": [
+    "reports/p5b-ntu120-retention-2026-09-07.json",
+    "reports/p5b-ucf101-retention-2026-09-07.json"
+  ],
+  "driver_note": "computed inline via scipy.stats during the R22 audit window; deterministic given the input JSONs"
+}

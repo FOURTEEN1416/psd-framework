@@ -33,7 +33,6 @@ p07 = j("p07-endtoend-ak-full12-2026-09-04.json")   # supervised full reference 
 p12 = j("p12-akv2-replication-2026-09-04.json")     # supervised full reference only
 p14 = j("p14-ntu-lowres-2026-09-04.json")           # supervised (c) reference only
 w23 = j("p05-al-efficiency-warmstart-short-2026-08-25.json")
-y_full = j("p05-stgcnbc-synthetic-100perclass-Y.json")
 
 pts = []
 # v1 public-real: spc2 = 18/141 anchors (9 classes with train coverage)
