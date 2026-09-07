@@ -46,6 +46,7 @@ Driver: `scripts/run_r23_ssl_baseline.py`; evidence: `reports/r23-ssl-baseline-<
 
 | 版本 | 日期 | 说明 |
 |---|---|---|
+| v1.1 | 2026-09-07 | 终审 dated 勘误（Amendment 2）：Holm 族重定义为八检验（3 tier gap×2 + SSL×2），SSL 校正 p 0.008→0.012（UCF 0.141），定性判定不变；实算工件 r23-holm-family-2026-09-07.json。 |
 | v1.0 | 2026-09-07 | FROZEN: R23c#4 驱动的外部 SSL 基线协议。判据/臂/种子/超参冻结。 |
 
 ## 7. Results (2026-09-07, post-run)
@@ -56,7 +57,7 @@ Driver: `scripts/run_r23_ssl_baseline.py`; evidence: `reports/r23-ssl-baseline-<
 | (b) PSD pipeline | 67.53% ± 0.24 |
 | (mt) Mean-Teacher pool distillation | **46.79% ± 0.61** |
 
-**Verdict per the frozen §4 rule: the PSD pipeline exceeds the external SSL baseline by +20.7pp — 10/10 paired seed wins, Wilcoxon p=0.002 (Holm-corrected 0.008 over the series-wide six-test family), far outside the ±1pp parity band and far above the +2.9pp "no advantage" trigger.** The Mean-Teacher arm is heavily handicapped in this harness exactly as the frozen §5 disclosure anticipated: soft pseudo-labels over 60 classes are sparse, and the τ=0.95 confidence mask admits only 15,758 of 36,082 pool clips (vs. the PSD pool's ~35.4k at near-full acceptance) — consistent with the paper's mechanism claim that at NTU scale near-full pool restoration *is* the mechanism, which a confidence-thresholded external SSL baseline cannot replicate. Both directions of the frozen rule were live; the favorable direction materialized and is reported with its mechanism-consistent explanation. Evidence: `reports/r23-ssl-baseline-2026-09-07.json`; driver `scripts/run_r23_ssl_baseline.py`.
+**Verdict per the frozen §4 rule: the PSD pipeline exceeds the external SSL baseline by +20.7pp — 10/10 paired seed wins, Wilcoxon p=0.002 (Holm-corrected 0.008 over the series-wide six-test family), far outside the ±1pp parity band and far above the +2.9pp "no advantage" trigger.** *(Correction, Amendment 2 below: the printed corrected value is superseded by the recomputed eight-test family correction.)* The Mean-Teacher arm is heavily handicapped in this harness exactly as the frozen §5 disclosure anticipated: soft pseudo-labels over 60 classes are sparse, and the τ=0.95 confidence mask admits only 15,758 of 36,082 pool clips (vs. the PSD pool's ~35.4k at near-full acceptance) — consistent with the paper's mechanism claim that at NTU scale near-full pool restoration *is* the mechanism, which a confidence-thresholded external SSL baseline cannot replicate. Both directions of the frozen rule were live; the favorable direction materialized and is reported with its mechanism-consistent explanation. Evidence: `reports/r23-ssl-baseline-2026-09-07.json`; driver `scripts/run_r23_ssl_baseline.py`.
 
 ## Amendment 1 (2026-09-07, second-domain extension, frozen before run)
 
@@ -72,4 +73,15 @@ Consistency check passed: the (a) arm reproduces the E9c artifact's 14.04% exact
 | (b) PSD pipeline | 15.40% ± 1.89 |
 | (mt) Mean-Teacher pool distillation | **14.17% ± 0.87** |
 
-**Verdict: PSD exceeds the external SSL baseline by +1.2pp (8/10 paired seed wins, Wilcoxon p=0.047 raw, not significant under the series-wide Holm-6 correction) — direction-consistent with NTU60, magnitude vanishing on the weak-reference domain.** The Mean-Teacher arm lands at parity with its own teacher (the linear head, 14.04%): on a tier whose full-budget reference is itself weak (23.11%), confidence-thresholded pool distillation adds nothing — the same pretext-learnability gradient that governs the E9 series, now observed on the external-baseline axis as well. Two-point SSL comparison: disadvantage of the external baseline is +20.7pp where the reference is strong (74.45%) and +1.2pp (n.s.) where it is weak (23.11%). Evidence: `reports/r23-ssl-baseline-ucf101-2026-09-07.json`.
+**Verdict: PSD exceeds the external SSL baseline by +1.2pp (8/10 paired seed wins, Wilcoxon p=0.047 raw, not significant under the series-wide Holm-6 correction) — direction-consistent with NTU60, magnitude vanishing on the weak-reference domain.** *(Correction, Amendment 2 below: the family size referenced here is superseded.)* The Mean-Teacher arm lands at parity with its own teacher (the linear head, 14.04%): on a tier whose full-budget reference is itself weak (23.11%), confidence-thresholded pool distillation adds nothing — the same pretext-learnability gradient that governs the E9 series, now observed on the external-baseline axis as well. Two-point SSL comparison: disadvantage of the external baseline is +20.7pp where the reference is strong (74.45%) and +1.2pp (n.s.) where it is weak (23.11%). Evidence: `reports/r23-ssl-baseline-ucf101-2026-09-07.json`.
+
+## Amendment 2 (2026-09-07, independent final audit; dated correction — no number above is edited)
+
+The final audit found that the Holm-corrected values printed in the two Results sections above reference a "six-test family" that (a) excluded the SSL tests themselves and (b) does not reproduce the printed 0.008 from any archived computation. The correction family is redefined once, series-wide, as **eight tests**: the pipeline-vs-linear gap tests on three tiers (one-sample t and Wilcoxon each) **plus both SSL Wilcoxon tests** (this protocol's two arms). Recomputed from the archived artifacts by `scripts/run_r23_holm_family.py` → `reports/r23-holm-family-2026-09-07.json`:
+
+| Test | raw p | Holm-8 corrected |
+|---|---|---|
+| SSL NTU60 (this file, §7) | 0.002 | **0.012** |
+| SSL UCF101 (Amendment 1) | 0.047 | **0.141** |
+
+Qualitative verdicts are unchanged (NTU60: significant; UCF101: not significant), and the reading is invariant to the narrower six-test family (gap tests only), under which the SSL tests would be reported raw (0.002 / 0.047). The manuscript (E9 / E9b / E9c passages) has been updated to the same family and values; the corrections printed above (0.008; "Holm-6") are superseded and retained only as the audit trail of what was printed.

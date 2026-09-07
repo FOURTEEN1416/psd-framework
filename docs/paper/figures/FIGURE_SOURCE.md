@@ -6,17 +6,17 @@
 
 | 图 | 产物 | 生成脚本 | 规格来源 | 数据依赖 | 状态 |
 |----|------|---------|---------|---------|------|
-| fig1 框架总览（hero） | `fig1_framework_overview.pdf`（矢量）+ `.png` 预览 | `scripts/make_fig1_overview.py`（仓库根 scripts/） | figure-specs.md §fig1 | 无（纯架构示意） | ✅ 已产出 |
-| fig2 语义迭代闭环 | `fig2_pseudo_label_loop.pdf`（矢量）+ `.png` 预览 | `scripts/make_fig2_pseudo_label_loop.py`（仓库根 scripts/） | figure-specs.md §fig2 | 无（算法流程示意） | ✅ 已产出 |
+| fig1 框架总览（hero） | `fig1_framework_overview.pdf`（矢量）+ `.png` 预览 | `figures/scripts/make_fig1_overview_v3.py`（印刷尺寸版，v0.3 起；根目录 `scripts/make_fig1_overview.py` 为 W17 旧版已弃用） | figure-specs.md §fig1 + R18 视觉门修订 | 无（纯架构示意） | ✅ 已产出 |
+| fig2 语义迭代闭环 | `fig2_pseudo_label_loop.pdf`（矢量）+ `.png` 预览 | `figures/scripts/make_fig2_pseudo_label_loop_v5.py`（印刷尺寸版，v0.3 起；根目录旧版已弃用） | figure-specs.md §fig2 | 无（算法流程示意） | ✅ 已产出 |
 | fig3 SMQ 分割 vs GT | `fig3_segmentation_qualitative.pdf`（矢量）+ `.png`(600dpi) | `docs/paper/figures/scripts/make_fig3_segmentation_qualitative.py` | figure-specs.md §fig3 + W22 登记节 | `reports/p02-smq-iou-eC-seeds-recheck.json`（E-C 定稿，含逐 episode gt/pred 边界序列） | ✅ 已产出（替换占位） |
 | fig4 主动学习效率曲线 | `fig4_al_efficiency.pdf`（矢量）+ `.png`(600dpi) | `docs/paper/figures/scripts/make_fig4_al_efficiency.py` | figure-specs.md §fig4 + W22 登记节 | `reports/p05-al-efficiency-short-2026-08-24.json`（W14 归档，curves 字段） | ✅ 已产出（替换占位） |
 
 ## 复现命令（仓库根目录执行）
 
 ```powershell
-# fig1/fig2（W17 产物，脚本位于仓库根 scripts/）
-python scripts/make_fig1_overview.py
-python scripts/make_fig2_pseudo_label_loop.py
+# fig1/fig2（终审 2026-09-07 勘正: 现行脚本为 figures/scripts/ 印刷尺寸版, 与 v0.3+ 登记一致）
+python docs/paper/figures/scripts/make_fig1_overview_v3.py
+python docs/paper/figures/scripts/make_fig2_pseudo_label_loop_v5.py
 # fig3/fig4（W22 产物，脚本随图入库 docs/paper/figures/scripts/）
 python docs/paper/figures/scripts/make_fig3_segmentation_qualitative.py
 python docs/paper/figures/scripts/make_fig4_al_efficiency.py
@@ -88,3 +88,5 @@ python docs/paper/figures/scripts/make_fig4_al_efficiency.py
 | v0.5 | 2026-09-05 | **R16 协议修正重绘（仅 fig5）**：R16 对抗审稿实锤端到端臂协议错误（最终头消费池片段真标签+oracle 停止），AK v1/v2 与 NTU 点改读修正协议工件 `r16-endtoend-pseudo-2026-09-05.json` / `r16-ntu-pseudo-2026-09-05.json`（全预算分母仍读纯监督归档 p07/p12/p14——不受协议错误影响）；y 轴 78-104→15-112（AK 保留率坍缩至 28.9/35.0/44.2%，NTU 90.6±0.2，synthetic-offset 84.9±4.5 不变）；caption 从"near-flat 低资源主张"改为诚实的 tier-dependent 叙事；修复 `syn_full` 硬编码回退（改 `y_full["summary"]["best_val_acc"]` 真读）。工件核验：mtime + pymupdf 抽取 y 轴刻度 20..100 确认更新。fig1-fig4 本轮零改动。 |
 
 | v0.6 | 2026-09-05 | **R18 judge 四轮视觉收敛（5/5 全过）**：fig1 底部两盒加宽+字号 5.9 修文字越界、自迭代弧移出盒外左缘、接口箭头下移避让；fig2 浮动 Ω/P/A 辐条标签两轮修不收敛后按删除优先原则移除（写回箭头保留），hub 扩至三行 Prototypes P/classifier Ω/anchors A 与 caption 定义对齐；fig4-AL（Figure 5）降高 4.45→4.05in 解 float 超页、基线标签升 y=7.2 离 spine、panel(b) 注释移左中两行+图例降位解三处碰撞；fig5-budget（Figure 4）y 下限 15→2 解 v1 误差棒下帽裁切、v1/v2-spc4 x 避让（13.9/11.5，caption 披露）、NTU ±0.2pp 误差棒小于 marker 入 caption。pdfimages 五图零嵌入位图（纯矢量）。judge 复验记录见 review-log R18。 |
+
+| v0.7 | 2026-09-07 | **独立终审勘正**：①顶部主表与复现命令的 fig1/fig2 脚本指向勘正为现行印刷尺寸版 v3/v5（原表残留 W17 根目录旧版，与 v0.3+ 登记矛盾——即终审发现的"溯源清单指向旧脚本"）。②重跑核验记录：fig5 PNG 逐位一致；fig1 内容级一致但**无逐位再生脚本**（v3 重跑 233052B vs 提交版 253530B，2103px vs 2105px，渲染像素差异 3.9% 全为 matplotlib 版本度量漂移；根目录旧版/v2 均非提交版来源）——提交版图件有效，逐位再生需求登记为已知限制。③fig3/fig4 重跑为排版级漂移（1-3px tight-bbox 舍入），打印值与正文一致（0.4577±0.0488, 4/4; negative-result 保留）。 |

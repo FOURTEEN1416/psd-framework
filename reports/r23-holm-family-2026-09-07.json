@@ -1,0 +1,47 @@
+{
+ "date": "2026-09-07",
+ "purpose": "Final-audit fix: printed Holm corrections for the E9 series must come from a committed computation. Family = 8 tests (3 tiers x {one-sample t, Wilcoxon} gap tests + 2 external-SSL Wilcoxon tests); PanAf500 gap excluded (directional only, arm ties with linear). Supersedes the ghost value 0.008 and the 0.099 pair.",
+ "family_note": "Conclusions are invariant to the narrower six-test family (gap tests only): NTU60/NTU120 W correct to 0.0078, UCF101 t/W to 0.0989, and the SSL tests are then reported raw -- every qualitative reading is unchanged.",
+ "tests": {
+  "E9_NTU60_gap_one_sample_t": {
+   "raw_p": 1.0945335724103147e-08,
+   "holm_corrected_p": 8.756268579282518e-08,
+   "evidence": "reports/r16-ntu-pseudo-10seed-2026-09-07.json"
+  },
+  "E9b_NTU120_gap_one_sample_t": {
+   "raw_p": 7.714151836603738e-07,
+   "holm_corrected_p": 5.399906285622617e-06,
+   "evidence": "reports/p5b-ntu120-retention-2026-09-07.json"
+  },
+  "E9c_UCF101_gap_one_sample_t": {
+   "raw_p": 0.04944447345046913,
+   "holm_corrected_p": 0.140625,
+   "evidence": "reports/p5b-ucf101-retention-2026-09-07.json"
+  },
+  "E9_NTU60_gap_wilcoxon": {
+   "raw_p": 0.001953125,
+   "holm_corrected_p": 0.01171875,
+   "evidence": "reports/r16-ntu-pseudo-10seed-2026-09-07.json"
+  },
+  "E9b_NTU120_gap_wilcoxon": {
+   "raw_p": 0.001953125,
+   "holm_corrected_p": 0.01171875,
+   "evidence": "reports/p5b-ntu120-retention-2026-09-07.json"
+  },
+  "E9c_UCF101_gap_wilcoxon": {
+   "raw_p": 0.052734375,
+   "holm_corrected_p": 0.140625,
+   "evidence": "reports/p5b-ucf101-retention-2026-09-07.json"
+  },
+  "SSL_NTU60_wilcoxon": {
+   "raw_p": 0.001953125,
+   "holm_corrected_p": 0.01171875,
+   "evidence": "reports/r23-ssl-baseline-2026-09-07.json"
+  },
+  "SSL_UCF101_wilcoxon": {
+   "raw_p": 0.046875,
+   "holm_corrected_p": 0.140625,
+   "evidence": "reports/r23-ssl-baseline-ucf101-2026-09-07.json"
+  }
+ }
+}

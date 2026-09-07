@@ -67,6 +67,7 @@ Driver: `scripts/run_r22_ntu_transition.py`（待写）；evidence: `reports/r22
 
 | 版本 | 日期 | 说明 |
 |---|---|---|
+| v1.1 | 2026-09-07 | 终审 dated 勘误：§8 解释句 "prediction is confirmed" 不精确（§4 预期 full 档 C 可能占优未兑现，D 两档均占优）；与正文 did-not-materialize 措辞对齐。§8 数字/判定/披露不变。 |
 | v1.0 | 2026-09-07 | **FROZEN**：用户批准 v0.1 按推荐选项（MLP 保守口径 + 双臂对照 + full/10% 两档）。映射构建冒烟通过（49 类/10 合并）。驱动 `scripts/run_r22_ntu_transition.py` 就绪，待扩容链收官 GPU 空闲即跑。 |
 | v0.1 | 2026-09-07 | DRAFT：R22b#5 驱动的真域转换复制协议。 |
 
@@ -82,3 +83,7 @@ Executed after freeze on the full xsub train split (40,091 clips; GPU exclusive;
 Per the frozen §4 rule the **cost endpoint FAILS in both budgets** (cost factor < 3×): the ≥3× claim remains scoped to the synthetic tier (E6, matched PyTorch-solver arms). The pre-registered accuracy-asymmetry prediction (§4) is confirmed: the decoupled arm is more accurate at every budget, outside the ±2.3pp band in both directions of the claim.
 
 Disclosures: (1) the artifact field `median_ratio_D_over_C` stores the cost-reduction factor C/D (coupled cost ÷ decoupled cost); the ≥3× condition tests this factor ≥3 — the field name is inverted relative to its content and is retained as archived (artifacts are never edited post hoc). (2) The frozen protocol pinned architecture, epochs, budgets, and seeds but **not solver families**: the D head uses the E9-series CPU logistic-regression convention (deterministic given the frozen pretext, hence identical acc across seeds) while C trains by GPU SGD; a matched-solver rerun would be post-hoc and is not claimed. (3) Substantive reading: at MLP backbone scale the coupled pipeline retrains in ~35 s, so there is no wall-clock cost for decoupling to save — consistent with E6's scaling caveat that the claim's practical value scales with the size of the pipeline being retrained; what the replication measures on real data is the accuracy value of decoupling, not its cost value. Evidence: `reports/r22-ntu-transition-2026-09-07.json`; driver `scripts/run_r22_ntu_transition.py`.
+
+### Correction (2026-09-07, independent final audit; dated amendment — §8 numbers and verdicts above are unchanged)
+
+The interpretation sentence "The pre-registered accuracy-asymmetry prediction (§4) is confirmed" is imprecise. §4 anticipated that the **coupled** arm may dominate at full budget (per the L10 gradient) while the decoupled arm may dominate at 10% labels; the observed outcome was **decoupled-arm dominance at BOTH budgets** (+3.93 pp full, +11.30 pp at 10%, both outside the ±2.3 pp band) — the full-budget half of the anticipation **did not materialize**. "Confirmed" overstates a two-sided possibility into a confirmation and is exactly the wording the manuscript corrected (R23b S1: E6-real / intro / L12 all state "did not materialize"). This file's results table, verdicts, and disclosures are unaffected; only the interpretation sentence is superseded by the manuscript's wording.

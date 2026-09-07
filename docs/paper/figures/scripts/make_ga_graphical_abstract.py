@@ -5,7 +5,7 @@
   PNG 600dpi(≥250dpi 线) + PDF 矢量。diagram-design 密度 4/10:三元素——
   ① 双层框(青=物理冻结 Φ / 橙=语义可修订 Ω,与 fig1 同谱系)
   ② Y→Y′ 演化箭头只穿语义层(框内虚线自环)
-  ③ 右侧保留率微条:NTU60 90.6 / NTU120 88.9 (10% labels,各层自身全预算参照)
+  ③ 右侧保留率微条:NTU60 90.7 / NTU120 88.9 (10% labels,各层自身全预算参照)
     + 犬科层如实边界(13% 预算绝对精度近随机,斜纹短条,不标保留率数)。
 数据来源: 正文 04-experiments.tex E9/E9b/E7 段(2026-09-07 10-seed 终口径),零硬编码之外的数字。
 输出: docs/paper/figures/fig_ga_graphical_abstract.pdf + .png

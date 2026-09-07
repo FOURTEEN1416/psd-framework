@@ -4,11 +4,13 @@
 % 铁律: 绝不凭记忆生成题录; 池外引用一律 [CITATION-NEEDED] 标记后走文献窗补齐。
 % 装配时: 从 dev-docs/research/ 题录池与各 owner 文档内嵌 BibTeX 逐条入库并去重。
 
-% 来源: 官方仓 Levigty/AimCLR README Citation 块逐字拷贝（GitHub 取证 2026-08-26, SHA 209e7127）;
-% outline.md §6 验证状态: ✅ 双源（官方仓 + awesome 目录）。作者字段保留官方仓原始格式。
+% 来源: 官方仓 Levigty/AimCLR README Citation 块（GitHub 取证 2026-08-26, SHA 209e7127）;
+% 终审修正 2026-09-07: 官方 README 的 bibtex 把名/姓倒置（"Tianyu, Guo"）, AAAI 官方页与论文 PDF
+% 直证正确形式为 Guo, Tianyu / Liu, Hong / Chen, Zhan / Liu, Mengyuan / Wang, Tao / Ding, Runwei,
+% 按 given-family 规范重排（渲染 T. Guo, H. Liu... 与官方一致）。
 @inproceedings{guo2022aimclr,
   title= {Contrastive Learning from Extremely Augmented Skeleton Sequences for Self-supervised Action Recognition},
-  author= {Tianyu, Guo and Hong, Liu and Zhan, Chen and Mengyuan, Liu and Tao, Wang  and Runwei, Ding},
+  author= {Guo, Tianyu and Liu, Hong and Chen, Zhan and Liu, Mengyuan and Wang, Tao and Ding, Runwei},
   booktitle= {AAAI},
   year= {2022}
 }
@@ -248,8 +250,9 @@
 
 @inproceedings{shahroudy2016ntu,
   author = {Shahroudy, Amir and Liu, Jun and Ng, Tian-Tsong and Wang, Gang},
-  title = {NTU RGB+D: A Large Dataset for Activities of Daily Living},
+  title = {NTU RGB+D: A Large Scale Dataset for 3D Human Activity Analysis},
   booktitle = {CVPR},
+  pages = {1010--1019},
   year = {2016},
   note = {DOI 10.1109/CVPR.2016.115}
 }
@@ -262,7 +265,7 @@
   number = {10},
   pages = {2684--2701},
   year = {2020},
-  note = {DOI 10.1109/TPAMI.2019.2910515}
+  note = {DOI 10.1109/TPAMI.2019.2916873}
 }
 
 @article{pointsup2026,
