@@ -1,0 +1,13 @@
+{
+ "date": "2026-09-07T21:28:05",
+ "protocol": "PSD-EXTBASE-PREREG-001 (published-checkpoint retention anchor) + Amendment 1",
+ "status": "FAIL-TO-RUN",
+ "reason": "Google Drive (drive.google.com / drive.usercontent.google.com / www.googleapis.com) unreachable from this machine at run time (connection timeout, HTTP 000 on all three endpoints; WinHTTP proxy = direct). gdown folder listing and file download both fail; firecrawl proxy can list folders but cannot relay binary downloads.",
+ "target": {
+  "file": "ntu60_xsub_joint.pt",
+  "gdrive_file_id": "14rayAgGWAHFL-JdeCJQOwP4cJ-fHglJS",
+  "source": "AimCLR (AAAI 2022) conference repo released_model folder"
+ },
+ "amendment_note": "Amendment 1 switched the anchor from AimCLR++ (no public checkpoint exists, verified) to the conference AimCLR official released checkpoint; download blocked by network, not by availability.",
+ "per_protocol_disposition": "FAIL-TO-RUN is recorded honestly and the anchor is NOT claimed anywhere in the manuscript; L13 (no head-to-head comparison) stays as written. Retry when Google endpoints are reachable (VPN/proxy); the protocol remains frozen."
+}
