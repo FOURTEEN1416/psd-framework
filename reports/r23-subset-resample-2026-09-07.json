@@ -1,0 +1,39 @@
+{
+  "date": "2026-09-07T14:00:58",
+  "purpose": "Post-hoc robustness diagnostic (NOT a pre-registered endpoint): quantifies the subset-resampling variance component disclosed in E9/§4.4 ('spreads cover self-training seeds but not subset resampling').",
+  "layer": "public_human_benchmark",
+  "rows": [
+    {
+      "subset_seed": 42,
+      "top1": 0.6605,
+      "role": "original"
+    },
+    {
+      "subset_seed": 43,
+      "top1": 0.6545,
+      "role": "resample"
+    },
+    {
+      "subset_seed": 44,
+      "top1": 0.6634,
+      "role": "resample"
+    },
+    {
+      "subset_seed": 45,
+      "top1": 0.6533,
+      "role": "resample"
+    },
+    {
+      "subset_seed": 46,
+      "top1": 0.6537,
+      "role": "resample"
+    }
+  ],
+  "stats": {
+    "original_seed42": 0.6605,
+    "resample_mean": 0.6562,
+    "resample_std_ddof1": 0.0048,
+    "n_resamples": 4
+  },
+  "wall_clock_sec": 213.8
+}
