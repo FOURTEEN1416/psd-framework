@@ -132,7 +132,7 @@ def run_one_seed(seed, resume_dir=None):
            "--config", str(cfg), "--seed", str(seed)]
     if resume_dir is not None:
         cmd += ["--resume-dir", str(resume_dir)]
-    r = subprocess.run(cmd, cwd=REPO, capture_output=True, timeout=6 * 3600)
+    r = subprocess.run(cmd, cwd=REPO, capture_output=True, timeout=12 * 3600)
     wall = round(time.time() - t0, 1)
     if r.returncode != 0:
         raise RuntimeError(f"seed {seed} training failed: {r.stdout[-500:]!r} {r.stderr[-500:]!r}")
@@ -222,10 +222,12 @@ def main():
     save_state(st)
 
     # ---- 1) 3 个有效 seed（NaN/崩溃自动补位, 候选池 42-47; 崩溃 seed 由看门狗拉起后续训）----
+    failed_now = []  # 本进程内已失败且非 NaN 的 seed: 不再紧循环重试(防死循环), 留给看门狗重启续训
     while len(prog["valid_seeds"]) < 3 and SEED_POOL:
         remaining = [s for s in SEED_POOL
                      if s not in [v["seed"] for v in prog["valid_seeds"]]
-                     and s not in prog.get("nan_failed", [])]
+                     and s not in prog.get("nan_failed", [])
+                     and s not in failed_now]
         if not remaining:
             break
         seed = remaining[0]
@@ -239,22 +241,28 @@ def main():
             log(f"training C' full seed {seed} (fresh, lr 0.00625)...")
         try:
             wall, acc, wd = run_one_seed(seed, resume_dir=resume_dir)
-            rec = {"seed": seed, "wall_clock_sec": wall, "val_acc": round(acc, 4),
-                   "work_dir": wd.name, "resumed": resume_dir is not None}
+            first = None
             if resume_dir is not None and st.get(PRE_SEGMENT_MTIME_KEY):
-                rec["first_attempt_sec"] = st[PRE_SEGMENT_MTIME_KEY].get(
-                    f"s{seed}_first_attempt_sec", None)
+                first = st[PRE_SEGMENT_MTIME_KEY].get(f"s{seed}_first_attempt_sec")
+            # 续训 seed 的 wall_clock = 全部贡献段之和(口径诚实: 中位数用总额)
+            total = round(wall + (first or 0.0), 1)
+            rec = {"seed": seed, "wall_clock_sec": total, "segment_sec": wall,
+                   "first_attempt_sec": first, "val_acc": round(acc, 4),
+                   "work_dir": wd.name, "resumed": resume_dir is not None}
             prog["valid_seeds"].append(rec)
             save_state(st)
-            log(f"  seed {seed}: wall={wall}s acc={acc:.4f} ({'resumed' if resume_dir is not None else 'fresh'})")
+            log(f"  seed {seed}: wall={total}s (segment {wall}s + prior {first}) acc={acc:.4f} "
+                f"({'resumed' if resume_dir is not None else 'fresh'})")
         except Exception as e:
             log(f"  seed {seed} FAILED: {str(e)[:200]}")
             if "NaN" in str(e):
                 # NaN=训练动力学随机事件, 永久排除该 seed 换下一候选
                 prog.setdefault("nan_failed", []).append(seed)
                 save_state(st)
-                continue
-            # 其他异常(超时/瞬态 CUDA 错等): 不排除, 看门狗重启后该 seed 从检查点续训
+            else:
+                # 其他异常: 本进程不再重试该 seed(紧循环无意义), 继续下一候选;
+                # 池耗尽时 exit(3) 交看门狗重启, 该 seed 从检查点续训
+                failed_now.append(seed)
             continue
 
     if len(prog["valid_seeds"]) < 3:

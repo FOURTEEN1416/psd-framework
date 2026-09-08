@@ -100,7 +100,7 @@ def main():
     proc.start()
 
     # 训练后: 选最高 acc 检查点, 自算 top1 输出（最后一行）
-    from net.st_gcn import Model as STGCNModel
+    # 注意: 此处必须用补丁前捕获的 _OriginalSTGCN——from net.st_gcn import Model 拿到的是被替换后的 shim
     from feeder.ntu_feeder import Feeder_single
     import numpy as np
 
@@ -117,11 +117,13 @@ def main():
 
     ck = torch.load(best, map_location="cpu")
     sd = ck.get("model", ck)
+    # 键位归一: shim 存盘可能带 inner./module. 前缀, 裸 STGCN 都剥掉
+    sd = {k.split("module.")[-1]: v for k, v in sd.items()}
     if any(k.startswith("inner.") for k in sd):
         sd = {k[len("inner."):]: v for k, v in sd.items()}
-    model = STGCNModel(in_channels=3, hidden_channels=16, hidden_dim=256, num_class=49,
-                       dropout=0.5, graph_args={"layout": "ntu-rgb+d", "strategy": "spatial"},
-                       edge_importance_weighting=True)
+    model = _OriginalSTGCN(in_channels=3, hidden_channels=16, hidden_dim=256, num_class=49,
+                           dropout=0.5, graph_args={"layout": "ntu-rgb+d", "strategy": "spatial"},
+                           edge_importance_weighting=True)
     model.load_state_dict(sd, strict=True)
     model.eval().cuda()
 
