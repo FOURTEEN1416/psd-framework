@@ -340,7 +340,7 @@ def gpu_snapshot(tag):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--stage", choices=["prep", "smoke", "full"], required=True)
+    ap.add_argument("--stage", choices=["prep", "smoke", "full", "full10"], required=True)
     args = ap.parse_args()
 
     if args.stage == "prep":
@@ -349,6 +349,8 @@ def main():
 
     epochs = 2 if args.stage == "smoke" else EPOCHS
     budget = "10pct" if args.stage == "smoke" else "full"
+    if args.stage == "full10":
+        budget, epochs = "10pct", EPOCHS
     seeds = (42,) if args.stage == "smoke" else SEEDS
     t0 = time.time()
     results = {"date": datetime.now().isoformat(timespec="seconds"),
