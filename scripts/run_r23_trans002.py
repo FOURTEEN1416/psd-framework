@@ -107,7 +107,7 @@ def stage_prep():
 
 
 def write_cfg(seed: int, budget: str, epochs: int, work_dir: Path) -> Path:
-    lr = round(0.1 * 16 / 128, 4)  # 官方线性缩放: 0.1 × 16/128
+    lr = round(0.1 * 16 / 128 / 2, 5)  # 官方线性缩放再减半(A-修正: full 档 0.0125 中途 NaN 实证)
     xp = {"full": "", "10pct": "_yp49_10pct"}[budget]
     cfg = f"""# TRANS-002 arm C' (frozen protocol PSD-NTU-TRANS-002; pyskl vanilla recipe, batch-16 linear-scaled LR)
 work_dir: {work_dir.as_posix()}
@@ -192,6 +192,8 @@ def run_supervised(cfg_path: Path, seed: int) -> float:
             self.model.train()
             return result
 
+
+
     _original_model_cls = _stgcn_mod.Model
     _stgcn_mod.Model = _AdapterShim
     try:
@@ -201,6 +203,15 @@ def run_supervised(cfg_path: Path, seed: int) -> float:
         proc.start()
     finally:
         _stgcn_mod.Model = _original_model_cls  # 恢复原类——eval_49 需裸 STGCNModel
+    log_f = cfg_path.parent / "log.txt"
+    if log_f.exists():
+        txt = log_f.read_text(encoding="utf-8", errors="replace")
+        # FT 官方循环无 nan 防护: 一旦 train_mean_loss 含 nan, 该 seed 的 checkpoint 视为坍缩
+        tail = txt[txt.rfind('Networks initialized'):] if 'Networks initialized' in txt else txt
+        if 'train_mean_loss: nan' in tail or 'eval_mean_loss: nan' in tail:
+            raise RuntimeError(
+                f"NaN collapse detected in {cfg_path.parent} (train/eval loss went nan). "
+                f"This seed's checkpoint is invalid — rerun with adjusted lr or a fresh seed.")
     best_ck = cfg_path.parent / "best_model.pt"
     if not best_ck.exists():
         cands = sorted(cfg_path.parent.glob("epoch*.pt"))
