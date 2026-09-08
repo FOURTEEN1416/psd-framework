@@ -1,0 +1,17 @@
+{
+ "attempt": 2,
+ "pre_segment_ts": {
+  "s42_first_attempt_sec": 5989,
+  "s42_work_dir": "c_fullfix_s42_205407",
+  "recorded_at": "2026-09-08T22:34:00"
+ },
+ "progress": {
+  "valid_seeds": [],
+  "m_rows": [],
+  "tried": [
+   42,
+   42
+  ],
+  "nan_failed": []
+ }
+}
