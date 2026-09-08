@@ -231,8 +231,10 @@ def main():
 
     # ---- 6) rebuild + commit + tag ----
     latex = REPO / "docs" / "paper" / "latex"
+    # SYSTEM 计划任务上下文的 PATH 不含用户级 MiKTeX，用绝对路径
+    pdflatex = r"C:\Users\FOUR\AppData\Local\Programs\MiKTeX\miktex\bin\x64\pdflatex.exe"
     for _ in range(2):
-        subprocess.run(["pdflatex", "-interaction=nonstopmode", "main.tex"], cwd=latex, capture_output=True)
+        subprocess.run([pdflatex, "-interaction=nonstopmode", "main.tex"], cwd=latex, capture_output=True)
     log("PDF rebuilt")
     subprocess.run(["git", "add", "-A", "docs/paper", "reports", "scripts"], cwd=REPO, capture_output=True)
     subprocess.run(["git", "commit", "-m",
