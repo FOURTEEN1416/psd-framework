@@ -1,0 +1,51 @@
+{
+ "date": "2026-09-08T07:13:36",
+ "protocol": "PSD-NTU-TRANS-002 (ST-GCN-scale three-arm transition replication)",
+ "stage": "smoke",
+ "runs": [
+  {
+   "arm": "C_prime",
+   "budget": "10pct",
+   "seed": 42,
+   "wall_clock_sec": 40.7,
+   "val_acc": 0.1012,
+   "gpu": [
+    {
+     "tag": "pre",
+     "reading": "7 %, 2934 MiB"
+    },
+    {
+     "tag": "post",
+     "reading": "94 %, 5388 MiB"
+    }
+   ]
+  },
+  {
+   "arm": "D_prime",
+   "budget": "10pct",
+   "seed": 42,
+   "wall_clock_sec": 59.3,
+   "val_acc": 0.6757
+  },
+  {
+   "arm": "M_matched",
+   "budget": "10pct",
+   "seed": 42,
+   "wall_clock_sec": 87.9,
+   "val_acc": 0.3627
+  }
+ ],
+ "config_echo": {
+  "epochs": 2,
+  "seeds": [
+   42
+  ],
+  "budget": "10pct",
+  "lr": 0.0125,
+  "batch": 16,
+  "recipe_source": "pyskl vanilla NTU60-xsub-HRNet (85.7% 60-class anchor)",
+  "scheduler": "constant lr (FT_Processor has none; disclosed)",
+  "pretext_ckpt": "epoch300_model.pt"
+ },
+ "wall_clock_sec_total": 204.5
+}

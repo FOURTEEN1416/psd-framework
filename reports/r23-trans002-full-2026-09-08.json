@@ -1,0 +1,115 @@
+{
+ "date": "2026-09-08T01:06:01",
+ "protocol": "PSD-NTU-TRANS-002 (ST-GCN-scale three-arm transition replication)",
+ "stage": "full",
+ "runs": [
+  {
+   "arm": "C_prime",
+   "budget": "full",
+   "seed": 42,
+   "wall_clock_sec": 6362.2,
+   "val_acc": 0.0501,
+   "gpu": [
+    {
+     "tag": "pre",
+     "reading": "4 %, 2231 MiB"
+    },
+    {
+     "tag": "post",
+     "reading": "93 %, 4301 MiB"
+    }
+   ]
+  },
+  {
+   "arm": "D_prime",
+   "budget": "full",
+   "seed": 42,
+   "wall_clock_sec": 764.5,
+   "val_acc": 0.7533
+  },
+  {
+   "arm": "M_matched",
+   "budget": "full",
+   "seed": 42,
+   "wall_clock_sec": 48.5,
+   "val_acc": 0.0501
+  },
+  {
+   "arm": "C_prime",
+   "budget": "full",
+   "seed": 43,
+   "wall_clock_sec": 6327.3,
+   "val_acc": 0.0501,
+   "gpu": [
+    {
+     "tag": "pre",
+     "reading": "5 %, 4431 MiB"
+    },
+    {
+     "tag": "post",
+     "reading": "100 %, 4460 MiB"
+    }
+   ]
+  },
+  {
+   "arm": "D_prime",
+   "budget": "full",
+   "seed": 43,
+   "wall_clock_sec": 626.3,
+   "val_acc": 0.7533
+  },
+  {
+   "arm": "M_matched",
+   "budget": "full",
+   "seed": 43,
+   "wall_clock_sec": 24.5,
+   "val_acc": 0.0501
+  },
+  {
+   "arm": "C_prime",
+   "budget": "full",
+   "seed": 44,
+   "wall_clock_sec": 6193.1,
+   "val_acc": 0.0501,
+   "gpu": [
+    {
+     "tag": "pre",
+     "reading": "4 %, 4447 MiB"
+    },
+    {
+     "tag": "post",
+     "reading": "96 %, 5286 MiB"
+    }
+   ]
+  },
+  {
+   "arm": "D_prime",
+   "budget": "full",
+   "seed": 44,
+   "wall_clock_sec": 172.5,
+   "val_acc": 0.7533
+  },
+  {
+   "arm": "M_matched",
+   "budget": "full",
+   "seed": 44,
+   "wall_clock_sec": 7.6,
+   "val_acc": 0.0501
+  }
+ ],
+ "config_echo": {
+  "epochs": 80,
+  "seeds": [
+   42,
+   43,
+   44
+  ],
+  "budget": "full",
+  "lr": 0.0125,
+  "batch": 16,
+  "recipe_source": "pyskl vanilla NTU60-xsub-HRNet (85.7% 60-class anchor)",
+  "scheduler": "constant lr (FT_Processor has none; disclosed)",
+  "pretext_ckpt": "epoch300_model.pt"
+ },
+ "wall_clock_sec_total": 20701.1
+}

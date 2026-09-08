@@ -1,0 +1,115 @@
+{
+ "date": "2026-09-08T09:06:30",
+ "protocol": "PSD-NTU-TRANS-002 (ST-GCN-scale three-arm transition replication)",
+ "stage": "full10",
+ "runs": [
+  {
+   "arm": "C_prime",
+   "budget": "10pct",
+   "seed": 42,
+   "wall_clock_sec": 1455.1,
+   "val_acc": 0.6477,
+   "gpu": [
+    {
+     "tag": "pre",
+     "reading": "64 %, 4083 MiB"
+    },
+    {
+     "tag": "post",
+     "reading": "5 %, 6962 MiB"
+    }
+   ]
+  },
+  {
+   "arm": "D_prime",
+   "budget": "10pct",
+   "seed": 42,
+   "wall_clock_sec": 121.9,
+   "val_acc": 0.6757
+  },
+  {
+   "arm": "M_matched",
+   "budget": "10pct",
+   "seed": 42,
+   "wall_clock_sec": 45.5,
+   "val_acc": 0.6852
+  },
+  {
+   "arm": "C_prime",
+   "budget": "10pct",
+   "seed": 43,
+   "wall_clock_sec": 1595.1,
+   "val_acc": 0.6501,
+   "gpu": [
+    {
+     "tag": "pre",
+     "reading": "7 %, 7040 MiB"
+    },
+    {
+     "tag": "post",
+     "reading": "99 %, 6492 MiB"
+    }
+   ]
+  },
+  {
+   "arm": "D_prime",
+   "budget": "10pct",
+   "seed": 43,
+   "wall_clock_sec": 46.8,
+   "val_acc": 0.6757
+  },
+  {
+   "arm": "M_matched",
+   "budget": "10pct",
+   "seed": 43,
+   "wall_clock_sec": 25.5,
+   "val_acc": 0.6699
+  },
+  {
+   "arm": "C_prime",
+   "budget": "10pct",
+   "seed": 44,
+   "wall_clock_sec": 1520.3,
+   "val_acc": 0.6518,
+   "gpu": [
+    {
+     "tag": "pre",
+     "reading": "29 %, 6846 MiB"
+    },
+    {
+     "tag": "post",
+     "reading": "58 %, 6419 MiB"
+    }
+   ]
+  },
+  {
+   "arm": "D_prime",
+   "budget": "10pct",
+   "seed": 44,
+   "wall_clock_sec": 43.3,
+   "val_acc": 0.6757
+  },
+  {
+   "arm": "M_matched",
+   "budget": "10pct",
+   "seed": 44,
+   "wall_clock_sec": 23.9,
+   "val_acc": 0.6688
+  }
+ ],
+ "config_echo": {
+  "epochs": 80,
+  "seeds": [
+   42,
+   43,
+   44
+  ],
+  "budget": "10pct",
+  "lr": 0.0125,
+  "batch": 16,
+  "recipe_source": "pyskl vanilla NTU60-xsub-HRNet (85.7% 60-class anchor)",
+  "scheduler": "constant lr (FT_Processor has none; disclosed)",
+  "pretext_ckpt": "epoch300_model.pt"
+ },
+ "wall_clock_sec_total": 4975.1
+}

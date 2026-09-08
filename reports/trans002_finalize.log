@@ -1,0 +1,9 @@
+[2026-09-08T09:06:24] finalize pipeline started
+[2026-09-08T09:06:24] full json ready: r23-trans002-full-2026-09-08.json
+[2026-09-08T09:06:24] running 10% tier (driver --stage full10)...
+[2026-09-08T10:29:28] full verdict: {'median_C_s': 6327.3, 'median_D_s': 626.3, 'cost_ratio': 10.1, 'acc_gap_pp': 70.32, 'acc_C_mean': 5.01, 'acc_D_mean': 75.33, 'verdict': 'PARTIAL'}
+[2026-09-08T10:29:28] 10% verdict: {'median_C_s': 1520.3, 'median_D_s': 46.8, 'cost_ratio': 32.49, 'acc_gap_pp': 2.58, 'acc_C_mean': 64.99, 'acc_D_mean': 67.57, 'verdict': 'PARTIAL'}
+[2026-09-08T10:29:28] 04-experiments.tex: E6-real-2 inserted
+[2026-09-08T10:29:28] 06-conclusion-limitations.tex: L12 extended
+[2026-09-08T10:29:28] main.tex: abstract updated
+[2026-09-08T10:29:36] PDF rebuilt
