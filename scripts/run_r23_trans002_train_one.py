@@ -23,13 +23,15 @@ def main():
     import net.st_gcn as _stgcn_mod
     import torch
 
+    _OriginalSTGCN = _stgcn_mod.Model  # 在替换前捕获原类（防止 shim 自引用递归）
+
     class _AdapterShim(torch.nn.Module):
         """FT 训练约定 model(None, x)——包 st_gcn.Model; forward 内强制 train 态
         （FT.train() 第一行写死 eval(), 含 BN 模型必须回 train——首跑实证 bug）。"""
 
         def __init__(self, *a, **k):
             super().__init__()
-            self.inner = _stgcn_mod.Model(*a, **k)
+            self.inner = _OriginalSTGCN(*a, **k)
 
         def forward(self, _ignored, x):
             self.inner.train()
