@@ -1,0 +1,78 @@
+{
+ "date": "2026-09-09T12:51:42",
+ "protocol": "PSD-NTU-TRANS-002 full-tier C' rerun (A-fix v2: lr 0.00625 + NaN watchdog + seed replacement pool 42-47 + resumable state + watchdog)",
+ "nan_disclosure": "First full-tier run (lr 0.0125) collapsed to constant prediction mid-training on all 3 seeds (NaN); rerun at half lr with NaN watchdog and seed-replacement pool.",
+ "C_prime": [
+  {
+   "seed": 42,
+   "wall_clock_sec": 26705.9,
+   "val_acc": 0.8154,
+   "work_dir": "c_fullfix_s42_205407",
+   "resumed": true,
+   "first_attempt_sec": 26689,
+   "segment_sec": 16.9
+  },
+  {
+   "seed": 43,
+   "wall_clock_sec": 8709.4,
+   "segment_sec": 4566.4,
+   "first_attempt_sec": 4143,
+   "val_acc": 0.784,
+   "work_dir": "c_fullfix_s43_061239",
+   "resumed": true,
+   "wall_note": "sum of contributing segments: 06:12-07:21 (ep0-40, froze at eval) + 08:04-09:20 resume (ep40-80)"
+  },
+  {
+   "seed": 44,
+   "wall_clock_sec": 975.7,
+   "segment_sec": 975.7,
+   "first_attempt_sec": null,
+   "val_acc": 0.7953,
+   "work_dir": "c_fullfix_s44_092543",
+   "resumed": true
+  }
+ ],
+ "D_prime_reused": [
+  {
+   "seed": 42,
+   "wall_clock_sec": 764.5,
+   "val_acc": 0.7533
+  },
+  {
+   "seed": 43,
+   "wall_clock_sec": 626.3,
+   "val_acc": 0.7533
+  },
+  {
+   "seed": 44,
+   "wall_clock_sec": 172.5,
+   "val_acc": 0.7533
+  }
+ ],
+ "M_matched": [
+  {
+   "seed": 42,
+   "wall_clock_sec": 69.5,
+   "val_acc": 0.8283
+  },
+  {
+   "seed": 43,
+   "wall_clock_sec": 68.2,
+   "val_acc": 0.8267
+  },
+  {
+   "seed": 44,
+   "wall_clock_sec": 136.1,
+   "val_acc": 0.8225
+  }
+ ],
+ "wall_clock_caveat": "seed(s) resumed from checkpoint after process death; wall_clock_sec is the final process's time; first_attempt_sec records the pre-death segment",
+ "verdict_full": {
+  "median_C_s": 8709.4,
+  "median_D_s": 626.3,
+  "cost_ratio": 13.91,
+  "acc_gap_pp": -4.49,
+  "verdict": "PARTIAL"
+ },
+ "tenpct_verdict_ref": "PARTIAL (C/D=32.49x, gap=+2.58pp) from r23-trans002-full10-2026-09-08.json"
+}

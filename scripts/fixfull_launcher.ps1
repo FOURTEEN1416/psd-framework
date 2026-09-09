@@ -1,5 +1,7 @@
-# fixfull_trans002 启动器（SYSTEM 计划任务入口）
-# 会话子进程会被会话终结连坐杀死(2026-09-08 13:49 事故)——必须经 schtasks SYSTEM 上下文脱离会话存活
+# fixfull_trans002 launcher (SYSTEM scheduled task entry)
+# NOTE: ASCII only - PowerShell 5.1 mangles UTF-8 Chinese comments and swallows the next line
+# Session-terminated child processes die with the session (2026-09-08 13:49 incident) -
+# always launch via schtasks SYSTEM context: PSD_TRANS002_FixFull
 $log = "D:\Desktop\psd-framework\reports\fixfull_bootstrap.log"
 "[$(Get-Date -Format s)] launcher start" | Out-File $log -Append -Encoding utf8
 Set-Location D:\Desktop\psd-framework

@@ -1,5 +1,5 @@
 {
- "attempt": 5,
+ "attempt": 10,
  "pre_segment_ts": {
   "s42_first_attempt_sec": 26689,
   "s42_work_dir": "c_fullfix_s42_205407",
@@ -16,9 +16,44 @@
     "resumed": true,
     "first_attempt_sec": 26689,
     "segment_sec": 16.9
+   },
+   {
+    "seed": 43,
+    "wall_clock_sec": 8709.4,
+    "segment_sec": 4566.4,
+    "first_attempt_sec": 4143,
+    "val_acc": 0.784,
+    "work_dir": "c_fullfix_s43_061239",
+    "resumed": true,
+    "wall_note": "sum of contributing segments: 06:12-07:21 (ep0-40, froze at eval) + 08:04-09:20 resume (ep40-80)"
+   },
+   {
+    "seed": 44,
+    "wall_clock_sec": 975.7,
+    "segment_sec": 975.7,
+    "first_attempt_sec": null,
+    "val_acc": 0.7953,
+    "work_dir": "c_fullfix_s44_092543",
+    "resumed": true
    }
   ],
-  "m_rows": [],
+  "m_rows": [
+   {
+    "seed": 42,
+    "wall_clock_sec": 69.5,
+    "val_acc": 0.8283
+   },
+   {
+    "seed": 43,
+    "wall_clock_sec": 68.2,
+    "val_acc": 0.8267
+   },
+   {
+    "seed": 44,
+    "wall_clock_sec": 136.1,
+    "val_acc": 0.8225
+   }
+  ],
   "tried": [
    42,
    42,
@@ -3820,7 +3855,14 @@
    42,
    43,
    43,
-   43
+   43,
+   43,
+   44,
+   43,
+   44,
+   44,
+   44,
+   44
   ],
   "nan_failed": []
  }
