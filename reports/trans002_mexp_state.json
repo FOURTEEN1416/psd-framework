@@ -1,0 +1,30 @@
+{
+ "attempt": 1,
+ "pairs": [
+  {
+   "seed": 42,
+   "c_acc": 0.8154,
+   "m_acc": 0.8283,
+   "c_reused": true,
+   "m_reused": true,
+   "c_ckpt": "epoch080_acc82.80_model.pt"
+  },
+  {
+   "seed": 43,
+   "c_acc": 0.784,
+   "m_acc": 0.8267,
+   "c_reused": true,
+   "m_reused": true,
+   "c_ckpt": "epoch080_acc81.62_model.pt"
+  },
+  {
+   "seed": 44,
+   "c_acc": 0.7953,
+   "m_acc": 0.8225,
+   "c_reused": true,
+   "m_reused": true,
+   "c_ckpt": "epoch080_acc81.54_model.pt"
+  }
+ ],
+ "nan_failed": []
+}

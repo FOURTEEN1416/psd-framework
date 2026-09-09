@@ -57,3 +57,14 @@ Driver: `scripts/run_r23_trans002.py`（待写）；evidence: `reports/r23-trans
 - **10% 档实现**：train 子集切片另存（4,009 clips, seed 42 分层），val 全量。
 - **特征提取**：encoder penultimate 经 forward hook 获取；评估前处理与 linear-eval 逐键一致。
 - **wall-clock**：外层 perf_counter 包络训练段 + GPU 快照前后各一次（TRANS-001 同口径）；bibtex 级噪声不滤波。
+
+## Dated addendum 2026-09-09: PSD-NTU-TRANS-002-MEXP（扩容修订，先于任何新运行冻结）
+
+范围：仅扩臂。冻结的三 seed 判据输出（seeds 42--44，PARTIAL，15.8x/−4.49pp，见上方 decision rule）**不变、不替换**；本修订在任何新训练开始前预先登记一项扩容：coupled 臂（C′）与其派生 matched-solver 臂（M）扩至十 seed（42--51；NaN 替换池 52--55，沿用 NaN 看门狗规则），把三 seed 的 M-vs-C′ 观察（冻结特征+线性头 82.25--82.83% vs coupled 全量微调 79.8%）升级为配对显著性检验。
+
+预先声明的分析方案（先于任何新训练冻结）：
+- 分析单元：逐 seed 配对。C′_s = 该 seed 的 max-accuracy checkpoint 在 49 类 Y′ 验证集上的净评估 top-1（eval 模式）；M_s = 在同一 checkpoint 的 penultimate 特征上用 decoupled solver（逻辑回归头）重训后的验证 top-1。
+- 检验：十对 (M_s − C′_s) 的双侧 Wilcoxon signed-rank，α=0.05；同时报告 sign test、逐对数值、均值/中位数。
+- 报告：无论显著与否均如实写入论文 TRANS-002 小节，标注为 post-hoc robustness expansion（dated，引用本修订）；冻结判据段落的措辞不改动。
+- wall-clock：逐 seed 记录入工件，但不进入冻结成本比 verdict。
+- 执行与恢复：沿用 fixfull 全套机制（save_interval=5、NaN 看门狗、断点续训、SYSTEM 看门狗任务、单实例锁）；无新鲜工件不得下任何结论。

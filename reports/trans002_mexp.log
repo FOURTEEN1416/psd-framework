@@ -1,0 +1,5 @@
+[2026-09-09T21:56:01] MEXP pipeline started (attempt 1, pairs done: 0)
+[2026-09-09T21:56:01]   seed 42 (frozen reuse): C'=0.8154 M=0.8283
+[2026-09-09T21:56:01]   seed 43 (frozen reuse): C'=0.784 M=0.8267
+[2026-09-09T21:56:01]   seed 44 (frozen reuse): C'=0.7953 M=0.8225
+[2026-09-09T21:56:01] training C' mexp seed 45 (fresh/resume, lr 0.00625)...
