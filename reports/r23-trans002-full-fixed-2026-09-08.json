@@ -5,31 +5,85 @@
  "C_prime": [
   {
    "seed": 42,
-   "wall_clock_sec": 26705.9,
+   "wall_clock_sec": 9912,
    "val_acc": 0.8154,
    "work_dir": "c_fullfix_s42_205407",
    "resumed": true,
    "first_attempt_sec": 26689,
-   "segment_sec": 16.9
+   "segment_sec": 16.9,
+   "segments": [
+    [
+     "20:54:07",
+     "22:34:14",
+     6007.0,
+     "ep0-44 killed"
+    ],
+    [
+     "23:03:55",
+     "00:08:43",
+     3888.0,
+     "ep40-80 done"
+    ],
+    [
+     "06:07:09",
+     "06:07:26",
+     17.0,
+     "net-eval"
+    ]
+   ]
   },
   {
    "seed": 43,
-   "wall_clock_sec": 8709.4,
+   "wall_clock_sec": 8709,
    "segment_sec": 4566.4,
    "first_attempt_sec": 4143,
    "val_acc": 0.784,
    "work_dir": "c_fullfix_s43_061239",
    "resumed": true,
-   "wall_note": "sum of contributing segments: 06:12-07:21 (ep0-40, froze at eval) + 08:04-09:20 resume (ep40-80)"
+   "wall_note": "sum of contributing segments: 06:12-07:21 (ep0-40, froze at eval) + 08:04-09:20 resume (ep40-80)",
+   "segments": [
+    [
+     "06:12:39",
+     "07:21:42",
+     4143.0,
+     "ep0-40 froze at eval"
+    ],
+    [
+     "08:04:13",
+     "09:20:19",
+     4566.0,
+     "ep40-80 done"
+    ]
+   ]
   },
   {
    "seed": 44,
-   "wall_clock_sec": 975.7,
+   "wall_clock_sec": 9897,
    "segment_sec": 975.7,
    "first_attempt_sec": null,
    "val_acc": 0.7953,
    "work_dir": "c_fullfix_s44_092543",
-   "resumed": true
+   "resumed": true,
+   "segments": [
+    [
+     "09:20:19",
+     "09:25:43",
+     324.0,
+     "ep0-4 killed"
+    ],
+    [
+     "09:25:43",
+     "11:49:00",
+     8597.0,
+     "ep0-69.5 died"
+    ],
+    [
+     "12:30:46",
+     "12:47:02",
+     976.0,
+     "ep65-80 done"
+    ]
+   ]
   }
  ],
  "D_prime_reused": [
@@ -68,11 +122,17 @@
  ],
  "wall_clock_caveat": "seed(s) resumed from checkpoint after process death; wall_clock_sec is the final process's time; first_attempt_sec records the pre-death segment",
  "verdict_full": {
-  "median_C_s": 8709.4,
+  "median_C_s": 9897,
   "median_D_s": 626.3,
-  "cost_ratio": 13.91,
+  "cost_ratio": 15.8,
   "acc_gap_pp": -4.49,
   "verdict": "PARTIAL"
  },
- "tenpct_verdict_ref": "PARTIAL (C/D=32.49x, gap=+2.58pp) from r23-trans002-full10-2026-09-08.json"
+ "tenpct_verdict_ref": "PARTIAL (C/D=32.49x, gap=+2.58pp) from r23-trans002-full10-2026-09-08.json",
+ "wall_clock_method": "sum of all contributing segments per seed from pipeline log timestamps (log-anchored); segments listed per seed",
+ "final_segment_sensitivity": {
+  "median_C_s_final_only": 3905,
+  "ratio_final_only": 6.24,
+  "note": "ratio using only post-restart uninterrupted segments; verdict unchanged (PARTIAL, 6.24x > 3x)"
+ }
 }
