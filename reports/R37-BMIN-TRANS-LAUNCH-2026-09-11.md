@@ -27,3 +27,10 @@
 ## 5. 纪律声明
 - 本轮两轮低精度均系**格式解读错误**（竖轴反/丢 z/丢第二人体），按预注册条款不得记为 B-MIN-TRANS 实验结论；
 - 规则阈值先验固定未调参的纪律保持；标签仅用于事后诊断精度，未进规则构建。
+
+## 6. v2 判定轮补记（同日）
+- 3D 双人体特征版（v2）跑通：覆盖 100%、总精度 1.9%（≈随机 1/49）→ **门未过**；
+- 弱信号已现：sit-stand 0.070 / falling 0.084（3-4× 随机），说明特征层方向正确但量级/阈值或关节索引仍有错位；
+- **未验证假设一处**：25 关节索引布局（假定 NTU 标准序，未从 AimCLR feeder 源码证实）。按预注册纪律，该 FAILS 记为**暂定**——布局证实后要么确认 FAILS（写入边界地图），要么修正索引后重校准；
+- 工件：runs/bmin_trans/seed_report_v2.json（已归档 reports/bmin-trans-seed-report-v2.json）+ seed_labels_v2.npy；
+- 下一步：读 external/AimCLR/feeder/ntu_feeder.py 确证关节序 → 终版判定（PASS 进 camera-ready 增补 / FAILS 进边界地图）。
