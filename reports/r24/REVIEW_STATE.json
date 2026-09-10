@@ -1,0 +1,22 @@
+{
+ "loop": "R24-refine (psd paper)",
+ "round": 8,
+ "status": "completed",
+ "methods": [
+  "auto-review-loop(serial 3-mode)",
+  "comp-visual-review(judges x2)",
+  "anti-defensive-writing(37+4 edits)",
+  "scholar-critique-figures(programmatic)"
+ ],
+ "round1_summary": "figures judge 6/6 fail -> all redrawn (fig1v6/fig2v6/fig3v3/fig4v2/fig5v2/GAv2); page judge 2 fatal (tab2 ref, Highlights imes) + major tables -> fixed; anti-defensive 37 edits applied; caption sync applied; PDF rebuilt 41p no errors; cross audit: fig5 PanAf caliber fixed (b_arms[:10]); MEXP para dangling-ref fixed",
+ "round2_pending": [
+  "judge A: 6 figures v2",
+  "judge B: pages v2 (incl p34 novelty overfull check)"
+ ],
+ "exit_criteria": "v9 micro-review pass -> bookkeeping commit + tag re-anchor + memory",
+ "timestamp": "2026-09-10T17:05:00",
+ "round2_summary": "fig judge R2: fig5 pass; fig1 fix-script-was-never-run exposed; fig2/3/4/GA partial fixes landed with new collisions",
+ "round3_6": "five more loops: fig1/3/5/GA passed; fig2 dual-ring->two-row pipeline v7b; fig4 dodge removed+note re-anchored; fig3 legend out-of-axes",
+ "round7_pending": "v9 micro-review: fig2 assign-box + fig4 (a) note closure + pg-38/40",
+ "final": "all 6 figures + all pages PASS (v9 micro-review + v8 page round + author pg-41 check); frozen"
+}
