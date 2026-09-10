@@ -1,66 +1,67 @@
 # -*- coding: utf-8 -*-
-r"""psd_style.py — PSD 论文图统一样式真源（R26 起=NS 九色板, 2026-09-10）。
+r"""psd_style.py — PSD 论文图统一样式真源（R30 起=海洋清风八色板, 2026-09-11）。
 
-R26 配色交割：用户指定参考图（微信图片_2026-09-10_204128_415.png，NS 单细胞九色板）
-为全论文唯一配色来源。色板：
-  #e53a46 红 / #ee726d 珊瑚 / #fedb65 黄 / #86bb4a 绿 / #75d3e3 天青 /
-  #59abdd 中蓝 / #b67bb2 兰紫 / #f5b5b0 浅粉 / #fbcdb5 杏
-配套工具箱 figure_style_guide 纪律：数据色走 token 禁硬编码；多系列=前 n 色+
-不同 marker；浅填充(PALETTE_LIGHT)+深边(PALETTE)；全论文统一。
+R30 配色交割：用户指定「海洋清风」科研配色（微信截图 8 色值）
+为全论文唯一配色来源，取代 R26 NS 九色板。色板：
+  #BFDDD2 浅绿 mint / #53999D 青绿 teal / #4098AC 深青 cyan / #7CC0CE 浅青 sky
+  #DCC992 卡其 khaki  / #ECB66B 金橙 gold / #EC9E59 橙 orange / #EC8E5A 深橙 ember
 
-跨图色彩语义铁律（同色=同意图，全六图一致）：
-  PHYS   蓝 #59abdd       = 物理层 / Φ 动态流 / 无监督提案
-  SEM    红 #e53a46       = 语义层 / 锚点 / 伪标签 / proposed 策略臂(HERO)
-  GRAY1..4 单调明度灰阶    = human benchmark / 参考 / 基线 / 近黑锚
-  NS 其余五色              = 多系列散点专用（fig5 一系一色，marker 冗余编码）
+R30 设计语言（diagram-design 编辑级规范 + figures4papers 房子风格联合裁决）：
+  - 阴影全面废除（"Shadows are out. Borders are in."）——card() 的 dx/dy/shadow
+    参数保留签名但不再生效，历史脚本零改动即去阴影；
+  - 结构色纪律不变：文字=墨黑 INK，箭头=深灰黑，中性阶=灰（禁自创彩色结构色）；
+  - 深化文字色=同色相明度压缩（HSL 降 L 保 H），白字对比 ≥5:1（R29 先例延续）；
+  - 焦点强调（HERO/DEEP 满块）每图 ≤2 处（diagram-design focal rule）；
+  - 数据图=figures4papers 房子风格：top/right spine 关闭、无框图例、dpi600。
+
+跨图色彩语义铁律（同色=同意图，全六图一致；冷=物理/自动，暖=语义/焦点）：
+  PHYS  深青 #4098AC 系   = 物理层 / Φ 动态流 / 无监督提案
+  SEM   深橙 #EC8E5A 系   = 语义层 / 锚点 / 伪标签 / proposed 策略臂(HERO)
+  HUMAN 青绿 #53999D 系   = human-in-the-loop / 人工环节
+  IFACE 浅绿 #BFDDD2 系   = 层间接口桥
+  GRAY1..4 单调明度灰阶   = human benchmark 参考 / 基线 / 近黑锚
 字体 Arial（回退 DejaVu）；spines 0.8。
 """
 import matplotlib.pyplot as plt
 from matplotlib.patches import FancyBboxPatch
 
-# --- R27 现代扁平设计语言（用户两轮判丑后确认：问题在骨架不在色值） ---
-SHADOW = "#1F2937"
-SHADOW_ALPHA = 0.13
+# --- R30 海洋清风八色板（用户参考图真源，勿改值） ---
+OCEAN_MINT   = "#BFDDD2"   # 浅绿
+OCEAN_TEAL   = "#53999D"   # 青绿
+OCEAN_CYAN   = "#4098AC"   # 深青
+OCEAN_SKY    = "#7CC0CE"   # 浅青
+OCEAN_KHAKI  = "#DCC992"   # 卡其
+OCEAN_GOLD   = "#ECB66B"   # 金橙
+OCEAN_ORANGE = "#EC9E59"   # 橙
+OCEAN_EMBER  = "#EC8E5A"   # 深橙
 
-def card(ax, x, y, w, h, fill="#FFFFFF", edge=None, lw=1.1, rounding=1.6,
-         dx=0.5, dy=-0.8, shadow=True, z=3, hatch=None):
-    """软阴影+大圆角扁平卡片（数据坐标）。edge=None 即无边纯色块。"""
-    if shadow:
-        ax.add_patch(FancyBboxPatch((x + dx, y + dy), w, h,
-                                     boxstyle=f"round,pad=0,rounding_size={rounding}",
-                                     facecolor=SHADOW, edgecolor="none",
-                                     alpha=SHADOW_ALPHA, zorder=z - 1))
-    p = FancyBboxPatch((x, y), w, h,
-                       boxstyle=f"round,pad=0,rounding_size={rounding}",
-                       facecolor=fill, edgecolor="none" if edge is None else edge,
-                       linewidth=lw if edge is not None else 0, zorder=z,
-                       hatch=hatch)
-    ax.add_patch(p)
-    return p
+# --- 旧 NS 板别名（deprecated, R30 起映射到海洋清风最近色，仅为未迁移引用兜底） ---
+NS_RED     = OCEAN_EMBER
+NS_CORAL   = OCEAN_ORANGE
+NS_YELLOW  = OCEAN_GOLD
+NS_GREEN   = OCEAN_TEAL
+NS_SKY     = OCEAN_SKY
+NS_BLUE    = OCEAN_CYAN
+NS_ORCHID  = OCEAN_TEAL
+NS_PINK    = OCEAN_MINT
+NS_APRICOT = OCEAN_KHAKI
 
-# --- NS 九色板（参考图真源，勿改值） ---
-NS_RED     = "#E53A46"
-NS_CORAL   = "#EE726D"
-NS_YELLOW  = "#FEDB65"
-NS_GREEN   = "#86BB4A"
-NS_SKY     = "#75D3E3"
-NS_BLUE    = "#59ABDD"
-NS_ORCHID  = "#B67BB2"
-NS_PINK    = "#F5B5B0"
-NS_APRICOT = "#FBCDB5"
+def _lighten(hex_color, f):
+    """向白混合 f 比例（印刷浅填充派生：色相不出八色板）。"""
+    r = int(hex_color[1:3], 16); g = int(hex_color[3:5], 16); b = int(hex_color[5:7], 16)
+    return "#{:02X}{:02X}{:02X}".format(
+        round(r + (255 - r) * f), round(g + (255 - g) * f), round(b + (255 - b) * f))
 
-# --- 语义 token（单一真源；各图脚本从这里取色，禁止散落字面量） ---
-# R28 用户令：一切可见颜色直接取 NS 九色板，结构色（文字/箭头/轴）用黑灰，禁自创蓝灰系。
-PHYS_EDGE = NS_BLUE                      # 物理层边线/主色
-PHYS_TEXT = "#2E77AE"                    # 浅蓝填充上的标题深蓝字（R26 judge: 白底蓝弱）
-PHYS_FILL = "#E4F1FB"                    # 物理层浅填充（NS_BLUE 提亮）
-SEM_EDGE  = NS_RED                       # 语义层边线/主色
-SEM_FILL  = "#FCE9E7"                    # 语义层浅填充（NS_RED 提亮）
-FOCAL_FILL = "#F9D2CE"                   # 焦点强调 tint（fig2 hub 侧盒）
-HERO      = NS_RED                       # proposed-strategy 曲线（fig4 entropy 臂）
-HUMAN_EDGE  = NS_ORCHID                  # 人工环节=兰紫（R28: 替代灰盒）
-HUMAN_FILL  = "#EDE0EC"                  # 兰紫提亮
-IFACE_FILL, IFACE_EDGE = NS_PINK, "#D89B93"   # 接口带=粉（R28: 替代灰带）
+# --- R30 语义 token（单一真源；各图脚本从这里取色，禁止散落字面量） ---
+PHYS_EDGE = OCEAN_CYAN                   # 物理层边线/主色
+PHYS_TEXT = PHYS_DEEP_COLOR = "#2D7686"  # 物理层深化字/线色（#4098AC 同相降L, 白底对比 5.9:1）
+SEM_EDGE  = OCEAN_EMBER                  # 语义层边线/主色
+SEM_TEXT = SEM_DEEP_COLOR = "#AF501D"    # 语义层深化字/线色（#EC8E5A 同相降L, 白字对比 5.3:1）
+FOCAL_FILL = _lighten(OCEAN_EMBER, 0.55) # 焦点强调 tint
+HERO      = OCEAN_EMBER                  # proposed-strategy 曲线（fig4 entropy 臂）
+HUMAN_EDGE  = OCEAN_TEAL                 # 人工环节=青绿
+HUMAN_TEXT = HUMAN_DEEP_COLOR = "#38686B"  # 青绿深化（#53999D 同相降L, 白字对比 6.2:1）
+IFACE_FILL, IFACE_EDGE = OCEAN_MINT, OCEAN_TEAL   # 接口带=浅绿桥（R30）
 
 GRAY_1 = "#A6A6A6"                        # 浅 —— 图内次级注记/线
 GRAY_2 = "#767676"                        # 中 —— 结构虚线/参照
@@ -69,19 +70,31 @@ GRAY_4 = "#272727"                        # 近黑 —— hub/强调
 NEUTRAL_LT = "#CFCECE"
 GRAY_EDGE  = "#9E9E9E"                    # 中性灰边（null 参照专用）
 GRAY_FILL  = "#E3E3E3"                    # 中性灰填充（null 参照专用）
-GRAY_LINE  = "#666666"                    # 流程图软箭头/虚线（R28: 深灰非蓝灰）
+GRAY_LINE  = "#666666"                    # 流程图软箭头/虚线
 
-# fig5 多系列映射（一系一色 + marker 形状冗余编码）
-S_PUBV1   = NS_BLUE                      # public-real v1 (o)
-S_PUBV2   = NS_RED                       # public-real v2 (s)
-S_NTU60   = NS_GREEN                     # human benchmark NTU60 (D)
-S_NTU120  = NS_ORCHID                    # human benchmark NTU120 (v)
-S_UCF     = NS_SKY                       # independent benchmark UCF101 (+)
-S_PANAF   = NS_CORAL                     # animal public benchmark PanAf500 (X)
-S_SYNTH   = NS_YELLOW                    # synthetic-offset (^) —— 白底浅，配深描边
-S_SYNTH_EDGE = "#C9A227"                 # 黄系列专用描边（保可见性）
+# R29 深化/柔色三件套 token 名保留（值换海洋清风深化系），v10/v12/GA v10 脚本零改动换装
+PHYS_DEEP  = PHYS_DEEP_COLOR
+SEM_DEEP   = SEM_DEEP_COLOR
+HUMAN_DEEP = HUMAN_DEEP_COLOR
+PHYS_TINT  = _lighten(OCEAN_SKY, 0.72)   # 容器柔色填充（浅青派生 #DEEFF3）
+SEM_TINT   = _lighten(OCEAN_EMBER, 0.78) # （深橙派生 #FAE3D6）
+HUMAN_TINT = OCEAN_MINT                  # 青绿系浅填充=板内浅绿原色
+BODY_TINT  = "#F4FAFB"                   # 容器身体（近白微青）
+# fig3 时间轴轨道填充（比容器 tint 深半档，配彩色描边）
+PHYS_FILL  = _lighten(OCEAN_SKY, 0.62)   # #D6ECF0
+SEM_FILL   = _lighten(OCEAN_EMBER, 0.70) # #F6D3C2
 
-INK   = "#1A1A1A"                        # 主文字=黑（R28: 参考图文字为黑，非蓝黑）
+# fig5 多系列映射（一系一色 + marker 形状冗余编码；八色板内取色）
+S_PUBV1   = OCEAN_CYAN                   # public-real v1 (o)
+S_PUBV2   = OCEAN_EMBER                  # public-real v2 (s) —— proposed 臂
+S_NTU60   = OCEAN_TEAL                   # human benchmark NTU60 (D)
+S_NTU120  = OCEAN_SKY                    # human benchmark NTU120 (v)
+S_UCF     = OCEAN_GOLD                   # independent benchmark UCF101 (+)
+S_PANAF   = OCEAN_ORANGE                 # animal public benchmark PanAf500 (X)
+S_SYNTH   = OCEAN_MINT                   # synthetic-offset (^) —— 白底浅，配深描边
+S_SYNTH_EDGE = OCEAN_TEAL                # 浅绿系列专用描边（保可见性）
+
+INK   = "#1A1A1A"                        # 主文字=黑
 ARROW = "#333333"                        # 流程箭头=深灰黑
 NOTE  = "#555555"                        # 次要标注
 GRID_GRAY = "#E8E8E8"                    # 网格（中性浅灰）
@@ -98,23 +111,26 @@ def apply_style():
         "xtick.color": INK,
         "ytick.color": INK,
         "axes.linewidth": 0.8,
+        "axes.spines.top": False,        # figures4papers 房子风格（R30）
+        "axes.spines.right": False,
         "legend.frameon": False,
     })
 
-# --- R29 顶刊方法图设计语言（Nature/Cell 柔色满块+层级文字+粗流线） ---
-# 模块=柔色圆角块（无边）+深系文字；容器=极浅身体+满色头带（白字标题）；
-# 数据流=粗圆头流线（lw>=2.2）。色相全部来自 NS 板（明度适配印刷对比度）。
-PHYS_DEEP  = "#1F6FA8"                    # NS_BLUE 深化：头带/文字/流线
-SEM_DEEP   = "#B02128"                    # NS_RED 深化
-HUMAN_DEEP = "#7E4678"                    # NS_ORCHID 深化
-PHYS_TINT  = "#C9E3F7"                    # 模块柔色填充（NS_BLUE 提亮一档）
-SEM_TINT   = "#F8C9C6"
-HUMAN_TINT = "#E4CFE2"
-BODY_TINT  = "#F4F8FC"                    # 容器身体（近白微蓝）
+def card(ax, x, y, w, h, fill="#FFFFFF", edge=None, lw=1.0, rounding=1.2,
+         dx=0.5, dy=-0.8, shadow=False, z=3, hatch=None):
+    """R30 扁平卡片：无阴影（diagram-design 铁律），edge 给定即描边。
+    dx/dy/shadow 参数保留仅为历史脚本签名兼容，R30 起不再产生任何效果。"""
+    p = FancyBboxPatch((x, y), w, h,
+                       boxstyle=f"round,pad=0,rounding_size={rounding}",
+                       facecolor=fill, edgecolor="none" if edge is None else edge,
+                       linewidth=lw if edge is not None else 0, zorder=z,
+                       hatch=hatch)
+    ax.add_patch(p)
+    return p
 
-def flowline(ax, x1, y1, x2, y2, color="#333333", lw=2.2, ls="-",
-             head=13, z=2, connectionstyle=None):
-    """顶刊式粗流线箭头（大箭头头；FancyArrowPatch 不收 capstyle，端形由 arrowstyle 决定）。"""
+def flowline(ax, x1, y1, x2, y2, color="#333333", lw=1.6, ls="-",
+             head=11, z=2, connectionstyle=None):
+    """R30 编辑级流线：1.6pt 细线 + 适中箭头（顶刊方法图线宽惯例，替代 R29 粗流线）。"""
     from matplotlib.patches import FancyArrowPatch
     kw = dict(arrowstyle="-|>", mutation_scale=head, color=color, lw=lw,
               linestyle=ls, zorder=z)
@@ -122,16 +138,16 @@ def flowline(ax, x1, y1, x2, y2, color="#333333", lw=2.2, ls="-",
         kw["connectionstyle"] = connectionstyle
     ax.add_patch(FancyArrowPatch((x1, y1), (x2, y2), **kw))
 
-def module(ax, x, y, w, h, tint, title, sub=None, deep="#333333", z=4,
-           title_fs=6.2, sub_fs=5.3, rounding=1.6):
-    """顶刊式模块：无边柔色圆角块 + 深系标题(+灰副文)。返回文字基线信息。"""
-    card(ax, x, y, w, h, fill=tint, edge=None, rounding=rounding,
-         dx=0.4, dy=-0.7, z=z)
+def module(ax, x, y, w, h, tint, title, sub=None, deep=None, z=4,
+           title_fs=6.2, sub_fs=5.3, rounding=1.2):
+    """R30 模块：无边柔色圆角块 + 墨黑粗标题(+灰副文)（diagram-design: node name=ink）。"""
+    card(ax, x, y, w, h, fill=tint, edge=None, rounding=rounding, z=z)
+    tc = INK if deep is None else deep
     if sub:
         ax.text(x + w/2, y + h*0.62, title, ha="center", va="center",
-                fontsize=title_fs, fontweight="bold", color=deep, zorder=z+2)
+                fontsize=title_fs, fontweight="bold", color=tc, zorder=z+2)
         ax.text(x + w/2, y + h*0.26, sub, ha="center", va="center",
                 fontsize=sub_fs, color="#444444", zorder=z+2)
     else:
         ax.text(x + w/2, y + h/2, title, ha="center", va="center",
-                fontsize=title_fs, fontweight="bold", color=deep, zorder=z+2)
+                fontsize=title_fs, fontweight="bold", color=tc, zorder=z+2)
