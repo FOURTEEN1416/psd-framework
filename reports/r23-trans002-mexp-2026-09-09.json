@@ -1,5 +1,7 @@
 {
- "attempt": 4,
+ "date": "2026-09-10T12:18:36",
+ "protocol": "PSD-NTU-TRANS-002-MEXP (dated addendum 2026-09-09, frozen before any new run)",
+ "n_pairs": 10,
  "pairs": [
   {
    "seed": 42,
@@ -82,5 +84,27 @@
    "c_ckpt": "epoch080_acc82.48_model.pt"
   }
  ],
- "nan_failed": []
+ "diffs_m_minus_c": [
+  0.0129,
+  0.0427,
+  0.0272,
+  0.0405,
+  0.0261,
+  0.0333,
+  0.0339,
+  0.0308,
+  0.0178,
+  0.0208
+ ],
+ "mean_C": 0.7971,
+ "mean_M": 0.8257,
+ "wilcoxon": {
+  "stat": 0.0,
+  "p_two_sided": 0.00195
+ },
+ "sign_test": {
+  "n_positive": 10,
+  "p_two_sided": 0.00195
+ },
+ "frozen_verdict_untouched": "PARTIAL (seeds 42-44, 15.8x/-4.49pp) per original decision rule"
 }
