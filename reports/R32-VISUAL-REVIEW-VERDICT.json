@@ -1,0 +1,59 @@
+{
+  "review": "R32 designated visual-review (pre-submission)",
+  "date": "2026-09-11",
+  "scope": {
+    "figures": [
+      "fig1_framework_overview",
+      "fig2_pseudo_label_loop",
+      "fig3_segmentation_qualitative",
+      "fig4_al_efficiency (paper Figure 5)",
+      "fig5_budget_retention (paper Figure 4)",
+      "fig_ga_graphical_abstract"
+    ],
+    "pdf_pages": [5, 11, 16, 21, 32],
+    "pdf": "docs/paper/latex/main.pdf"
+  },
+  "skill_compliance": {
+    "skills_loaded": ["comp-visual-review", "scholar-critique-figures"],
+    "review_mode": "--review (6/6 real vision-API calls, no degradation, no counter bypass)",
+    "tools": {
+      "tikz_vision_check": ["fig1: PASS", "fig2: ISSUE 1 (bottom-left blank space, loose row spacing)", "fig_ga: PASS"],
+      "data_fig_vision_check": ["fig3: PASS", "fig4: PASS", "fig5: PASS"],
+      "note": "tikz tool exit-code anomaly (prints PASS but exit=1) logged as V3; printed verdict text taken as authoritative; multimodal human re-review of all 6 figures additionally performed for R30 palette contract A-D"
+    }
+  },
+  "findings": [
+    {
+      "id": "V1",
+      "severity": "minor",
+      "where": "fig2_pseudo_label_loop (paper Figure 2, p10) bottom-left region",
+      "evidence": "vision tool ISSUE 1 + reviewer re-check: blank space around AL queue / Verified seeds nodes and large gap between top and bottom rows; no overlap, no truncation, semantics unaffected",
+      "fix": "optional: tighten canvas height or move legend up; cosmetic, non-blocking"
+    },
+    {
+      "id": "V2",
+      "severity": "minor",
+      "where": "main.pdf all page footers",
+      "evidence": "placeholder author 'USER: surname et al.: Preprint submitted to Elsevier' visible on every page",
+      "fix": "replace with real author/affiliation before actual submission (known manual item, not a figure defect)"
+    },
+    {
+      "id": "V3",
+      "severity": "minor",
+      "where": "toolbox tool tikz_vision_check.py",
+      "evidence": "fig1/fig_ga print PASS but process exit code is 1 (data tool exits 0 on PASS); suspected exit-code bug",
+      "fix": "toolkit-side fix of exit-code logic; this review takes printed verdict text as authoritative"
+    },
+    {
+      "id": "V4",
+      "severity": "minor",
+      "where": "paper Figure 4 (fig5_budget_retention) legend",
+      "evidence": "7 legend entries exceed scholar-critique 5-6 guideline; mitigated by two-hue families + 7 distinct marker shapes; all 7 points distinguishable in render",
+      "fix": "acceptable as-is; if a reviewer raises it, group minor tiers or move legend beside axis"
+    }
+  ],
+  "fatal_count": 0,
+  "major_count": 0,
+  "minor_count": 4,
+  "status": "pass"
+}

@@ -25,7 +25,7 @@ Continuous skeleton streams must be cut into behavior-proposal units before labe
 
 \subsection{Semantic layer}\label{ssec:semantic}
 
-The semantic layer grows labeled coverage toward completeness of the taxonomy from the rule-engine seed set $S$, following the anchor--cluster--pseudo-label recipe transferred from image-domain few-shot recognition (Section~\ref{ssec:rw-semi}).
+The semantic layer grows labeled coverage toward completeness of the taxonomy from the rule-engine seed set $S$, following the anchor--cluster--pseudo-label recipe transferred from image-domain few-shot recognition~\citep{snell2017prototypical} (Section~\ref{ssec:rw-semi}).
 
 The transfer required re-engineering, not re-application, because three domain shifts bind: First, anchors must be defined over \emph{temporal segment embeddings} from a self-supervised physics encoder instead of image features, so anchor quality depends on representation adequacy (§\ref{ssec:pretrain}). Second, prototype clustering operates on variable-length proposals delivered by unsupervised segmentation rather than fixed-size inputs, coupling label-expansion quality to segmentation quality (§\ref{ssec:segmentation}). Third, confidence calibration must tolerate quadruped kinematics whose intra-class motion variance differs from both image textures and human locomotion. Each shift is validated separately in Sections~\ref{sec:experiments}--\ref{sec:ablation} before the composed pipeline is evaluated.
 
@@ -40,7 +40,7 @@ Unlabeled proposals from Section~\ref{ssec:segmentation} are embedded by $\Phi$ 
 \begin{figure}[pos=tbp]
   \centering
   \includegraphics[width=\linewidth]{fig2_pseudo_label_loop.pdf}
-  \caption{The anchor-guided pseudo-labeling loop as a two-row pipeline around a shared state hub. Automated loop (top row, left to right): Assign proposals routes high-confidence proposals ($\kappa \geq \tau$) into the label pool; $\Omega$ is updated on seeds $\cup$ pool, prototypes are re-estimated, and the next round returns to Assign along the top. Human branch (bottom row): low-confidence proposals ($\kappa < \tau$) divert to an annotation queue (budget $B$ of 100--200 clips); verified seeds write back to the anchor set $A$. The dark hub carries the shared state ($P$, $\Omega$, $A$) that the dashed write-back spokes update each pass; the physics encoder stays frozen. Orange-labeled steps are automated; teal-labeled steps are human-in-the-loop. The annotation queue is a deployment extension of Algorithm~\ref{alg:pseudoloop}.}\label{fig:pseudoloop}
+  \caption{The anchor-guided pseudo-labeling loop as a two-row pipeline around a shared state hub. Automated loop (top row, left to right): Assign proposals routes high-confidence proposals ($\kappa \geq \tau$) into the label pool; $\Omega$ is updated on seeds $\cup$ pool, prototypes are re-estimated, and the next round returns to Assign along the top. Human branch (bottom row): low-confidence proposals ($\kappa < \tau$) divert to an annotation queue (budget $B$ of 100--200 clips); verified seeds write back to the anchor set $A$. The dark hub carries the shared state ($P$, $\Omega$, $A$) that the dashed write-back spokes update each pass; the physics encoder $\Phi$ remains frozen throughout (not shown). Orange-labeled steps are automated; teal-labeled steps are human-in-the-loop. The annotation queue is a deployment extension of Algorithm~\ref{alg:pseudoloop}.}\label{fig:pseudoloop}
 \end{figure}
 
 \begin{algorithm}[t]
