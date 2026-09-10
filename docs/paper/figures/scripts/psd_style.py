@@ -16,6 +16,27 @@ R26 配色交割：用户指定参考图（微信图片_2026-09-10_204128_415.pn
 字体 Arial（回退 DejaVu）；spines 0.8。
 """
 import matplotlib.pyplot as plt
+from matplotlib.patches import FancyBboxPatch
+
+# --- R27 现代扁平设计语言（用户两轮判丑后确认：问题在骨架不在色值） ---
+SHADOW = "#1F2937"
+SHADOW_ALPHA = 0.13
+
+def card(ax, x, y, w, h, fill="#FFFFFF", edge=None, lw=1.1, rounding=1.6,
+         dx=0.5, dy=-0.8, shadow=True, z=3, hatch=None):
+    """软阴影+大圆角扁平卡片（数据坐标）。edge=None 即无边纯色块。"""
+    if shadow:
+        ax.add_patch(FancyBboxPatch((x + dx, y + dy), w, h,
+                                     boxstyle=f"round,pad=0,rounding_size={rounding}",
+                                     facecolor=SHADOW, edgecolor="none",
+                                     alpha=SHADOW_ALPHA, zorder=z - 1))
+    p = FancyBboxPatch((x, y), w, h,
+                       boxstyle=f"round,pad=0,rounding_size={rounding}",
+                       facecolor=fill, edgecolor="none" if edge is None else edge,
+                       linewidth=lw if edge is not None else 0, zorder=z,
+                       hatch=hatch)
+    ax.add_patch(p)
+    return p
 
 # --- NS 九色板（参考图真源，勿改值） ---
 NS_RED     = "#E53A46"
@@ -29,6 +50,7 @@ NS_PINK    = "#F5B5B0"
 NS_APRICOT = "#FBCDB5"
 
 # --- 语义 token（单一真源；各图脚本从这里取色，禁止散落字面量） ---
+# R28 用户令：一切可见颜色直接取 NS 九色板，结构色（文字/箭头/轴）用黑灰，禁自创蓝灰系。
 PHYS_EDGE = NS_BLUE                      # 物理层边线/主色
 PHYS_TEXT = "#2E77AE"                    # 浅蓝填充上的标题深蓝字（R26 judge: 白底蓝弱）
 PHYS_FILL = "#E4F1FB"                    # 物理层浅填充（NS_BLUE 提亮）
@@ -36,16 +58,18 @@ SEM_EDGE  = NS_RED                       # 语义层边线/主色
 SEM_FILL  = "#FCE9E7"                    # 语义层浅填充（NS_RED 提亮）
 FOCAL_FILL = "#F9D2CE"                   # 焦点强调 tint（fig2 hub 侧盒）
 HERO      = NS_RED                       # proposed-strategy 曲线（fig4 entropy 臂）
+HUMAN_EDGE  = NS_ORCHID                  # 人工环节=兰紫（R28: 替代灰盒）
+HUMAN_FILL  = "#EDE0EC"                  # 兰紫提亮
+IFACE_FILL, IFACE_EDGE = NS_PINK, "#D89B93"   # 接口带=粉（R28: 替代灰带）
 
 GRAY_1 = "#A6A6A6"                        # 浅 —— 图内次级注记/线
-GRAY_2 = "#767676"                        # 中 —— random 基线
-GRAY_3 = "#4D4D4D"                        # 深 —— 轴 spines/深色文字
-GRAY_4 = "#272727"                        # 近黑 —— hub/强调文字
+GRAY_2 = "#767676"                        # 中 —— 结构虚线/参照
+GRAY_3 = "#4D4D4D"                        # 深 —— 轴 spines
+GRAY_4 = "#272727"                        # 近黑 —— hub/强调
 NEUTRAL_LT = "#CFCECE"
-GRAY_EDGE  = "#8A94A6"                    # 流程图灰盒边（蓝灰调，融入 NS 板）
-GRAY_FILL  = "#F2F4F7"                    # 流程图灰盒填充
-GRAY_LINE  = "#9AA5B1"                    # 流程图软箭头/虚线（蓝灰）
-IFACE_FILL, IFACE_EDGE = "#EEF1F5", "#9AA5B1"
+GRAY_EDGE  = "#9E9E9E"                    # 中性灰边（null 参照专用）
+GRAY_FILL  = "#E3E3E3"                    # 中性灰填充（null 参照专用）
+GRAY_LINE  = "#666666"                    # 流程图软箭头/虚线（R28: 深灰非蓝灰）
 
 # fig5 多系列映射（一系一色 + marker 形状冗余编码）
 S_PUBV1   = NS_BLUE                      # public-real v1 (o)
@@ -57,10 +81,10 @@ S_PANAF   = NS_CORAL                     # animal public benchmark PanAf500 (X)
 S_SYNTH   = NS_YELLOW                    # synthetic-offset (^) —— 白底浅，配深描边
 S_SYNTH_EDGE = "#C9A227"                 # 黄系列专用描边（保可见性）
 
-INK   = "#22313F"                        # 主文字（深蓝黑，与 NS 板同调）
-ARROW = "#5D6D7E"                        # 流程箭头
-NOTE  = "#5D6D7E"                        # 次要标注
-GRID_GRAY = "#E5E8EC"                    # 网格（浅蓝灰）
+INK   = "#1A1A1A"                        # 主文字=黑（R28: 参考图文字为黑，非蓝黑）
+ARROW = "#333333"                        # 流程箭头=深灰黑
+NOTE  = "#555555"                        # 次要标注
+GRID_GRAY = "#E8E8E8"                    # 网格（中性浅灰）
 
 def apply_style():
     """所有 PSD 图脚本顶端统一调用（替代各图散落的 rcParams.update）。"""
