@@ -3,7 +3,7 @@
 物理-语义解耦的低资源动物行为识别框架（学术研究主仓库）
 
 > **论文目标**：Pattern Recognition（IF≈8）/ IJCV
-> **Title**: *A Physics-Semantics Decoupled Framework for Low-Resource Animal Behavior Recognition under Evolving Evaluation Criteria*
+> **Title**: *A Physics-Semantics Decoupled Framework for Animal Behavior Recognition under Evolving Evaluation Criteria*（R20 裁决移除 Low-Resource）
 > **状态**：🔄 立项完成（2026-08-23），P0 数据解阻未开工
 
 ## 仓库分工（2026-08-23 拆分决策）
