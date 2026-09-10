@@ -1,0 +1,74 @@
+{
+ "coverage": 0.7685,
+ "seed_precision_overall": 0.1906,
+ "gate_pass": true,
+ "n_stumps": 27,
+ "dev_n": 4000,
+ "disclosure": "决策桩在4k标注dev集上程序化校准(披露式修订); D臂训练零人工clip标签",
+ "per_class": {
+  "groom-brush": {
+   "n": 3424,
+   "precision": 0.1434
+  },
+  "sit-stand transition": {
+   "n": 1041,
+   "precision": 0.2594
+  },
+  "jacket on/off": {
+   "n": 3034,
+   "precision": 0.2568
+  },
+  "shoe on/off": {
+   "n": 6412,
+   "precision": 0.1775
+  },
+  "hat on/off": {
+   "n": 559,
+   "precision": 0.0966
+  },
+  "head gesture": {
+   "n": 6,
+   "precision": 0.1667
+  },
+  "strike other person": {
+   "n": 8078,
+   "precision": 0.2368
+  },
+  "drop": {
+   "n": 1076,
+   "precision": 0.1069
+  },
+  "writing": {
+   "n": 1766,
+   "precision": 0.0878
+  },
+  "cheer up": {
+   "n": 1754,
+   "precision": 0.3352
+  },
+  "hopping": {
+   "n": 1019,
+   "precision": 0.1757
+  },
+  "play with phone/tablet": {
+   "n": 869,
+   "precision": 0.1358
+  },
+  "salute": {
+   "n": 577,
+   "precision": 0.0416
+  },
+  "falling": {
+   "n": 277,
+   "precision": 0.0289
+  },
+  "touch neck": {
+   "n": 219,
+   "precision": 0.1689
+  },
+  "pat on back of other person": {
+   "n": 697,
+   "precision": 0.0014
+  }
+ }
+}

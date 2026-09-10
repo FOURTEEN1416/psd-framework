@@ -1,0 +1,8 @@
+{
+ "verdict": "PASS-gate",
+ "d_arm_val_acc_yp49": 0.1455,
+ "n_train": 30808,
+ "comparator_c_arm_trans002": 0.798,
+ "gap_pp": -65.25,
+ "claim": "\u89e3\u8026\u81c2(\u4ec5\u89c4\u5219\u79cd\u5b50, 0 \u4eba\u5de5 clip \u6807\u7b7e) vs \u8026\u5408\u81c2(\u5168\u91cf\u91cd\u6807\u6ce8)"
+}

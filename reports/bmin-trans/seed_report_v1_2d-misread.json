@@ -1,0 +1,125 @@
+{
+ "coverage": 0.9947,
+ "seed_precision_overall": 0.0176,
+ "gate_pass": false,
+ "per_class": {
+  "falling": {
+   "n": 2329,
+   "precision": 0.0043
+  },
+  "jump up": {
+   "n": 644,
+   "precision": 0.0031
+  },
+  "hopping": {
+   "n": 114,
+   "precision": 0.0
+  },
+  "sit-stand transition": {
+   "n": 553,
+   "precision": 0.0036
+  },
+  "kicking something": {
+   "n": 4316,
+   "precision": 0.0315
+  },
+  "cheer up": {
+   "n": 1892,
+   "precision": 0.0037
+  },
+  "hand waving": {
+   "n": 82,
+   "precision": 0.0
+  },
+  "salute": {
+   "n": 873,
+   "precision": 0.008
+  },
+  "clapping": {
+   "n": 1,
+   "precision": 1.0
+  },
+  "palms together": {
+   "n": 114,
+   "precision": 0.0263
+  },
+  "cross hands": {
+   "n": 400,
+   "precision": 0.025
+  },
+  "rub two hands together": {
+   "n": 4,
+   "precision": 0.0
+  },
+  "phone call": {
+   "n": 3863,
+   "precision": 0.0243
+  },
+  "sneeze/cough": {
+   "n": 13395,
+   "precision": 0.0253
+  },
+  "consume": {
+   "n": 558,
+   "precision": 0.0323
+  },
+  "touch head": {
+   "n": 1,
+   "precision": 0.0
+  },
+  "touch neck": {
+   "n": 203,
+   "precision": 0.0493
+  },
+  "touch chest": {
+   "n": 146,
+   "precision": 0.0137
+  },
+  "nausea or vomiting": {
+   "n": 146,
+   "precision": 0.0137
+  },
+  "jacket on/off": {
+   "n": 3,
+   "precision": 0.0
+  },
+  "shoe on/off": {
+   "n": 7218,
+   "precision": 0.0026
+  },
+  "hat on/off": {
+   "n": 401,
+   "precision": 0.0025
+  },
+  "reach into pocket": {
+   "n": 615,
+   "precision": 0.0114
+  },
+  "drop": {
+   "n": 2,
+   "precision": 0.0
+  },
+  "reading": {
+   "n": 1,
+   "precision": 0.0
+  },
+  "head gesture": {
+   "n": 123,
+   "precision": 0.0813
+  },
+  "point to something": {
+   "n": 3,
+   "precision": 0.0
+  },
+  "writing": {
+   "n": 55,
+   "precision": 0.0364
+  },
+  "tear up paper": {
+   "n": 1823,
+   "precision": 0.0099
+  }
+ },
+ "n": 40091,
+ "note": "阈值=几何先验先验固定, 未用标签调参; precision 对 train Y' GT 的事后诊断"
+}
