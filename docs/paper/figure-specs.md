@@ -1,5 +1,8 @@
 # 图表绘制规格（Figure Specs · P0.6 增量二）
 
+> ⚠️ **治理注记（2026-09-10 真源交割，用户裁决）**: 图绘制 truth = `docs/paper/figures/scripts/make_*.py` 版本递进脚本 + 渲染工件（pdf/png）；caption truth = tex 各节 figure 环境。本文件冻结为历史设计稿，不得作为改图依据。
+
+
 > Owner: `docs/paper/figure-specs.md` · W5 窗口 2026-08-23 · 状态: v0.1——fig1/fig2 绘制规格 + Mermaid 结构图 + 自足 caption；fig3/fig4 待数据后补规格
 > 执行标准: experiment-skeleton.md §图表规范（白底浅灰网格 / ≤6 色 / 低饱和淡彩 / 避红绿 / 矢量输出 / caption 自足）
 > 用途: 绘图窗口（或用户手动绘图时）照此执行，无需重新设计

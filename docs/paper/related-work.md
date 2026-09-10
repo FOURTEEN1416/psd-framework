@@ -1,5 +1,8 @@
 # 2. Related Work（英文初稿 · P0.6）
 
+> ⚠️ **治理注记（2026-09-10 真源交割，用户裁决）**: 本文件的正文装配 truth 已正式移交 `docs/paper/latex/sections/` 各节 tex——R22 之后各轮（fixfull/MEXP/R24/R25）全部直改 tex，本 md 从未回同步；本文件**冻结为历史设计稿**，不得作为修订、引用或数字对账依据。
+
+
 > Owner: `docs/paper/related-work.md` · W5 窗口 2026-08-23 · 状态: 初稿 v0.4（两轮评审 + W17 文献终审标记同步，见文末审查记录与修订历史）
 > 引用纪律: 全部条目溯源 `dev-docs/research/RESEARCH_LITERATURE.md`（17 篇池）与 `NOVELTY_CHECK_YAOQING_JIA.md`；题录不全者标 `[CITATION-NEEDED]`。
 > 写作规范: 主题式综合（禁逐篇罗列）；句均长 ≤25 词；被动语态慎用；每小节以差距句收尾。

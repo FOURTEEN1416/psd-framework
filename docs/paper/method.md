@@ -1,5 +1,8 @@
 # 3. Method（英文框架稿 · P0.6）
 
+> ⚠️ **治理注记（2026-09-10 真源交割，用户裁决）**: 本文件的正文装配 truth 已正式移交 `docs/paper/latex/sections/` 各节 tex——R22 之后各轮（fixfull/MEXP/R24/R25）全部直改 tex，本 md 从未回同步；本文件**冻结为历史设计稿**，不得作为修订、引用或数字对账依据。
+
+
 > Owner: `docs/paper/method.md` · W5 窗口 2026-08-23 · 状态: **终稿候选 v0.3（2026-08-25 W36 终填轮）**——已归档数字终填、C7 换轨合规改写完成、"sliding-window baseline" 误标已按 W34 勘误修正；未执行项以显式 scope 声明保留（AimCLR++ 对比 / τ-K 敏感性全扫），不冒充已完成
 > v0.2 对抗评审加固：§3.3 增迁移非平凡性论证段（防 incremental 指控）；§3.4 成本函数形式化（C_decoupled vs C_full @matched accuracy）。
 > 写作规范（galaxy Method 章）: 以可复现为标准；呈现最终设计决策；消融留给 §4-§5；超参列表化。

@@ -4,8 +4,8 @@
 %% 类选项实证: review => setspace + \doublespacing（cas-sc.cls L67/L138），对应 PR
 %%   "single-column, double-spaced" 投稿硬约束; 页数窗口 20-35 页含参考文献附录。
 %% 引用样式: PR 刊出为数字制 => natbib numbers + elsarticle-num.bst（官方 Elsevier 数字样式）。
-%% 装配纪律: 各节 body 的 truth 仍是 docs/paper/<owner>.md（W36 v-final），转换时逐块搬运、
-%%   禁止改写数字与措辞；全文对账以 number-index（gen_number_index.py）为准。
+%% 装配纪律（2026-09-10 交割）: body truth = 各节 tex 文件（R22 后全部修订直改 tex，md 不回同步）；
+%%   docs/paper/<owner>.md 冻结为历史设计稿（头部有治理注记）；全文对账仍以 number-index（gen_number_index.py）为准。
 %% 排版纪律: pdflatex 非 Unicode 引擎——排版面（非注释）禁 CJK；占位一律走 \TODO{} 且参数纯 ASCII。
 %% 编译: 本目录内执行（latexmk 需 Perl，本机未装——用经典三连）:
 %%   pdflatex -interaction=nonstopmode main.tex ; bibtex main ; pdflatex x2
@@ -78,17 +78,17 @@ animal behavior recognition \sep skeleton-based action recognition \sep self-sup
 
 \maketitle
 
-%% ---------------- 正文装配区（truth = docs/paper/<owner>.md，W36 v-final）----------------
-\input{sections/01-introduction}          % <= introduction.md      (Abstract 已内置上方)
-\input{sections/02-related-work}          % <= related-work.md      (题录池 11 条全解决/3 条作者项已经 CrossRef/arXiv 落库)
-\input{sections/03-method}                % <= method.md
-\input{sections/04-experiments}           % <= experiment-skeleton.md §4 (三层口径铁律随行)
-\input{sections/05-ablation-analysis}     % <= experiment-skeleton.md §5 (tab3 七行零 PENDING)
-\input{sections/06-conclusion-limitations}% <= conclusion-limitations.md (Limitations 十三条: L1-L13; 终审 2026-09-07 勘正条数)
+%% ---------------- 正文装配区（truth = 各节 tex，2026-09-10 交割）----------------
+\input{sections/01-introduction}          % hist-draft: introduction.md (Abstract 已内置上方)
+\input{sections/02-related-work}          % hist-draft: related-work.md (题录池 11 条全解决/3 条作者项已经 CrossRef/arXiv 落库)
+\input{sections/03-method}                % hist-draft: method.md
+\input{sections/04-experiments}           % hist-draft: experiment-skeleton.md §4 (三层口径铁律随行)
+\input{sections/05-ablation-analysis}     % hist-draft: experiment-skeleton.md §5 (tab3 七行零 PENDING)
+\input{sections/06-conclusion-limitations}% hist-draft: conclusion-limitations.md (Limitations 十三条: L1-L13; 终审 2026-09-07 勘正条数)
 
 %% fig1 已迁至 01-introduction.tex §1 尾（hero 图按 figure-specs 落位）
 
-%% ---------------- 声明区（草稿 truth: reports/submission-package-2026-08-26.md §2-§3）----------------
+%% ---------------- 声明区（truth = 本 tex；历史建议稿: reports/submission-package-2026-08-26.md §2-§3）----------------
 %% 终审修复 2026-09-07: 删除手写 \section*{CRediT...}——cas-sc 的 \printcredits 自带同名标题,
 %% 手写节标题导致印刷页标题重复两次(R 视觉验收实锤)
 \printcredits %% 角色明细取前置区 \credit{} 字段; 作者名单定稿后复核

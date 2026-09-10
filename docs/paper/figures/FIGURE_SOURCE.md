@@ -1,5 +1,8 @@
 # FIGURE_SOURCE — 论文图表溯源清单（W17 建册 / W22 更新）
 
+> ⚠️ **治理注记（2026-09-10 真源交割，用户裁决）**: 图绘制 truth = `docs/paper/figures/scripts/make_*.py` 版本递进脚本 + 渲染工件（pdf/png）；caption truth = tex 各节 figure 环境。本文件冻结为历史设计稿，不得作为改图依据。
+
+
 > Owner: `docs/paper/figures/` · W17 窗口 2026-08-24 建册 · W22 窗口 2026-08-25 补齐 fig3/fig4
 > 执行标准: `experiment-skeleton.md` §图表规范（白底浅灰 / ≤6 色 / 低饱和淡彩 / 避红绿 / 矢量输出）
 > 绘制规格唯一来源: `docs/paper/figure-specs.md`（改图先改规格；W22 规格偏差见下方登记节）
