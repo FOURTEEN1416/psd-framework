@@ -1,0 +1,25 @@
+{
+ "coverage": 1.0,
+ "seed_precision_overall": 0.0498,
+ "gate_pass": false,
+ "n_rules": 1408,
+ "disclosure": "单桩+双特征合取, 4k dev 校准(披露); D 臂零人工 clip 标签",
+ "per_class": {
+  "shoe on/off": {
+   "n": 70,
+   "precision": 0.0429
+  },
+  "strike other person": {
+   "n": 2642,
+   "precision": 0.1688
+  },
+  "bidirectional walk": {
+   "n": 35010,
+   "precision": 0.0271
+  },
+  "cheer up": {
+   "n": 2369,
+   "precision": 0.2528
+  }
+ }
+}
