@@ -100,3 +100,38 @@ def apply_style():
         "axes.linewidth": 0.8,
         "legend.frameon": False,
     })
+
+# --- R29 顶刊方法图设计语言（Nature/Cell 柔色满块+层级文字+粗流线） ---
+# 模块=柔色圆角块（无边）+深系文字；容器=极浅身体+满色头带（白字标题）；
+# 数据流=粗圆头流线（lw>=2.2）。色相全部来自 NS 板（明度适配印刷对比度）。
+PHYS_DEEP  = "#1F6FA8"                    # NS_BLUE 深化：头带/文字/流线
+SEM_DEEP   = "#B02128"                    # NS_RED 深化
+HUMAN_DEEP = "#7E4678"                    # NS_ORCHID 深化
+PHYS_TINT  = "#C9E3F7"                    # 模块柔色填充（NS_BLUE 提亮一档）
+SEM_TINT   = "#F8C9C6"
+HUMAN_TINT = "#E4CFE2"
+BODY_TINT  = "#F4F8FC"                    # 容器身体（近白微蓝）
+
+def flowline(ax, x1, y1, x2, y2, color="#333333", lw=2.2, ls="-",
+             head=13, z=2, connectionstyle=None):
+    """顶刊式粗流线箭头（大箭头头；FancyArrowPatch 不收 capstyle，端形由 arrowstyle 决定）。"""
+    from matplotlib.patches import FancyArrowPatch
+    kw = dict(arrowstyle="-|>", mutation_scale=head, color=color, lw=lw,
+              linestyle=ls, zorder=z)
+    if connectionstyle:
+        kw["connectionstyle"] = connectionstyle
+    ax.add_patch(FancyArrowPatch((x1, y1), (x2, y2), **kw))
+
+def module(ax, x, y, w, h, tint, title, sub=None, deep="#333333", z=4,
+           title_fs=6.2, sub_fs=5.3, rounding=1.6):
+    """顶刊式模块：无边柔色圆角块 + 深系标题(+灰副文)。返回文字基线信息。"""
+    card(ax, x, y, w, h, fill=tint, edge=None, rounding=rounding,
+         dx=0.4, dy=-0.7, z=z)
+    if sub:
+        ax.text(x + w/2, y + h*0.62, title, ha="center", va="center",
+                fontsize=title_fs, fontweight="bold", color=deep, zorder=z+2)
+        ax.text(x + w/2, y + h*0.26, sub, ha="center", va="center",
+                fontsize=sub_fs, color="#444444", zorder=z+2)
+    else:
+        ax.text(x + w/2, y + h/2, title, ha="center", va="center",
+                fontsize=title_fs, fontweight="bold", color=deep, zorder=z+2)
