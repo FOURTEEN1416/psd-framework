@@ -27,6 +27,16 @@
 
 \graphicspath{{../figures/}}                 % fig1-4 PDF 位于 docs/paper/figures/
 
+%% R31 浮动体修复(交叉重排 2026-09-11): cas-common.sty 的 figure/table 环境依赖
+%%   etoolbox \csxdef 回写 \\fps@figure, 裸 [t] 语法走 unknown-key 分支会把定位符写空
+%%   (实测 \\fps@figure 运行时 undefined => 全部图表滞留文末浮动页 37-41 的根因)。
+%%   双保险: ①\\def 预置合法默认定位符(\\renewcommand 对 undefined 会报错被 nonstopmode 吞掉)
+%%   ②全部浮动环境改用类约定的 [pos=t] 键值语法(实测有效)。
+\makeatletter
+\def\fps@figure{tbp}
+\def\fps@table{tbp}
+\makeatother
+
 \begin{document}
 
 \let\WriteBookmarks\relax
@@ -128,7 +138,7 @@ During the preparation of this work the authors used AI development tools to ass
 
 Table~\ref{tab:novelty} records the repository-scale survey behind the firstness claim (Section~\ref{sec:related}): ten query groups over GitHub code search, the last a full scan of the maintained awesome-skeleton-AR catalog (18 survey candidates; the submission-time arXiv/CrossRef re-verification added the point-supervised row, giving 19 candidate works across 8 table rows), each candidate checked against the three-part mechanism (self-supervised skeleton encoder $\to$ rule-engine seed anchors $\to$ clustered, confidence-filtered iterated pseudo-labels).
 
-\begin{table}[t]
+\begin{table}[pos=t]
 \centering
 \caption{Novelty survey matrix. ``Occupies niche?'' = does the work instantiate all three mechanism parts for temporal skeleton recognition. Rows are identified by name and venue; bibliography keys for works cited in the body appear in Section~\ref{sec:related}, and the full check table is in the released survey log (\texttt{dev-docs/research/}).}
 \label{tab:novelty}

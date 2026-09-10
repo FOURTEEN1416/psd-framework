@@ -5,13 +5,13 @@
 
 Table~\ref{tab:ablation} summarizes the component-level ablations; each row removes, replaces, or perturbs one design element and reports the measured consequence under its disclosed caliber.
 
-\begin{table}[t]
+\begin{table}[pos=t]
 \centering
 \caption{Component ablations. Every number is tier-tagged; tiers are never mixed. Paired designs are described inline. Device calibers are disclosed where a row spans devices (row 1: gradient tiers CPU, saturation tier GPU); cross-device absolute accuracies are not poolable (Section~\ref{sec:conclusion}, L10).}
 \label{tab:ablation}
 \small
 \hyphenpenalty=10000
-\begin{tabularx}{\linewidth}{>{\raggedright\arraybackslash}p{2.6cm}>{\raggedright\arraybackslash}p{1.4cm}>{\raggedright\arraybackslash}X}
+\begin{tabularx}{\linewidth}{>{\raggedright\arraybackslash}p{2.6cm}>{\raggedright\arraybackslash}p{1.8cm}>{\raggedright\arraybackslash}X}
 \hline
 Switch & Claim & Result (caliber) \\
 \hline
@@ -44,7 +44,7 @@ We report, as an exploratory finding, that uncertainty sampling did not help in 
 \paragraph{Sensitivity.}
 Seed-ratio sweeps show prototype quality saturating early ($\leq$1\,pp beyond 25\% seeds at $K\in\{5,10\}$; $-2.4$\,pp at the best sweep cell $K{=}14$); the confidence threshold $\tau$ and cluster count $K$ interact with the frequency-aware margin design, and full sweeps are registered as future work. The class-imbalance handling switch (frequency-aware margins vs.\ resampling) is registered for evaluation on the public-real tier (not yet run) together with the per-class breakdown mandated by Section~\ref{sec:conclusion}.
 
-\begin{figure}[t]
+\begin{figure}[pos=tbp]
   \centering
   \includegraphics[width=\linewidth]{fig4_al_efficiency.pdf}
   \caption{Active-learning efficiency on the synthetic layer (short-budget protocol; best validation accuracy, 22-class top-1 on a fixed ground-truth set, $n=330$; mean $\pm$ std, 3 seeds; budget axis on log scale). Panel (a) cold-start scorers; panel (b) warm-started in-domain scorers---the stronger negative evidence. Entropy sampling shows no detectable advantage: in panel (a) $b=20/50$ differences lie within noise, and random leads in mean at $b \geq 100$ (69.9 vs.\ 77.8\% at $b=100$, 2/3 seeds; 80.9 vs.\ 88.0\% at $b=200$, 3/3 seeds); in panel (b) random leads by 4.2--5.0\,pp at every budget above the shared initial set.}\label{fig:al-efficiency}
