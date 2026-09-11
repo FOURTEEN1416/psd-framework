@@ -47,7 +47,7 @@
 \shorttitle{Physics-semantics decoupled framework for animal behavior recognition}
 %% 排版纪律 2: 前置区字段(shortauthors/author/ead/affiliation)会被类内 LaTeX3 机制全展开——
 %%   禁放任何自定义宏(含 \TODO/\textcolor)，只写纯文本占位；\TODO 仅用于正文区。
-\shortauthors{USER: surname et al.}
+\shortauthors{Hou et al.}
 
 % R20 标题终裁（模拟审稿最优解）：移除"Low-Resource"——动物层端到端低资源为负，标题词与结果不匹配是 framing 级拒稿面；
 %   卖点迁到已交付且新颖的"解耦+演化评估准则"。low-resource 作为设计目标保留在摘要/正文/关键词（上下文即时限定）。
@@ -57,15 +57,51 @@
 \renewcommand{\casprelimstitle}{A Physics--Semantics Decoupled Framework for Animal Behavior Recognition\\ under Evolving Evaluation Criteria}
 
 %% 作者区 USER 终审项: 名单/单位/ORCID/通讯标记——结构按官方模板预留
-\author[1]{USER: Author One}
+\author[1]{Zhimai Hou}[orcid=0009-0006-1360-8359]
 \cormark[1]
-\ead{USER: email}
-\credit{Conceptualization, Methodology, Software, Validation, Investigation, Data curation, Writing -- original draft, Writing -- review \& editing, Visualization}
-\affiliation[1]{organization={USER},
-            city={USER},
-            postcode={},
-            country={USER}}
+\ead{3389812293@qq.com}
+\credit{Conceptualization, Methodology, Software, Investigation, Data curation, Writing -- original draft}
+\affiliation[1]{organization={Yunnan Police College},
+            city={Kunming},
+            postcode={650000},
+            country={China}}
 \cortext[1]{Corresponding author}
+\author[2]{Jinhuan Wu}
+\credit{Software, Validation}
+\affiliation[2]{organization={Qujing Normal University},
+            city={Qujing},
+            postcode={655000},
+            country={China}}
+\author[3]{Ying Geng}
+\credit{Investigation, Data curation}
+\affiliation[3]{organization={Shanghai Jiao Tong University},
+            city={Shanghai},
+            postcode={200240},
+            country={China}}
+\author[4]{Guoliang Yang}
+\credit{Software, Validation}
+\affiliation[4]{organization={Beijing University of Chemical Technology},
+            city={Beijing},
+            postcode={100029},
+            country={China}}
+\author[5]{Shuo Lin}
+\credit{Investigation, Visualization}
+\affiliation[5]{organization={Southwest Jiaotong University},
+            city={Chengdu},
+            postcode={610031},
+            country={China}}
+\author[6]{Jiabin Zhao}
+\credit{Methodology, Supervision, Writing -- review \& editing}
+\affiliation[6]{organization={Criminal Investigation Police University of China},
+            city={Shenyang},
+            postcode={110035},
+            country={China}}
+\author[7]{Ting Yang}
+\credit{Supervision, Writing -- review \& editing}
+\affiliation[7]{organization={Southwest University},
+            city={Chongqing},
+            postcode={400715},
+            country={China}}
 
 %% ---------------- 摘要（introduction.md v0.3 W36 合并定稿逐字搬运）----------------
 \begin{abstract}
@@ -130,8 +166,8 @@ All reported numbers are reproducible from archived configurations, released scr
 This study exclusively re-analyzes publicly available, previously published datasets collected by third-party research groups; the authors conducted no new experiments on animals or human subjects. Original data collection complied with the protocols of the respective providers cited in Section~\ref{sec:datasets} (InterPet4D, Animal Kingdom, APTv2, NTU RGB+D); the public canine pose corpora used for skeleton extraction (dog-pose/StanfordExtra lineage) are described in the Data availability statement. For InterPet4D, the dataset providers state that ``All participants provided informed consent for data release'', that ``No personally identifying information (faces / voices of bystanders) is included'', and that ``all interactions were supervised and non-coercive'' with respect to pet welfare. Sex- and gender-based analyses were not performed; this scope restriction is acknowledged within the limitations on cross-family generalization (Section~\ref{sec:conclusion}). The application context (working-dog training) involves no intervention by this work; all reported systems are offline analysis pipelines.
 
 \section*{Declaration of generative AI use}
-%% truth: reports/submission-package-2026-08-26.md §3.3 建议稿; 🔴 披露颗粒度(工具名列举 vs 概括)待用户终裁——投稿强制项
-During the preparation of this work the authors used AI development tools to assist with code development, experiment orchestration, and language editing. After using these tools, the authors reviewed and edited the content as needed and take full responsibility for the content of the published article.
+%% GenAI 披露颗粒度终裁(2026-09-11 用户裁决): 点名 GLM-5.3-Flash (Zhipu AI); 工具清单如有增补须同步更新本段
+During the preparation of this work the authors used GLM-5.3-Flash (Zhipu AI) as the primary AI assistant for code development, experiment orchestration, and language editing. After using this tool, the authors reviewed and edited the content as needed and take full responsibility for the content of the published article. to assist with code development, experiment orchestration, and language editing. After using these tools, the authors reviewed and edited the content as needed and take full responsibility for the content of the published article.
 
 %% ---------------- 附录（R12 启用: 首次性证据矩阵 + 复现链, 消除"Supplementary Material 不存在"指控）----------------
 \appendix
