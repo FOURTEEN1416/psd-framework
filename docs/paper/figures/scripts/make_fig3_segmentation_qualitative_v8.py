@@ -144,3 +144,10 @@ for i in ids:
     ep = episodes[i]
     print(f"ep{i}: T={ep['T']} IoU={ep['mean_matched_iou']} baseline={ep['random_baseline_iou']}")
 print(f"aggregate: {agg['mean_matched_iou']} \u00b1 {agg['std']} | {n_win}/4")
+
+# ---- 出图门禁（任务包 A 第三轮内建：G1 + G4） ----
+import make_common_gates as gates
+gates.gate_print_robustness(
+    "fig3", {"pseudo-GT band": ORANGE_DARK, "SMQ pred band": CYAN_DARK},
+    redundancy="upper/lower band position + colored axis labels + bar hatch")
+gates.gate_pdf(pdf_path)

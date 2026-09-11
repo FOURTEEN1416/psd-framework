@@ -113,6 +113,15 @@ fig.savefig(png_path, dpi=600, bbox_inches="tight", pad_inches=0)
 plt.close(fig)
 
 assert pdf_path.is_file() and png_path.is_file(), "GA outputs missing"
+
+# ---- 出图门禁（任务包 A 第三轮内建：G1 + G4(531x131pt)） ----
+import make_common_gates as gates
+gates.gate_print_robustness(
+    "GA", {"NTU60": psd_style.S_NTU60, "NTU120": psd_style.S_NTU120,
+           "canine": psd_style.GRAY_FILL},
+    redundancy="direct text labels + hatch")
+gates.gate_pdf(pdf_path, max_w_pt=531, max_h_pt=131)
+
 print("written:", pdf_path)
 print("written:", png_path)
 print("GA v13 (top-journal polish: retention rail + 100% tick) saved")

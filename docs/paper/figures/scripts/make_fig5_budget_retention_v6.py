@@ -149,37 +149,20 @@ for side in ("left", "bottom"):
     ax.spines[side].set_linewidth(0.65)
 ax.tick_params(labelsize=6, width=0.65, length=2.4)
 
-# ---- 程序化碰撞检测（渲染坐标两两 bbox 相交断言 + 出轴断言） ----
-fig.canvas.draw()
-ren = fig.canvas.get_renderer()
-ax_bb = ax.get_window_extent(ren)
-boxes = [(t.get_text(), t.get_window_extent(ren)) for t in label_texts]
-problems = []
-for (n1, b1), (n2, b2) in itertools.combinations(boxes, 2):
-    if b1.overlaps(b2):
-        problems.append(f"label-overlap: {n1!r} × {n2!r}")
-for n, b in boxes:
-    if not (b.x0 >= ax_bb.x0 - 2 and b.x1 <= ax_bb.x1 + 2
-            and b.y0 >= ax_bb.y0 - 2 and b.y1 <= ax_bb.y1 + 2):
-        problems.append(f"label-out-of-axes: {n!r}")
-# 文本 × 误差棒竖线相交检查（x 在文本横向范围内且 y 区间重叠即判撞线, 留 3pt cap 余量）
-CAP_PX = 3.0
-for fx, lo, hi, tier in point_errs:
-    x_line = ax.transData.transform((fx, 0))[0]
-    y_lo = ax.transData.transform((fx, lo))[1]
-    y_hi = ax.transData.transform((fx, hi))[1]
-    for n, b in boxes:
-        if (b.x0 - CAP_PX <= x_line <= b.x1 + CAP_PX
-                and not (b.y0 > max(y_lo, y_hi) or b.y1 < min(y_lo, y_hi))):
-            problems.append(f"label-on-whisker: {n!r} × {tier} errbar")
-if problems:
-    for p in problems:
-        print("⛔", p)
-    raise SystemExit("fig5 v6 label collision check FAILED")
-print(f"label collision check PASS ({len(boxes)} labels, pairwise clear + in-axes)")
+# ---- 出图门禁（任务包 A 第三轮：统一收敛到共享门禁模块 make_common_gates） ----
+import make_common_gates as gates
+gates.gate_print_robustness(
+    "fig5", {"public-real v1": psd_style.S_PUBV1, "public-real v2": psd_style.S_PUBV2,
+             "human NTU60": psd_style.S_NTU60, "human NTU120": psd_style.S_NTU120,
+             "indep. UCF101": psd_style.S_UCF, "animal PanAf500": psd_style.S_PANAF,
+             "synthetic-offset": psd_style.S_SYNTH},
+    redundancy="7 unique marker shapes + direct labels")
+gates.gate_labels(fig, ax, label_texts, name="fig5")
+gates.gate_whisker_texts(fig, ax, label_texts, point_errs, name="fig5")
 
 fig.savefig(OUT / "fig5_budget_retention.pdf", bbox_inches="tight", pad_inches=0.02)
 fig.savefig(OUT / "fig5_budget_retention.png", dpi=600, bbox_inches="tight", pad_inches=0.02)
+gates.gate_pdf(OUT / "fig5_budget_retention.pdf")
 for frac, r, e, tier, _, _ in pts:
     print(f"{tier}: {frac:.1f}% -> {r:.1f}% ± {e:.1f}")
 print("fig5 v6 saved")

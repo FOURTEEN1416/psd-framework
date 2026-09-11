@@ -18,8 +18,8 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from pathlib import Path
 
-OUT = Path(r"D:\Desktop\psd-framework\docs\paper\figures")
-
+ROOT = Path(__file__).resolve().parents[4]  # worktree 隔离：禁硬编码主仓绝对路径
+OUT = ROOT / "docs" / "paper" / "figures"
 import sys, os
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import psd_style
@@ -110,6 +110,15 @@ ax.text(55, 5.0, r"Taxonomy $\mathcal{Y} \to \mathcal{Y}'$:  only $\Omega$ retra
 psd_style.flowline(ax, 84, 8.3, 84, 16.6, color=SD_, lw=1.3, ls=(0, (3, 2)), head=9)
 
 fig.subplots_adjust(left=0.005, right=0.995, top=0.995, bottom=0.005)
-fig.savefig(OUT / "fig1_framework_overview.pdf", bbox_inches="tight", pad_inches=0.01)
+pdf_path = OUT / "fig1_framework_overview.pdf"
+fig.savefig(pdf_path, bbox_inches="tight", pad_inches=0.01)
 fig.savefig(OUT / "fig1_framework_overview.png", dpi=600, bbox_inches="tight", pad_inches=0.01)
 print("fig1 v13 (top-journal polish: hairline container borders) saved")
+
+# ---- 出图门禁（任务包 A 第三轮内建：G1 印刷稳健性 + G2 标签碰撞 + G4 文件级） ----
+import make_common_gates as gates
+gates.gate_print_robustness(
+    "fig1", {"physics": psd_style.PHYS_EDGE, "semantic": psd_style.SEM_EDGE},
+    redundancy="container tint + position + labels")
+gates.gate_labels(fig, ax, list(ax.texts), name="fig1")
+gates.gate_pdf(pdf_path)

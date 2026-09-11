@@ -110,3 +110,10 @@ for arm in SERIES:
     print(f"(b) {arm:>8}: {row}")
 neg = all(payload["curves"]["random"][str(b)]["mean"] >= payload["curves"]["entropy"][str(b)]["mean"] for b in (100, 200))
 print(f"negative-result fact preserved: {neg}")
+
+# ---- 出图门禁（任务包 A 第三轮内建：G1 + G4） ----
+import make_common_gates as gates
+gates.gate_print_robustness(
+    "fig4", {"uncertainty (proposed)": ENT_COLOR, "random": RND_COLOR},
+    redundancy="marker shape (o/s) + linestyle (solid/dashed) + legend")
+gates.gate_pdf(pdf_path)

@@ -1,17 +1,12 @@
 # -*- coding: utf-8 -*-
-r"""fig2 v16 — 伪标签循环双行管线（R43b 顶刊级冲刺 · 承 v15 拓扑，加自动环步骤号锚点）。
-automated=深橙系，human=青绿系，hub=墨黑（语义锁承 psd_style）。
+r"""fig2 v17 — 伪标签循环双行管线（任务包 A 第三轮 · G2 门禁抓出相触修复）。
 
-相对 v14 的重绘点（拓扑不变，caption 的 top/bottom row 措辞保真）：
-1. write-back 两条对角虚线改正交圆角肘线：Update Ω 垂直下入 hub 顶；
-   Re-estimate P 垂直下行→肘弯左行入 hub 右缘（diagram-design 连线可追踪性）；
-2. "next round" 回路轨道从 y=82 压至 y=69.5 贴盒（画布高度 2.95→2.35in，
-   顶部死区回收，单位物理尺度不变）；
-3. 图例重构：底部单行三键（automated / human-in-the-loop / write-back to state），
-   删 v14 图内+图例双处 write-back 重复（spokes 旁保留一处标注）；
-4. 六个站盒宽度统一 19.5（v14 Assign 独宽 21.5）。
-R43b: 自动环四步加 ①-④ 圆角编号 chip（角标白底橙描边）——与 caption
-"Automated loop (top row, left to right)" 叙述序精确对应（加法项，caption 零改动）。
+相对 v16 的唯一构图改动：κ≥τ 段标签从段上方 (ldy=1.6) 改置段下方
+(ldy=-2.2)——消除 v16 中与 "Assign proposals" 标题 bbox 1.9px 相触
+（G2 标签碰撞门禁实证；段长仅 6 单位，上方两侧均有盒角/chip 拥挤，
+下方无元素；caption 无位置词，零耦合）。
+拓扑/色板/图例/chip 编号/write-back 肘线全部承 v16；路径修复为 worktree
+相对（v16 曾硬编码主仓，worktree 内重跑会越窗覆盖，已同步修）。
 """
 import matplotlib
 matplotlib.use("Agg")
@@ -86,7 +81,7 @@ def seg(a, b, label=None, lp=0.5, ldy=2.2, ls="solid", lw=1.6, color=SOFT,
         ax.text(mx, my, label, fontsize=5.8, color="#444444", ha="center", va="center", zorder=5)
 
 # ---- 上排自动环(线性) + 贴盒回路轨道 ----
-seg("assign", "pool", label=r"$\kappa \geq \tau$", ldy=1.6)
+seg("assign", "pool", label=r"$\kappa \geq \tau$", ldy=-2.2)
 seg("pool", "upd")
 seg("upd", "reest")
 # 三段贴盒折线回环: reest 顶 -> 上 -> 左 -> assign 顶(箭头)
@@ -168,12 +163,12 @@ fig.subplots_adjust(left=0.005, right=0.995, top=0.995, bottom=0.005)
 pdf_path = OUT / "fig2_pseudo_label_loop.pdf"
 fig.savefig(pdf_path, bbox_inches="tight", pad_inches=0.01)
 fig.savefig(OUT / "fig2_pseudo_label_loop.png", dpi=600, bbox_inches="tight", pad_inches=0.01)
-print("fig2 v16 (top-journal polish: numbered auto-loop chips) saved")
+print("fig2 v17 (G2-fix: kappa label nudge) saved")
 
 # ---- 出图门禁（任务包 A 第三轮内建：G1 + G2 + G4） ----
 import make_common_gates as gates
 gates.gate_print_robustness(
     "fig2", {"automated": psd_style.SEM_EDGE, "human": psd_style.HUMAN_EDGE},
     redundancy="card fill/border + legend keys + step chips")
-gates.gate_labels(fig, ax, list(ax.texts), name="fig2")
+gates.gate_labels(fig, ax, list(ax.texts), name="fig2-v17")
 gates.gate_pdf(pdf_path)
