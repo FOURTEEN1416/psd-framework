@@ -26,6 +26,7 @@ description: 多窗口 AI 协同作战系统。当需要多个 AI 编码窗口�
 pwsh scripts/window_checkin.ps1 -Name <窗名> [-Remove] [-Permit 豁免路径]
 ```
 三门禁自动执行：领地扫描（禁触清单命中即拒）→ 窗口内全量测试 → master 合并后回归（失败自动回滚）。合并用 `--no-ff` 留整窗交付节点。冲突自动 abort 上报。
+禁触清单用 PowerShell `-like` **全串匹配**，目录级项必须写成 `<dir>/*`（2026-09-12 实证：原 `docs/paper/` 与 `dev-docs/decisions/` 两条漏写通配符 → 恒不命中 → 论文源与决策记录曾实际无门禁，已修）。
 
 ### 3. 跨窗看板（消灭信息不互通）
 `dev-docs/board/BOARD.md` 追加只写，全窗共享：

@@ -24,7 +24,9 @@ $PY = Join-Path $MAIN ".venv\Scripts\python.exe"
 if (-not (Test-Path $WORKTREE)) { Write-Error "[checkin] worktree 不存在: $WORKTREE"; exit 1 }
 
 # ---- 门禁 1: 领地扫描（禁触清单，命中即拒）
-$FORBIDDEN = @("dev-docs/decisions/", "docs/paper/", "*ntu*", "scripts/relay_executor.ps1", "dev-docs/HANDOVER.md")
+# 注意：目录级禁触必须写成 <dir>/* —— PowerShell -like 是全串匹配，写成 "docs/paper/" 会恒不命中。
+# 2026-09-12 figB 收编时实证此缺陷：原两条目录项形同虚设（论文源与决策记录实际无门禁），已修。
+$FORBIDDEN = @("dev-docs/decisions/*", "docs/paper/*", "*ntu*", "scripts/relay_executor.ps1", "dev-docs/HANDOVER.md")
 $changed = git -C $MAIN diff --name-only master..$BRANCH 2>$null
 if (-not $changed) { Write-Host "[checkin] $BRANCH 无领先提交——视为已收编，跳过合并"; }
 else {
