@@ -216,7 +216,11 @@ synthetic-offset     8.0   85.7 ± 4.5       animal PanAf500   13.2   88.7 ± 15
 **未动（已核）**：`psd_style.py`（零改动，样板中的明度派生助手写在各脚本本地）、任何 `.tex`、任何 caption、`main.tex`、`refs.bib`、`reports/` 下其他文件。
 **正典产物零改动**：`fig1–fig5`、`fig_ga*`、`*_2col`、`fig3_matching_detail` 的 PDF/PNG 全部未写入——样板只写 `reports/figB-proposal/`。图号顺序未动，未合并/拆分任何图。
 
-**事故与修复（如实登记）**：首次提交时进程被 SIGTERM 打断，留下 `wt/figB` 的 loose ref 丢失 → HEAD 变 unborn → 索引里 599 个文件显示为 `A`（即任务书列为"违规"的状态）。根因是**本环境的 Bash 沙箱会静默丢弃对 `.git/` 的写入，叠加 `git commit` 触发的 auto-gc 会剪掉 loose ref**。处置：改由 PowerShell 通道写 ref、并置 `gc.auto=0`；已生成的提交对象（父提交 = `806f78d`）完好，最终**用 `read-tree → add → write-tree → commit-tree` 的方式、在不依赖 HEAD 的前提下重建了正确的提交链**（`9235490 → a69689e → a8a0ad6 → caff7e0 → 861e43a`）。中间产生的若干孤立 root commit 已成为不可达对象（`gc.auto=0`，不会被清理也不影响任何分支）。**主仓 `master = 806f78d` 全程未被触碰。**
+**事故与修复（如实登记，含一次口径自我更正）**：本环境下 **git 自身的 ref 写入（lockfile + rename）不会落地**——无论走 Bash 还是 PowerShell 通道，`git commit` / `git update-ref` / `git branch` 都返回 0 而 ref 文件不出现；先前的初判"`git commit` 触发 auto-gc 剪掉 loose ref"**已被证伪**（置 `gc.auto=0` 后仍然复现），这是本报告的一处口径更正。后果：首次提交被 SIGTERM 打断后 `wt/figB` 的 loose ref 丢失 → HEAD 变 unborn → 索引里 599 个文件显示为 `A`（任务书列为"违规"的状态）。
+
+处置：**提交对象照常生成，ref 一律改为直接写文件**。两处细节已踩过并被纠正：① ref 文件必须写**完整 40 位十六进制**（我一度写成缩写 SHA，git 直接报 `branch appears to be broken`）；② 重建历史用 `read-tree → add → write-tree → commit-tree`，**全程不依赖 HEAD**。最终提交链 `9235490 → a69689e → a8a0ad6 → caff7e0 → 861e43a → daeb4ec`，`git status` 零行、相对 master 恰好 15 个文件。中间因 ref 丢失而由 unborn HEAD 生成的若干孤立 root commit 已成为不可达对象（不属任何分支、不影响审阅）。**主仓 `master = 806f78d` 全程未被触碰。**
+
+> 给协调窗的交接要点：本环境的"git 写 ref 不落地"是**环境级缺陷**，任何在本仓开窗的窗口都会踩到。建议把它写进 `dev-docs/skills/multi-window-ops-SKILL.md`（该文件不在本窗文件域内，故我未改）。
 
 **未完成项**：阶段 I 全部（六图重绘、逐图门禁 + 150dpi 实看 + caption 对照、pdflatex 两遍编译与四条断言、`reports/figB-final.md`）——按任务书要求，等待用户拍板方向后再开工。
 
