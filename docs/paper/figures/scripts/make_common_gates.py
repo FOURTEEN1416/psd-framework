@@ -18,12 +18,16 @@ G3 误差棒穿线 gate_whisker_texts()
 G4 文件级 gate_pdf()
    PDF MediaBox 实测尺寸上限断言（GA 531×131pt 等）+ pdfimages -list 零嵌入
    位图断言（poppler 工具链，MiKTeX 自带）。
+G5 排印 gate_typography()  ← wt/figB 新增 2026-09-12
+   全图遍历 Text：字号下限（默认 5.5pt）+ 两两 bbox 互压 + 画布裁切。
+   补 G2 盲区——G2 只覆盖调用方显式传入的标签，轴名/刻度/面板字母不在其视野内。
 
 用法（各 make_*.py 末尾）：
     import make_common_gates as gates
     gates.gate_print_robustness("fig5", {"v1": "#4098AC", ...}, redundancy="marker+direct-label")
     gates.gate_labels(fig, ax, label_texts)
     gates.gate_whisker_texts(fig, ax, label_texts, point_errs)
+    gates.gate_typography(fig, min_pt=5.5, name="fig5")   # 建议置于 savefig 之前
     gates.gate_pdf(pdf_path, max_w_pt=531, max_h_pt=131)
 
 隔离纪律：本模块只读借用 scientific-visualization 色盲检查方法论（Okabe-Ito 惯例），
@@ -34,6 +38,7 @@ import shutil
 import subprocess
 
 import numpy as np
+from matplotlib.collections import PathCollection
 
 # ---- Machado, Oliveira & Fernandes (2009) severity=1.0 模拟矩阵（线性 RGB） ----
 _CVD_MATRICES = {
@@ -217,6 +222,140 @@ def _pdf_mediabox_pt(pdf_path):
         return r.width, r.height
     except Exception:
         return None
+
+
+def gate_typography(fig, min_pt=5.5, name="fig", min_ovl_area_px2=4.0,
+                    canvas_tol_px=1.0, extra_texts=()):
+    """G5 排印门禁（wt/figB 新增，2026-09-12）。
+
+    补 G1–G4 的盲区：G2 只检查调用方**显式传入**的标签，
+    轴名 / 刻度标签 / 面板字母 / 参考线注记不在其视野内——实测 fig5 样板
+    的两处真缺陷（色键点出轴被裁、双面板 y 轴名重印叠字）均从 G2 漏过。
+
+    三条断言（全图自动遍历 `fig.findobj(Text)`，无需调用方枚举）：
+      (a) 字号下限：每个可见 Text 的 fontsize ≥ min_pt（默认 5.5pt，任务书规格）；
+      (b) 文字互压：两两 Text 的渲染 bbox 相交面积 ≤ min_ovl_area_px2；
+      (c) 不被裁切：每个 Text 的 bbox 落在 figure canvas 内（容差 canvas_tol_px）。
+
+    extra_texts: 额外送检的艺术家（例如手动 add_patch 的文字若 bind 不回来）。
+    任一失败 SystemExit 非零。
+    """
+    from matplotlib.text import Text
+
+    fig.canvas.draw()
+    ren = fig.canvas.get_renderer()
+
+    seen, texts = set(), []
+    for t in list(fig.findobj(Text)) + list(extra_texts):
+        if id(t) in seen:
+            continue
+        seen.add(id(t))
+        try:
+            if not t.get_visible() or not t.get_text().strip():
+                continue
+        except Exception:
+            continue
+        texts.append(t)
+
+    problems = []
+
+    # (a) 字号下限
+    small = [(t.get_text()[:28], t.get_fontsize()) for t in texts
+             if t.get_fontsize() < min_pt - 1e-6]
+    print(f"[G5 typography] {name}: {len(texts)} texts, min fontsize "
+          f"{min((t.get_fontsize() for t in texts), default=float('nan')):.2f}pt "
+          f"-> floor {min_pt}pt " + ("PASS" if not small else "FAIL"))
+    for s, fs in sorted(small, key=lambda v: v[1]):
+        problems.append(f"fontsize-below-floor: {fs:.2f}pt < {min_pt}pt | {s!r}")
+
+    # (b) 文字互压 + (c) 画布裁切
+    boxes = [(t.get_text()[:28], t.get_window_extent(ren)) for t in texts]
+    for (n1, b1), (n2, b2) in itertools.combinations(boxes, 2):
+        if not b1.overlaps(b2):
+            continue
+        ix = min(b1.x1, b2.x1) - max(b1.x0, b2.x0)
+        iy = min(b1.y1, b2.y1) - max(b1.y0, b2.y0)
+        if ix * iy > min_ovl_area_px2:
+            problems.append(f"text-overlap: {n1!r} x {n2!r} "
+                            f"(overlap {ix * iy:.1f} px^2)")
+    cb = fig.bbox
+    for n, b in boxes:
+        if (b.x0 < cb.x0 - canvas_tol_px or b.x1 > cb.x1 + canvas_tol_px
+                or b.y0 < cb.y0 - canvas_tol_px or b.y1 > cb.y1 + canvas_tol_px):
+            problems.append(f"text-out-of-canvas: {n!r}")
+    print(f"[G5 typography] {name}: pairwise-overlap + canvas-fit -> "
+          + ("PASS" if not problems else "FAIL"))
+    if problems:
+        for p in problems:
+            print("  FAIL:", p)
+        raise SystemExit(f"{name}: typography gate FAILED")
+    return True
+
+
+def gate_marks_in_axes(fig, name="fig", tol_frac=0.0):
+    """G6 标记落位门禁（wt/figB 新增，2026-09-12）。
+
+    与 G2/G5 的分工：G2 管"调用方传入的文字"、G5 管"全图文字"，
+    但**散点 marker / 色键点**这类非文字艺术家的越界被两者同时漏掉——
+    实测 fig5 样板 v7a 的三个右缘色键点落在 xlim 之外被轴框裁成半个点，
+    G1–G5 全绿仍放行。
+
+    断言：所有以 transData 绘制的 scatter offsets 与带 marker 的 Line2D
+    数据点，必须落在所属 axes 的 (xlim, ylim) 内。
+    tol_frac: 允许越界的轴跨比例（0 = 严格）。任一越界 SystemExit 非零。
+    """
+    problems, checked = [], 0
+    for ax in fig.axes:
+        xl, yl = ax.get_xlim(), ax.get_ylim()
+        xlo, xhi = min(xl), max(xl)
+        ylo, yhi = min(yl), max(yl)
+        dx, dy = (xhi - xlo) * tol_frac, (yhi - ylo) * tol_frac
+
+        def _check(x, y, what):
+            nonlocal checked
+            checked += 1
+            if not (xlo - dx <= x <= xhi + dx and ylo - dy <= y <= yhi + dy):
+                problems.append(f"mark-out-of-axes: {what} at ({x:.3f}, {y:.3f}) "
+                                f"outside x[{xlo:g},{xhi:g}] y[{ylo:g},{yhi:g}]")
+
+        for c in ax.collections:
+            # 只查真散点（PathCollection）：errorbar 的 LineCollection 其 offsets
+            # 常为 (0,0) 占位（真实几何在 segments 里），会造出假阳性。
+            if not isinstance(c, PathCollection):
+                continue
+            if c.get_transform() is not ax.transData:
+                continue
+            try:
+                offs = c.get_offsets()
+            except Exception:
+                continue
+            if offs is None:
+                continue
+            arr = np.asarray(offs, dtype=float)
+            if arr.ndim != 2 or arr.shape[1] < 2:
+                continue
+            for x, y in arr[:, :2]:
+                if np.isfinite(x) and np.isfinite(y):
+                    _check(x, y, c.__class__.__name__)
+
+        for ln in ax.lines:
+            mk = ln.get_marker()
+            if mk in (None, "", "None", "none", " "):
+                continue
+            if ln.get_transform() is not ax.transData:
+                continue
+            xs, ys = ln.get_data()
+            for x, y in zip(np.asarray(xs, dtype=float), np.asarray(ys, dtype=float)):
+                if np.isfinite(x) and np.isfinite(y):
+                    _check(x, y, f"Line2D(marker={mk!r})")
+
+    print(f"[G6 marks-in-axes] {name}: {checked} marks -> "
+          + ("PASS" if not problems else "FAIL"))
+    if problems:
+        for p in problems:
+            print("  FAIL:", p)
+        raise SystemExit(f"{name}: marks-in-axes gate FAILED")
+    return True
 
 
 def gate_pdf(pdf_path, max_w_pt=None, max_h_pt=None, name=None):

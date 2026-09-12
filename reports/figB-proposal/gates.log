@@ -1,0 +1,169 @@
+==============================================================
+figB 三方向样板 · 门禁与自检原始输出（PowerShell 通道复跑）
+解释器: D:\Desktop\psd-framework\.venv\Scripts\python.exe
+cwd: D:\Desktop\psd-framework-figB
+==============================================================
+
+########## make_fig5_budget_retention_v7a.py ##########
+[LOCAL self-check] texts=8 vs marks=8+dots=7 -> PASS (0 hits)
+[G1 print-robustness] fig5-v7a: 7 series colors
+  animal PanAf500 x human NTU120: dE 14.7 / deut 14.6 / prot 14.6 / dL* 14.7
+  animal PanAf500 x human NTU60: dE 18.5 / deut 18.5 / prot 18.5 / dL* 18.5
+  animal PanAf500 x indep. UCF101: dE 22.1 / deut 22.1 / prot 22.1 / dL* 22.1
+  animal PanAf500 x public-real v1: dE 52.5 / deut 52.5 / prot 52.5 / dL* 52.5
+  animal PanAf500 x public-real v2: dE 52.6 / deut 45.6 / prot 38.0 / dL* 0.2
+  animal PanAf500 x synthetic-offset: dE 35.4 / deut 35.4 / prot 35.4 / dL* 35.4
+  human NTU120 x human NTU60: dE 33.2 / deut 33.1 / prot 33.1 / dL* 33.2
+  human NTU120 x indep. UCF101: dE 7.4 / deut 7.5 / prot 7.5 / dL* 7.4
+  human NTU120 x public-real v1: dE 67.2 / deut 67.1 / prot 67.1 / dL* 67.2
+  human NTU120 x public-real v2: dE 54.4 / deut 47.1 / prot 42.5 / dL* 14.9
+  human NTU120 x synthetic-offset: dE 50.1 / deut 50.0 / prot 50.0 / dL* 50.1
+  human NTU60 x indep. UCF101: dE 40.6 / deut 40.6 / prot 40.6 / dL* 40.6
+  human NTU60 x public-real v1: dE 34.0 / deut 34.0 / prot 34.0 / dL* 34.0
+  human NTU60 x public-real v2: dE 55.7 / deut 50.2 / prot 40.1 / dL* 18.3
+  human NTU60 x synthetic-offset: dE 16.9 / deut 16.9 / prot 16.9 / dL* 16.9
+  indep. UCF101 x public-real v1: dE 74.6 / deut 74.6 / prot 74.6 / dL* 74.6
+  indep. UCF101 x public-real v2: dE 57.1 / deut 49.5 / prot 46.4 / dL* 22.3
+  indep. UCF101 x synthetic-offset: dE 57.5 / deut 57.5 / prot 57.5 / dL* 57.5
+  public-real v1 x public-real v2: dE 74.2 / deut 71.5 / prot 60.7 / dL* 52.3
+  public-real v1 x synthetic-offset: dE 17.1 / deut 17.1 / prot 17.1 / dL* 17.1
+  public-real v2 x synthetic-offset: dE 63.3 / deut 59.4 / prot 48.4 / dL* 35.2
+  WARN(redundancy=7 unique marker shapes + direct labels + color-key dots): animal PanAf500 x public-real v2: grayscale dL* 0.2 < 10.0
+  WARN(redundancy=7 unique marker shapes + direct labels + color-key dots): human NTU120 x indep. UCF101: CVD dE 7.4 < 12.0
+  WARN(redundancy=7 unique marker shapes + direct labels + color-key dots): human NTU120 x indep. UCF101: grayscale dL* 7.4 < 10.0
+  -> PASS (3 redundancy-exempt warns)
+[G2 label-collision] fig5-v7a: 7 labels -> PASS
+[G3 whisker-crossing] fig5-v7a: 7 labels x 8 errbars -> PASS
+[G5 typography] fig5-v7a: 19 texts, min fontsize 5.50pt -> floor 5.5pt PASS
+[G5 typography] fig5-v7a: pairwise-overlap + canvas-fit -> PASS
+[G6 marks-in-axes] fig5-v7a: 24 marks -> PASS
+[G4 file] D:\Desktop\psd-framework-figB\reports\figB-proposal\fig5_v7a.pdf: MediaBox 219.35 x 179.86 pt
+[G4 file] D:\Desktop\psd-framework-figB\reports\figB-proposal\fig5_v7a.pdf: embedded images = 0
+[G4 file] D:\Desktop\psd-framework-figB\reports\figB-proposal\fig5_v7a.pdf -> PASS
+public-real v1: 13.9% -> 28.9% 卤 22.1
+public-real v2: 5.5% -> 35.0% 卤 14.2
+public-real v2: 11.5% -> 44.2% 卤 18.1
+human NTU60: 10.0% -> 90.7% 卤 0.3
+human NTU120: 16.5% -> 88.9% 卤 1.4
+indep. UCF101: 8.8% -> 66.6% 卤 8.2
+animal PanAf500: 13.2% -> 88.7% 卤 15.1
+synthetic-offset: 8.0% -> 85.7% 卤 4.5
+fig5 v7a saved
+EXIT=0
+
+########## make_fig5_budget_retention_v7b.py ##########
+[G1 print-robustness] fig5-v7b: 7 series colors
+  animal PanAf500 x human NTU120: dE 73.2 / deut 64.8 / prot 56.5 / dL* 2.3
+  animal PanAf500 x human NTU60: dE 72.1 / deut 61.9 / prot 51.1 / dL* 12.5
+  animal PanAf500 x indep. UCF101: dE 13.0 / deut 6.0 / prot 7.1 / dL* 5.9
+  animal PanAf500 x public-real v1: dE 79.2 / deut 71.7 / prot 60.1 / dL* 13.0
+  animal PanAf500 x public-real v2: dE 10.4 / deut 4.5 / prot 8.5 / dL* 3.6
+  animal PanAf500 x synthetic-offset: dE 58.6 / deut 49.1 / prot 45.4 / dL* 14.2
+  human NTU120 x human NTU60: dE 15.9 / deut 15.6 / prot 15.8 / dL* 14.8
+  human NTU120 x indep. UCF101: dE 65.9 / deut 62.8 / prot 55.4 / dL* 3.7
+  human NTU120 x public-real v1: dE 16.1 / deut 16.3 / prot 15.4 / dL* 15.3
+  human NTU120 x public-real v2: dE 74.8 / deut 61.6 / prot 50.3 / dL* 5.9
+  human NTU120 x synthetic-offset: dE 20.7 / deut 21.4 / prot 18.2 / dL* 11.9
+  human NTU60 x indep. UCF101: dE 65.7 / deut 61.3 / prot 51.9 / dL* 18.5
+  human NTU60 x public-real v1: dE 9.4 / deut 10.0 / prot 9.2 / dL* 0.5
+  human NTU60 x public-real v2: dE 73.6 / deut 58.0 / prot 43.5 / dL* 8.9
+  human NTU60 x synthetic-offset: dE 30.2 / deut 30.1 / prot 27.4 / dL* 26.7
+  indep. UCF101 x public-real v1: dE 73.3 / deut 71.0 / prot 60.8 / dL* 19.0
+  indep. UCF101 x public-real v2: dE 22.3 / deut 8.5 / prot 13.3 / dL* 9.5
+  indep. UCF101 x synthetic-offset: dE 49.7 / deut 45.8 / prot 42.4 / dL* 8.2
+  public-real v1 x public-real v2: dE 79.9 / deut 67.9 / prot 52.6 / dL* 9.4
+  public-real v1 x synthetic-offset: dE 34.9 / deut 35.9 / prot 31.7 / dL* 27.2
+  public-real v2 x synthetic-offset: dE 61.6 / deut 46.8 / prot 41.3 / dL* 17.8
+  WARN(redundancy=7 unique marker shapes + direct labels): animal PanAf500 x human NTU120: grayscale dL* 2.3 < 10.0
+  WARN(redundancy=7 unique marker shapes + direct labels): animal PanAf500 x indep. UCF101: CVD dE 6.0 < 12.0
+  WARN(redundancy=7 unique marker shapes + direct labels): animal PanAf500 x indep. UCF101: grayscale dL* 5.9 < 10.0
+  WARN(redundancy=7 unique marker shapes + direct labels): animal PanAf500 x public-real v2: CVD dE 4.5 < 12.0
+  WARN(redundancy=7 unique marker shapes + direct labels): animal PanAf500 x public-real v2: grayscale dL* 3.6 < 10.0
+  WARN(redundancy=7 unique marker shapes + direct labels): human NTU120 x indep. UCF101: grayscale dL* 3.7 < 10.0
+  WARN(redundancy=7 unique marker shapes + direct labels): human NTU120 x public-real v2: grayscale dL* 5.9 < 10.0
+  WARN(redundancy=7 unique marker shapes + direct labels): human NTU60 x public-real v1: CVD dE 9.2 < 12.0
+  WARN(redundancy=7 unique marker shapes + direct labels): human NTU60 x public-real v1: grayscale dL* 0.5 < 10.0
+  WARN(redundancy=7 unique marker shapes + direct labels): human NTU60 x public-real v2: grayscale dL* 8.9 < 10.0
+  WARN(redundancy=7 unique marker shapes + direct labels): indep. UCF101 x public-real v2: CVD dE 8.5 < 12.0
+  WARN(redundancy=7 unique marker shapes + direct labels): indep. UCF101 x public-real v2: grayscale dL* 9.5 < 10.0
+  WARN(redundancy=7 unique marker shapes + direct labels): indep. UCF101 x synthetic-offset: grayscale dL* 8.2 < 10.0
+  WARN(redundancy=7 unique marker shapes + direct labels): public-real v1 x public-real v2: grayscale dL* 9.4 < 10.0
+  -> PASS (14 redundancy-exempt warns)
+[G2 label-collision] fig5-v7b-a: 4 labels -> PASS
+[G2 label-collision] fig5-v7b-b: 3 labels -> PASS
+[G3 whisker-crossing] fig5-v7b-a: 4 labels x 4 errbars -> PASS
+[G3 whisker-crossing] fig5-v7b-b: 3 labels x 4 errbars -> PASS
+[G5 typography] fig5-v7b: 23 texts, min fontsize 5.50pt -> floor 5.5pt PASS
+[G5 typography] fig5-v7b: pairwise-overlap + canvas-fit -> PASS
+[G6 marks-in-axes] fig5-v7b: 24 marks -> PASS
+[G4 file] D:\Desktop\psd-framework-figB\reports\figB-proposal\fig5_v7b.pdf: MediaBox 246.24 x 219.60 pt
+[G4 file] D:\Desktop\psd-framework-figB\reports\figB-proposal\fig5_v7b.pdf: embedded images = 0
+[G4 file] D:\Desktop\psd-framework-figB\reports\figB-proposal\fig5_v7b.pdf -> PASS
+public-real v1: 13.9% -> 28.9% 卤 22.1
+public-real v2: 5.5% -> 35.0% 卤 14.2
+public-real v2: 11.5% -> 44.2% 卤 18.1
+human NTU60: 10.0% -> 90.7% 卤 0.3
+human NTU120: 16.5% -> 88.9% 卤 1.4
+indep. UCF101: 8.8% -> 66.6% 卤 8.2
+animal PanAf500: 13.2% -> 88.7% 卤 15.1
+synthetic-offset: 8.0% -> 85.7% 卤 4.5
+fig5 v7b saved
+EXIT=0
+
+########## make_fig5_budget_retention_v7c.py ##########
+[G1 print-robustness] fig5-v7c: 7 series colors
+  animal PanAf500 x human NTU120: dE 73.2 / deut 64.8 / prot 56.5 / dL* 2.3
+  animal PanAf500 x human NTU60: dE 72.1 / deut 61.9 / prot 51.1 / dL* 12.5
+  animal PanAf500 x indep. UCF101: dE 13.0 / deut 6.0 / prot 7.1 / dL* 5.9
+  animal PanAf500 x public-real v1: dE 79.2 / deut 71.7 / prot 60.1 / dL* 13.0
+  animal PanAf500 x public-real v2: dE 10.4 / deut 4.5 / prot 8.5 / dL* 3.6
+  animal PanAf500 x synthetic-offset: dE 58.6 / deut 49.1 / prot 45.4 / dL* 14.2
+  human NTU120 x human NTU60: dE 15.9 / deut 15.6 / prot 15.8 / dL* 14.8
+  human NTU120 x indep. UCF101: dE 65.9 / deut 62.8 / prot 55.4 / dL* 3.7
+  human NTU120 x public-real v1: dE 16.1 / deut 16.3 / prot 15.4 / dL* 15.3
+  human NTU120 x public-real v2: dE 74.8 / deut 61.6 / prot 50.3 / dL* 5.9
+  human NTU120 x synthetic-offset: dE 20.7 / deut 21.4 / prot 18.2 / dL* 11.9
+  human NTU60 x indep. UCF101: dE 65.7 / deut 61.3 / prot 51.9 / dL* 18.5
+  human NTU60 x public-real v1: dE 9.4 / deut 10.0 / prot 9.2 / dL* 0.5
+  human NTU60 x public-real v2: dE 73.6 / deut 58.0 / prot 43.5 / dL* 8.9
+  human NTU60 x synthetic-offset: dE 30.2 / deut 30.1 / prot 27.4 / dL* 26.7
+  indep. UCF101 x public-real v1: dE 73.3 / deut 71.0 / prot 60.8 / dL* 19.0
+  indep. UCF101 x public-real v2: dE 22.3 / deut 8.5 / prot 13.3 / dL* 9.5
+  indep. UCF101 x synthetic-offset: dE 49.7 / deut 45.8 / prot 42.4 / dL* 8.2
+  public-real v1 x public-real v2: dE 79.9 / deut 67.9 / prot 52.6 / dL* 9.4
+  public-real v1 x synthetic-offset: dE 34.9 / deut 35.9 / prot 31.7 / dL* 27.2
+  public-real v2 x synthetic-offset: dE 61.6 / deut 46.8 / prot 41.3 / dL* 17.8
+  WARN(redundancy=7 unique marker shapes + direct labels + 2 leader lines): animal PanAf500 x human NTU120: grayscale dL* 2.3 < 10.0
+  WARN(redundancy=7 unique marker shapes + direct labels + 2 leader lines): animal PanAf500 x indep. UCF101: CVD dE 6.0 < 12.0
+  WARN(redundancy=7 unique marker shapes + direct labels + 2 leader lines): animal PanAf500 x indep. UCF101: grayscale dL* 5.9 < 10.0
+  WARN(redundancy=7 unique marker shapes + direct labels + 2 leader lines): animal PanAf500 x public-real v2: CVD dE 4.5 < 12.0
+  WARN(redundancy=7 unique marker shapes + direct labels + 2 leader lines): animal PanAf500 x public-real v2: grayscale dL* 3.6 < 10.0
+  WARN(redundancy=7 unique marker shapes + direct labels + 2 leader lines): human NTU120 x indep. UCF101: grayscale dL* 3.7 < 10.0
+  WARN(redundancy=7 unique marker shapes + direct labels + 2 leader lines): human NTU120 x public-real v2: grayscale dL* 5.9 < 10.0
+  WARN(redundancy=7 unique marker shapes + direct labels + 2 leader lines): human NTU60 x public-real v1: CVD dE 9.2 < 12.0
+  WARN(redundancy=7 unique marker shapes + direct labels + 2 leader lines): human NTU60 x public-real v1: grayscale dL* 0.5 < 10.0
+  WARN(redundancy=7 unique marker shapes + direct labels + 2 leader lines): human NTU60 x public-real v2: grayscale dL* 8.9 < 10.0
+  WARN(redundancy=7 unique marker shapes + direct labels + 2 leader lines): indep. UCF101 x public-real v2: CVD dE 8.5 < 12.0
+  WARN(redundancy=7 unique marker shapes + direct labels + 2 leader lines): indep. UCF101 x public-real v2: grayscale dL* 9.5 < 10.0
+  WARN(redundancy=7 unique marker shapes + direct labels + 2 leader lines): indep. UCF101 x synthetic-offset: grayscale dL* 8.2 < 10.0
+  WARN(redundancy=7 unique marker shapes + direct labels + 2 leader lines): public-real v1 x public-real v2: grayscale dL* 9.4 < 10.0
+  -> PASS (14 redundancy-exempt warns)
+[G2 label-collision] fig5-v7c: 9 labels -> PASS
+[G3 whisker-crossing] fig5-v7c: 9 labels x 8 errbars -> PASS
+[LOCAL leader-clean] text=0 leaderXleader=0 nearMarker=0 crossErrbar=0 -> PASS
+[G5 typography] fig5-v7c: 20 texts, min fontsize 5.50pt -> floor 5.5pt PASS
+[G5 typography] fig5-v7c: pairwise-overlap + canvas-fit -> PASS
+[G6 marks-in-axes] fig5-v7c: 32 marks -> PASS
+[G4 file] D:\Desktop\psd-framework-figB\reports\figB-proposal\fig5_v7c.pdf: MediaBox 219.35 x 188.18 pt
+[G4 file] D:\Desktop\psd-framework-figB\reports\figB-proposal\fig5_v7c.pdf: embedded images = 0
+[G4 file] D:\Desktop\psd-framework-figB\reports\figB-proposal\fig5_v7c.pdf -> PASS
+public-real v1: 13.9% -> 28.9% 卤 22.1
+public-real v2: 5.5% -> 35.0% 卤 14.2
+public-real v2: 11.5% -> 44.2% 卤 18.1
+human NTU60: 10.0% -> 90.7% 卤 0.3
+human NTU120: 16.5% -> 88.9% 卤 1.4
+indep. UCF101: 8.8% -> 66.6% 卤 8.2
+animal PanAf500: 13.2% -> 88.7% 卤 15.1
+synthetic-offset: 8.0% -> 85.7% 卤 4.5
+fig5 v7c saved -> D:\Desktop\psd-framework-figB\reports\figB-proposal
+EXIT=0
