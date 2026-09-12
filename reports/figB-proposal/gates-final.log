@@ -1,0 +1,137 @@
+==============================================================
+figB 阶段 I 终版门禁日志 · 五张正典脚本复跑 2026-09-12 14:39:38
+解释器: D://Desktop//psd-framework//.venv//Scripts//python.exe (matplotlib 3.8.4)
+cwd: D://Desktop//psd-framework-figB  (worktree wt/figB)
+方向: C 分阶色标 + 制图精度；尺度修复 = 去 bbox_inches=tight
+==============================================================
+
+########## make_fig1_overview_v15.py ##########
+'created' timestamp seems very low; regarding as unix timestamp
+'modified' timestamp seems very low; regarding as unix timestamp
+fig1 v15 (direction C tone-ladder + fixed-canvas) saved
+[G1 print-robustness] fig1-v15: 2 series colors
+  physics x semantic: dE 79.9 / deut 67.9 / prot 52.6 / dL* 9.4
+  WARN(redundancy=tone ladder + position + labels): physics x semantic: grayscale dL* 9.4 < 10.0
+  -> PASS (1 redundancy-exempt warns)
+[G2 label-collision] fig1-v15: 15 labels -> PASS
+[G5 typography] fig1-v15: 15 texts, min fontsize 5.50pt -> floor 5.5pt PASS
+[G5 typography] fig1-v15: pairwise-overlap + canvas-fit -> PASS
+[G6 marks-in-axes] fig1-v15: 0 marks -> PASS
+[G4 file] D:\Desktop\psd-framework-figB\docs\paper\figures\fig1_framework_overview.pdf: MediaBox 246.24 x 187.20 pt
+[G4 file] D:\Desktop\psd-framework-figB\docs\paper\figures\fig1_framework_overview.pdf: embedded images = 0
+[G4 file] D:\Desktop\psd-framework-figB\docs\paper\figures\fig1_framework_overview.pdf -> PASS
+EXIT=0
+
+########## make_fig2_pseudo_label_loop_v18.py ##########
+fig2 v18 (direction C tone-ladder + fixed-canvas) saved
+[G1 print-robustness] fig2-v18: 2 series colors
+  automated x human: dE 73.6 / deut 58.0 / prot 43.5 / dL* 8.9
+  WARN(redundancy=card tint/border + legend keys + step chips): automated x human: grayscale dL* 8.9 < 10.0
+  -> PASS (1 redundancy-exempt warns)
+[G2 label-collision] fig2-v18: 26 labels -> PASS
+[G5 typography] fig2-v18: 26 texts, min fontsize 5.50pt -> floor 5.5pt PASS
+[G5 typography] fig2-v18: pairwise-overlap + canvas-fit -> PASS
+[G6 marks-in-axes] fig2-v18: 0 marks -> PASS
+[G4 file] D:\Desktop\psd-framework-figB\docs\paper\figures\fig2_pseudo_label_loop.pdf: MediaBox 246.24 x 169.92 pt
+[G4 file] D:\Desktop\psd-framework-figB\docs\paper\figures\fig2_pseudo_label_loop.pdf: embedded images = 0
+[G4 file] D:\Desktop\psd-framework-figB\docs\paper\figures\fig2_pseudo_label_loop.pdf -> PASS
+EXIT=0
+
+########## make_fig3_segmentation_qualitative_v9.py ##########
+fig3 v9 (fixed-canvas scale fix) saved
+ep1: T=3258 IoU=0.4196 baseline=0.2908
+ep2: T=2410 IoU=0.423 baseline=0.3145
+ep3: T=3145 IoU=0.4483 baseline=0.3359
+ep4: T=2535 IoU=0.54 baseline=0.3499
+aggregate: 0.4577 ± 0.0488 | 4/4
+[G1 print-robustness] fig3-v9: 2 series colors
+  SMQ pred band x pseudo-GT band: dE 79.9 / deut 67.9 / prot 52.6 / dL* 9.4
+  WARN(redundancy=upper/lower band position + colored axis labels + bar hatch): SMQ pred band x pseudo-GT band: grayscale dL* 9.4 < 10.0
+  -> PASS (1 redundancy-exempt warns)
+[G5 typography] fig3-v9: 37 texts, min fontsize 5.50pt -> floor 5.5pt PASS
+[G5 typography] fig3-v9: pairwise-overlap + canvas-fit -> PASS
+[G6 marks-in-axes] fig3-v9: 0 marks -> PASS
+[G4 file] D:\Desktop\psd-framework-figB\docs\paper\figures\fig3_segmentation_qualitative.pdf: MediaBox 246.24 x 218.16 pt
+[G4 file] D:\Desktop\psd-framework-figB\docs\paper\figures\fig3_segmentation_qualitative.pdf: embedded images = 0
+[G4 file] D:\Desktop\psd-framework-figB\docs\paper\figures\fig3_segmentation_qualitative.pdf -> PASS
+EXIT=0
+
+########## make_fig4_al_efficiency_v7.py ##########
+[G1 print-robustness] fig4-v7: 2 series colors
+  random x uncertainty (proposed): dE 79.9 / deut 67.9 / prot 52.6 / dL* 9.4
+  WARN(redundancy=marker shape (o/s) + linestyle (solid/dashed) + legend): random x uncertainty (proposed): grayscale dL* 9.4 < 10.0
+  -> PASS (1 redundancy-exempt warns)
+[G3 whisker-crossing] fig4-v7-a: 2 labels x 8 errbars -> PASS
+[G3 whisker-crossing] fig4-v7-b: 1 labels x 8 errbars -> PASS
+[G5 typography] fig4-v7: 26 texts, min fontsize 6.00pt -> floor 5.5pt PASS
+[G5 typography] fig4-v7: pairwise-overlap + canvas-fit -> PASS
+[G6 marks-in-axes] fig4-v7: 48 marks -> PASS
+[G4 file] D:\Desktop\psd-framework-figB\docs\paper\figures\fig4_al_efficiency.pdf: MediaBox 246.24 x 263.52 pt
+[G4 file] D:\Desktop\psd-framework-figB\docs\paper\figures\fig4_al_efficiency.pdf: embedded images = 0
+[G4 file] D:\Desktop\psd-framework-figB\docs\paper\figures\fig4_al_efficiency.pdf -> PASS
+written: D:\Desktop\psd-framework-figB\docs\paper\figures\fig4_al_efficiency.pdf | D:\Desktop\psd-framework-figB\docs\paper\figures\fig4_al_efficiency.png
+(a)  entropy: b=20: 7.8, b=50: 9.4, b=100: 69.9, b=200: 80.9
+(b)  entropy: b=20: 82.0, b=50: 85.2, b=100: 89.4, b=200: 91.4
+(a)   random: b=20: 8.0, b=50: 9.1, b=100: 77.8, b=200: 88.0
+(b)   random: b=20: 82.0, b=50: 89.7, b=100: 94.3, b=200: 95.7
+negative-result fact preserved: True
+fig4 v7 (fixed-canvas scale fix, height 3.66in compliant) saved
+EXIT=0
+
+########## make_fig5_budget_retention_v8.py ##########
+[G1 print-robustness] fig5-v8: 7 series colors
+  animal PanAf500 x human NTU120: dE 73.2 / deut 64.8 / prot 56.5 / dL* 2.3
+  animal PanAf500 x human NTU60: dE 72.1 / deut 61.9 / prot 51.1 / dL* 12.5
+  animal PanAf500 x indep. UCF101: dE 13.0 / deut 6.0 / prot 7.1 / dL* 5.9
+  animal PanAf500 x public-real v1: dE 79.2 / deut 71.7 / prot 60.1 / dL* 13.0
+  animal PanAf500 x public-real v2: dE 10.4 / deut 4.5 / prot 8.5 / dL* 3.6
+  animal PanAf500 x synthetic-offset: dE 58.6 / deut 49.1 / prot 45.4 / dL* 14.2
+  human NTU120 x human NTU60: dE 15.9 / deut 15.6 / prot 15.8 / dL* 14.8
+  human NTU120 x indep. UCF101: dE 65.9 / deut 62.8 / prot 55.4 / dL* 3.7
+  human NTU120 x public-real v1: dE 16.1 / deut 16.3 / prot 15.4 / dL* 15.3
+  human NTU120 x public-real v2: dE 74.8 / deut 61.6 / prot 50.3 / dL* 5.9
+  human NTU120 x synthetic-offset: dE 20.7 / deut 21.4 / prot 18.2 / dL* 11.9
+  human NTU60 x indep. UCF101: dE 65.7 / deut 61.3 / prot 51.9 / dL* 18.5
+  human NTU60 x public-real v1: dE 9.4 / deut 10.0 / prot 9.2 / dL* 0.5
+  human NTU60 x public-real v2: dE 73.6 / deut 58.0 / prot 43.5 / dL* 8.9
+  human NTU60 x synthetic-offset: dE 30.2 / deut 30.1 / prot 27.4 / dL* 26.7
+  indep. UCF101 x public-real v1: dE 73.3 / deut 71.0 / prot 60.8 / dL* 19.0
+  indep. UCF101 x public-real v2: dE 22.3 / deut 8.5 / prot 13.3 / dL* 9.5
+  indep. UCF101 x synthetic-offset: dE 49.7 / deut 45.8 / prot 42.4 / dL* 8.2
+  public-real v1 x public-real v2: dE 79.9 / deut 67.9 / prot 52.6 / dL* 9.4
+  public-real v1 x synthetic-offset: dE 34.9 / deut 35.9 / prot 31.7 / dL* 27.2
+  public-real v2 x synthetic-offset: dE 61.6 / deut 46.8 / prot 41.3 / dL* 17.8
+  WARN(redundancy=7 unique marker shapes + direct labels + 2 leader lines): animal PanAf500 x human NTU120: grayscale dL* 2.3 < 10.0
+  WARN(redundancy=7 unique marker shapes + direct labels + 2 leader lines): animal PanAf500 x indep. UCF101: CVD dE 6.0 < 12.0
+  WARN(redundancy=7 unique marker shapes + direct labels + 2 leader lines): animal PanAf500 x indep. UCF101: grayscale dL* 5.9 < 10.0
+  WARN(redundancy=7 unique marker shapes + direct labels + 2 leader lines): animal PanAf500 x public-real v2: CVD dE 4.5 < 12.0
+  WARN(redundancy=7 unique marker shapes + direct labels + 2 leader lines): animal PanAf500 x public-real v2: grayscale dL* 3.6 < 10.0
+  WARN(redundancy=7 unique marker shapes + direct labels + 2 leader lines): human NTU120 x indep. UCF101: grayscale dL* 3.7 < 10.0
+  WARN(redundancy=7 unique marker shapes + direct labels + 2 leader lines): human NTU120 x public-real v2: grayscale dL* 5.9 < 10.0
+  WARN(redundancy=7 unique marker shapes + direct labels + 2 leader lines): human NTU60 x public-real v1: CVD dE 9.2 < 12.0
+  WARN(redundancy=7 unique marker shapes + direct labels + 2 leader lines): human NTU60 x public-real v1: grayscale dL* 0.5 < 10.0
+  WARN(redundancy=7 unique marker shapes + direct labels + 2 leader lines): human NTU60 x public-real v2: grayscale dL* 8.9 < 10.0
+  WARN(redundancy=7 unique marker shapes + direct labels + 2 leader lines): indep. UCF101 x public-real v2: CVD dE 8.5 < 12.0
+  WARN(redundancy=7 unique marker shapes + direct labels + 2 leader lines): indep. UCF101 x public-real v2: grayscale dL* 9.5 < 10.0
+  WARN(redundancy=7 unique marker shapes + direct labels + 2 leader lines): indep. UCF101 x synthetic-offset: grayscale dL* 8.2 < 10.0
+  WARN(redundancy=7 unique marker shapes + direct labels + 2 leader lines): public-real v1 x public-real v2: grayscale dL* 9.4 < 10.0
+  -> PASS (14 redundancy-exempt warns)
+[G2 label-collision] fig5-v8: 9 labels -> PASS
+[G3 whisker-crossing] fig5-v8: 9 labels x 8 errbars -> PASS
+[LOCAL leader-clean] text=0 leaderXleader=0 nearMarker=0 crossErrbar=0 -> PASS
+[G5 typography] fig5-v8: 20 texts, min fontsize 5.50pt -> floor 5.5pt PASS
+[G5 typography] fig5-v8: pairwise-overlap + canvas-fit -> PASS
+[G6 marks-in-axes] fig5-v8: 32 marks -> PASS
+[G4 file] D:\Desktop\psd-framework-figB\docs\paper\figures\fig5_budget_retention.pdf: MediaBox 246.24 x 198.00 pt
+[G4 file] D:\Desktop\psd-framework-figB\docs\paper\figures\fig5_budget_retention.pdf: embedded images = 0
+[G4 file] D:\Desktop\psd-framework-figB\docs\paper\figures\fig5_budget_retention.pdf -> PASS
+public-real v1: 13.9% -> 28.9% ± 22.1
+public-real v2: 5.5% -> 35.0% ± 14.2
+public-real v2: 11.5% -> 44.2% ± 18.1
+human NTU60: 10.0% -> 90.7% ± 0.3
+human NTU120: 16.5% -> 88.9% ± 1.4
+indep. UCF101: 8.8% -> 66.6% ± 8.2
+animal PanAf500: 13.2% -> 88.7% ± 15.1
+synthetic-offset: 8.0% -> 85.7% ± 4.5
+fig5 v8 (direction C, fixed-canvas scale fix) saved
+EXIT=0
