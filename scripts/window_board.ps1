@@ -10,7 +10,7 @@ param(
     [switch]$All
 )
 
-$BOARD = "D:\Desktop\psd-framework\dev-docs\board\BOARD.md"
+$BOARD = "D:\Desktop\PR论文\psd-framework\dev-docs\board\BOARD.md"
 
 if ($Append) {
     $ok = $false

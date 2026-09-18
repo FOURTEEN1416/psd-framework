@@ -2,9 +2,9 @@
 
 > **版本**: v2.2
 > **日期**: 2026-08-25
-> **项目根目录**: `D:\Desktop\psd-framework`
+> **项目根目录**: `D:\Desktop\PR论文\psd-framework`
 > **交接会话**: 歆歆（sliver-vibe-coding）于 2026-08-23 完成建仓拆分 + truth 链初始化 + 数据盘点；W11 于 2026-08-24 完成 P0.5 前置工程
-> **上游决策**: `D:\Desktop\k9-training-system\dev-docs\decisions\0013-research-repo-split.md`（ADR 0013）
+> **上游决策**: `D:\Desktop\PR论文\k9-training-system\dev-docs\decisions\0013-research-repo-split.md`（ADR 0013）
 
 ---
 

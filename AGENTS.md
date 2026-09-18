@@ -1,6 +1,6 @@
 # AGENTS.md — PSD-Framework Agent Constitution
 
-> 状态: v1.1（2026-09-03 补行为准则节）
+> 状态: v1.4（2026-09-19 迁移路径清洗）
 > 方法论继承自 k9-training-system AGENTS.md（sliver-vibe-coding 框架），此处只保留本仓库必需条款
 
 ## 0. 行为准则（个人级，全局优先）
@@ -27,11 +27,11 @@
 > 背景：W14 曾发生并行窗口共用主检出、4 次覆盖已提交文件的事故；2026-08-24 用户裁决 **B-full（每窗口 git worktree 物理隔离）**，W24 交付机制。本节为所有新窗口的强制协议。
 
 1. **新窗口一律 worktree 开工**：开工前执行 `pwsh scripts/new_window_worktree.ps1 -Name <窗口名>`，此后一切读写只在自己的 `..\psd-framework-<窗口名>` 内进行；分支命名 `wt/<窗口名>`
-2. **主检出只做协调合并**：`D:\Desktop\psd-framework` 保留给歆歆协调与 merge 收编用途，不在其中开新的实验窗口；跨窗产物收编一律显式 `git merge --no-ff wt/<窗口名>`
+2. **主检出只做协调合并**：`D:\Desktop\PR论文\psd-framework` 保留给歆歆协调与 merge 收编用途，不在其中开新的实验窗口；跨窗产物收编一律显式 `git merge --no-ff wt/<窗口名>`
 3. **提交仍在各自 wt 分支**：产物落盘即提交；白名单制度在 worktree 内照旧执行——只提交任务书白名单内文件，精确 `git add`，禁用 `git add .`
 4. **data/ 共享即同盘写入**：worktree 的 data/ 经 Junction 指向主仓 data/（gitignore 生成物不随 git 走）；各窗口生成物必须带窗口前缀或唯一 seed，冲突时以后提交者重命名为准
 5. **runs/ 各窗独立**：上游 checkpoint 由建窗脚本按清单复制；禁止写入他窗 runs 子目录
-6. **Python 解释器统一用主仓绝对路径** `.venv` 不复制：`D:\Desktop\psd-framework\.venv\Scripts\python.exe`（cwd 置于本 worktree 内即可正确 import psd）
+6. **Python 解释器统一用主仓绝对路径** `.venv` 不复制：`D:\Desktop\PR论文\psd-framework\.venv\Scripts\python.exe`（cwd 置于本 worktree 内即可正确 import psd）
 7. **收编自助**：窗口完成验收自检后运行 `pwsh scripts/window_checkin.ps1 -Name <本窗名> [-Remove] [-Message "移交说明"]` 自助合并——脚本强制执行领地扫描/窗口内测试/master 回归三道门禁，冲突自动中止上报；`-Remove` 卸窗含 runs/data_campaign 数据汇聚检查。禁止绕过脚本直接改 master
 8. **跨窗看板**：所有跨窗信息（移交/发现/阻塞/待裁决）必须写入 `dev-docs/board/BOARD.md`（工具 `scripts/window_board.ps1 -Append/-Tail`）；开窗第一件事读看板再读 HANDOVER；协调者监控看板代替逐窗轮询
 9. **记忆库双写**：重大发现/裁决/状态变更在写 BOARD 的同时必须调用记忆 MCP（`memory_memory_add`/`bulk_add`，agent_id=shared）入库；开工/验收前用 `memory_memory_context`/`memory_memory_search` 拉取相关记忆——语义召回补 BOARD 的关键词盲区，双信道缺一不可
@@ -57,3 +57,4 @@
 | v1.1 | 2026-08-25 | W24 增补 §4 并行纪律（B-full worktree 协议六条），Owner Map 顺延为 §5 |
 | v1.2 | 2026-08-25 | §4 增补条款 7-8：收编自助（window_checkin.ps1 三门禁协议）+ 跨窗看板（BOARD.md 强制信道）——消除协调瓶颈与信息不互通 |
 | v1.3 | 2026-08-25 | §4 增补条款 9：记忆库双写协议（BOARD 正式信道 + 记忆 MCP 语义召回，agent_id=shared）——补齐跨窗知识管理的语义盲区 |
+| v1.4 | 2026-09-19 | 仓库整体迁至 `D:\Desktop\PR论文\` 后的路径清洗：§4 条款 2/6 主检出与 .venv 绝对路径改指新根；figB worktree 断链经 `git worktree repair` 修复；branch.master.merge 由陈旧 refs/heads/main 改指 refs/heads/master（ahead-147 幻象消除，真实 ahead 1） |

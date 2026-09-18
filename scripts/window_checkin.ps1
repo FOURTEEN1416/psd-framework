@@ -15,9 +15,9 @@ param(
 )
 
 $ErrorActionPreference = "Continue"
-$MAIN = "D:\Desktop\psd-framework"
+$MAIN = "D:\Desktop\PR论文\psd-framework"
 $BRANCH = "wt/$Name"
-$WORKTREE = "D:\Desktop\psd-framework-$Name"
+$WORKTREE = "D:\Desktop\PR论文\psd-framework-$Name"
 $PY = Join-Path $MAIN ".venv\Scripts\python.exe"
 
 # ---- 门禁 0: 前置存在性
