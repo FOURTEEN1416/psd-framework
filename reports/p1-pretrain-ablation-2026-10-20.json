@@ -1,0 +1,44 @@
+{
+  "generated_at": "2026-10-20T14:03:44+00:00",
+  "experiment": "AimCLR 预训练池扩容消融（941 vs 225）",
+  "probe": {
+    "data": "data/processed/p01/train_data.npy",
+    "labels": "data/processed/p01/train_label.pkl",
+    "n": 225,
+    "note": "两臂 probe 样本逐字节相同（对抗验收核验）"
+  },
+  "expanded_pool": {
+    "n": 941,
+    "composition": "225 InterPet4D + 716 MammalNet canine"
+  },
+  "baseline_pool": {
+    "n": 225,
+    "composition": "InterPet4D only"
+  },
+  "curves": [
+    {
+      "epoch": 20,
+      "expanded_941": 18.67,
+      "baseline_225": 16.89,
+      "delta_pp": 1.78
+    },
+    {
+      "epoch": 40,
+      "expanded_941": 23.56,
+      "baseline_225": 19.11,
+      "delta_pp": 4.45
+    },
+    {
+      "epoch": 60,
+      "expanded_941": 21.78,
+      "baseline_225": 28.89,
+      "delta_pp": -7.11
+    }
+  ],
+  "limitations": [
+    "queue_size=1024 > 941 样本，负样本队列重复入队，绝对 kNN 值被系统性压低（两臂同口径，相对比较仍公平）",
+    "MammalNet 为 2D 源，第三通道诚实置 0，与 InterPet4D 的真实 z 存在域差（未做消融）",
+    "MammalNet 品种标签来自 keyword 字段，非专家核验"
+  ],
+  "verdict": "扩容无效/有害：941 比 225 低 7.11pp"
+}

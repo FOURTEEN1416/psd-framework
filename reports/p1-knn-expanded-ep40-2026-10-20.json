@@ -1,0 +1,22 @@
+{
+  "date": "2026-10-20T21:49:07",
+  "weights": "runs/p01_aimclr_expanded/epoch40_model.pt",
+  "feature": "backbone",
+  "n_samples": 225,
+  "num_class": 12,
+  "label_semantics": "dog ID (InterPet4D v1 无行为标注, 代理 probe)",
+  "metric_layer": "公开真实层 (InterPet4D smal_npy)",
+  "knn_k": 1,
+  "cv_folds": 5,
+  "fold_top1_acc": [
+    0.2222222222222222,
+    0.2222222222222222,
+    0.2222222222222222,
+    0.3111111111111111,
+    0.2
+  ],
+  "knn_top1_mean_pct": 23.56,
+  "random_baseline_pct": 8.33,
+  "ratio_vs_random": 2.83,
+  "acceptance_2x_random": true
+}
