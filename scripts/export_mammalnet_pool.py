@@ -113,11 +113,10 @@ def _extract_clip_kpts(
             nearest = min(valid, key=lambda j: abs(j - i))
             filled_k[i] = frames_kpts[nearest]
             filled_v[i] = np.zeros(17, dtype=np.float32)  # 填充帧置信度归零
-    kp17 = np.stack(
-        [filled_k[..., 0], filled_k[..., 1], filled_v], axis=-1
-    )  # (T,17,3) [x,y,vis]
+        kp17 = np.stack(
+            [filled_k[..., 0], filled_k[..., 1], filled_v], axis=-1
+        )  # (T,17,3) [x,y,vis]
     return kp17, filled_v
-
 
 def _subset_key(name: str, subset: Dict[str, dict]) -> str:
     """把 clip 名解析为 subset_annotations 的键。
@@ -177,12 +176,18 @@ def main() -> None:
             skipped_no_detect.append(stem)
             continue
         kp17, vis = got
-        kp24 = map_aptv2_keypoints(kp17)  # (T,24,3)
-        # 不可映射槽位已是 NaN；to_ntu_view 要求输入有限——把 NaN 的 vis 置 0、坐标置 0
-        kp24 = np.nan_to_num(kp24, nan=0.0)
-        # 置信度（vis）作为 to_ntu_view 的 weight
-        weight = kp24[..., 2].astype(np.float32)
-        view = to_ntu_view(kp24, weight=weight, conf_threshold=args.conf_threshold)
+        kp24 = map_aptv2_keypoints(kp17)  # (T,24,3)，第三维是 vis(0-1)，不可映射槽位为 NaN
+        # 对抗验收修复（2026-10-20）：to_ntu_view 的第三维是 **z 坐标**，不是置信度。
+        # 直接把 vis 当 z 送进去会被 _normalize_sequence 一并质心化/尺度化，
+        # 产出 ch2∈[0, 0.005] 的残值——与 InterPet4D 参照池的 ch2∈[-0.78, 0.83] 语义冲突，
+        # 两批数据混合预训练时模型会学到两套互斥的 z 信号（实测对照见验收报告）。
+        # 正确做法（同仓 ak_pose_extract 的 2D 口径）：2D 源无真实 z，第三维置 0，
+        # 置信度只作为 to_ntu_view 的 weight 用于低置信置零，不进张量。
+        vis = kp24[..., 2].astype(np.float32)
+        kp24_xyz = kp24.copy()
+        kp24_xyz[..., 2] = 0.0  # 2D 源：z 诚实置 0（非伪造 3D）
+        kp24_xyz = np.nan_to_num(kp24_xyz, nan=0.0)
+        view = to_ntu_view(kp24_xyz, weight=vis, conf_threshold=args.conf_threshold)
         views.append(view)
         names.append(stem)
         if i % 50 == 0 or i == len(videos):

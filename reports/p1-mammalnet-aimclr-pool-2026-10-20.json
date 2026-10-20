@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-20T10:24:39.702026+00:00",
+  "generated_at": "2026-10-20T11:48:07.318748+00:00",
   "data_root": "D:\\Desktop\\PR论文\\datasets\\mammalnet_canine",
   "pose_weights": "D:\\Desktop\\PR论文\\k9-training-system\\runs\\pose\\runs\\aptv2_finetune\\yolo_canidae_pose\\weights\\best.pt",
   "clips_seen": 752,
@@ -62,16 +62,5 @@
     "shepherd dog",
     "terrier"
   ],
-  "usage_scope": "pretrain_pool_only（无标签自监督；不进 K9-Bench-v0 验收门）",
-  "label_fix": "对抗验收修复：分片 clip（_1/_2）标签曾误落 unknown（90/716），剥离后缀后 unknown=0",
-  "label_distribution": {
-    "bulldog": 235,
-    "eskimo dog": 10,
-    "foxhound": 2,
-    "hound": 63,
-    "husky dog": 28,
-    "malamute": 116,
-    "shepherd dog": 27,
-    "terrier": 235
-  }
+  "usage_scope": "pretrain_pool_only（无标签自监督；不进 K9-Bench-v0 验收门）"
 }

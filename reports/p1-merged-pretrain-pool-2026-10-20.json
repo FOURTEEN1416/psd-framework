@@ -1,0 +1,24 @@
+{
+  "generated_at": "2026-10-20T13:29:57.330053+00:00",
+  "interpet4d": {
+    "dir": "data/processed/p01",
+    "n": 225,
+    "classes": 12
+  },
+  "mammalnet": {
+    "dir": "data/processed/p01_mammalnet",
+    "n": 716,
+    "breeds": 8
+  },
+  "merged_shape": [
+    941,
+    3,
+    64,
+    25,
+    1
+  ],
+  "merged_n": 941,
+  "label_policy": "InterPet4D dog-ID 保留原索引；MammalNet 一律 -1（不进 kNN probe），其品种索引单存 mammalnet_breed.pkl。原因：dog ID 与品种是不同语义，同空间会污染 probe 指标（对抗验收发现#3）",
+  "pretrain_note": "AimCLR 自监督不使用 label，合并池可直接训练；仅 probe 侧需按 label_policy 过滤",
+  "ch2_semantics": "InterPet4D 为真实 3D z；MammalNet 为 2D 源、ch2 恒 0（非伪造）"
+}
