@@ -40,5 +40,13 @@
     "MammalNet 为 2D 源，第三通道诚实置 0，与 InterPet4D 的真实 z 存在域差（未做消融）",
     "MammalNet 品种标签来自 keyword 字段，非专家核验"
   ],
-  "verdict": "扩容无效/有害：941 比 225 低 7.11pp"
+  "verdict": "无法判定（原自动判定「扩容有害」不成立——实验设计存在混淆变量）",
+  "verdict_revision": {
+    "reason": "自动化脚本按 epoch60 单点差值给出「扩容无效/有害 -7.11pp」，经对抗复核该判定不成立",
+    "confound_1": "两臂梯度步数不等：expanded 941/64=14 iters/epoch×60=840 步；baseline 225/64=3 iters/epoch×60=180 步（3.75x 差异）→ 这是「等 epoch」而非「等算力」对比",
+    "confound_2": "基线 epoch60 的 28.89% 伴随最大折间方差 fold_sd=6.29pp（单折最高 40.0%），2-3 折驱动；对比 expanded epoch60 fold_sd=2.43pp（更稳定）",
+    "confound_3": "两臂训练 loss 差异显著：expanded 收尾 ~9.98，baseline ~13.15（基线训练不足，180 步）",
+    "trend_analysis": "epoch20/40 两臂同向可比：expanded 领先 +1.78pp / +4.45pp；epoch60 出现反向但伴随最大基线方差 → 不支持「扩容有害」结论",
+    "honest_conclusion": "现有数据不足以判定扩容好坏；需要 (a) 等步数对比（baseline 跑 280 epoch 或 expanded 降步数）(b) 多 seed 重复 (c) 固定评估协议"
+  }
 }
