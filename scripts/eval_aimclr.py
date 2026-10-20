@@ -76,6 +76,8 @@ def main():
     ap.add_argument("--folds", type=int, default=5)
     ap.add_argument("--feature", choices=["proj", "backbone"], default="backbone",
                     help="probe 特征: backbone=fc 前池化特征(256d, 惯例), proj=projection 输出(128d)")
+    ap.add_argument("--expect-samples", type=int, default=0,
+                    help="若给出，则校验 --data 的实际样本数；用于防止「用 A 池数据评估 B 池模型」的静默错配")
     args = ap.parse_args()
 
     if not args.knn:
@@ -113,9 +115,32 @@ def main():
         return h
 
     data = np.load(REPO_ROOT / args.data, mmap_mode="r")
+    if args.expect_samples and data.shape[0] != args.expect_samples:
+        raise SystemExit(
+            f"[eval] 数据-权重错配防护: --data 有 {data.shape[0]} 样本，"
+            f"但 --expect-samples={args.expect_samples}。"
+            f"（常见错误：用 p01 的 225 样本评估在 941 合并池上训练的模型）"
+        )
     with open(REPO_ROOT / args.labels, "rb") as f:
         sample_names, labels = pickle.load(f)
     labels_arr = np.asarray(labels)
+
+    # 合并池口径（2026-10-20 对抗验收修复）:
+    #   MammalNet 样本 label 一律为 -1（品种与 dog-ID 不同语义，见 merge_pretrain_pool.py）。
+    #   -1 既不能进 kNN 投票（np.bincount 遇负数直接 ValueError），也不该进 probe 精度，
+    #   故评估前按 label>=0 过滤，只对 InterPet4D 的 dog-ID 类做 probe。
+    if (labels_arr < 0).any():
+        keep = labels_arr >= 0
+        dropped = int((~keep).sum())
+        print(
+            f"[eval] 过滤无 probe 标签样本: {dropped}/{len(labels_arr)}"
+            f"（label<0，来自 MammalNet 品种池，仅参与自监督预训练）"
+        )
+        labels_arr = labels_arr[keep]
+        sample_names = [n for n, k in zip(sample_names, keep) if k]
+        data = data[keep]
+        if len(labels_arr) == 0:
+            raise SystemExit("[eval] 过滤后无可用 probe 样本——检查标签口径")
 
     feats = []
     with torch.no_grad():
