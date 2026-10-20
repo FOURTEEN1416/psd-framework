@@ -23,6 +23,20 @@ def main() -> None:
         "--config",
         default=str(REPO_ROOT / "configs" / "p01_aimclr.yaml"),
     )
+    # 多 seed 复现（2026-10-20 加入）：seed 影响权重初始化 + 数据增强 + 采样顺序。
+    # 不改 external/AimCLR 内部实现，仅在本仓薄适配器注入。
+    ap.add_argument(
+        "--seed",
+        type=int,
+        default=0,
+        help="随机种子（默认 0，与历史 P0.1 基线一致）",
+    )
+    # work_dir 覆盖：多 seed/多臂实验需各自隔离输出目录，避免互相覆盖
+    ap.add_argument(
+        "--work-dir",
+        default="",
+        help="覆盖 config 中的 work_dir（留空则用 config 值）",
+    )
     args, forward = ap.parse_known_args()
 
     if not AIMCLR_ROOT.exists():
@@ -34,12 +48,16 @@ def main() -> None:
     sys.path.insert(0, str(AIMCLR_ROOT / "torchlight"))
     from processor.processor import init_seed  # noqa: E402
 
-    init_seed(0)
+    init_seed(args.seed)
+    print(f"[train] seed={args.seed}")
     # 本仓适配处理器：跳过官方 weights_init（坍缩根因，证据见 reports/p01 报告）
     sys.path.insert(0, str(REPO_ROOT))
     from psd.training.p01_processor import P01AimCLRProcessor
 
     argv = ["--config", str(Path(args.config).resolve())] + forward
+    if args.work_dir:
+        argv += ["--work_dir", str(Path(args.work_dir).resolve())]
+        print(f"[train] work_dir override -> {args.work_dir}")
     proc = P01AimCLRProcessor(argv)
 
     # 官方 Processor 自带 work_dir 创建与日志；cwd 需为 repo root 以解析相对路径

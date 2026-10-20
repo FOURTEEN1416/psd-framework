@@ -1,0 +1,64 @@
+{
+  "generated_at": "2026-10-20T19:25:45+00:00",
+  "experiment": "AimCLR 预训练池扩容消融 v2（等步数 + 多 seed）",
+  "design": {
+    "step_match": 840,
+    "seeds": [
+      0,
+      1,
+      2
+    ],
+    "baseline": {
+      "samples": 225,
+      "iters_per_epoch": 3,
+      "epochs": 280,
+      "mining_epoch": 252
+    },
+    "expanded": {
+      "samples": 941,
+      "iters_per_epoch": 14,
+      "epochs": 60,
+      "mining_epoch": 54
+    },
+    "probe": {
+      "data": "data/processed/p01/train_data.npy",
+      "labels": "data/processed/p01/train_label.pkl",
+      "n": 225,
+      "k": 1,
+      "folds": 5,
+      "note": "两臂共用同一 probe 样本，逐字节核验相同"
+    }
+  },
+  "results": {
+    "baseline_225": {
+      "n": 3,
+      "mean": 19.26,
+      "sd": 2.6,
+      "per_seed": [
+        22.22,
+        17.33,
+        18.22
+      ]
+    },
+    "expanded_941": {
+      "n": 3,
+      "mean": 21.78,
+      "sd": 1.78,
+      "per_seed": [
+        23.56,
+        21.78,
+        20.0
+      ]
+    },
+    "delta_pp": 2.52,
+    "noise_sd_pp": 4.97
+  },
+  "verdict": "无显著差异：|Δ|=2.52pp vs 噪声 4.97pp（同向 3/3 seeds）",
+  "limitations": [
+    "queue_size=1024 相对两臂样本量均偏大（941/225），负样本队列重复入队，绝对 kNN 被系统性压低",
+    "MammalNet 为 2D 源、第三通道诚实置 0，与 InterPet4D 真实 z 存在域差（未做消融）",
+    "MammalNet 品种标签来自 keyword 字段，非专家核验；仅作自监督燃料，不进 probe",
+    "seed 数=3 为最低可判据；如需论文级置信区间应扩到 ≥5 seeds"
+  ],
+  "scope": "本实验测「额外无标签数据能否提升表征质量」，不代表行为识别精度；行为验收仍须 K9-Bench-v0"
+}

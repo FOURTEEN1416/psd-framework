@@ -1,0 +1,22 @@
+{
+  "date": "2026-10-21T03:25:45",
+  "weights": "runs/p01_ablation_v2_expanded_s2/epoch60_model.pt",
+  "feature": "backbone",
+  "n_samples": 225,
+  "num_class": 12,
+  "label_semantics": "dog ID (InterPet4D v1 无行为标注, 代理 probe)",
+  "metric_layer": "公开真实层 (InterPet4D smal_npy)",
+  "knn_k": 1,
+  "cv_folds": 5,
+  "fold_top1_acc": [
+    0.2222222222222222,
+    0.26666666666666666,
+    0.2222222222222222,
+    0.15555555555555556,
+    0.13333333333333333
+  ],
+  "knn_top1_mean_pct": 20.0,
+  "random_baseline_pct": 8.33,
+  "ratio_vs_random": 2.4,
+  "acceptance_2x_random": true
+}
