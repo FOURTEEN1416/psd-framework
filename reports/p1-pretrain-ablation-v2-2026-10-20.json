@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-20T19:25:45+00:00",
+  "generated_at": "2026-10-20T19:29:09+00:00",
   "experiment": "AimCLR 预训练池扩容消融 v2（等步数 + 多 seed）",
   "design": {
     "step_match": 840,
@@ -51,7 +51,18 @@
       ]
     },
     "delta_pp": 2.52,
-    "noise_sd_pp": 4.97
+    "noise_sd_pp": 4.97,
+    "paired_test": {
+      "n_pairs": 3,
+      "mean_diff_pp": 2.52,
+      "sd_diff_pp": 1.68,
+      "se_pp": 0.97,
+      "t": 2.6,
+      "df": 2,
+      "p_value": 0.1218,
+      "sign_test_p_one_sided": 0.125,
+      "significant_at_0.05": false
+    }
   },
   "verdict": "无显著差异：|Δ|=2.52pp vs 噪声 4.97pp（同向 3/3 seeds）",
   "limitations": [

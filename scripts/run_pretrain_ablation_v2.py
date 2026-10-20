@@ -85,6 +85,9 @@ ARMS = {
 TRAIN_TIMEOUT_S = 7200
 EVAL_TIMEOUT_S = 900
 RETRIES = 3
+# 实测单 epoch 耗时（2026-10-21 本机实测：baseline 280ep=69.8min、expanded 60ep=15.1min
+# → 两者均 ≈15 s/epoch。旧版 --plan 曾据此误报 baseline 21 分钟，此处按实测标注）
+SEC_PER_EPOCH = 15.0
 
 
 def _now() -> str:
@@ -321,6 +324,7 @@ def write_report(state: dict) -> Path | None:
     # 判定（v2 规则）：|Δmean| > pooled_sd 且多数 seed 同号
     verdict = "无法判定（数据不足）"
     delta = pooled_sd = None
+    paired_stats: dict = {}
     if se["mean"] is not None and sb["mean"] is not None:
         delta = round(se["mean"] - sb["mean"], 2)
         # pooled sd：用两臂折间 sd 的合并估计
@@ -344,6 +348,32 @@ def write_report(state: dict) -> Path | None:
                 f"（同向 {same_sign}/{len(paired)} seeds）"
             )
 
+        # 配对 t 检验（seed 配对，消除 seed 间基线波动）——报告里必须给出 p 值，
+        # 「同向 3/3」本身不是显著性证据（n=3 全同向的符号检验 p=0.125）
+        if len(paired) >= 2:
+            diffs = [e - b for e, b in paired]
+            md_ = statistics.mean(diffs)
+            sd_ = statistics.stdev(diffs)
+            se_ = sd_ / (len(diffs) ** 0.5)
+            t_ = md_ / se_ if se_ > 0 else float("inf")
+            p_ = None
+            try:
+                from scipy import stats as _st  # 可选依赖
+                p_ = float(_st.ttest_rel(exp_means, base_means).pvalue)
+            except Exception:  # noqa: BLE001
+                p_ = None
+            paired_stats = {
+                "n_pairs": len(paired),
+                "mean_diff_pp": round(md_, 2),
+                "sd_diff_pp": round(sd_, 2),
+                "se_pp": round(se_, 2),
+                "t": round(t_, 2),
+                "df": len(paired) - 1,
+                "p_value": round(p_, 4) if p_ is not None else None,
+                "sign_test_p_one_sided": round(1 / (2 ** len(paired)), 4),
+                "significant_at_0.05": (p_ is not None and p_ < 0.05),
+            }
+
     summary = {
         "generated_at": _now(),
         "experiment": "AimCLR 预训练池扩容消融 v2（等步数 + 多 seed）",
@@ -363,6 +393,7 @@ def write_report(state: dict) -> Path | None:
             "expanded_941": {**se, "per_seed": exp_means},
             "delta_pp": delta,
             "noise_sd_pp": pooled_sd,
+            "paired_test": paired_stats,
         },
         "verdict": verdict,
         "limitations": [
@@ -406,6 +437,27 @@ def write_report(state: dict) -> Path | None:
         f"| expanded(941) | {se['n']} | {fmt(se['mean'])}% | {fmt(se['sd'])} | {exp_means} |",
         "",
         f"Δ = **{fmt(delta)}pp**；折间噪声估计 **{fmt(pooled_sd)}pp**；随机基线 8.33%。",
+        "",
+        "## 统计检验（配对，消除 seed 间波动）",
+    ]
+    if paired_stats:
+        ps = paired_stats
+        md += [
+            f"- 配对差值：{[(round(e - b, 2)) for e, b in zip(exp_means, base_means)]}",
+            f"- 均值差 **{ps['mean_diff_pp']}pp**，sd {ps['sd_diff_pp']}，SE {ps['se_pp']}，"
+            f"t={ps['t']}（df={ps['df']}）",
+            f"- **p = {ps['p_value']}**（配对 t 检验）",
+            f"- 符号检验（n={ps['n_pairs']} 全同向）单尾 p = {ps['sign_test_p_one_sided']}",
+            f"- **0.05 水平显著：{'是' if ps['significant_at_0.05'] else '否'}**"
+            + (
+                "——方向一致但样本量不足以判定显著"
+                if not ps["significant_at_0.05"]
+                else ""
+            ),
+            "",
+            "> 「同向 3/3」本身不构成显著性证据：n=3 全同向的符号检验 p=0.125。",
+        ]
+    md += [
         "",
         "## 判定规则（v2）",
         "只有同时满足才算差异成立：① `|Δmean| > pooled_sd`（效应超过噪声）；",
@@ -463,8 +515,14 @@ def print_plan() -> None:
     print(f"训练任务数 : {total}（{len(ARMS)} 臂 × {len(SEEDS)} seeds）")
     print(f"probe      : {PROBE_DATA} n={PROBE_N} k={PROBE_K} folds={PROBE_FOLDS}")
     print()
-    print("预计耗时：baseline 280ep×3 ≈ 21 分钟/seed，expanded 60ep×14 ≈ 15 分钟/seed")
-    print(f"         共 {len(SEEDS)}×(21+15) ≈ {len(SEEDS)*36} 分钟（串行，GPU 显存互斥）")
+    print(f"预计耗时（实测 {SEC_PER_EPOCH:.0f} s/epoch，串行 GPU 互斥）：")
+    per_seed = 0.0
+    for arm in ARMS:
+        mins = epochs_for(arm) * SEC_PER_EPOCH / 60.0
+        per_seed += mins
+        print(f"          {arm:9s}: {epochs_for(arm):3d} epoch ≈ {mins:5.1f} 分钟")
+    total_min = per_seed * len(SEEDS)
+    print(f"          总计: {len(SEEDS)} seeds × {per_seed:.0f} 分钟 ≈ {total_min:.0f} 分钟（{total_min/60:.1f} 小时）")
 
 
 def main() -> int:
