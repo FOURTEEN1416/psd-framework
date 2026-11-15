@@ -44,17 +44,17 @@
 \def\textpagefraction{.001}
 
 %% ---------------- 前置区（Frontmatter）----------------
-\shorttitle{Physics-semantics decoupled framework for animal behavior recognition}
+\shorttitle{Physics-semantics decoupled framework under evolving evaluation criteria}
 %% 排版纪律 2: 前置区字段(shortauthors/author/ead/affiliation)会被类内 LaTeX3 机制全展开——
 %%   禁放任何自定义宏(含 \TODO/\textcolor)，只写纯文本占位；\TODO 仅用于正文区。
 \shortauthors{Hou et al.}
 
 % R20 标题终裁（模拟审稿最优解）：移除"Low-Resource"——动物层端到端低资源为负，标题词与结果不匹配是 framing 级拒稿面；
 %   卖点迁到已交付且新颖的"解耦+演化评估准则"。low-resource 作为设计目标保留在摘要/正文/关键词（上下文即时限定）。
-\title[mode = title]{A Physics--Semantics Decoupled Framework for Animal Behavior Recognition under Evolving Evaluation Criteria}
+\title[mode = title]{A Physics--Semantics Decoupled Framework for Skeleton-Based Behavior Recognition under Evolving Evaluation Criteria}
 %% R18: casprelimstitle 在 highlights/abstract prelims 框内不自动折断（类缺陷）——手动断行修复 117pt overfull
 
-\renewcommand{\casprelimstitle}{A Physics--Semantics Decoupled Framework for Animal Behavior Recognition\\ under Evolving Evaluation Criteria}
+\renewcommand{\casprelimstitle}{A Physics--Semantics Decoupled Framework for\\ Skeleton-Based Behavior Recognition\\ under Evolving Evaluation Criteria}%% R18 fix: 类不重排此框内标题, 手动三段断行全部落在 \textwidth 内, 消除 117pt overfull
 
 %% 作者区 USER 终审项: 名单/单位/ORCID/通讯标记——结构按官方模板预留
 \author[1]{Zhimai Hou}[orcid=0009-0006-1360-8359]
@@ -112,19 +112,20 @@
             postcode={650000},
             country={China}}
 
-%% ---------------- 摘要（introduction.md v0.3 W36 合并定稿逐字搬运）----------------
+%% ---------------- 摘要（2026-11-15 深度改造: 主张收缩为 taxonomy 演化下物理-语义解耦的成本-收益边界与透明评估协议; R2-1/R2-5 落实）----------------
 \begin{abstract}
-Behavior recognition in animals underpins welfare monitoring and working-dog training, yet behavior annotation is scarce and evaluation criteria evolve with operational needs. Existing pipelines couple representation learning to a fixed label set, so every taxonomy change forces re-annotation and retraining. We propose PSD, a physics--semantics decoupled framework that separates \emph{how skeletons move} from \emph{what behaviors are called}. A label-free physics layer combines self-supervised pretraining with unsupervised motion-word segmentation; a lightweight semantic layer expands rule-engine seeds toward full taxonomy coverage through anchor-guided prototype clustering with iterated confidence-filtered pseudo-labeling, consolidated by self-training and warm-started initialization. On public real animal-skeleton data, pretraining alone yields subject-identification $k$-NN top-1 of \textbf{20.89\% versus an 8.33\% random baseline (2.51$\times$; probe)}. On the synthetic-offset tier, the warm-started semantic layer reaches \textbf{82.0\% top-1 on 22 classes from 20 labeled clips} (the marginal budget atop a fully labeled source domain); a taxonomy transition there is absorbed at \textbf{$\geq$3$\times$ lower retraining cost} than full retraining (conservative bound; measured $6.07\times$); real-domain replications bound the scope: fails at small scale, PARTIAL at backbone scale. On the human-domain benchmark, the end-to-end pipeline retains \textbf{90.7\% of full-budget linear-probe accuracy at 10\% of the labels} under a pre-registered protocol (the frozen-feature linear head alone retains 88.7\%); on the canine tier the same corrected protocol stays near chance at a 13\% budget---a tier-dependent boundary. These results indicate that decoupling reduces taxonomy evolution to a semantic-layer update whose benefits are architecture- and scale-dependent rather than universal.
+Evaluation criteria in applied behavior recognition evolve with operational needs, and every taxonomy change re-opens the annotation and retraining pipeline behind a deployed classifier. This paper asks when decoupling the layers of such a pipeline pays for itself. We propose PSD, a physics--semantics decoupled framework for skeleton-based behavior recognition that separates \emph{how skeletons move} from \emph{what behaviors are called}: a label-free physics layer combines self-supervised pretraining with unsupervised motion-word segmentation, and a lightweight semantic layer expands rule-engine seeds toward taxonomy coverage through anchor-guided prototype clustering with iterated confidence-filtered pseudo-labeling, consolidated by self-training and warm-started initialization. We evaluate PSD under a pre-registered, tier-separated protocol that reports cost against accuracy at matched budgets and publishes its failure conditions. On the synthetic tier, a taxonomy transition is absorbed at \textbf{$\geq$3$\times$ lower retraining cost than full retraining} (conservative bound; measured $6.07\times$); this bound is established on the synthetic tier only, and real-domain replications bound its scope (fails at small scale, PARTIAL at backbone scale). The warm-started semantic layer reaches \textbf{82.0\% top-1 on 22 classes from 20 labeled clips} (vs.\ \textbf{96.6\% full-budget}; the 20 clips are the marginal budget atop a fully labeled source domain). On public benchmarks, the end-to-end pipeline retains \textbf{90.7\% of full-budget linear-probe accuracy at 10\% of the labels} on the human benchmark (full-budget reference 74.45\%; the frozen-feature linear head alone retains 88.7\%), holds the PARTIAL band on NTU120 and PanAf500 (88.9\%/88.7\%, the latter 85.8\% at thirty seeds), and collapses on UCF101 (66.6\%) where the full-budget reference is weak; on the canine tier the same protocol stays \emph{below chance} at a 13\% budget (\textbf{9.8\% vs.\ 11.1\% chance}, with a generic-SSL control reaching 15.2\%)---an honest negative that bounds the mechanism's applicability. The contribution is not a universal animal-recognition system but a cost--benefit boundary and a transparent evaluation protocol: decoupling pays where a frozen backbone is reusable and semantics are cheap to rebuild, and the same protocol exposes where it does not.
 
 \end{abstract}
 
 %% Highlights 同步维护两处: 此处（版内）+ highlights.tex（投稿系统独立可编辑文件）
+%% 2026-11-15 深度改造: R2-1/R2-5 联动——6.07x 显式限定 synthetic tier；82.0% 补 full-budget 对照；k-NN 降位并标 probe。
 \begin{highlights}
 \item Decoupled framework absorbs taxonomy evolution cheaply (synthetic tier)
-\item Taxonomy transitions cost $\geq$3x less wall clock (synthetic tier)
-\item First, to our knowledge, anchor--cluster pseudo-label loop on skeletons (combination)
-\item Pretraining: 2.51x random kNN on quadruped skeletons (subject-ID probe)
-\item Warm start: 82.0\% top-1 adapting to an offset domain with 20 clips (marginal budget)
+\item Taxonomy transitions cost $\geq$3x less wall clock (measured 6.07x, synthetic tier)
+\item Warm start: 82.0\% top-1 from 20 clips (vs.\ 96.6\% full-budget, offset tier)
+\item Pipeline retains 90.7\% full-budget accuracy at 10\% labels (human benchmark)
+\item Canine tier stays below chance at 13\% budget (9.8\% vs.\ 11.1\%)---honest boundary
 \end{highlights}
 
 %% 关键词（建议稿 F6，1-7 个允许）
@@ -180,13 +181,17 @@ During the preparation of this work the authors used GLM-5.3-Flash (Zhipu AI) to
 
 %% ---------------- 附录（R12 启用: 首次性证据矩阵 + 复现链, 消除"Supplementary Material 不存在"指控）----------------
 \appendix
+%% 跨文档引用: m_c 完整形式在独立编译的补充材料 supplementary.tex（R2-4 承诺兑现, 附录 A 编号 app:mc）
+\section{The frequency-aware margin factor $m_c$: exact instantiation}\label{app:mc}
+This appendix summarizes the $m_c$ instantiation whose full version is Section~A of the supplementary material: $m_c = \max(\rho, (\pi_c/\pi_{\max})^{\alpha})$ with defaults $\alpha = 1.0$ and $\rho = 0.5$ (floor ratio), base threshold $\tau$ fixed by quantile targeting at first-round coverage $0.35$, and two pre-registered ablation hooks ($\alpha \in \{0, 0.5, 1\}$; coverage target $\in \{0.25, 0.35, 0.50\}$). The reference implementation is \texttt{frequency\_aware\_thresholds} in \texttt{psd/training/jia\_prototype.py} of the released repository.
+
 \section{Novelty survey matrix}\label{app:novelty}
 
-Table~\ref{tab:novelty} records the repository-scale survey behind the firstness claim (Section~\ref{sec:related}): ten query groups over GitHub code search, the last a full scan of the maintained awesome-skeleton-AR catalog (18 survey candidates; the submission-time arXiv/CrossRef re-verification added the point-supervised row, giving 19 candidate works across 8 table rows), each candidate checked against the three-part mechanism (self-supervised skeleton encoder $\to$ rule-engine seed anchors $\to$ clustered, confidence-filtered iterated pseudo-labels).
+Table~\ref{tab:novelty} records the repository-scale survey behind the firstness claim (Section~\ref{sec:related}): ten query groups over GitHub code search, the last a full scan of the maintained awesome-skeleton-AR catalog (18 survey candidates; the submission-time arXiv/CrossRef re-verification added the point-supervised row, and the revision added the three nearest-neighbor rows of Section~\ref{ssec:rw-position}, giving 22 candidate works across 11 table rows), each candidate checked against the three-part mechanism (self-supervised skeleton encoder $\to$ rule-engine seed anchors $\to$ clustered, confidence-filtered iterated pseudo-labels).
 
 \begin{table}[pos=t]
 \centering
-\caption{Novelty survey matrix. ``Occupies niche?'' = does the work instantiate all three mechanism parts for temporal skeleton recognition. Rows are identified by name and venue; bibliography keys for works cited in the body appear in Section~\ref{sec:related}, and the full check table is in the released repository's survey log.}
+\caption{Novelty survey matrix. ``Occupies niche?'' = does the work instantiate all three mechanism parts for temporal skeleton recognition. Rows are identified by name and venue; bibliography keys for works cited in the body appear in Section~\ref{sec:related} (TREBA, h/BehaveMAE, and ProSL are the nearest neighbors of Section~\ref{ssec:rw-position}), and the full check table is in the released repository's survey log.}
 \label{tab:novelty}
 \small
 \hyphenpenalty=10000
@@ -202,6 +207,9 @@ Skeleton-to-image (arXiv 2603.05963) & human skel., VFM features & representatio
 TP-CanineNet (Animals 2026) & canine \textbf{RGB} video, pseudo-labels & video domain, no skeleton, no anchor clustering & no \\
 SMQ (ICCV 2025); hierarchical ST-VQ & unsup.\ skeleton segmentation & quantizes motion; no taxonomy semantics & no \\
 Point-supervised skeleton segmentation (arXiv 2603.06201) & human skel., prototype pseudo-labels & one labeled frame per segment; no rule-engine anchors, no confidence-filtered iteration, no transition-cost framing & no \\
+TREBA (CVPR 2021) & rodent/fly RGB+pose, task-programmed SSL & representation + probes under a fixed ethogram; no proposals, no label-expansion loop, no taxonomy-change setting & no \\
+h/BehaveMAE (ECCV 2024) & animal mocap, hierarchical masked AE & latents and probe accuracies only; no segmentation into proposals, no seed anchors, no pseudo-label loop & no \\
+ProSL (Machine Learning 2025) & human skel., unsup.\ cluster pseudo-labels & cluster identities train the \emph{encoder}; no external seed anchors, no confidence-filtered recognition loop, no transition-cost framing & no \\
 \hline
 \end{tabularx}
 \end{table}

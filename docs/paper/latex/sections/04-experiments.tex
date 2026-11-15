@@ -64,7 +64,7 @@ The $\geq 3\times$ wall-clock saving of E6/E6-real-2 is available to any frozen-
 
 \begin{table}[pos=t]
 \centering
-\caption{Attribution controls for the transition-cost claim (pre-registered; \TODO{results pending, to be backfilled}). The frozen-backbone control tests whether the $\geq 3\times$ saving is generic to freezing; the merge/rename bound is a zero-retraining upper limit for transitions that need no new supervision. Tiers are never mixed; calibers follow E9/E6.}
+\caption{Attribution controls for the transition-cost claim. Both controls are pre-registered (protocols frozen before their runs); the runs are in progress, and the result cells will be backfilled verbatim from the released run artifacts (\TODO{results pending, to be backfilled from runs/p1\_sprint})---no value is imputed. The frozen-backbone control tests whether the $\geq 3\times$ saving is generic to freezing; the merge/rename bound is a zero-retraining upper limit for transitions that need no new supervision. Tiers are never mixed; calibers follow E9/E6.}
 \label{tab:attribution-controls}
 \small
 \hyphenpenalty=10000
@@ -75,7 +75,7 @@ Control & Arm & Metric & Result \\
 Frozen-backbone + standard head & frozen $\Phi$ + linear head, 10\% labels & top-1 & \TODO{NTU60: XX.X\% $\pm$ X.X (10 seeds)} \\
  & & & \TODO{NTU120: XX.X\% $\pm$ X.X; UCF101: XX.X\% $\pm$ X.X; PanAf500: XX.X\% $\pm$ X.X} \\
  & frozen $\Phi$ + MLP head, 10\% labels & top-1 & \TODO{NTU60: XX.X\% $\pm$ X.X} \\
- & PSD semantic layer, 10\% labels (E9 reference) & top-1 & 67.5\% $\pm$ 0.2 (NTU60; E9) \\
+ & PSD semantic layer, 10\% labels (E9 reference) & top-1 & 67.53\% $\pm$ 0.24 (NTU60; E9) \\
  & & wall-clock & \TODO{head-retrain seconds vs.\ semantic rebuild seconds (paired seeds)} \\
 \hline
 Merge/rename zero-retraining bound & frozen $\mathcal{Y}$-model, label remap (NTU60 ten-merge) & top-1 & \TODO{XX.X\% (zero retraining; no wall-clock)} \\

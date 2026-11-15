@@ -67,7 +67,7 @@ The operating threshold $\tau$ is fixed once by quantile targeting on estimated 
 \begin{equation}\label{eq:mc}
 \tau_c \;=\; \tau \cdot m_c, \qquad m_c = f\!\left(\pi_c / \pi_{\max}\right),
 \end{equation}
-where $m_c$ is a \emph{frequency-aware scaling factor} built from the ratio of class $c$'s seed prior $\pi_c$ to the largest class prior $\pi_{\max}$: rare classes receive $m_c \leq 1$ (a lower admission bar, countering long-tail suppression), majority classes receive $m_c \approx 1$, and a floor prevents the bar from collapsing on extreme tails. The concrete functional form of $f(\cdot)$ and its sensitivity parameters (exponent and floor ratio) are hyperparameters of the protocol rather than tuned per benchmark; we state the required shape here and give the exact instantiation, default values, and ablation hooks in the supplementary material.
+where $m_c$ is a \emph{frequency-aware scaling factor} built from the ratio of class $c$'s seed prior $\pi_c$ to the largest class prior $\pi_{\max}$: rare classes receive $m_c \leq 1$ (a lower admission bar, countering long-tail suppression), majority classes receive $m_c \approx 1$, and a floor prevents the bar from collapsing on extreme tails. The concrete functional form of $f(\cdot)$ and its sensitivity parameters (exponent and floor ratio) are hyperparameters of the protocol rather than tuned per benchmark; we state the required shape here and give the exact instantiation, default values, and ablation hooks in the supplementary material (Appendix~\ref{app:mc}).
 
 \begin{figure}[pos=tbp]
   \centering

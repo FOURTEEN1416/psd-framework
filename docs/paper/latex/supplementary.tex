@@ -1,0 +1,69 @@
+%% ============================================================================
+%% supplementary.tex — PSD Framework @ Pattern Recognition 投稿补充材料
+%% 独立编译单元（\\documentclass<article>，单栏预印本风格），与 main.tex 同目录；
+%% 真源: 本文件。正文 03-method.tex:70 承诺的 m_c 完整形式在此兑现（R2-4 方案 b）。
+%% 编译: pdflatex -interaction=nonstopmode supplementary.tex（两遍，含目录引用时）
+%% 纪律: pdflatex 非 Unicode 引擎——排版面禁 CJK；不使用 main.tex 的 \TODO 宏。
+%% ============================================================================
+
+\documentclass[11pt,a4paper]{article}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage[numbers,sort&compress]{natbib}
+\usepackage{xcolor}
+\usepackage{booktabs}
+
+\newcommand{\psd}{\textsc{psd}}
+
+\title{Supplementary Material for\\
+``A Physics--Semantics Decoupled Framework for Animal Behavior Recognition under Evolving Evaluation Criteria''}
+\author{Zhimai Hou et al.}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section{The frequency-aware margin factor $m_c$: exact instantiation}\label{app:mc}
+
+This section gives the complete instantiation of the class-specific threshold scaling factor $m_c$ referenced in Section~3.3.2 of the main text (Eq.~(6) there): the concrete functional form of $f(\cdot)$, its default sensitivity parameters, the calibration rule that fixes the base threshold $\tau$, and the pre-registered ablation hooks.
+
+\subsection{Functional form}
+
+With $\pi_c$ the seed prior of class $c$ (the fraction of verified seed anchors labeled $c$), $\pi_{\max} = \max_{c'} \pi_{c'}$, an exponent $\alpha \geq 0$, and a floor ratio $\rho \in (0,1]$, the scaling factor is
+\begin{equation}\label{eq:mc-supp}
+m_c \;=\; f\!\left(\pi_c / \pi_{\max}\right) \;=\; \max\!\left(\rho,\; \left(\pi_c / \pi_{\max}\right)^{\alpha}\right),
+\qquad \tau_c \;=\; \tau \cdot m_c .
+\end{equation}
+Rare classes ($\pi_c \ll \pi_{\max}$) receive $m_c \leq 1$, i.e.\ a lowered admission bar that counters long-tail suppression; majority classes receive $m_c \approx 1$; and the floor $\rho$ prevents the bar from collapsing on extreme tails. Setting $\alpha = 0$ disables the mechanism ($m_c \equiv 1$ for all classes), which is the ablated fallback configuration.
+
+\subsection{Default values and reference implementation}
+
+The protocol defaults, used unchanged in every reported arm (E4, E7, E7b, E9 series), are
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+Parameter & Default & Role \\
+\midrule
+Exponent $\alpha$ & $1.0$ & frequency-aware scaling strength ($0$ = off) \\
+Floor ratio $\rho$ & $0.5$ & minimum scaling factor (admission bar never below $\tau/2$) \\
+Base threshold $\tau$ & calibrated per run & see Section~\ref{app:mc-calib} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The reference implementation is the function \texttt{frequency\_aware\_thresholds} in \texttt{psd/training/jia\_prototype.py} of the released repository (signature \texttt{(tau, label\_priors, alpha=1.0, floor\_ratio=0.5)}), consumed per round by the self-training loop in \texttt{psd/training/tcl\_selftrain.py}; the entering scripts (\texttt{scripts/run\_p04\_tcl.py}, \texttt{scripts/run\_p07\_endtoend\_ak.py}, \texttt{scripts/run\_r16\_ntu\_pseudo\_10seed.py} and the other E9-series entry points) pin \texttt{alpha=1.0} and never override \texttt{floor\_ratio}. The seed prior $\pi_c$ is computed from the anchor-side labels only (GT-independent), and is re-estimated each round from the current labeled set (verified seeds $\cup$ confidence-filtered pool), so $m_c$ tracks the labeling state exactly as the prototype re-estimation of Eq.~(5) of the main text does.
+
+\subsection{Base-threshold calibration}\label{app:mc-calib}
+
+The base threshold $\tau$ is fixed once by quantile targeting: $\tau$ is the $(1 - \text{target-coverage})$ quantile of the effective scores $\kappa(u)/m_{\hat{y}_u}$ over the admissible proposal universe at the first round, with target coverage $0.35$ (pre-registered). The same $\tau$ is reused in every later round to prevent drift-based selection; only $m_c$ updates as the labeled set grows. No ground-truth labels enter this calibration.
+
+\subsection{Ablation hooks}
+
+Two pre-registered ablation hooks isolate the factor's contribution, both released in \texttt{configs/p04\_tcl.yaml} and reported in the ablation reports:
+\begin{itemize}
+\item \textbf{$\alpha$ ablation.} $\alpha = 0$ (uniform thresholds; \texttt{freq\_alpha\_ablation} in the config) against the default $\alpha = 1$ (\texttt{freq\_alpha\_default}), with the intermediate value $\alpha = 0.5$ included in the sweep grid.
+\item \textbf{Coverage-target sweep.} The quantile target $\in \{0.25, 0.35, 0.50\}$, which moves the operating point along the precision--coverage curve while holding $f(\cdot)$ fixed.
+\end{itemize}
+The floor ratio $\rho$ is held at $0.5$ throughout; it is a safety parameter rather than a tuned one, and sweeping it is left as an explicitly unclaimed direction (main text, Section~4.6, scope statements).
+
+\end{document}
