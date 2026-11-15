@@ -1,0 +1,145 @@
+[2026-11-15 23:14:40] === cycle 1 ===
+[2026-11-15 23:14:40] DONE  merge_rename_upper（指标已收割）
+[2026-11-15 23:14:40] DONE  standard_selftrain_baseline（指标已收割）
+[2026-11-15 23:14:40] DONE  smq_downstream_ablation（指标已收割）
+[2026-11-15 23:14:40] FAILED frozen_backbone_contrast（第 1 次重试，mitigation=none）
+[2026-11-15 23:14:41] 回填 3 处：merge/rename 标签重映射上界；merge/rename 硬投票下界；总表 merge/rename 行
+[2026-11-15 23:16:01] 编译 失败：g 'main.fls'
+Latexmk: Examining 'main.log'
+Latexmk: Errors, so I did not complete making targets
+Collected error summary (may duplicate other messages):
+  pdflatex: Command for 'pdflatex' gave return code 1
+      Refer to 'main.log' and/or above output for details
+Latexmk: Undoing directory change
+
+
+[2026-11-15 23:16:01] 状态：{"done": 3, "failed": 0, "running": 1, "pending": 0}
+[2026-11-15 23:34:20] === cycle 2 ===
+[2026-11-15 23:34:20] DONE  merge_rename_upper（指标已收割）
+[2026-11-15 23:34:20] DONE  standard_selftrain_baseline（指标已收割）
+[2026-11-15 23:34:20] DONE  smq_downstream_ablation（指标已收割）
+[2026-11-15 23:34:20] RUNNING frozen_backbone_contrast
+[2026-11-15 23:34:20] 状态：{"done": 3, "failed": 0, "running": 1, "pending": 0}
+[2026-11-15 23:38:14] === cycle 3 ===
+[2026-11-15 23:38:14] DONE  merge_rename_upper（指标已收割）
+[2026-11-15 23:38:14] DONE  standard_selftrain_baseline（指标已收割）
+[2026-11-15 23:38:14] DONE  smq_downstream_ablation（指标已收割）
+[2026-11-15 23:38:14] RUNNING frozen_backbone_contrast
+[2026-11-15 23:38:14] 状态：{"done": 3, "failed": 0, "running": 1, "pending": 0}
+[2026-11-15 23:53:03] === cycle 4 ===
+[2026-11-15 23:53:03] DONE  merge_rename_upper（指标已收割）
+[2026-11-15 23:53:03] DONE  standard_selftrain_baseline（指标已收割）
+[2026-11-15 23:53:03] DONE  smq_downstream_ablation（指标已收割）
+[2026-11-15 23:53:03] RUNNING frozen_backbone_contrast
+[2026-11-15 23:53:03] 状态：{"done": 3, "failed": 0, "running": 1, "pending": 0}
+[2026-11-16 00:08:09] === cycle 5 ===
+[2026-11-16 00:08:09] DONE  merge_rename_upper（指标已收割）
+[2026-11-16 00:08:09] DONE  standard_selftrain_baseline（指标已收割）
+[2026-11-16 00:08:09] DONE  smq_downstream_ablation（指标已收割）
+[2026-11-16 00:08:09] RUNNING frozen_backbone_contrast
+[2026-11-16 00:08:09] 状态：{"done": 3, "failed": 0, "running": 1, "pending": 0}
+[2026-11-16 00:23:08] === cycle 6 ===
+[2026-11-16 00:23:08] DONE  merge_rename_upper（指标已收割）
+[2026-11-16 00:23:08] DONE  standard_selftrain_baseline（指标已收割）
+[2026-11-16 00:23:08] DONE  smq_downstream_ablation（指标已收割）
+[2026-11-16 00:23:08] FAILED-FINAL frozen_backbone_contrast：重试 99 次仍失败，转人工/AI 处理
+[2026-11-16 00:23:08] 状态：{"done": 3, "failed": 1, "running": 0, "pending": 0}
+[2026-11-16 00:38:03] === cycle 7 ===
+[2026-11-16 00:38:03] DONE  merge_rename_upper（指标已收割）
+[2026-11-16 00:38:03] DONE  standard_selftrain_baseline（指标已收割）
+[2026-11-16 00:38:03] DONE  smq_downstream_ablation（指标已收割）
+[2026-11-16 00:38:03] FAILED-FINAL frozen_backbone_contrast：重试 99 次仍失败，转人工/AI 处理
+[2026-11-16 00:38:03] 状态：{"done": 3, "failed": 1, "running": 0, "pending": 0}
+[2026-11-16 00:53:04] === cycle 8 ===
+[2026-11-16 00:53:04] DONE  merge_rename_upper（指标已收割）
+[2026-11-16 00:53:04] DONE  standard_selftrain_baseline（指标已收割）
+[2026-11-16 00:53:04] DONE  smq_downstream_ablation（指标已收割）
+[2026-11-16 00:53:04] FAILED-FINAL frozen_backbone_contrast：重试 99 次仍失败，转人工/AI 处理
+[2026-11-16 00:53:04] 状态：{"done": 3, "failed": 1, "running": 0, "pending": 0}
+[2026-11-16 01:08:03] === cycle 9 ===
+[2026-11-16 01:08:03] DONE  merge_rename_upper（指标已收割）
+[2026-11-16 01:08:03] DONE  standard_selftrain_baseline（指标已收割）
+[2026-11-16 01:08:03] DONE  smq_downstream_ablation（指标已收割）
+[2026-11-16 01:08:04] FAILED-FINAL frozen_backbone_contrast：重试 99 次仍失败，转人工/AI 处理
+[2026-11-16 01:08:04] 状态：{"done": 3, "failed": 1, "running": 0, "pending": 0}
+[2026-11-16 01:23:05] === cycle 10 ===
+[2026-11-16 01:23:05] DONE  merge_rename_upper（指标已收割）
+[2026-11-16 01:23:05] DONE  standard_selftrain_baseline（指标已收割）
+[2026-11-16 01:23:05] DONE  smq_downstream_ablation（指标已收割）
+[2026-11-16 01:23:05] FAILED-FINAL frozen_backbone_contrast：重试 99 次仍失败，转人工/AI 处理
+[2026-11-16 01:23:05] DONE  zerobound_6049（指标已收割）
+[2026-11-16 01:23:05] DONE  split_addition_episode（指标已收割）
+[2026-11-16 01:23:05] RUNNING semantic_rebuild_1100
+[2026-11-16 01:23:05] 状态：{"done": 5, "failed": 1, "running": 1, "pending": 0}
+[2026-11-16 01:38:46] === cycle 11 ===
+[2026-11-16 01:38:46] DONE  merge_rename_upper（指标已收割）
+[2026-11-16 01:38:46] DONE  standard_selftrain_baseline（指标已收割）
+[2026-11-16 01:38:46] DONE  smq_downstream_ablation（指标已收割）
+[2026-11-16 01:38:46] FAILED-FINAL frozen_backbone_contrast：重试 99 次仍失败，转人工/AI 处理
+[2026-11-16 01:38:46] DONE  zerobound_6049（指标已收割）
+[2026-11-16 01:38:46] RUNNING split_addition_episode
+[2026-11-16 01:38:46] DONE  semantic_rebuild_1100（指标已收割）
+[2026-11-16 01:38:46] 状态：{"done": 5, "failed": 1, "running": 1, "pending": 0}
+[2026-11-16 01:53:28] === cycle 12 ===
+[2026-11-16 01:53:28] DONE  merge_rename_upper（指标已收割）
+[2026-11-16 01:53:28] DONE  standard_selftrain_baseline（指标已收割）
+[2026-11-16 01:53:28] DONE  smq_downstream_ablation（指标已收割）
+[2026-11-16 01:53:28] FAILED-FINAL frozen_backbone_contrast：重试 99 次仍失败，转人工/AI 处理
+[2026-11-16 01:53:28] DONE  zerobound_6049（指标已收割）
+[2026-11-16 01:53:28] DONE  split_addition_episode（指标已收割）
+[2026-11-16 01:53:28] RUNNING semantic_rebuild_1100
+[2026-11-16 01:53:28] 状态：{"done": 5, "failed": 1, "running": 1, "pending": 0}
+[2026-11-16 02:08:02] === cycle 13 ===
+[2026-11-16 02:08:02] DONE  merge_rename_upper（指标已收割）
+[2026-11-16 02:08:02] DONE  standard_selftrain_baseline（指标已收割）
+[2026-11-16 02:08:02] DONE  smq_downstream_ablation（指标已收割）
+[2026-11-16 02:08:02] FAILED-FINAL frozen_backbone_contrast：重试 99 次仍失败，转人工/AI 处理
+[2026-11-16 02:08:02] DONE  zerobound_6049（指标已收割）
+[2026-11-16 02:08:02] DONE  split_addition_episode（指标已收割）
+[2026-11-16 02:08:02] DONE  semantic_rebuild_1100（指标已收割）
+[2026-11-16 02:08:02] 状态：{"done": 6, "failed": 1, "running": 0, "pending": 0}
+[2026-11-16 02:23:02] === cycle 14 ===
+[2026-11-16 02:23:02] DONE  merge_rename_upper（指标已收割）
+[2026-11-16 02:23:02] DONE  standard_selftrain_baseline（指标已收割）
+[2026-11-16 02:23:02] DONE  smq_downstream_ablation（指标已收割）
+[2026-11-16 02:23:02] FAILED-FINAL frozen_backbone_contrast：重试 99 次仍失败，转人工/AI 处理
+[2026-11-16 02:23:02] DONE  zerobound_6049（指标已收割）
+[2026-11-16 02:23:02] DONE  split_addition_episode（指标已收割）
+[2026-11-16 02:23:02] DONE  semantic_rebuild_1100（指标已收割）
+[2026-11-16 02:23:02] 状态：{"done": 6, "failed": 1, "running": 0, "pending": 0}
+[2026-11-16 02:38:02] === cycle 15 ===
+[2026-11-16 02:38:02] DONE  merge_rename_upper（指标已收割）
+[2026-11-16 02:38:02] DONE  standard_selftrain_baseline（指标已收割）
+[2026-11-16 02:38:02] DONE  smq_downstream_ablation（指标已收割）
+[2026-11-16 02:38:02] FAILED-FINAL frozen_backbone_contrast：重试 99 次仍失败，转人工/AI 处理
+[2026-11-16 02:38:02] DONE  zerobound_6049（指标已收割）
+[2026-11-16 02:38:02] DONE  split_addition_episode（指标已收割）
+[2026-11-16 02:38:02] DONE  semantic_rebuild_1100（指标已收割）
+[2026-11-16 02:38:02] 状态：{"done": 6, "failed": 1, "running": 0, "pending": 0}
+[2026-11-16 02:53:02] === cycle 16 ===
+[2026-11-16 02:53:02] DONE  merge_rename_upper（指标已收割）
+[2026-11-16 02:53:02] DONE  standard_selftrain_baseline（指标已收割）
+[2026-11-16 02:53:02] DONE  smq_downstream_ablation（指标已收割）
+[2026-11-16 02:53:02] FAILED-FINAL frozen_backbone_contrast：重试 99 次仍失败，转人工/AI 处理
+[2026-11-16 02:53:02] DONE  zerobound_6049（指标已收割）
+[2026-11-16 02:53:02] DONE  split_addition_episode（指标已收割）
+[2026-11-16 02:53:02] DONE  semantic_rebuild_1100（指标已收割）
+[2026-11-16 02:53:02] 状态：{"done": 6, "failed": 1, "running": 0, "pending": 0}
+[2026-11-16 03:08:02] === cycle 17 ===
+[2026-11-16 03:08:02] DONE  merge_rename_upper（指标已收割）
+[2026-11-16 03:08:02] DONE  standard_selftrain_baseline（指标已收割）
+[2026-11-16 03:08:02] DONE  smq_downstream_ablation（指标已收割）
+[2026-11-16 03:08:02] FAILED-FINAL frozen_backbone_contrast：重试 99 次仍失败，转人工/AI 处理
+[2026-11-16 03:08:02] DONE  zerobound_6049（指标已收割）
+[2026-11-16 03:08:02] DONE  split_addition_episode（指标已收割）
+[2026-11-16 03:08:02] DONE  semantic_rebuild_1100（指标已收割）
+[2026-11-16 03:08:02] 状态：{"done": 6, "failed": 1, "running": 0, "pending": 0}
+[2026-11-16 03:23:02] === cycle 18 ===
+[2026-11-16 03:23:02] DONE  merge_rename_upper（指标已收割）
+[2026-11-16 03:23:02] DONE  standard_selftrain_baseline（指标已收割）
+[2026-11-16 03:23:02] DONE  smq_downstream_ablation（指标已收割）
+[2026-11-16 03:23:02] FAILED-FINAL frozen_backbone_contrast：重试 99 次仍失败，转人工/AI 处理
+[2026-11-16 03:23:02] DONE  zerobound_6049（指标已收割）
+[2026-11-16 03:23:02] DONE  split_addition_episode（指标已收割）
+[2026-11-16 03:23:02] DONE  semantic_rebuild_1100（指标已收割）
+[2026-11-16 03:23:02] 状态：{"done": 6, "failed": 1, "running": 0, "pending": 0}

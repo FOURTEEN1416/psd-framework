@@ -1,0 +1,44 @@
+{
+  "experiment": "zerobound_6049_ten_merge_episode",
+  "mode": "full",
+  "seed": 42,
+  "budget_frac": 0.1,
+  "n_train": 40091,
+  "n_val": 16487,
+  "n_train_labeled_used": 4009,
+  "source_classes": 60,
+  "target_classes": 49,
+  "episode": "TRANS-002 frozen 60->49 ten-merge (runs/bmin_trans_yprime_map.json)",
+  "source_60class_val_top1": 0.6605,
+  "rename_oracle_upper_top1": 0.6804,
+  "argmax_vote_lower_top1": 0.6797,
+  "target_fullsupervision_ref_top1": 0.6756,
+  "retention_upper_vs_ref": 1.007,
+  "random_baseline_top1": 0.0001,
+  "comparators_same_episode": {
+    "trans002_full_fixed": {
+      "source": "reports\\r23-trans002-full-fixed-2026-09-08.json",
+      "budget": "full(40091)",
+      "episode": "60->49 ten-merge",
+      "coupled_C_prime_acc": 0.7982,
+      "decoupled_D_prime_acc": 0.7533,
+      "matched_M_acc": 0.8258
+    },
+    "merge_rename_60to10": {
+      "source": "runs\\p1_sprint\\merge_rename_upper\\summary.json",
+      "episode": "60->10 coarse grouping",
+      "rename_oracle_upper_top1": 0.7676,
+      "argmax_vote_lower_top1": 0.7651,
+      "target_fullsupervision_ref_top1": 0.715
+    }
+  },
+  "protocol_notes": [
+    "零重训上界=rename-oracle: 源 60 类头 softmax 后验按冻结 60->49 映射求和",
+    "零重训下界=argmax-vote: 源 argmax 硬投票（与上界之差=校准损失）",
+    "参照=同一批标注在 49 类目标 taxonomy 上的全监督线性头",
+    "特征: runs/ntu_lowres/features_joint_ep300.npz (P1.4a 冻结 pretext 256d)",
+    "分类器: run_p14 ScaledLR (StandardScaler+LR max_iter=1000) 原样复用",
+    "comparators 为既有报告数字（TRANS-002 full-fixed / merge_rename_upper），未重跑"
+  ],
+  "duration_sec": 112.5
+}

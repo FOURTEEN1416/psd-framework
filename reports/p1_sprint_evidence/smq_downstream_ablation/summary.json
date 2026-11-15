@@ -1,0 +1,26 @@
+{
+  "experiment": "smq_downstream_ablation",
+  "mode": "full",
+  "ckpt": "runs\\p02_smq\\models\\epoch-30.model",
+  "n_clips_labeled": 225,
+  "n_train": 151,
+  "n_val": 74,
+  "label_vocab": [
+    "jump",
+    "lying",
+    "rise_transition",
+    "running",
+    "sitting",
+    "standing",
+    "walking"
+  ],
+  "val_acc_with_smq": 0.4595,
+  "val_acc_without_smq": 0.4595,
+  "delta": 0.0,
+  "protocol_notes": [
+    "clip 标签=规则种子伪 GT 主导类（conf>=0.8 帧众数），公开真实层口径",
+    "with_smq 单元=SMQ 同码连续段; without_smq 单元=等长切分(段数对齐)",
+    "单元特征=冻结 ST-GCN+BC (p07 warm) penultimate; 下游=单元级 LR + clip 级均值聚合"
+  ],
+  "duration_sec": 48.1
+}

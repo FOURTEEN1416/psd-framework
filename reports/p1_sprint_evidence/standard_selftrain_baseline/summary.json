@@ -1,0 +1,121 @@
+{
+  "experiment": "standard_selftrain_baseline_ntu60",
+  "mode": "full",
+  "seed": 42,
+  "budget_frac": 0.1,
+  "tau": 0.95,
+  "max_iters": 10,
+  "n_train": 40091,
+  "n_val": 16487,
+  "n_anchor": 4009,
+  "ref_linear10_top1": 0.6605,
+  "ref_linear10_macro_f1": 0.6593,
+  "std_st_top1": 0.6639,
+  "std_st_macro_f1": 0.66,
+  "std_st_n_pseudo": 21274,
+  "std_st_stop": "max-iters",
+  "std_st_rounds": [
+    {
+      "iter": 1,
+      "n_train": 4009,
+      "n_pool": 36082,
+      "n_accepted": 15758,
+      "accept_rate": 0.4367,
+      "mean_conf_accepted": 0.9903
+    },
+    {
+      "iter": 2,
+      "n_train": 19767,
+      "n_pool": 20324,
+      "n_accepted": 3095,
+      "accept_rate": 0.1523,
+      "mean_conf_accepted": 0.9774
+    },
+    {
+      "iter": 3,
+      "n_train": 22862,
+      "n_pool": 17229,
+      "n_accepted": 979,
+      "accept_rate": 0.0568,
+      "mean_conf_accepted": 0.9655
+    },
+    {
+      "iter": 4,
+      "n_train": 23841,
+      "n_pool": 16250,
+      "n_accepted": 405,
+      "accept_rate": 0.0249,
+      "mean_conf_accepted": 0.9641
+    },
+    {
+      "iter": 5,
+      "n_train": 24246,
+      "n_pool": 15845,
+      "n_accepted": 234,
+      "accept_rate": 0.0148,
+      "mean_conf_accepted": 0.9606
+    },
+    {
+      "iter": 6,
+      "n_train": 24480,
+      "n_pool": 15611,
+      "n_accepted": 338,
+      "accept_rate": 0.0217,
+      "mean_conf_accepted": 0.9598
+    },
+    {
+      "iter": 7,
+      "n_train": 24818,
+      "n_pool": 15273,
+      "n_accepted": 125,
+      "accept_rate": 0.0082,
+      "mean_conf_accepted": 0.9586
+    },
+    {
+      "iter": 8,
+      "n_train": 24943,
+      "n_pool": 15148,
+      "n_accepted": 95,
+      "accept_rate": 0.0063,
+      "mean_conf_accepted": 0.9561
+    },
+    {
+      "iter": 9,
+      "n_train": 25038,
+      "n_pool": 15053,
+      "n_accepted": 223,
+      "accept_rate": 0.0148,
+      "mean_conf_accepted": 0.9585
+    },
+    {
+      "iter": 10,
+      "n_train": 25261,
+      "n_pool": 14830,
+      "n_accepted": 22,
+      "accept_rate": 0.0015,
+      "mean_conf_accepted": 0.9575,
+      "stop": "max-iters"
+    }
+  ],
+  "tau_sensitivity": {
+    "0.8": {
+      "top1": 0.6576,
+      "macro_f1": 0.6547,
+      "n_pseudo": 31613,
+      "stop": "max-iters"
+    },
+    "0.9": {
+      "top1": 0.6586,
+      "macro_f1": 0.6553,
+      "n_pseudo": 26950,
+      "stop": "max-iters"
+    }
+  },
+  "delta_vs_ref": 0.0034,
+  "protocol_notes": [
+    "标准 confidence-based self-training: max-softmax>=τ 硬伪标签迭代, τ=0.95 (FixMatch 默认), 无 PSD 专用组件（无原型/共识/频率阈值）",
+    "特征/头/预算与 p14 完全一致（ScaledLR + 10% 分层种子），仅自训练机制不同",
+    "停止: 无样本过阈 或 max_iters; precision_stop 不适用（无 oracle）"
+  ],
+  "duration_sec": 5899.9
+}

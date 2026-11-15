@@ -1,0 +1,8 @@
+[data] train=1100 val=220 device=cuda
+[frozen] trainable=6,423 / total=926,491 params
+[frozen] done: best_val_acc=0.6864 (176.9s)
+[fullft] trainable=926,491 / total=926,491 params
+[fullft] done: best_val_acc=0.9818 (342.3s)
+[scratch] trainable=926,491 / total=926,491 params
+[scratch] done: best_val_acc=0.9773 (365.7s)
+[done] D:\Desktop\PR论文\psd-framework\runs\p1_sprint\frozen_backbone_contrast\summary.json

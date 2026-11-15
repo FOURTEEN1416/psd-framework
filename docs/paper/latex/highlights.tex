@@ -7,11 +7,12 @@
 \pagestyle{empty}
 \begin{document}
 \section*{Highlights}
+%% 2026-11-15 深度改造: 与 main.tex 版内 highlights 同步（R2-1/R2-5 联动）
 \begin{itemize}
 \item Decoupled framework absorbs taxonomy evolution cheaply (synthetic tier)
-\item Taxonomy transitions cost $\geq$3x less wall clock (synthetic tier)
-\item First, to our knowledge, anchor--cluster pseudo-label loop on skeletons (combination)
-\item Pretraining: 2.51x random kNN on quadruped skeletons (subject-ID probe)
-\item Warm start: 82.0\% top-1 adapting to an offset domain with 20 clips (marginal budget)
+\item Taxonomy transitions cost $\geq$3x less wall clock (measured 6.07x, synthetic tier)
+\item Warm start: 82.0\% top-1 from 20 clips (vs.\ 96.6\% full-budget, offset tier)
+\item Frozen-feature pipeline retains 90.7\% of full-budget accuracy at 10\% labels (NTU60)
+\item Canine tier stays below chance at 13\% budget (9.8\% vs.\ 11.1\%)---honest boundary
 \end{itemize}
 \end{document}

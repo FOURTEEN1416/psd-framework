@@ -1,0 +1,53 @@
+{
+  "experiment": "frozen_backbone_contrast",
+  "mode": "full",
+  "pretrained_ckpt": "runs\\ntu_phaseB\\joint_pretext\\epoch120_model.pt",
+  "arms": [
+    {
+      "arm": "frozen",
+      "seed": 42,
+      "best_val_acc": 0.6864,
+      "best_epoch": 35,
+      "final_val_acc_recomputed": 0.6682,
+      "epochs_run": 100,
+      "trainable_params": 6423,
+      "total_params": 926491,
+      "trainable_params_after_fit": 6423,
+      "frozen_verified": true,
+      "duration_sec": 176.9
+    },
+    {
+      "arm": "fullft",
+      "seed": 42,
+      "best_val_acc": 0.9818,
+      "best_epoch": 18,
+      "final_val_acc_recomputed": 0.9727,
+      "epochs_run": 100,
+      "trainable_params": 926491,
+      "total_params": 926491,
+      "trainable_params_after_fit": 926491,
+      "frozen_verified": null,
+      "duration_sec": 342.3
+    },
+    {
+      "arm": "scratch",
+      "seed": 42,
+      "best_val_acc": 0.9773,
+      "best_epoch": 81,
+      "final_val_acc_recomputed": 0.9682,
+      "epochs_run": 100,
+      "trainable_params": 926491,
+      "total_params": 926491,
+      "trainable_params_after_fit": 926491,
+      "frozen_verified": null,
+      "duration_sec": 365.7
+    }
+  ],
+  "config": {
+    "epochs": 100,
+    "samples_per_class": 50,
+    "batch_size": 16,
+    "lr": 0.001,
+    "seed": 42
+  }
+}

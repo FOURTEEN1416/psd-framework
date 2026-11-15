@@ -1,0 +1,267 @@
+﻿python.exe : D:\Desktop\PR璁烘枃\psd-framework\scripts\p1_sprint\autopilot.py:188: SyntaxWarning: invalid escape sequence 
+'\T'
+所在位置 D:\Desktop\PR论文\psd-framework\scripts\p1_sprint\run_autopilot.ps1:4 字符: 1
++ & ".\.venv\Scripts\python.exe" ".\scripts\p1_sprint\autopilot.py" 2>& ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (D:\Desktop\PR璁烘...e sequence '\T':String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+  """閫愪釜绮剧‘鏇挎崲 \TODO 閿氱偣锛涜繑鍥?(applied_desc, remaining_desc)銆傚箓绛夛細閿氱偣涓嶅瓨鍦ㄥ嵆璺宠繃銆?""
+[2026-11-15 23:38:14] === cycle 3 ===
+[2026-11-15 23:38:14] DONE  merge_rename_upper锛堟寚鏍囧凡鏀跺壊锛?
+[2026-11-15 23:38:14] DONE  standard_selftrain_baseline锛堟寚鏍囧凡鏀跺壊锛?
+[2026-11-15 23:38:14] DONE  smq_downstream_ablation锛堟寚鏍囧凡鏀跺壊锛?
+[2026-11-15 23:38:14] RUNNING frozen_backbone_contrast
+[2026-11-15 23:38:14] 鐘舵€侊細{"done": 3, "failed": 0, "running": 1, "pending": 0}
+python.exe : D:\Desktop\PR璁烘枃\psd-framework\scripts\p1_sprint\autopilot.py:188: SyntaxWarning: invalid escape sequence 
+'\T'
+所在位置 D:\Desktop\PR论文\psd-framework\scripts\p1_sprint\run_autopilot.ps1:4 字符: 1
++ & ".\.venv\Scripts\python.exe" ".\scripts\p1_sprint\autopilot.py" 2>& ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (D:\Desktop\PR璁烘...e sequence '\T':String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+  """閫愪釜绮剧‘鏇挎崲 \TODO 閿氱偣锛涜繑鍥?(applied_desc, remaining_desc)銆傚箓绛夛細閿氱偣涓嶅瓨鍦ㄥ嵆璺宠繃銆?""
+[2026-11-15 23:53:03] === cycle 4 ===
+[2026-11-15 23:53:03] DONE  merge_rename_upper锛堟寚鏍囧凡鏀跺壊锛?
+[2026-11-15 23:53:03] DONE  standard_selftrain_baseline锛堟寚鏍囧凡鏀跺壊锛?
+[2026-11-15 23:53:03] DONE  smq_downstream_ablation锛堟寚鏍囧凡鏀跺壊锛?
+[2026-11-15 23:53:03] RUNNING frozen_backbone_contrast
+[2026-11-15 23:53:03] 鐘舵€侊細{"done": 3, "failed": 0, "running": 1, "pending": 0}
+python.exe : D:\Desktop\PR璁烘枃\psd-framework\scripts\p1_sprint\autopilot.py:188: SyntaxWarning: invalid escape sequence 
+'\T'
+所在位置 D:\Desktop\PR论文\psd-framework\scripts\p1_sprint\run_autopilot.ps1:4 字符: 1
++ & ".\.venv\Scripts\python.exe" ".\scripts\p1_sprint\autopilot.py" 2>& ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (D:\Desktop\PR璁烘...e sequence '\T':String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+  """閫愪釜绮剧‘鏇挎崲 \TODO 閿氱偣锛涜繑鍥?(applied_desc, remaining_desc)銆傚箓绛夛細閿氱偣涓嶅瓨鍦ㄥ嵆璺宠繃銆?""
+[2026-11-16 00:08:09] === cycle 5 ===
+[2026-11-16 00:08:09] DONE  merge_rename_upper锛堟寚鏍囧凡鏀跺壊锛?
+[2026-11-16 00:08:09] DONE  standard_selftrain_baseline锛堟寚鏍囧凡鏀跺壊锛?
+[2026-11-16 00:08:09] DONE  smq_downstream_ablation锛堟寚鏍囧凡鏀跺壊锛?
+[2026-11-16 00:08:09] RUNNING frozen_backbone_contrast
+[2026-11-16 00:08:09] 鐘舵€侊細{"done": 3, "failed": 0, "running": 1, "pending": 0}
+python.exe : D:\Desktop\PR璁烘枃\psd-framework\scripts\p1_sprint\autopilot.py:188: SyntaxWarning: invalid escape seque
+nce '\T'
+所在位置 D:\Desktop\PR论文\psd-framework\scripts\p1_sprint\run_autopilot.ps1:4 字符: 1
++ & ".\.venv\Scripts\python.exe" ".\scripts\p1_sprint\autopilot.py" 2>& ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (D:\Desktop\PR璁烘...e sequence '\T':String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+  """閫愪釜绮剧‘鏇挎崲 \TODO 閿氱偣锛涜繑鍥?(applied_desc, remaining_desc)銆傚箓绛夛細閿氱偣涓嶅瓨鍦ㄥ嵆璺宠繃銆?""
+[2026-11-16 00:23:08] === cycle 6 ===
+[2026-11-16 00:23:08] DONE  merge_rename_upper锛堟寚鏍囧凡鏀跺壊锛?
+[2026-11-16 00:23:08] DONE  standard_selftrain_baseline锛堟寚鏍囧凡鏀跺壊锛?
+[2026-11-16 00:23:08] DONE  smq_downstream_ablation锛堟寚鏍囧凡鏀跺壊锛?
+[2026-11-16 00:23:08] FAILED-FINAL frozen_backbone_contrast锛氶噸璇?99 娆′粛澶辫触锛岃浆浜哄伐/AI 澶勭悊
+[2026-11-16 00:23:08] 鐘舵€侊細{"done": 3, "failed": 1, "running": 0, "pending": 0}
+python.exe : D:\Desktop\PR璁烘枃\psd-framework\scripts\p1_sprint\autopilot.py:188: SyntaxWarning: invalid escape sequence 
+'\T'
+所在位置 D:\Desktop\PR论文\psd-framework\scripts\p1_sprint\run_autopilot.ps1:4 字符: 1
++ & ".\.venv\Scripts\python.exe" ".\scripts\p1_sprint\autopilot.py" 2>& ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (D:\Desktop\PR璁烘...e sequence '\T':String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+  """閫愪釜绮剧‘鏇挎崲 \TODO 閿氱偣锛涜繑鍥?(applied_desc, remaining_desc)銆傚箓绛夛細閿氱偣涓嶅瓨鍦ㄥ嵆璺宠繃銆?""
+[2026-11-16 00:38:03] === cycle 7 ===
+[2026-11-16 00:38:03] DONE  merge_rename_upper锛堟寚鏍囧凡鏀跺壊锛?
+[2026-11-16 00:38:03] DONE  standard_selftrain_baseline锛堟寚鏍囧凡鏀跺壊锛?
+[2026-11-16 00:38:03] DONE  smq_downstream_ablation锛堟寚鏍囧凡鏀跺壊锛?
+[2026-11-16 00:38:03] FAILED-FINAL frozen_backbone_contrast锛氶噸璇?99 娆′粛澶辫触锛岃浆浜哄伐/AI 澶勭悊
+[2026-11-16 00:38:03] 鐘舵€侊細{"done": 3, "failed": 1, "running": 0, "pending": 0}
+python.exe : D:\Desktop\PR璁烘枃\psd-framework\scripts\p1_sprint\autopilot.py:188: SyntaxWarning: invalid escape sequence 
+'\T'
+所在位置 D:\Desktop\PR论文\psd-framework\scripts\p1_sprint\run_autopilot.ps1:4 字符: 1
++ & ".\.venv\Scripts\python.exe" ".\scripts\p1_sprint\autopilot.py" 2>& ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (D:\Desktop\PR璁烘...e sequence '\T':String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+  """閫愪釜绮剧‘鏇挎崲 \TODO 閿氱偣锛涜繑鍥?(applied_desc, remaining_desc)銆傚箓绛夛細閿氱偣涓嶅瓨鍦ㄥ嵆璺宠繃銆?""
+[2026-11-16 00:53:04] === cycle 8 ===
+[2026-11-16 00:53:04] DONE  merge_rename_upper锛堟寚鏍囧凡鏀跺壊锛?
+[2026-11-16 00:53:04] DONE  standard_selftrain_baseline锛堟寚鏍囧凡鏀跺壊锛?
+[2026-11-16 00:53:04] DONE  smq_downstream_ablation锛堟寚鏍囧凡鏀跺壊锛?
+[2026-11-16 00:53:04] FAILED-FINAL frozen_backbone_contrast锛氶噸璇?99 娆′粛澶辫触锛岃浆浜哄伐/AI 澶勭悊
+[2026-11-16 00:53:04] 鐘舵€侊細{"done": 3, "failed": 1, "running": 0, "pending": 0}
+python.exe : D:\Desktop\PR璁烘枃\psd-framework\scripts\p1_sprint\autopilot.py:188: SyntaxWarning: invalid escape sequence 
+'\T'
+所在位置 D:\Desktop\PR论文\psd-framework\scripts\p1_sprint\run_autopilot.ps1:4 字符: 1
++ & ".\.venv\Scripts\python.exe" ".\scripts\p1_sprint\autopilot.py" 2>& ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (D:\Desktop\PR璁烘...e sequence '\T':String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+  """閫愪釜绮剧‘鏇挎崲 \TODO 閿氱偣锛涜繑鍥?(applied_desc, remaining_desc)銆傚箓绛夛細閿氱偣涓嶅瓨鍦ㄥ嵆璺宠繃銆?""
+[2026-11-16 01:08:03] === cycle 9 ===
+[2026-11-16 01:08:03] DONE  merge_rename_upper锛堟寚鏍囧凡鏀跺壊锛?
+[2026-11-16 01:08:03] DONE  standard_selftrain_baseline锛堟寚鏍囧凡鏀跺壊锛?
+[2026-11-16 01:08:03] DONE  smq_downstream_ablation锛堟寚鏍囧凡鏀跺壊锛?
+[2026-11-16 01:08:04] FAILED-FINAL frozen_backbone_contrast锛氶噸璇?99 娆′粛澶辫触锛岃浆浜哄伐/AI 澶勭悊
+[2026-11-16 01:08:04] 鐘舵€侊細{"done": 3, "failed": 1, "running": 0, "pending": 0}
+python.exe : D:\Desktop\PR璁烘枃\psd-framework\scripts\p1_sprint\autopilot.py:188: SyntaxWarning: invalid escape seque
+nce '\T'
+所在位置 D:\Desktop\PR论文\psd-framework\scripts\p1_sprint\run_autopilot.ps1:4 字符: 1
++ & ".\.venv\Scripts\python.exe" ".\scripts\p1_sprint\autopilot.py" 2>& ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (D:\Desktop\PR璁烘...e sequence '\T':String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+  """閫愪釜绮剧‘鏇挎崲 \TODO 閿氱偣锛涜繑鍥?(applied_desc, remaining_desc)銆傚箓绛夛細閿氱偣涓嶅瓨鍦ㄥ嵆璺宠繃銆?""
+[2026-11-16 01:23:05] === cycle 10 ===
+[2026-11-16 01:23:05] DONE  merge_rename_upper锛堟寚鏍囧凡鏀跺壊锛?
+[2026-11-16 01:23:05] DONE  standard_selftrain_baseline锛堟寚鏍囧凡鏀跺壊锛?
+[2026-11-16 01:23:05] DONE  smq_downstream_ablation锛堟寚鏍囧凡鏀跺壊锛?
+[2026-11-16 01:23:05] FAILED-FINAL frozen_backbone_contrast锛氶噸璇?99 娆′粛澶辫触锛岃浆浜哄伐/AI 澶勭悊
+[2026-11-16 01:23:05] DONE  zerobound_6049锛堟寚鏍囧凡鏀跺壊锛?
+[2026-11-16 01:23:05] DONE  split_addition_episode锛堟寚鏍囧凡鏀跺壊锛?
+[2026-11-16 01:23:05] RUNNING semantic_rebuild_1100
+[2026-11-16 01:23:05] 鐘舵€侊細{"done": 5, "failed": 1, "running": 1, "pending": 0}
+python.exe : D:\Desktop\PR璁烘枃\psd-framework\scripts\p1_sprint\autopilot.py:188: SyntaxWarning: invalid escape sequence 
+'\T'
+所在位置 D:\Desktop\PR论文\psd-framework\scripts\p1_sprint\run_autopilot.ps1:4 字符: 1
++ & ".\.venv\Scripts\python.exe" ".\scripts\p1_sprint\autopilot.py" 2>& ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (D:\Desktop\PR璁烘...e sequence '\T':String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+  """閫愪釜绮剧‘鏇挎崲 \TODO 閿氱偣锛涜繑鍥?(applied_desc, remaining_desc)銆傚箓绛夛細閿氱偣涓嶅瓨鍦ㄥ嵆璺宠繃銆?""
+[2026-11-16 01:38:46] === cycle 11 ===
+[2026-11-16 01:38:46] DONE  merge_rename_upper锛堟寚鏍囧凡鏀跺壊锛?
+[2026-11-16 01:38:46] DONE  standard_selftrain_baseline锛堟寚鏍囧凡鏀跺壊锛?
+[2026-11-16 01:38:46] DONE  smq_downstream_ablation锛堟寚鏍囧凡鏀跺壊锛?
+[2026-11-16 01:38:46] FAILED-FINAL frozen_backbone_contrast锛氶噸璇?99 娆′粛澶辫触锛岃浆浜哄伐/AI 澶勭悊
+[2026-11-16 01:38:46] DONE  zerobound_6049锛堟寚鏍囧凡鏀跺壊锛?
+[2026-11-16 01:38:46] RUNNING split_addition_episode
+[2026-11-16 01:38:46] DONE  semantic_rebuild_1100锛堟寚鏍囧凡鏀跺壊锛?
+[2026-11-16 01:38:46] 鐘舵€侊細{"done": 5, "failed": 1, "running": 1, "pending": 0}
+python.exe : D:\Desktop\PR璁烘枃\psd-framework\scripts\p1_sprint\autopilot.py:188: SyntaxWarning: invalid escape seq
+uence '\T'
+所在位置 D:\Desktop\PR论文\psd-framework\scripts\p1_sprint\run_autopilot.ps1:4 字符: 1
++ & ".\.venv\Scripts\python.exe" ".\scripts\p1_sprint\autopilot.py" 2>& ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (D:\Desktop\PR璁烘...e sequence '\T':String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+  """閫愪釜绮剧‘鏇挎崲 \TODO 閿氱偣锛涜繑鍥?(applied_desc, remaining_desc)銆傚箓绛夛細閿氱偣涓嶅瓨鍦ㄥ嵆璺宠繃銆?""
+[2026-11-16 01:53:28] === cycle 12 ===
+[2026-11-16 01:53:28] DONE  merge_rename_upper锛堟寚鏍囧凡鏀跺壊锛?
+[2026-11-16 01:53:28] DONE  standard_selftrain_baseline锛堟寚鏍囧凡鏀跺壊锛?
+[2026-11-16 01:53:28] DONE  smq_downstream_ablation锛堟寚鏍囧凡鏀跺壊锛?
+[2026-11-16 01:53:28] FAILED-FINAL frozen_backbone_contrast锛氶噸璇?99 娆′粛澶辫触锛岃浆浜哄伐/AI 澶勭悊
+[2026-11-16 01:53:28] DONE  zerobound_6049锛堟寚鏍囧凡鏀跺壊锛?
+[2026-11-16 01:53:28] DONE  split_addition_episode锛堟寚鏍囧凡鏀跺壊锛?
+[2026-11-16 01:53:28] RUNNING semantic_rebuild_1100
+[2026-11-16 01:53:28] 鐘舵€侊細{"done": 5, "failed": 1, "running": 1, "pending": 0}
+python.exe : D:\Desktop\PR璁烘枃\psd-framework\scripts\p1_sprint\autopilot.py:188: SyntaxWarning: invalid escape sequence 
+'\T'
+所在位置 D:\Desktop\PR论文\psd-framework\scripts\p1_sprint\run_autopilot.ps1:4 字符: 1
++ & ".\.venv\Scripts\python.exe" ".\scripts\p1_sprint\autopilot.py" 2>& ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (D:\Desktop\PR璁烘...e sequence '\T':String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+  """閫愪釜绮剧‘鏇挎崲 \TODO 閿氱偣锛涜繑鍥?(applied_desc, remaining_desc)銆傚箓绛夛細閿氱偣涓嶅瓨鍦ㄥ嵆璺宠繃銆?""
+[2026-11-16 02:08:02] === cycle 13 ===
+[2026-11-16 02:08:02] DONE  merge_rename_upper锛堟寚鏍囧凡鏀跺壊锛?
+[2026-11-16 02:08:02] DONE  standard_selftrain_baseline锛堟寚鏍囧凡鏀跺壊锛?
+[2026-11-16 02:08:02] DONE  smq_downstream_ablation锛堟寚鏍囧凡鏀跺壊锛?
+[2026-11-16 02:08:02] FAILED-FINAL frozen_backbone_contrast锛氶噸璇?99 娆′粛澶辫触锛岃浆浜哄伐/AI 澶勭悊
+[2026-11-16 02:08:02] DONE  zerobound_6049锛堟寚鏍囧凡鏀跺壊锛?
+[2026-11-16 02:08:02] DONE  split_addition_episode锛堟寚鏍囧凡鏀跺壊锛?
+[2026-11-16 02:08:02] DONE  semantic_rebuild_1100锛堟寚鏍囧凡鏀跺壊锛?
+[2026-11-16 02:08:02] 鐘舵€侊細{"done": 6, "failed": 1, "running": 0, "pending": 0}
+python.exe : D:\Desktop\PR璁烘枃\psd-framework\scripts\p1_sprint\autopilot.py:188: SyntaxWarning: invalid escape sequence 
+'\T'
+所在位置 D:\Desktop\PR论文\psd-framework\scripts\p1_sprint\run_autopilot.ps1:4 字符: 1
++ & ".\.venv\Scripts\python.exe" ".\scripts\p1_sprint\autopilot.py" 2>& ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (D:\Desktop\PR璁烘...e sequence '\T':String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+  """閫愪釜绮剧‘鏇挎崲 \TODO 閿氱偣锛涜繑鍥?(applied_desc, remaining_desc)銆傚箓绛夛細閿氱偣涓嶅瓨鍦ㄥ嵆璺宠繃銆?""
+[2026-11-16 02:23:02] === cycle 14 ===
+[2026-11-16 02:23:02] DONE  merge_rename_upper锛堟寚鏍囧凡鏀跺壊锛?
+[2026-11-16 02:23:02] DONE  standard_selftrain_baseline锛堟寚鏍囧凡鏀跺壊锛?
+[2026-11-16 02:23:02] DONE  smq_downstream_ablation锛堟寚鏍囧凡鏀跺壊锛?
+[2026-11-16 02:23:02] FAILED-FINAL frozen_backbone_contrast锛氶噸璇?99 娆′粛澶辫触锛岃浆浜哄伐/AI 澶勭悊
+[2026-11-16 02:23:02] DONE  zerobound_6049锛堟寚鏍囧凡鏀跺壊锛?
+[2026-11-16 02:23:02] DONE  split_addition_episode锛堟寚鏍囧凡鏀跺壊锛?
+[2026-11-16 02:23:02] DONE  semantic_rebuild_1100锛堟寚鏍囧凡鏀跺壊锛?
+[2026-11-16 02:23:02] 鐘舵€侊細{"done": 6, "failed": 1, "running": 0, "pending": 0}
+python.exe : D:\Desktop\PR璁烘枃\psd-framework\scripts\p1_sprint\autopilot.py:188: SyntaxWarning: invalid escape sequence 
+'\T'
+所在位置 D:\Desktop\PR论文\psd-framework\scripts\p1_sprint\run_autopilot.ps1:4 字符: 1
++ & ".\.venv\Scripts\python.exe" ".\scripts\p1_sprint\autopilot.py" 2>& ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (D:\Desktop\PR璁烘...e sequence '\T':String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+  """閫愪釜绮剧‘鏇挎崲 \TODO 閿氱偣锛涜繑鍥?(applied_desc, remaining_desc)銆傚箓绛夛細閿氱偣涓嶅瓨鍦ㄥ嵆璺宠繃銆?""
+[2026-11-16 02:38:02] === cycle 15 ===
+[2026-11-16 02:38:02] DONE  merge_rename_upper锛堟寚鏍囧凡鏀跺壊锛?
+[2026-11-16 02:38:02] DONE  standard_selftrain_baseline锛堟寚鏍囧凡鏀跺壊锛?
+[2026-11-16 02:38:02] DONE  smq_downstream_ablation锛堟寚鏍囧凡鏀跺壊锛?
+[2026-11-16 02:38:02] FAILED-FINAL frozen_backbone_contrast锛氶噸璇?99 娆′粛澶辫触锛岃浆浜哄伐/AI 澶勭悊
+[2026-11-16 02:38:02] DONE  zerobound_6049锛堟寚鏍囧凡鏀跺壊锛?
+[2026-11-16 02:38:02] DONE  split_addition_episode锛堟寚鏍囧凡鏀跺壊锛?
+[2026-11-16 02:38:02] DONE  semantic_rebuild_1100锛堟寚鏍囧凡鏀跺壊锛?
+[2026-11-16 02:38:02] 鐘舵€侊細{"done": 6, "failed": 1, "running": 0, "pending": 0}
+python.exe : D:\Desktop\PR璁烘枃\psd-framework\scripts\p1_sprint\autopilot.py:188: SyntaxWarning: invalid escape sequence 
+'\T'
+所在位置 D:\Desktop\PR论文\psd-framework\scripts\p1_sprint\run_autopilot.ps1:4 字符: 1
++ & ".\.venv\Scripts\python.exe" ".\scripts\p1_sprint\autopilot.py" 2>& ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (D:\Desktop\PR璁烘...e sequence '\T':String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+  """閫愪釜绮剧‘鏇挎崲 \TODO 閿氱偣锛涜繑鍥?(applied_desc, remaining_desc)銆傚箓绛夛細閿氱偣涓嶅瓨鍦ㄥ嵆璺宠繃銆?""
+[2026-11-16 02:53:02] === cycle 16 ===
+[2026-11-16 02:53:02] DONE  merge_rename_upper锛堟寚鏍囧凡鏀跺壊锛?
+[2026-11-16 02:53:02] DONE  standard_selftrain_baseline锛堟寚鏍囧凡鏀跺壊锛?
+[2026-11-16 02:53:02] DONE  smq_downstream_ablation锛堟寚鏍囧凡鏀跺壊锛?
+[2026-11-16 02:53:02] FAILED-FINAL frozen_backbone_contrast锛氶噸璇?99 娆′粛澶辫触锛岃浆浜哄伐/AI 澶勭悊
+[2026-11-16 02:53:02] DONE  zerobound_6049锛堟寚鏍囧凡鏀跺壊锛?
+[2026-11-16 02:53:02] DONE  split_addition_episode锛堟寚鏍囧凡鏀跺壊锛?
+[2026-11-16 02:53:02] DONE  semantic_rebuild_1100锛堟寚鏍囧凡鏀跺壊锛?
+[2026-11-16 02:53:02] 鐘舵€侊細{"done": 6, "failed": 1, "running": 0, "pending": 0}
+python.exe : D:\Desktop\PR璁烘枃\psd-framework\scripts\p1_sprint\autopilot.py:188: SyntaxWarning: invalid escape sequence 
+'\T'
+所在位置 D:\Desktop\PR论文\psd-framework\scripts\p1_sprint\run_autopilot.ps1:4 字符: 1
++ & ".\.venv\Scripts\python.exe" ".\scripts\p1_sprint\autopilot.py" 2>& ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (D:\Desktop\PR璁烘...e sequence '\T':String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+  """閫愪釜绮剧‘鏇挎崲 \TODO 閿氱偣锛涜繑鍥?(applied_desc, remaining_desc)銆傚箓绛夛細閿氱偣涓嶅瓨鍦ㄥ嵆璺宠繃銆?""
+[2026-11-16 03:08:02] === cycle 17 ===
+[2026-11-16 03:08:02] DONE  merge_rename_upper锛堟寚鏍囧凡鏀跺壊锛?
+[2026-11-16 03:08:02] DONE  standard_selftrain_baseline锛堟寚鏍囧凡鏀跺壊锛?
+[2026-11-16 03:08:02] DONE  smq_downstream_ablation锛堟寚鏍囧凡鏀跺壊锛?
+[2026-11-16 03:08:02] FAILED-FINAL frozen_backbone_contrast锛氶噸璇?99 娆′粛澶辫触锛岃浆浜哄伐/AI 澶勭悊
+[2026-11-16 03:08:02] DONE  zerobound_6049锛堟寚鏍囧凡鏀跺壊锛?
+[2026-11-16 03:08:02] DONE  split_addition_episode锛堟寚鏍囧凡鏀跺壊锛?
+[2026-11-16 03:08:02] DONE  semantic_rebuild_1100锛堟寚鏍囧凡鏀跺壊锛?
+[2026-11-16 03:08:02] 鐘舵€侊細{"done": 6, "failed": 1, "running": 0, "pending": 0}
+python.exe : D:\Desktop\PR璁烘枃\psd-framework\scripts\p1_sprint\autopilot.py:188: SyntaxWarning: invalid escape sequence 
+'\T'
+所在位置 D:\Desktop\PR论文\psd-framework\scripts\p1_sprint\run_autopilot.ps1:4 字符: 1
++ & ".\.venv\Scripts\python.exe" ".\scripts\p1_sprint\autopilot.py" 2>& ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (D:\Desktop\PR璁烘...e sequence '\T':String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+  """閫愪釜绮剧‘鏇挎崲 \TODO 閿氱偣锛涜繑鍥?(applied_desc, remaining_desc)銆傚箓绛夛細閿氱偣涓嶅瓨鍦ㄥ嵆璺宠繃銆?""
+[2026-11-16 03:23:02] === cycle 18 ===
+[2026-11-16 03:23:02] DONE  merge_rename_upper锛堟寚鏍囧凡鏀跺壊锛?
+[2026-11-16 03:23:02] DONE  standard_selftrain_baseline锛堟寚鏍囧凡鏀跺壊锛?
+[2026-11-16 03:23:02] DONE  smq_downstream_ablation锛堟寚鏍囧凡鏀跺壊锛?
+[2026-11-16 03:23:02] FAILED-FINAL frozen_backbone_contrast锛氶噸璇?99 娆′粛澶辫触锛岃浆浜哄伐/AI 澶勭悊
+[2026-11-16 03:23:02] DONE  zerobound_6049锛堟寚鏍囧凡鏀跺壊锛?
+[2026-11-16 03:23:02] DONE  split_addition_episode锛堟寚鏍囧凡鏀跺壊锛?
+[2026-11-16 03:23:02] DONE  semantic_rebuild_1100锛堟寚鏍囧凡鏀跺壊锛?
+[2026-11-16 03:23:02] 鐘舵€侊細{"done": 6, "failed": 1, "running": 0, "pending": 0}

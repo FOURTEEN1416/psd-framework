@@ -1,0 +1,62 @@
+{
+  "python": "D:\\Desktop\\PR论文\\psd-framework\\.venv\\Scripts\\python.exe",
+  "cwd": "D:\\Desktop\\PR论文\\psd-framework",
+  "queueDir": "D:\\Desktop\\PR论文\\psd-framework\\runs\\p1_sprint\\queue",
+  "logDir": "D:\\Desktop\\PR论文\\psd-framework\\runs\\p1_sprint",
+  "idleSecondsBetweenJobs": 10,
+  "jobs": [
+    {
+      "id": "merge_rename_upper",
+      "script": "D:\\Desktop\\PR论文\\psd-framework\\scripts\\p1_sprint\\merge_rename_upper.py",
+      "args": [],
+      "summary": "D:\\Desktop\\PR论文\\psd-framework\\runs\\p1_sprint\\merge_rename_upper\\summary.json",
+      "doneMarker": "MERGE_RENAME_UPPER_DONE",
+      "priority": "P0-先跑（纯推理、零训练、几分钟内出结果）"
+    },
+    {
+      "id": "standard_selftrain_baseline",
+      "script": "D:\\Desktop\\PR论文\\psd-framework\\scripts\\p1_sprint\\standard_selftrain_baseline.py",
+      "args": [],
+      "summary": "D:\\Desktop\\PR论文\\psd-framework\\runs\\p1_sprint\\standard_selftrain_baseline\\summary.json",
+      "doneMarker": "STANDARD_SELFTRAIN_BASELINE_DONE"
+    },
+    {
+      "id": "smq_downstream_ablation",
+      "script": "D:\\Desktop\\PR论文\\psd-framework\\scripts\\p1_sprint\\smq_downstream_ablation.py",
+      "args": [],
+      "summary": "D:\\Desktop\\PR论文\\psd-framework\\runs\\p1_sprint\\smq_downstream_ablation\\summary.json",
+      "doneMarker": "SMQ_DOWNSTREAM_ABLATION_DONE"
+    },
+    {
+      "id": "frozen_backbone_contrast",
+      "script": "D:\\Desktop\\PR论文\\psd-framework\\scripts\\p1_sprint\\frozen_backbone_contrast.py",
+      "args": [],
+      "summary": "D:\\Desktop\\PR论文\\psd-framework\\runs\\p1_sprint\\frozen_backbone_contrast\\summary.json",
+      "doneMarker": "FROZEN_BACKBONE_CONTRAST_DONE"
+    },
+    {
+      "id": "zerobound_6049",
+      "script": "D:\\Desktop\\PR论文\\psd-framework\\scripts\\p1_sprint\\zerobound_6049.py",
+      "args": ["--seed", "42"],
+      "summary": "D:\\Desktop\\PR论文\\psd-framework\\runs\\p1_sprint\\zerobound_6049\\summary.json",
+      "doneMarker": "ZEROBOUND_6049_DONE",
+      "priority": "E1-纯推理零训练，先跑（60->49 ten-merge 零重训上界，消除与 75.3% 同表口径缺口）"
+    },
+    {
+      "id": "split_addition_episode",
+      "script": "D:\\Desktop\\PR论文\\psd-framework\\scripts\\p1_sprint\\split_addition_episode.py",
+      "args": ["--seeds", "42,43,44"],
+      "summary": "D:\\Desktop\\PR论文\\psd-framework\\runs\\p1_sprint\\split_addition_episode\\summary.json",
+      "doneMarker": "SPLIT_ADDITION_EPISODE_DONE",
+      "priority": "E3-合成层 split+addition 迁移 episode（3 seeds）"
+    },
+    {
+      "id": "semantic_rebuild_1100",
+      "script": "D:\\Desktop\\PR论文\\psd-framework\\scripts\\p1_sprint\\semantic_rebuild_1100.py",
+      "args": ["--seeds", "42,43,44"],
+      "summary": "D:\\Desktop\\PR论文\\psd-framework\\runs\\p1_sprint\\semantic_rebuild_1100\\summary.json",
+      "doneMarker": "SEMANTIC_REBUILD_1100_DONE",
+      "priority": "E2-对照预算 1100 clips 三臂（TRANS-002 协议 seeds 42-44，闭合跨预算拼接误读）"
+    }
+  ]
+}

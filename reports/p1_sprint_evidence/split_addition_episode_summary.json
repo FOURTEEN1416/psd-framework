@@ -1,0 +1,227 @@
+{
+  "experiment": "split_addition_episode_synthetic",
+  "mode": "full",
+  "date": "2026-11-16T01:50:51",
+  "episode": {
+    "Y": "22 classes (psd.data.synth_stgcn.ALL_BEHAVIORS_22)",
+    "split_parents": [
+      "sit",
+      "track",
+      "retrieve"
+    ],
+    "children": [
+      "sit_split_a",
+      "track_split_a",
+      "retrieve_split_a",
+      "sit_split_b",
+      "track_split_b",
+      "retrieve_split_b"
+    ],
+    "additions": [
+      "play_bow",
+      "roll_over",
+      "shake_off",
+      "point_freeze"
+    ],
+    "Y_prime": [
+      "down",
+      "stand",
+      "heel",
+      "sit_up",
+      "stay",
+      "bark",
+      "bite",
+      "alert_sit",
+      "alert_down",
+      "apprehend",
+      "escort",
+      "obstacle",
+      "recall",
+      "watch",
+      "guard",
+      "release",
+      "jump",
+      "scale",
+      "search_blind",
+      "sit_split_a",
+      "track_split_a",
+      "retrieve_split_a",
+      "sit_split_b",
+      "track_split_b",
+      "retrieve_split_b",
+      "play_bow",
+      "roll_over",
+      "shake_off",
+      "point_freeze"
+    ],
+    "split_delta": 0.06,
+    "note": "父类样本在 Y' 中不可用（子类必须新监督）; 新增类无 Y-era 来源"
+  },
+  "config": {
+    "epochs": 60,
+    "spc": 50,
+    "vspc": 10,
+    "new_supervision_per_class": 10,
+    "rule_seeds_per_class": 0,
+    "batch_size": 32,
+    "lr": 0.001,
+    "seeds": [
+      42,
+      43,
+      44
+    ]
+  },
+  "pretrained_ckpt": "runs\\ntu_phaseB\\joint_pretext\\epoch120_model.pt",
+  "runs": [
+    {
+      "top1_overall": 0.969,
+      "top1_old19": 0.9526,
+      "top1_children6": 1.0,
+      "top1_additions4": 1.0,
+      "arm": "coupled",
+      "seed": 42,
+      "trainable_params": 928290,
+      "new_labels_used": 500,
+      "total_train_clips": 1450,
+      "duration_sec": 153.0
+    },
+    {
+      "top1_overall": 0.4448,
+      "top1_old19": 0.6211,
+      "top1_children6": 0.1833,
+      "top1_additions4": 0.0,
+      "arm": "decoupled",
+      "seed": 42,
+      "trainable_params": 8222,
+      "new_labels_used": 100,
+      "total_train_clips": 1050,
+      "duration_sec": 85.5
+    },
+    {
+      "top1_overall": 0.6793,
+      "top1_old19": 0.6,
+      "top1_children6": 0.9167,
+      "top1_additions4": 0.7,
+      "arm": "frozen_head",
+      "seed": 42,
+      "trainable_params": 8222,
+      "new_labels_used": 500,
+      "total_train_clips": 1450,
+      "duration_sec": 113.0
+    },
+    {
+      "top1_overall": 0.4172,
+      "top1_old19": 0.6368,
+      "top1_children6": 0.0,
+      "top1_additions4": 0.0,
+      "arm": "remap_zero_shot",
+      "seed": 42,
+      "trainable_params": 6423,
+      "new_labels_used": 0,
+      "total_train_clips": 1100,
+      "duration_sec": 50.6
+    },
+    {
+      "top1_overall": 0.9655,
+      "top1_old19": 0.9474,
+      "top1_children6": 1.0,
+      "top1_additions4": 1.0,
+      "arm": "coupled",
+      "seed": 43,
+      "trainable_params": 928290,
+      "new_labels_used": 500,
+      "total_train_clips": 1450,
+      "duration_sec": 164.2
+    },
+    {
+      "top1_overall": 0.4345,
+      "top1_old19": 0.6,
+      "top1_children6": 0.0333,
+      "top1_additions4": 0.25,
+      "arm": "decoupled",
+      "seed": 43,
+      "trainable_params": 8222,
+      "new_labels_used": 100,
+      "total_train_clips": 1050,
+      "duration_sec": 50.6
+    },
+    {
+      "top1_overall": 0.6897,
+      "top1_old19": 0.6263,
+      "top1_children6": 0.9167,
+      "top1_additions4": 0.65,
+      "arm": "frozen_head",
+      "seed": 43,
+      "trainable_params": 8222,
+      "new_labels_used": 500,
+      "total_train_clips": 1450,
+      "duration_sec": 67.9
+    },
+    {
+      "top1_overall": 0.4276,
+      "top1_old19": 0.6526,
+      "top1_children6": 0.0,
+      "top1_additions4": 0.0,
+      "arm": "remap_zero_shot",
+      "seed": 43,
+      "trainable_params": 6423,
+      "new_labels_used": 0,
+      "total_train_clips": 1100,
+      "duration_sec": 46.8
+    },
+    {
+      "top1_overall": 0.9793,
+      "top1_old19": 0.9684,
+      "top1_children6": 1.0,
+      "top1_additions4": 1.0,
+      "arm": "coupled",
+      "seed": 44,
+      "trainable_params": 928290,
+      "new_labels_used": 500,
+      "total_train_clips": 1450,
+      "duration_sec": 116.5
+    },
+    {
+      "top1_overall": 0.4931,
+      "top1_old19": 0.6368,
+      "top1_children6": 0.2167,
+      "top1_additions4": 0.225,
+      "arm": "decoupled",
+      "seed": 44,
+      "trainable_params": 8222,
+      "new_labels_used": 100,
+      "total_train_clips": 1050,
+      "duration_sec": 50.2
+    },
+    {
+      "top1_overall": 0.6724,
+      "top1_old19": 0.6,
+      "top1_children6": 0.9,
+      "top1_additions4": 0.675,
+      "arm": "frozen_head",
+      "seed": 44,
+      "trainable_params": 8222,
+      "new_labels_used": 500,
+      "total_train_clips": 1450,
+      "duration_sec": 106.3
+    },
+    {
+      "top1_overall": 0.4448,
+      "top1_old19": 0.6789,
+      "top1_children6": 0.0,
+      "top1_additions4": 0.0,
+      "arm": "remap_zero_shot",
+      "seed": 44,
+      "trainable_params": 6423,
+      "new_labels_used": 0,
+      "total_train_clips": 1100,
+      "duration_sec": 51.9
+    }
+  ],
+  "protocol_notes": [
+    "coupled/frozen_head 消费 Y' 全量标注; decoupled 旧类零新增+新类 k 条新监督",
+    "remap_zero_shot: Y-era 22 类头 remap 到 19 旧类，新类原理上不可命名",
+    "关键读数: 新类精度阶梯 remap < decoupled(k) ≤ frozen_head(全量) + 成本对照",
+    "clip 生成复刻 psd/data/synth_stgcn 配方（sin+高斯），模板参数化"
+  ]
+}

@@ -1,0 +1,40 @@
+[data] train=(40091, 256) val=(16487, 256) classes=60
+[budget] 10% subset: 4009 clips
+[ref] linear@10%: top1=0.6605 macroF1=0.6593
+[std-st] tau=0.95 max_iters=10
+  [iter 1] train=4009 pool=36082 accepted=15758 (tau=0.95)
+  [iter 2] train=19767 pool=20324 accepted=3095 (tau=0.95)
+  [iter 3] train=22862 pool=17229 accepted=979 (tau=0.95)
+  [iter 4] train=23841 pool=16250 accepted=405 (tau=0.95)
+  [iter 5] train=24246 pool=15845 accepted=234 (tau=0.95)
+  [iter 6] train=24480 pool=15611 accepted=338 (tau=0.95)
+  [iter 7] train=24818 pool=15273 accepted=125 (tau=0.95)
+  [iter 8] train=24943 pool=15148 accepted=95 (tau=0.95)
+  [iter 9] train=25038 pool=15053 accepted=223 (tau=0.95)
+  [iter 10] train=25261 pool=14830 accepted=22 (tau=0.95)
+[std-st] top1=0.6639 macroF1=0.66 pseudo=21274 stop=max-iters
+  [iter 1] train=4009 pool=36082 accepted=22495 (tau=0.8)
+  [iter 2] train=26504 pool=13587 accepted=5207 (tau=0.8)
+  [iter 3] train=31711 pool=8380 accepted=1564 (tau=0.8)
+  [iter 4] train=33275 pool=6816 accepted=640 (tau=0.8)
+  [iter 5] train=33915 pool=6176 accepted=831 (tau=0.8)
+  [iter 6] train=34746 pool=5345 accepted=272 (tau=0.8)
+  [iter 7] train=35018 pool=5073 accepted=224 (tau=0.8)
+  [iter 8] train=35242 pool=4849 accepted=104 (tau=0.8)
+  [iter 9] train=35346 pool=4745 accepted=165 (tau=0.8)
+  [iter 10] train=35511 pool=4580 accepted=111 (tau=0.8)
+[std-st tau=0.8] top1=0.6576 pseudo=31613
+  [iter 1] train=4009 pool=36082 accepted=18651 (tau=0.9)
+  [iter 2] train=22660 pool=17431 accepted=3407 (tau=0.9)
+  [iter 3] train=26067 pool=14024 accepted=1244 (tau=0.9)
+  [iter 4] train=27311 pool=12780 accepted=1218 (tau=0.9)
+  [iter 5] train=28529 pool=11562 accepted=675 (tau=0.9)
+  [iter 6] train=29204 pool=10887 accepted=479 (tau=0.9)
+  [iter 7] train=29683 pool=10408 accepted=545 (tau=0.9)
+  [iter 8] train=30228 pool=9863 accepted=268 (tau=0.9)
+  [iter 9] train=30496 pool=9595 accepted=317 (tau=0.9)
+  [iter 10] train=30813 pool=9278 accepted=146 (tau=0.9)
+[std-st tau=0.9] top1=0.6586 pseudo=26950
+[done] D:\Desktop\PR论文\psd-framework\runs\p1_sprint\standard_selftrain_baseline\summary.json
+
+[2026-11-15 15:13:59] END standard_selftrain_baseline exit=0 

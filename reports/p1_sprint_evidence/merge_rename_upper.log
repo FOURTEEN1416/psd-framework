@@ -1,0 +1,22 @@
+[map] NTU60(60) -> NTU120 10-class: 覆盖 60/60 源类
+[budget] 10% subset: 4009 clips
+{
+  "experiment": "merge_rename_upper_ntu60_to_ntu120_10class",
+  "mode": "full",
+  "seed": 42,
+  "budget_frac": 0.1,
+  "n_train": 40091,
+  "n_val": 16487,
+  "n_train_labeled_used": 4009,
+  "source_classes": 60,
+  "target_classes": 10,
+  "rename_oracle_upper_top1": 0.7676,
+  "argmax_vote_lower_top1": 0.7651,
+  "target_fullsupervision_ref_top1": 0.715,
+  "retention_upper_vs_ref": 1.0735,
+  "random_baseline_top1": 0.0001,
+  "duration_sec": 111.5
+}
+[done] D:\Desktop\PR论文\psd-framework\runs\p1_sprint\merge_rename_upper\summary.json
+
+[2026-11-15 13:35:28] END merge_rename_upper exit=0 

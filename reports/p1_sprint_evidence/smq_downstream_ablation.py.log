@@ -1,0 +1,48 @@
+[data] clips=225
+[labels] 有伪标签 clips=225 类别=['jump', 'lying', 'rise_transition', 'running', 'sitting', 'standing', 'walking']
+[split] train=151 val=74
+D:\Desktop\PR论文\psd-framework\.venv\Lib\site-packages\sklearn\linear_model\_logistic.py:599: ConvergenceWarning: lbfgs failed to converge after 2000 iteration(s) (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT
+
+Increase the number of iterations to improve the convergence (max_iter=2000).
+You might also want to scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  n_iter_i = _check_optimize_result(
+D:\Desktop\PR论文\psd-framework\.venv\Lib\site-packages\sklearn\linear_model\_logistic.py:599: ConvergenceWarning: lbfgs failed to converge after 2000 iteration(s) (status=1):
+STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT
+
+Increase the number of iterations to improve the convergence (max_iter=2000).
+You might also want to scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+Please also refer to the documentation for alternative solver options:
+    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression
+  n_iter_i = _check_optimize_result(
+{
+  "experiment": "smq_downstream_ablation",
+  "mode": "full",
+  "ckpt": "runs\\p02_smq\\models\\epoch-30.model",
+  "n_clips_labeled": 225,
+  "n_train": 151,
+  "n_val": 74,
+  "label_vocab": [
+    "jump",
+    "lying",
+    "rise_transition",
+    "running",
+    "sitting",
+    "standing",
+    "walking"
+  ],
+  "val_acc_with_smq": 0.4595,
+  "val_acc_without_smq": 0.4595,
+  "delta": 0.0,
+  "protocol_notes": [
+    "clip 标签=规则种子伪 GT 主导类（conf>=0.8 帧众数），公开真实层口径",
+    "with_smq 单元=SMQ 同码连续段; without_smq 单元=等长切分(段数对齐)",
+    "单元特征=冻结 ST-GCN+BC (p07 warm) penultimate; 下游=单元级 LR + clip 级均值聚合"
+  ],
+  "duration_sec": 48.1
+}
+[done] D:\Desktop\PR论文\psd-framework\runs\p1_sprint\smq_downstream_ablation\summary.json

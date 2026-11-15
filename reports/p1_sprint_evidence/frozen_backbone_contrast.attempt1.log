@@ -1,0 +1,8 @@
+[data] train=1100 val=220 device=cuda
+[frozen] trainable=6,423 / total=926,491 params
+[frozen] done: best_val_acc=0.6864 (144.6s)
+[fullft] trainable=926,491 / total=926,491 params
+
+[2026-11-15 15:17:52] END frozen_backbone_contrast exit=1 
+
+[2026-11-15 23:14:40] AUTOPILOT relaunch (mitigation=none)

@@ -51,10 +51,11 @@
 
 % R20 标题终裁（模拟审稿最优解）：移除"Low-Resource"——动物层端到端低资源为负，标题词与结果不匹配是 framing 级拒稿面；
 %   卖点迁到已交付且新颖的"解耦+演化评估准则"。low-resource 作为设计目标保留在摘要/正文/关键词（上下文即时限定）。
-\title[mode = title]{A Physics--Semantics Decoupled Framework for Skeleton-Based Behavior Recognition under Evolving Evaluation Criteria}
+% 2026-11-15 CVIU 改投终裁：标题去掉物种/模态限定（Animal/Skeleton-Based），主张按收缩后口径落在"解耦框架+演化评估准则"。
+\title[mode = title]{A Physics--Semantics Decoupled Framework for Behavior Recognition under Evolving Evaluation Criteria}
 %% R18: casprelimstitle 在 highlights/abstract prelims 框内不自动折断（类缺陷）——手动断行修复 117pt overfull
 
-\renewcommand{\casprelimstitle}{A Physics--Semantics Decoupled Framework for\\ Skeleton-Based Behavior Recognition\\ under Evolving Evaluation Criteria}%% R18 fix: 类不重排此框内标题, 手动三段断行全部落在 \textwidth 内, 消除 117pt overfull
+\renewcommand{\casprelimstitle}{A Physics--Semantics Decoupled Framework\\ for Behavior Recognition\\ under Evolving Evaluation Criteria}%% R18 fix: 类不重排此框内标题, 手动三段断行全部落在 \textwidth 内, 消除 117pt overfull
 
 %% 作者区 USER 终审项: 名单/单位/ORCID/通讯标记——结构按官方模板预留
 \author[1]{Zhimai Hou}[orcid=0009-0006-1360-8359]
@@ -112,11 +113,33 @@
             postcode={650000},
             country={China}}
 
-%% ---------------- 摘要（2026-11-15 深度改造: 主张收缩为 taxonomy 演化下物理-语义解耦的成本-收益边界与透明评估协议; R2-1/R2-5 落实）----------------
+%% ---------------- 摘要（2026-11-16 统稿: 词数见下注; 归因叙事与 tab:attribution-controls 对齐——TRANS-002 同 episode 读数
+%%   75.3/79.8/82.6 与同 episode 零重训 remap 界 68.0%（E1 实测, runs/p1_sprint/zerobound_6049）如实写入;
+%%   60→10 coarse-grouping 的 76.8% 与 60→49 不同 episode, 摘要不再使用;
+%%   剩余价值主张按 E3 + k 阶梯 E3b 实测定稿（runs/p1_sprint/split_addition_episode, runs/p1_sprint/k_ladder）:
+%%   全梯度无平价 → 摘要如实写 "residual-value hypothesis not supported at any tested budget", decoupled 仅余成本节省;
+%%   已删: 设问句 "This paper asks..."、线性头归因括注（nuance 保留于贡献3/结论/E9 正文）、"an honest negative result" 尾注。
+%%   词数（空白分词、数学组记 1、em/en-dash 不拆）=246，保守口径（em/en-dash 拆开）=249，均 ≤250
+%%   （2026-11-16 终审删词复测：摘要删 "measured"/"new" 各 1 词；计数法：剥 \textbf/\emph 壳保内容、
+%%   其余命令与 $ 脱壳、空白分词、含字母数字判词）；投稿系统计数可能有 ±2 出入）----------------
 \begin{abstract}
-Evaluation criteria in applied behavior recognition evolve with operational needs, and every taxonomy change re-opens the annotation and retraining pipeline behind a deployed classifier. This paper asks when decoupling the layers of such a pipeline pays for itself. We propose PSD, a physics--semantics decoupled framework for skeleton-based behavior recognition that separates \emph{how skeletons move} from \emph{what behaviors are called}: a label-free physics layer combines self-supervised pretraining with unsupervised motion-word segmentation, and a lightweight semantic layer expands rule-engine seeds toward taxonomy coverage through anchor-guided prototype clustering with iterated confidence-filtered pseudo-labeling, consolidated by self-training and warm-started initialization. We evaluate PSD under a pre-registered, tier-separated protocol that reports cost against accuracy at matched budgets and publishes its failure conditions. On the synthetic tier, a taxonomy transition is absorbed at \textbf{$\geq$3$\times$ lower retraining cost than full retraining} (conservative bound; measured $6.07\times$); this bound is established on the synthetic tier only, and real-domain replications bound its scope (fails at small scale, PARTIAL at backbone scale). The warm-started semantic layer reaches \textbf{82.0\% top-1 on 22 classes from 20 labeled clips} (vs.\ \textbf{96.6\% full-budget}; the 20 clips are the marginal budget atop a fully labeled source domain). On public benchmarks, the end-to-end pipeline retains \textbf{90.7\% of full-budget linear-probe accuracy at 10\% of the labels} on the human benchmark (full-budget reference 74.45\%; the frozen-feature linear head alone retains 88.7\%), holds the PARTIAL band on NTU120 and PanAf500 (88.9\%/88.7\%, the latter 85.8\% at thirty seeds), and collapses on UCF101 (66.6\%) where the full-budget reference is weak; on the canine tier the same protocol stays \emph{below chance} at a 13\% budget (\textbf{9.8\% vs.\ 11.1\% chance}, with a generic-SSL control reaching 15.2\%)---an honest negative that bounds the mechanism's applicability. The contribution is not a universal animal-recognition system but a cost--benefit boundary and a transparent evaluation protocol: decoupling pays where a frozen backbone is reusable and semantics are cheap to rebuild, and the same protocol exposes where it does not.
+Evaluation criteria in behavior recognition keep evolving; every taxonomy change re-opens annotation and retraining. We propose PSD, a physics--semantics decoupled framework for skeleton-based behavior recognition: a label-free physics layer learns \emph{how skeletons move}; a semantic layer learns \emph{what behaviors are called} from rule-engine seeds via clustering, confidence-filtered pseudo-labels, and warm-started self-training. A pre-registered, tier-separated protocol reports cost against accuracy and publishes failures. A synthetic-tier taxonomy transition is absorbed at \textbf{$\geq$3$\times$ lower retraining cost than full retraining} (measured $6.07\times$). Controls attribute the savings to semantic rebuilding, not freezing: naive freezing collapses accuracy (68.6\% vs.\ 98.2\% full fine-tuning). On the real merge transition, the decoupled rebuild (75.3\%) trails its coupled arm (79.8\%) and matched-solver control (82.6\%); the same-episode zero-retraining remap bound reads 68.0\% at a 10\% labeled-head budget. On synthetic split/addition transitions, a labeled-budget ladder (10--100 labels/class) lifts the decoupled rebuild from 45.2\% to 72.4\% versus coupled 95.9\%---never within the $\pm$2.3\,pp parity band: the residual-value hypothesis is \emph{not supported at any tested budget}, and decoupling buys label and wall-clock savings at a large accuracy cost. The warm-started semantic layer reaches \textbf{82.0\% top-1 on 22 classes from 20 clips} (vs.\ \textbf{96.6\% full-budget}). A frozen-feature pipeline retains \textbf{90.7\% of full-budget linear-probe accuracy at 10\% labels} on NTU60 (88.9\% on NTU120; 85.8\% on PanAf500), collapses on UCF101 (66.6\%), and stays \emph{below chance} on the canine tier at 13\% budget (9.8\% vs.\ 11.1\% chance). Decoupling pays where a frozen backbone is reusable and semantics rebuild cheaply; the protocol exposes where it fails.
 
 \end{abstract}
+%% [E1-INTERFACE·已消费 2026-11-16 统稿] E1（TRANS-002 同 episode 60→49 零重训界重测）已出数并回填三处：
+%%   rename-oracle 上界 68.04% / argmax-vote 下界 67.97%（10% 标注头预算, seed 42, 纯推理 112.5s, 零重训零新标注）。
+%%   数值源 runs/p1_sprint/zerobound_6049/summary.json（reports/p1_sprint_evidence/ 有逐字节一致副本）, 严禁编造。
+%%   同步点: 本摘要句 + 01-introduction.tex 贡献1 + 06-conclusion-limitations.tex 结论段与 L12 + 04-experiments.tex
+%%   tab:attribution-controls（60→49 界两行）。60→10 的 76.8%/76.5% 仍是另一 episode 的合法数字, 不可混用。
+%% [E3b-INTERFACE·已消费 2026-11-16 统稿] k 阶梯（E3b: 同 split/addition episode 定义, k∈{10,25,50,100} 新标注/类,
+%%   池扩到 100/类支持 k=100, k=10 档为趋势参照非 E3 复现）: decoupled 45.2/61.0/63.8/72.4%（k=100 三种子 ±0.0）,
+%%   coupled 95.9%（±0.5, k 无关参照）, frozen-head 71.7%；coupled−decoupled 边际 50.69/34.83/32.07/23.45pp,
+%%   全梯度落在 ±2.3pp 平价带外 → k*=None（verdict=no_parity_within_tested_range）。
+%%   摘要剩余价值句据此降级为 "not supported at any tested budget"；decoupled 仅余标注/墙钟节省
+%%   （k=10: 100 vs 1000 新标注, 92s vs 234s, seed 42）。
+%%   数值源: runs/p1_sprint/k_ladder/summary.json（reports/p1_sprint_evidence/ 有副本）, 严禁编造。
+%%   同步点: 本摘要句 + 01-introduction.tex 贡献1 + 04-experiments.tex（Reinforcement E3/E3b 段 + tab:kladder）
+%%   + 06-conclusion-limitations.tex 结论段与 L12 + supplementary.tex app:kladder。
 
 %% Highlights 同步维护两处: 此处（版内）+ highlights.tex（投稿系统独立可编辑文件）
 %% 2026-11-15 深度改造: R2-1/R2-5 联动——6.07x 显式限定 synthetic tier；82.0% 补 full-budget 对照；k-NN 降位并标 probe。
@@ -124,16 +147,22 @@ Evaluation criteria in applied behavior recognition evolve with operational need
 \item Decoupled framework absorbs taxonomy evolution cheaply (synthetic tier)
 \item Taxonomy transitions cost $\geq$3x less wall clock (measured 6.07x, synthetic tier)
 \item Warm start: 82.0\% top-1 from 20 clips (vs.\ 96.6\% full-budget, offset tier)
-\item Pipeline retains 90.7\% full-budget accuracy at 10\% labels (human benchmark)
+\item Frozen-feature pipeline retains 90.7\% of full-budget accuracy at 10\% labels (NTU60)
 \item Canine tier stays below chance at 13\% budget (9.8\% vs.\ 11.1\%)---honest boundary
 \end{highlights}
 
-%% 关键词（建议稿 F6，1-7 个允许）
+%% 关键词（2026-11-16 回修重排: 与收缩后的主张对齐——去掉 animal-behavior 领衔与 low-resource 承诺，1-7 个允许）
 \begin{keywords}
-animal behavior recognition \sep skeleton-based action recognition \sep self-supervised learning \sep pseudo-labeling \sep decoupled architecture \sep low-resource learning
+decoupled architecture \sep skeleton-based action recognition \sep taxonomy evolution \sep pseudo-labeling \sep self-supervised learning \sep evaluation protocol
 \end{keywords}
 
+%% 2026-11-15 117pt overfull 根因修复: 该 warning 并非标题断行, 而是 els-cas review 版式把 ARTICLE INFO/keywords 盒
+%%   放进 \hbox to 0pt（设计上悬挂于摘要左栏; 盒宽恰为 0.25\textwidth=117.0831pt; 诊断: 去掉 keywords 环境重编译,
+%%   该 warning 消失, 其余 overfull 为 0）。属类机制性假阳性: 在 \maketitle 期间临时放宽 \hfuzz 精准豁免该盒,
+%%   之后立即恢复默认严格度, PDF 输出不变。
+\hfuzz=120pt
 \maketitle
+\hfuzz=0.1pt
 
 %% ---------------- 正文装配区（truth = 各节 tex，2026-09-10 交割）----------------
 \input{sections/01-introduction}          % hist-draft: introduction.md (Abstract 已内置上方)
@@ -170,6 +199,23 @@ All datasets used in this study are publicly available from their original provi
 All reported numbers are reproducible from archived configurations, released scripts, and the reproduction appendix (Appendix~\ref{app:repro}) in the public repository (github.com/FOURTEEN1416/psd-framework; review snapshots are tagged \texttt{review-snapshot} against the dated commit chain); external datasets and pretrained backbones must be obtained under their own licenses, and derived skeletons regenerate from provider data via the released scripts%
 %% 【审稿快照锁定: 中间人防护——指向不可变 tag 而非可变 main; tag 在最终 commit 后打, 无自引用; 后续大改重打 tag】
 ; per-experiment evidence files accompany the code.
+%% 【投稿前自查清单 · 2026-11-16 回修写手核验】（本注释不进 PDF；投稿前逐项勾销）
+%% [已核·本地在位] runs/p1_sprint/frozen_backbone_contrast/summary.json（68.64/98.18/97.73%；176.9/342.3/365.7s）
+%% [已核·本地在位] runs/p1_sprint/merge_rename_upper/summary.json（76.76/76.51%，60→10 episode；参照 71.5%）
+%% [已核·本地在位] runs/p1_sprint/smq_downstream_ablation/summary.json（Δ=0.0）
+%% [已核·本地在位 2026-11-16 统稿] 本轮四补强实验 summary：runs/p1_sprint/{zerobound_6049（E1: 68.04/67.97/66.05/67.56%, 112.5s）,
+%%     semantic_rebuild_1100（E2: C′44.93/D′60.16/M48.20%, 180.0/6.8/10.2s, 26.47×）, split_addition_episode（E3: 42.99/45.75/68.05/97.13%, 3.02×）,
+%%     k_ladder（E3b: 45.17/61.03/63.79/72.41%, coupled 95.86±0.49, frozen-head 71.72±0.49, 边际 50.69/34.83/32.07/23.45pp, k*=None）}
+%%     ——均已逐字节一致镜像至 reports/p1_sprint_evidence/（含 60→10 界、三臂对照及 E1–E3b 四份 summary 等共 19 文件 + MANIFEST.md）。
+%% [已核·本地在位+git 已跟踪] reports/r22-ntu-transition-2026-09-07.json 与 reports/r23-trans002-*.json（含 mexp）
+%% [已核·网络] 仓库公开可访问（github.com/FOURTEEN1416/psd-framework，HTTP 200，repository_public=true，2026-11-16 抓取）
+%% [已核·网络] tag review-snapshot 可解析（→ commit 806f78d，2026-09-11）
+%% [!] runs/（.gitignore L19 /runs/*）git 未跟踪 => 当前 tag 快照不含实验产物；仓内可提交镜像 reports/p1_sprint_evidence/
+%%     已建好但 git ls-files 确认尚未跟踪——投稿前 git add reports/p1_sprint_evidence/（+ scripts/p1_sprint/）并随本次修订重打 tag
+%%     （正文已有"后续大改重打 tag"注记；git 提交须用户确认后执行）。
+%% [!] tag 快照（2026-09-11）早于本次回修（2026-11）——投稿前按正文承诺重打 tag。
+%% [已核·git 已跟踪 2026-11-16 统稿] novelty survey log 在仓: dev-docs/research/NOVELTY_CHECK_YAOQING_JIA.md（核验报告, 2026-08-23）
+%%     + dev-docs/handovers/W1-novelty-check.md（任务交接），满足 app:novelty "full check table in the released repository's survey log" 承诺。
 
 \section*{Ethics statement}
 %% truth: reports/submission-package-2026-08-26.md §3.2 + InterPet4D 官方卡 "Ethical Considerations" 节逐字引用（本地镜像 data/interpet4d/README.md L165-169, 2026-09-03 取证）

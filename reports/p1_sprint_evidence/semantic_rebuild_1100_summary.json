@@ -1,0 +1,144 @@
+{
+  "experiment": "semantic_rebuild_1100_trans002_three_arm",
+  "mode": "full",
+  "date": "2026-11-16T01:51:07",
+  "protocol": "PSD-NTU-TRANS-002 recipes @ 1,100-clip control budget (E2)",
+  "budget_clips": 1100,
+  "budget_meta": {
+    "budget_clips": 1100,
+    "draw_seed": 42,
+    "indices_sha256_16": "7aa6b1811dd9d0d5",
+    "per_class_min": 17,
+    "per_class_max": 19,
+    "labels": "Y' 49-class (TRANS-002 frozen merge)",
+    "note": "预算抽取种子固定 42（披露）；臂种子独立于本切片"
+  },
+  "epochs": 80,
+  "seeds": [
+    42,
+    43,
+    44
+  ],
+  "val_size": 16487,
+  "runs": [
+    {
+      "arm": "C_prime",
+      "budget": "1100",
+      "seed": 42,
+      "wall_clock_sec": 250.1,
+      "val_acc": 0.4485
+    },
+    {
+      "arm": "D_prime",
+      "budget": "1100",
+      "seed": 42,
+      "wall_clock_sec": 9.1,
+      "val_acc": 0.6016
+    },
+    {
+      "arm": "M_matched",
+      "budget": "1100",
+      "seed": 42,
+      "wall_clock_sec": 10.2,
+      "val_acc": 0.4801
+    },
+    {
+      "arm": "C_prime",
+      "budget": "1100",
+      "seed": 43,
+      "wall_clock_sec": 177.9,
+      "val_acc": 0.4422
+    },
+    {
+      "arm": "D_prime",
+      "budget": "1100",
+      "seed": 43,
+      "wall_clock_sec": 6.8,
+      "val_acc": 0.6016
+    },
+    {
+      "arm": "M_matched",
+      "budget": "1100",
+      "seed": 43,
+      "wall_clock_sec": 10.2,
+      "val_acc": 0.4794
+    },
+    {
+      "arm": "C_prime",
+      "budget": "1100",
+      "seed": 44,
+      "wall_clock_sec": 180.0,
+      "val_acc": 0.4573
+    },
+    {
+      "arm": "D_prime",
+      "budget": "1100",
+      "seed": 44,
+      "wall_clock_sec": 3.3,
+      "val_acc": 0.6016
+    },
+    {
+      "arm": "M_matched",
+      "budget": "1100",
+      "seed": 44,
+      "wall_clock_sec": 4.2,
+      "val_acc": 0.4864
+    }
+  ],
+  "summary": {
+    "C_prime": {
+      "seeds": [
+        42,
+        43,
+        44
+      ],
+      "acc_mean": 0.4493,
+      "wall_median_s": 180.0
+    },
+    "D_prime": {
+      "seeds": [
+        42,
+        43,
+        44
+      ],
+      "acc_mean": 0.6016,
+      "wall_median_s": 6.8
+    },
+    "M_matched": {
+      "seeds": [
+        42,
+        43,
+        44
+      ],
+      "acc_mean": 0.482,
+      "wall_median_s": 10.2
+    },
+    "cost_ratio_C_over_D": 26.47,
+    "acc_gap_D_minus_C_pp": 15.23
+  },
+  "comparators_other_budgets": {
+    "full_40091": {
+      "source": "r23-trans002-full-fixed-2026-09-08.json",
+      "val_acc": {
+        "C_prime": 0.7982,
+        "D_prime": 0.7533,
+        "M_matched": 0.8258
+      }
+    },
+    "tenpct_4009": {
+      "source": "r23-trans002-full10-2026-09-08.json",
+      "val_acc": {
+        "C_prime": 0.6499,
+        "D_prime": 0.6757,
+        "M_matched": 0.6746
+      }
+    }
+  },
+  "protocol_notes": [
+    "预算 1,100 clips = 合成层三臂对照 50/class×22 的等预算对齐点（E2 动机）",
+    "C′/D′/M 配方与 TRANS-002 冻结协议一致（A-fix lr=0.00625, batch16, SGD）",
+    "预算抽取种子固定 42 并落盘 meta；臂种子独立",
+    "评估统一在全部 16,487 val clips；D′ val 特征复用 TRANS-002 既有 pretext 导出",
+    "comparators_other_budgets 为既有报告数字（full 40,091 / 10% 4,009），未重跑"
+  ]
+}
