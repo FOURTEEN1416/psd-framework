@@ -1,0 +1,357 @@
+{
+  "experiment": "k_ladder_decoupled_budget",
+  "mode": "full",
+  "date": "2026-11-16T17:51:03",
+  "episode": {
+    "Y": "22 classes (psd.data.synth_stgcn.ALL_BEHAVIORS_22)",
+    "split_parents": [
+      "sit",
+      "track",
+      "retrieve"
+    ],
+    "children": [
+      "sit_split_a",
+      "track_split_a",
+      "retrieve_split_a",
+      "sit_split_b",
+      "track_split_b",
+      "retrieve_split_b"
+    ],
+    "additions": [
+      "play_bow",
+      "roll_over",
+      "shake_off",
+      "point_freeze"
+    ],
+    "Y_prime": [
+      "down",
+      "stand",
+      "heel",
+      "sit_up",
+      "stay",
+      "bark",
+      "bite",
+      "alert_sit",
+      "alert_down",
+      "apprehend",
+      "escort",
+      "obstacle",
+      "recall",
+      "watch",
+      "guard",
+      "release",
+      "jump",
+      "scale",
+      "search_blind",
+      "sit_split_a",
+      "track_split_a",
+      "retrieve_split_a",
+      "sit_split_b",
+      "track_split_b",
+      "retrieve_split_b",
+      "play_bow",
+      "roll_over",
+      "shake_off",
+      "point_freeze"
+    ],
+    "split_delta": 0.06,
+    "pool_samples_per_class": 100,
+    "val_samples_per_class": 10,
+    "note": "与 E3 同一 episode 定义; 池 spc=100 以支持 k=100 档"
+  },
+  "config": {
+    "epochs": 60,
+    "spc": 100,
+    "vspc": 10,
+    "k_values": [
+      10,
+      25,
+      50
+    ],
+    "arms": [
+      "decoupled",
+      "frozen_head"
+    ],
+    "seeds": [
+      43,
+      44
+    ],
+    "batch_size": 32,
+    "lr": 0.001,
+    "parity_band_pp": 2.3,
+    "episode_data_seed": 42,
+    "decoupled_sampling": "exact k per new class (stratified, rng seed+99)"
+  },
+  "pretrained_ckpt": "runs\\ntu_phaseB\\joint_pretext\\epoch120_model.pt",
+  "episode_build_sec": 4.4,
+  "ladder": [
+    {
+      "k": 10,
+      "arms": {
+        "decoupled": {
+          "n_seeds": 2,
+          "seeds": [
+            43,
+            44
+          ],
+          "top1_overall": 0.4535,
+          "top1_overall_std": 0.0018,
+          "top1_old19": 0.6342,
+          "top1_old19_std": 0.0079,
+          "top1_children6": 0.0667,
+          "top1_children6_std": 0.0,
+          "top1_additions4": 0.175,
+          "top1_additions4_std": 0.025,
+          "new_labels_used": 100,
+          "total_train_clips": 2000,
+          "duration_sec": 92.8,
+          "duration_sec_per_seed": {
+            "43": 92.5,
+            "44": 93.1
+          },
+          "k_independent_reference": false
+        },
+        "frozen_head": {
+          "n_seeds": 2,
+          "seeds": [
+            43,
+            44
+          ],
+          "top1_overall": 0.7189,
+          "top1_overall_std": 0.0051,
+          "top1_old19": 0.6684,
+          "top1_old19_std": 0.0052,
+          "top1_children6": 0.975,
+          "top1_children6_std": 0.0083,
+          "top1_additions4": 0.575,
+          "top1_additions4_std": 0.0,
+          "new_labels_used": 1000,
+          "total_train_clips": 2900,
+          "duration_sec": 132.1,
+          "duration_sec_per_seed": {
+            "43": 135.2,
+            "44": 128.9
+          },
+          "k_independent_reference": true
+        }
+      }
+    },
+    {
+      "k": 25,
+      "arms": {
+        "decoupled": {
+          "n_seeds": 2,
+          "seeds": [
+            43,
+            44
+          ],
+          "top1_overall": 0.5811,
+          "top1_overall_std": 0.0258,
+          "top1_old19": 0.6632,
+          "top1_old19_std": 0.0315,
+          "top1_children6": 0.5417,
+          "top1_children6_std": 0.025,
+          "top1_additions4": 0.25,
+          "top1_additions4_std": 0.0,
+          "new_labels_used": 250,
+          "total_train_clips": 2150,
+          "duration_sec": 100.2,
+          "duration_sec_per_seed": {
+            "43": 99.7,
+            "44": 100.7
+          },
+          "k_independent_reference": false
+        },
+        "frozen_head": {
+          "n_seeds": 2,
+          "seeds": [
+            43,
+            44
+          ],
+          "top1_overall": 0.7189,
+          "top1_overall_std": 0.0051,
+          "top1_old19": 0.6684,
+          "top1_old19_std": 0.0052,
+          "top1_children6": 0.975,
+          "top1_children6_std": 0.0083,
+          "top1_additions4": 0.575,
+          "top1_additions4_std": 0.0,
+          "new_labels_used": 1000,
+          "total_train_clips": 2900,
+          "duration_sec": 132.1,
+          "duration_sec_per_seed": {
+            "43": 135.2,
+            "44": 128.9
+          },
+          "k_independent_reference": true
+        }
+      }
+    },
+    {
+      "k": 50,
+      "arms": {
+        "decoupled": {
+          "n_seeds": 2,
+          "seeds": [
+            43,
+            44
+          ],
+          "top1_overall": 0.6569,
+          "top1_overall_std": 0.0121,
+          "top1_old19": 0.6815,
+          "top1_old19_std": 0.0131,
+          "top1_children6": 0.8,
+          "top1_children6_std": 0.0167,
+          "top1_additions4": 0.325,
+          "top1_additions4_std": 0.0,
+          "new_labels_used": 500,
+          "total_train_clips": 2400,
+          "duration_sec": 110.6,
+          "duration_sec_per_seed": {
+            "43": 110.2,
+            "44": 111.0
+          },
+          "k_independent_reference": false
+        },
+        "frozen_head": {
+          "n_seeds": 2,
+          "seeds": [
+            43,
+            44
+          ],
+          "top1_overall": 0.7189,
+          "top1_overall_std": 0.0051,
+          "top1_old19": 0.6684,
+          "top1_old19_std": 0.0052,
+          "top1_children6": 0.975,
+          "top1_children6_std": 0.0083,
+          "top1_additions4": 0.575,
+          "top1_additions4_std": 0.0,
+          "new_labels_used": 1000,
+          "total_train_clips": 2900,
+          "duration_sec": 132.1,
+          "duration_sec_per_seed": {
+            "43": 135.2,
+            "44": 128.9
+          },
+          "k_independent_reference": true
+        }
+      }
+    }
+  ],
+  "k_star_analysis": null,
+  "runs": [
+    {
+      "top1_overall": 0.7241,
+      "top1_old19": 0.6737,
+      "top1_children6": 0.9833,
+      "top1_additions4": 0.575,
+      "arm": "frozen_head",
+      "k": null,
+      "seed": 43,
+      "trainable_params": 8222,
+      "new_labels_used": 1000,
+      "total_train_clips": 2900,
+      "duration_sec": 135.2
+    },
+    {
+      "top1_overall": 0.4552,
+      "top1_old19": 0.6421,
+      "top1_children6": 0.0667,
+      "top1_additions4": 0.15,
+      "arm": "decoupled",
+      "k": 10,
+      "seed": 43,
+      "trainable_params": 8222,
+      "new_labels_used": 100,
+      "total_train_clips": 2000,
+      "duration_sec": 92.5
+    },
+    {
+      "top1_overall": 0.6069,
+      "top1_old19": 0.6947,
+      "top1_children6": 0.5667,
+      "top1_additions4": 0.25,
+      "arm": "decoupled",
+      "k": 25,
+      "seed": 43,
+      "trainable_params": 8222,
+      "new_labels_used": 250,
+      "total_train_clips": 2150,
+      "duration_sec": 99.7
+    },
+    {
+      "top1_overall": 0.6448,
+      "top1_old19": 0.6684,
+      "top1_children6": 0.7833,
+      "top1_additions4": 0.325,
+      "arm": "decoupled",
+      "k": 50,
+      "seed": 43,
+      "trainable_params": 8222,
+      "new_labels_used": 500,
+      "total_train_clips": 2400,
+      "duration_sec": 110.2
+    },
+    {
+      "top1_overall": 0.7138,
+      "top1_old19": 0.6632,
+      "top1_children6": 0.9667,
+      "top1_additions4": 0.575,
+      "arm": "frozen_head",
+      "k": null,
+      "seed": 44,
+      "trainable_params": 8222,
+      "new_labels_used": 1000,
+      "total_train_clips": 2900,
+      "duration_sec": 128.9
+    },
+    {
+      "top1_overall": 0.4517,
+      "top1_old19": 0.6263,
+      "top1_children6": 0.0667,
+      "top1_additions4": 0.2,
+      "arm": "decoupled",
+      "k": 10,
+      "seed": 44,
+      "trainable_params": 8222,
+      "new_labels_used": 100,
+      "total_train_clips": 2000,
+      "duration_sec": 93.1
+    },
+    {
+      "top1_overall": 0.5552,
+      "top1_old19": 0.6316,
+      "top1_children6": 0.5167,
+      "top1_additions4": 0.25,
+      "arm": "decoupled",
+      "k": 25,
+      "seed": 44,
+      "trainable_params": 8222,
+      "new_labels_used": 250,
+      "total_train_clips": 2150,
+      "duration_sec": 100.7
+    },
+    {
+      "top1_overall": 0.669,
+      "top1_old19": 0.6947,
+      "top1_children6": 0.8167,
+      "top1_additions4": 0.325,
+      "arm": "decoupled",
+      "k": 50,
+      "seed": 44,
+      "trainable_params": 8222,
+      "new_labels_used": 500,
+      "total_train_clips": 2400,
+      "duration_sec": 111.0
+    }
+  ],
+  "protocol_notes": [
+    "coupled/frozen_head 消费 Y' 全量标注（k 无关参照，每 seed 各一次，数值按 k 档复用）",
+    "decoupled: 旧 19 类 remap 既有标注零新增 + 每新类恰好 k 条新鲜标注",
+    "k* 判定: min{k: acc(coupled)-acc(decoupled(k)) <= 2.3pp}（种子均值）",
+    "episode 数据固定 seed=42 构建一次; 臂种子只变训练随机性（与 E3 一致）",
+    "与 E3 差异: 池 spc 50->100（k=100 档需要），k=10 档仅供趋势参照非 E3 复现",
+    "clip 生成复刻 psd/data/synth_stgcn 配方（sin+高斯），模板参数化"
+  ]
+}

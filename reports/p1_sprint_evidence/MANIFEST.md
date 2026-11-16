@@ -2,12 +2,12 @@
 
 > 归档时间：2026-11-16 · 操作：证据归档员（只复制/新建，未删除任何文件，未执行 git add/commit）
 > 来源：`runs/p1_sprint/`（该目录被 `.gitignore:19 /runs/*` 忽略，故将可提交证据镜像至本目录）
-> 完整性校验：全部 19 个文件已用 `cmp` 与源文件逐字节比对，**全部一致**（E1–E3 三份 summary 于 2026-11-16 02:04 补充归档；E3b k 阶梯 summary 于同日统稿时补充归档；本清单更新时已再次 `cmp` 复核，仍与 `runs/p1_sprint/*/summary.json` 逐字节一致）。
+> 完整性校验：全部文件已用 `cmp` 与源文件逐字节比对，**全部一致**（E1–E3 三份 summary 于 2026-11-16 02:04 补充归档；E3b k 阶梯 summary 于同日统稿时补充归档；**2026-11-16 终审 P1 收口前刷新**：`k_ladder_summary.json` 发现为补测前旧快照（03:10:01，k≤50 单种子 42），已用 `runs/p1_sprint/k_ladder/summary.json`（17:52:40 canonical 全档位三种子合并版）重新覆盖，`cmp` 逐字节一致；同批新增补测会话镜像 `k_ladder_summary_s43_44_k102550.json`（源 `runs/p1_sprint/k_ladder/summary_s43_44_k102550.json`，17:51:03 落盘），`cmp` 逐字节一致）。
 > **2026-11-16 终审回修补充归档（真实 tier 冻结编码器对照）**：`frozen_real_tier/` 子目录新增 3 份 summary（ntu120/ucf101/panaf500，源 `runs/p1_sprint/{ntu120,ucf101,panaf500}/summary.json`，13:04–14:01 执行），逐份 `cmp` 逐字节一致。
 
-## 一、归档文件（19 个 + 本清单 MANIFEST.md）
+## 一、归档文件（23 个 + 本清单 MANIFEST.md）
 
-### 实验结果 summary.json（8 个，逐字节校验通过）
+### 实验结果 summary.json（9 个，逐字节校验通过）
 
 | 归档路径 | 源路径 | 关键内容 |
 |---|---|---|
@@ -18,7 +18,8 @@
 | `zerobound_6049_summary.json` | `runs/p1_sprint/zerobound_6049/summary.json` | E1：TRANS-002 同 episode（60→49 ten-merge）零重训上界重测（seed 42，10% 标注头预算 4,009 clips，纯推理 112.5s，零重训零新标注）：rename-oracle 上界 **0.6804**，argmax-vote 下界 0.6797，源 60 类头 0.6605，目标 49 类全监督参照 0.6756（retention 1.007） |
 | `semantic_rebuild_1100_summary.json` | `runs/p1_sprint/semantic_rebuild_1100/summary.json` | E2：TRANS-002 三臂 @ 1,100-clip 对照预算（seeds 42/43/44，80 epochs，预算抽取 seed 42）：C′ 0.4493 / 180.0s，D′ **0.6016 / 6.8s**，M 0.4820 / 10.2s；D′−C′ = +15.23pp，成本比 **26.47×** |
 | `split_addition_episode_summary.json` | `runs/p1_sprint/split_addition_episode/summary.json` | E3：合成层 22→29 split/addition 迁移 episode（3 拆分 + 4 新增，seeds 42/43/44，50 clips/class，60 epochs）：remap 0.4299 → decoupled(k=10) 0.4575 → frozen head 0.6805 → coupled **0.9713**；新类精度阶梯 + 中位成本比 **3.02×**（verdict PARTIAL） |
-| `k_ladder_summary.json` | `runs/p1_sprint/k_ladder/summary.json` | E3b：同 episode 定义标注预算阶梯 k∈{10,25,50,100}（episode seed 42；k≤50 单种子 42，k=100 三种子 42/43/44；池扩到 100/类）：decoupled 0.4517/0.6103/0.6379/**0.7241**（k=100 ±0.0），coupled 0.9586±0.0049（k 无关参照），frozen head 0.7172±0.0049；coupled−decoupled 边际 50.69/34.83/32.07/**23.45pp** 全部在 ±2.3pp 平价带外 → **k\*=None（verdict=no_parity_within_tested_range）**；k=10 档 100 vs 1000 新标注、92.1s vs 234.0s（seed 42） |
+| `k_ladder_summary.json` | `runs/p1_sprint/k_ladder/summary.json` | E3b：同 episode 定义标注预算阶梯 k∈{10,25,50,100}（episode seed 42；**全档位三种子 42/43/44**，2026-11-16 17:52:40 canonical 合并版，含 17:36 补测会话合并；池扩到 100/类）：decoupled **0.4529**±0.0016 / 0.5908±0.0252 / 0.6506±0.0133 / **0.7241**±0.0000，coupled 0.9586±0.0049（k 无关参照），frozen head 0.7172±0.0049；coupled−decoupled 边际 **50.57/36.78/30.80/23.45pp** 全部在 ±2.3pp 平价带外 → **k\*=None（verdict=no_parity_within_tested_range）**；k=10 档 100 vs 1000 新标注、92.1s vs 234.0s（seed 42；三种子 92.1/92.5/93.1 vs 234.0/232.6/229.1） |
+| `k_ladder_summary_s43_44_k102550.json` | `runs/p1_sprint/k_ladder/summary_s43_44_k102550.json` | E3b 补测会话原件（seeds 43/44 × k∈{10,25,50} × decoupled/frozen\_head 两臂；coupled 臂 k 无关按种子复用；17:51:03 落盘）：canonical 合并版 `k_ladder_summary.json` 的输入之一，随终审一并归档留证 |
 
 ### 真实 tier 冻结编码器对照 summary（3 个，2026-11-16 终审回修归档，`frozen_real_tier/` 子目录，逐字节校验通过）
 
@@ -76,3 +77,4 @@ git add docs/paper/latex/highlights.tex \
 7. **E3b k 阶梯 summary 补充归档（2026-11-16 统稿）**：`k_ladder_summary.json`（源 `runs/p1_sprint/k_ladder/summary.json`，03:10 落盘）由统稿环节归档，`cmp` 逐字节一致；正文载体为 04-experiments.tex 的 Reinforcement E3/E3b 段 + tab:kladder，协议全文在 supplementary.tex app:kladder。E3b 的两份运行日志（`k_ladder.log`、`k_ladder_s43_44.log`）与 E1–E3 日志同例留在 `runs/p1_sprint/` 未镜像。
 
 8. **真实 tier 冻结对照归档（2026-11-16 终审回修）**：`frozen_real_tier/` 3 份 summary 已 `cmp` 逐字节校验后归档；对应驱动脚本 `scripts/p1_sprint/frozen_ntu120.py`、`frozen_ucf101.py`、`frozen_panaf500.py` 随本轮证据提交入库。
+9. **k 阶梯镜像刷新（2026-11-16 终审 P1 收口）**：终审发现 `k_ladder_summary.json` 为补测前旧快照（03:10:01：k≤50 单种子 42、边际 50.69/34.83/32.07/23.45pp、decoupled 0.4517/0.6103/0.6379），与正文引用的 canonical 版（17:52:40：全档位三种子、边际 50.57/36.78/30.80/23.45pp、decoupled 0.4529/0.5908/0.6506）不一致。已重新覆盖为 canonical 版并 `cmp` 逐字节一致；补测会话原件 `summary_s43_44_k102550.json` 同批归档为 `k_ladder_summary_s43_44_k102550.json`。旧快照的中间状态仍可溯源于 `runs/p1_sprint/k_ladder/summary_pre_s43_44_k102550.json`（未镜像）。
