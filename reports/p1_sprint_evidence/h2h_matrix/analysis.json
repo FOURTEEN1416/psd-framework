@@ -1,0 +1,122 @@
+{
+  "date": "2026-11-17T00:22:41",
+  "matrix_mode": "full",
+  "psd_10seed_subset42": {
+    "values": [
+      0.6753,
+      0.6759,
+      0.6731,
+      0.6733,
+      0.6787,
+      0.6722,
+      0.6781,
+      0.6772,
+      0.6766,
+      0.6725
+    ],
+    "mean": 0.6753,
+    "std": 0.0024
+  },
+  "aimclr_5seed_subset42": {
+    "values": [
+      0.6671,
+      0.6668,
+      0.668,
+      0.6676,
+      0.6673
+    ],
+    "mean": 0.6674,
+    "std": 0.0005
+  },
+  "stgcn_5seed_subset42": {
+    "values": [
+      0.6652,
+      0.613,
+      0.6573,
+      0.6424,
+      0.6643
+    ],
+    "mean": 0.6484,
+    "std": 0.0218
+  },
+  "significance_tests": {
+    "psd_vs_aimclr_10pct": {
+      "n_a": 10,
+      "n_b": 5,
+      "mean_a": 0.6753,
+      "mean_b": 0.6674,
+      "std_a": 0.0024,
+      "std_b": 0.0005,
+      "diff_pp": 0.79,
+      "welch_t": 10.127,
+      "welch_p": 1.147093014655891e-06,
+      "mwu_p": 0.000666000666000666
+    },
+    "psd_vs_stgcn_10pct": {
+      "n_a": 10,
+      "n_b": 5,
+      "mean_a": 0.6753,
+      "mean_b": 0.6484,
+      "std_a": 0.0024,
+      "std_b": 0.0218,
+      "diff_pp": 2.69,
+      "welch_t": 2.744,
+      "welch_p": 0.051015988555768624,
+      "mwu_p": 0.000666000666000666
+    },
+    "psd_vs_linear_head_10pct": {
+      "diff_pp": 1.48
+    }
+  },
+  "subset_robustness_10pct": {
+    "42": {
+      "psd_mean": 0.6753,
+      "aimclr": 0.6671,
+      "stgcn": 0.6652,
+      "d_psd_aimclr_pp": 0.82,
+      "d_psd_stgcn_pp": 1.01
+    },
+    "43": {
+      "psd_mean": 0.7411,
+      "aimclr": 0.6629,
+      "stgcn": 0.6409,
+      "d_psd_aimclr_pp": 7.82,
+      "d_psd_stgcn_pp": 10.02
+    },
+    "44": {
+      "psd_mean": 0.742,
+      "aimclr": 0.6691,
+      "stgcn": 0.6495,
+      "d_psd_aimclr_pp": 7.29,
+      "d_psd_stgcn_pp": 9.25
+    }
+  },
+  "budget_curve": {
+    "0.05": {
+      "psd": 0.742,
+      "psd_std": 0.0005,
+      "aimclr": 0.6412,
+      "stgcn": 0.5288
+    },
+    "0.10": {
+      "psd": 0.6753,
+      "psd_std": 0.0024,
+      "aimclr": 0.6674,
+      "stgcn": 0.6484,
+      "linear_head_ref": 0.6605
+    },
+    "0.20": {
+      "psd": 0.7408,
+      "psd_std": 0.0015,
+      "aimclr": 0.6962,
+      "stgcn": 0.7283
+    },
+    "full": {
+      "aimclr": 0.743,
+      "stgcn": 0.8346,
+      "psd_linear_probe_ref": 0.7445,
+      "note": "PSD semantic pipeline not run at full budget (low-budget mechanism); frozen linear probe is the full-budget reference"
+    }
+  },
+  "failed_cells": {}
+}

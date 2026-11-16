@@ -1,0 +1,28 @@
+{
+  "date": "2026-11-16T20:51:06",
+  "method": "PSD linear head on frozen 256-d features (E9 arm-a; ScaledLR; deterministic)",
+  "rows": [
+    {
+      "frac": 0.05,
+      "n_anchor": 2006,
+      "top1": 0.633,
+      "macro_f1": 0.6304
+    },
+    {
+      "frac": 0.1,
+      "n_anchor": 4009,
+      "top1": 0.6605,
+      "macro_f1": 0.6593
+    },
+    {
+      "frac": 0.2,
+      "n_anchor": 8014,
+      "top1": 0.6879,
+      "macro_f1": 0.6865
+    }
+  ],
+  "consistency": {
+    "reported_e9_linear_10pct": 0.6605,
+    "reproduced": 0.6605
+  }
+}

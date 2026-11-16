@@ -56,7 +56,8 @@ def main() -> None:
     tests = {
         "psd_vs_aimclr_10pct": welch(psd10, aim_seeds),
         "psd_vs_stgcn_10pct": welch(psd10, stg_seeds),
-        "psd_vs_linear_head_10pct": welch(psd10, [0.6605]),  # 确定性线性头（单值，仅列差值）
+        # 确定性线性头（单值、无随机性）不做检验，只报差值
+        "psd_vs_linear_head_10pct": {"diff_pp": round((float(np.mean(psd10)) - 0.6605) * 100, 2)},
     }
 
     # 子集重抽配对差（42=已发表格; 43/44=矩阵新格; PSD 取 3 selftrain seeds 均值）
