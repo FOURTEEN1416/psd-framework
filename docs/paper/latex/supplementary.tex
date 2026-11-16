@@ -16,6 +16,8 @@
 %%      数字源 runs/p1_sprint/{ntu120,ucf101,panaf500}/summary.json, 与 reports/p5b-ntu120|p5b-ucf101|p23-panaf-retention-2026-09-07.json
 %%      逐位一致（weights_provenance=retrained_same_protocol_saved 已披露）, 禁编造。
 %%   E  CIL 定位说明段(app:cil, 与正文 02-related-work 的 Relation to class-incremental and continual learning 段对齐)。
+%% 2026-11-16 篇幅压缩新增（自 main.tex 附录迁入）: Algorithm 1 伪代码 / app:novelty 新颖性调研矩阵 /
+%%   app:repro 复现链 / tab:compmap 可比性映射表 / fig3 分割定性图 + fig4 主动学习效率图（Supplementary figures）/ app:fivearm 五臂研究全文。
 %% 编译: pdflatex -interaction=nonstopmode supplementary.tex ; bibtex supplementary ; pdflatex x2
 %% 纪律: pdflatex 非 Unicode 引擎——排版面禁 CJK; 数字只来自实验产物, 禁编造;
 %%       跨文档引用一律写死编号并与主文核对（Eq.(1)(3)=03-method 的 proto/mc; §3.3.2/§4.4/§5）。
@@ -28,6 +30,12 @@
 \usepackage{xcolor}
 \usepackage{booktabs}
 \usepackage{tabularx}
+\usepackage{url}
+\usepackage[hidelinks]{hyperref}
+\usepackage{graphicx}
+\graphicspath{{../figures/}}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
 
 \newcommand{\psd}{\textsc{psd}}
 
@@ -44,12 +52,27 @@
 
 \noindent
 This supplement documents three items referenced from the main text.
-Section~\ref{app:mc} gives the complete instantiation of the frequency-aware margin factor $m_c$, whose summary appears in Appendix~A of the main text and whose required shape is stated in Section~3.3.2 there.
+Section~\ref{app:mc} gives the complete instantiation of the frequency-aware margin factor $m_c$, whose required shape is stated in Section~3.3.2 of the main text.
 Section~\ref{app:trans} gives the full pre-registered protocols for the taxonomy-transition replications (PSD-NTU-TRANS-001/002, referenced from Sections~4.3 and 4.5 of the main text) and for the two attribution controls of the main text's attribution-controls table (Section~4.4 there): the synthetic-tier frozen-backbone three-arm contrast---extended in this revision to the real E9-series tiers NTU120/UCF101/PanAf500 as explicit frozen-encoder arms (Section~\ref{app:frozenreal})---and the merge/rename zero-retraining bound; it also lists the per-seed paired wall-clock ratios behind the synthetic-tier E6 headline ratio (Section~\ref{app:e6seeds}).
 Section~\ref{app:smq} gives the protocol and result of the controlled downstream ablation of the SMQ segmentation step.
 Section~\ref{app:reinforce} documents the four reinforcement protocols of the decoupling claim---E1 (the zero-retraining bound re-measured on the same $60\to49$ episode as the TRANS-002 rebuild), E2 (the three TRANS-002 arms re-run at the three-arm contrast's 1{,}100-clip budget), E3 (a synthetic-tier split/addition migration episode), and E3b (a labeled-budget ladder on the same episode)---specified in advance (same-day; protocol text committed before runs), executed the same day, and backfilled verbatim from the released artifacts.
 Section~\ref{app:cil} restates the relation to class-incremental learning for readers of the supplement alone.
 Every number below is reproduced verbatim from the released run artifacts; no value is imputed, and pending cells are marked as pending rather than estimated.
+
+\begin{algorithm}[t]
+\caption{Anchor-guided iterative pseudo-labeling (referenced from Section~3.3.2 of the main text)}\label{alg:pseudoloop}
+\begin{algorithmic}[1]
+\Require physics encoder $\Phi$ (frozen), seed anchors $A$, unlabeled proposals $U$, threshold $\tau$, margins $m_c$
+\Ensure classifier $\Omega$ under taxonomy $\mathcal{Y}$
+\State initialize prototypes $P$ as class means of $A$ (Eq.~(1) of the main text)
+\Repeat
+  \State assign each $u \in U$ via $\Omega$; prototype opinion $\hat{y}^{P}_u$; confidence $\kappa(u)$
+  \State $L_{\mathrm{high}} \leftarrow \{u : \hat{y}^{\Omega}_u = \hat{y}^{P}_u \wedge \kappa(u) \geq \tau_{\hat{y}^{\Omega}_u}\}$ (Eq.~(2) of the main text); re-filter the pseudo-labeled pool (replacement)
+  \State update $\Omega$ on verified seeds $\cup$ pseudo-labeled pool
+  \State re-estimate $P$ as class means of the labeled set (Eq.~(1) of the main text)
+\Until{proposal assignment stabilizes, the iteration budget is reached, or (where a rule-derived consensus reference exists) pool precision against it drops for two consecutive rounds}
+\end{algorithmic}
+\end{algorithm}
 
 \section{The frequency-aware margin factor $m_c$: exact instantiation}\label{app:mc}
 
@@ -389,7 +412,7 @@ Verdict (same-day specified rule): the coupled/decoupled median wall-clock ratio
 Reinforcement protocol specified in advance on 2026-11-16 (same-day written fix, not an advance-frozen pre-registration; see the preamble of Section~\ref{app:reinforce}), executed the same day. Driver: \texttt{scripts/p1\_sprint/k\_ladder.py}; evidence: \texttt{runs/p1\_sprint/k\_ladder/summary.json}, mirrored copy \texttt{reports/p1\_sprint\_evidence/k\_ladder\_summary.json}. Motivation: E3 (Section~\ref{app:synthmigration}) measures the decoupled rebuild at one new-label budget ($k{=}10$ per new class); the ladder asks whether granting the frozen path progressively more fresh labels closes its accuracy gap to coupled full retraining---i.e.\ whether a critical budget $k^{\ast}$ with parity exists---which decides whether the residual-value hypothesis survives or is downgraded.
 
 \paragraph{Protocol (specified in advance, same-day).}
-Episode: the identical E3 split/addition definition ($\mathcal{Y}\to\mathcal{Y}'$: $22\to29$ classes; split delta 0.06; four additions with no $\mathcal{Y}$-era source), built once with episode seed 42; arm seeds vary training randomness only. Arms: \emph{decoupled}---the frozen $\mathcal{Y}$-era backbone keeps the 19 retained classes via remap with zero new labels, and each of the ten new classes receives exactly $k$ stratified fresh labels ($k\in\{10,25,50,100\}$; rng seed$+99$); \emph{coupled}---the full pipeline retrained end-to-end on $\mathcal{Y}'$ (a $k$-independent reference); \emph{frozen head}---the frozen backbone with a head trained on the full $\mathcal{Y}'$ labeling (a $k$-independent ceiling reference). Shared configuration as E3: 60 epochs, batch 32, learning rate $10^{-3}$, 10 validation clips per class, initialization \texttt{runs/ntu\_phaseB/joint\_pretext/epoch120\_model.pt}. One caliber change against E3, disclosed: the annotation pool is enlarged from 50 to 100 clips per class so the $k{=}100$ rung is drawable; the $k{=}10$ rung is therefore a trend reference, not an exact replication of E3. Seed coverage: seed 42 at $k\in\{10,25,50\}$; seeds 42/43/44 at $k{=}100$ (the rung with the smallest expected margin). Decision rule (pre-specified): $k^{\ast}=\min\{k : \mathrm{acc}(\text{coupled})-\mathrm{acc}(\text{decoupled}(k))\leq 2.3\,\mathrm{pp}\}$ on seed means, with the $\pm2.3$\,pp parity band of E6.
+Episode: the identical E3 split/addition definition ($\mathcal{Y}\to\mathcal{Y}'$: $22\to29$ classes; split delta 0.06; four additions with no $\mathcal{Y}$-era source), built once with episode seed 42; arm seeds vary training randomness only. Arms: \emph{decoupled}---the frozen $\mathcal{Y}$-era backbone keeps the 19 retained classes via remap with zero new labels, and each of the ten new classes receives exactly $k$ stratified fresh labels ($k\in\{10,25,50,100\}$; rng seed$+99$); \emph{coupled}---the full pipeline retrained end-to-end on $\mathcal{Y}'$ (a $k$-independent reference); \emph{frozen head}---the frozen backbone with a head trained on the full $\mathcal{Y}'$ labeling (a $k$-independent ceiling reference). Shared configuration as E3: 60 epochs, batch 32, learning rate $10^{-3}$, 10 validation clips per class, initialization \texttt{runs/ntu\_phaseB/joint\_pretext/epoch120\_model.pt}. One caliber change against E3, disclosed: the annotation pool is enlarged from 50 to 100 clips per class so the $k{=}100$ rung is drawable; the $k{=}10$ rung is therefore a trend reference, not an exact replication of E3. Seed coverage: seeds 42/43/44 at every rung (seeds 43/44 at $k\in\{10,25,50\}$ were added by a same-day supplemental run after the initial single-seed readout; both readouts are released; the $k$-independent coupled and frozen-head arms reuse their three-seed readout at every rung). Decision rule (pre-specified): $k^{\ast}=\min\{k : \mathrm{acc}(\text{coupled})-\mathrm{acc}(\text{decoupled}(k))\leq 2.3\,\mathrm{pp}\}$ on seed means, with the $\pm2.3$\,pp parity band of E6.
 
 \paragraph{Results (verbatim from the summary artifact).}
 \begin{center}
@@ -397,17 +420,17 @@ Episode: the identical E3 split/addition definition ($\mathcal{Y}\to\mathcal{Y}'
 \toprule
 $k$ (new labels/class; total) & Decoupled rebuild & Coupled ($k$-indep.) & Frozen head ($k$-indep.) & Margin (pp) \\
 \midrule
-10 (100) & 45.17\% & 95.86\% $\pm$ 0.49 & 71.72\% $\pm$ 0.49 & 50.69 \\
-25 (250) & 61.03\% & 95.86\% $\pm$ 0.49 & 71.72\% $\pm$ 0.49 & 34.83 \\
-50 (500) & 63.79\% & 95.86\% $\pm$ 0.49 & 71.72\% $\pm$ 0.49 & 32.07 \\
+10 (100) & 45.29\% $\pm$ 0.16 & 95.86\% $\pm$ 0.49 & 71.72\% $\pm$ 0.49 & 50.57 \\
+25 (250) & 59.08\% $\pm$ 2.52 & 95.86\% $\pm$ 0.49 & 71.72\% $\pm$ 0.49 & 36.78 \\
+50 (500) & 65.06\% $\pm$ 1.33 & 95.86\% $\pm$ 0.49 & 71.72\% $\pm$ 0.49 & 30.80 \\
 100 (1{,}000) & 72.41\% $\pm$ 0.00 & 95.86\% $\pm$ 0.49 & 71.72\% $\pm$ 0.49 & 23.45 \\
 \bottomrule
 \end{tabular}
 \end{center}
-Decoupled rungs $k\in\{10,25,50\}$ are single-seed (42); $k{=}100$ is three seeds (42/43/44; std 0.0). Wall-clock (seed 42): decoupled 92.1/100.2/109.0/128.8\,s across the rungs, versus coupled 234.0\,s and frozen head 128.4\,s; training clips 2{,}000/2{,}150/2{,}400/2{,}900 (decoupled) versus 2{,}900 (both reference arms).
+All rungs are three seeds (42/43/44; s.d.\ over seeds, ddof~0). Wall-clock (seed 42): decoupled 92.1/100.2/109.0/128.8\,s across the rungs, versus coupled 234.0\,s and frozen head 128.4\,s; training clips 2{,}000/2{,}150/2{,}400/2{,}900 (decoupled) versus 2{,}900 (both reference arms).
 
 \paragraph{Verdict and reading.}
-The decoupled arm rises monotonically (45.17\% $\to$ 61.03\% $\to$ 63.79\% $\to$ 72.41\%) but never approaches the coupled arm: the smallest margin, 23.45\,pp at $k{=}100$ (three seeds), sits far outside the $\pm2.3$\,pp parity band, so $k^{\ast}$ does not exist within the tested range (verdict \texttt{no\_parity\_within\_tested\_range}). At $k{=}100$ the decoupled arm coincides with the frozen-head ceiling (72.41\% vs.\ 71.72\%; same frozen path, same full new-label budget; the decoupled arm reads 72.41\% on every one of the three seeds), confirming saturation at the frozen-feature ceiling rather than label-limited progress. The residual-value hypothesis---accuracy parity at a reduced label budget---is therefore \emph{not supported at any tested budget}: decoupling's measured value on this transition type is the label and wall-clock saving (at $k{=}10$: 100 vs.\ 1{,}000 new labels; 92\,s vs.\ 234\,s, seed 42), and closing the accuracy gap appears to require adapting the frozen encoder rather than adding labels.
+The decoupled arm rises monotonically (45.29\% $\to$ 59.08\% $\to$ 65.06\% $\to$ 72.41\%) but never approaches the coupled arm: the smallest margin, 23.45\,pp at $k{=}100$ (three seeds), sits far outside the $\pm2.3$\,pp parity band, so $k^{\ast}$ does not exist within the tested range (verdict \texttt{no\_parity\_within\_tested\_range}). At $k{=}100$ the decoupled arm coincides with the frozen-head ceiling (72.41\% vs.\ 71.72\%; same frozen path, same full new-label budget; the decoupled arm reads 72.41\% on every one of the three seeds), confirming saturation at the frozen-feature ceiling rather than label-limited progress. The residual-value hypothesis---accuracy parity at a reduced label budget---is therefore \emph{not supported at any tested budget}: decoupling's measured value on this transition type is the label and wall-clock saving (at $k{=}10$: 100 vs.\ 1{,}000 new labels; 92\,s vs.\ 234\,s, seed 42), and closing the accuracy gap appears to require adapting the frozen encoder rather than adding labels.
 
 \section{Downstream ablation of the SMQ segmentation step}\label{app:smq}
 
@@ -434,11 +457,89 @@ Validation top-1: \textbf{45.95\% with SMQ vs.\ 45.95\% without SMQ}---$\Delta =
 Under this registered protocol, replacing SMQ's same-code segments with capacity-matched uniform windows leaves downstream clip-level accuracy unchanged ($\Delta = 0.0$). This closes the loop with the boundary-metric picture of the main text (Section~5): SMQ leads on boundary IoU (0.458 vs.\ 0.399) but trails on boundary F1 (0.343 vs.\ 0.396), and a fixed-grid probe is statistically on par (0.453)---so neither the boundary metrics nor this downstream ablation shows a consistent SMQ advantage. The result supports the paper's positioning of SMQ as an auxiliary, non-load-bearing proposal source: the claims of the main text do not rest on it. Scope: this is a controlled ablation of the \emph{segmentation step} under frozen features and a linear head, at one SMQ operating point (epoch-30 checkpoint, $K{=}8$) on the public-real tier; it is not by itself the full end-to-end pipeline attribution (rerunning the entire pseudo-label loop with and without SMQ), which remains registered future work. Within this caliber, the segmentation choice is a measured operating decision, not a load-bearing component.
 
 \paragraph{Cross-references.}
-Segmentation interface and downgraded positioning: main text Section~3.2.2; boundary-metric ablation: main text Section~5 (the component-ablation table there, row ``replace SMQ''); qualitative segmentation: main text Figure~3.
+Segmentation interface and downgraded positioning: main text Section~3.2.2; boundary-metric ablation: main text Section~5 (the component-ablation table there, row ``replace SMQ''); qualitative segmentation: Figure~1 of this supplement.
 
 \section{Relation to class-incremental learning}\label{app:cil}
 
 The main text positions this work against class-incremental learning (CIL) and continual learning in its related-work section; this note restates the positioning for readers of the supplement alone. Taxonomy evolution under a frozen backbone is adjacent to CIL~\citep{rebuffi2017icarl,wang2024continual,masana2023cil}: both settings reuse frozen or slowly updated representations, retrain heads, and reconcile logits across label spaces (classifier realignment; logit aggregation for merged heads). The objectives differ, however. CIL methods are designed and benchmarked for incremental accuracy over sequences of arriving, disjoint class sets, typically spending rehearsal buffers, distillation, or parameter isolation to resist catastrophic forgetting; this paper asks for the \emph{cost--benefit accounting} of an explicitly declared taxonomy remap $\mathcal{Y}\to\mathcal{Y}'$ over an already-collected unlabeled stream, where the semantic layer rebuilds coverage from rule-engine seeds plus unsupervised proposals and no rehearsal or memory-preservation objective is in play. CIL baselines therefore answer a question the registered transition protocol does not ask---accuracy retention across incremental sessions under an arriving-class stream---and are not comparable within the matched-budget, frozen-remap design without re-experimentation; conversely, the transition-cost endpoints reported here (wall-clock and annotation units at matched accuracy under a frozen remap) are not quantities CIL benchmarks report. The two lines are complementary: CIL supplies mechanisms for absorbing \emph{arriving} classes under stability--plasticity trade-offs, while this paper measures when the decoupled structure makes an \emph{arbitrary declared remap} worth absorbing at low cost. Scope: the measured episodes cover merges and renames (the TRANS-001/002 replications and the E1 bound) and, through the E3 episode above, splits and additions on the synthetic tier (the new-class accuracy ladder runs from 0\% for the zero-shot remap to 100\% under coupled full retraining).
+
+\section{Novelty survey matrix}\label{app:novelty}
+
+Table~\ref{tab:novelty} records the repository-scale survey behind the firstness claim (Section~2 of the main text): ten query groups over GitHub code search, the last a full scan of the maintained awesome-skeleton-AR catalog (18 survey candidates; the submission-time arXiv/CrossRef re-verification added the point-supervised row, and the revision added the three nearest-neighbor rows of the main text's positioning section, giving 22 candidate works across 11 table rows), each candidate checked against the three-part mechanism (self-supervised skeleton encoder $\to$ rule-engine seed anchors $\to$ clustered, confidence-filtered iterated pseudo-labels).
+
+\begin{table}[t]
+\centering
+\caption{Novelty survey matrix. ``Occupies niche?'' = does the work instantiate all three mechanism parts for temporal skeleton recognition. Rows are identified by name and venue; bibliography keys for works cited in the body appear in Section~2 of the main text (TREBA, h/BehaveMAE, and ProSL are the nearest neighbors), and the full check table is in the released repository's survey log.}
+\label{tab:novelty}
+\small
+\hyphenpenalty=10000
+\begin{tabularx}{\linewidth}{p{3.1cm}p{2.2cm}X p{1.2cm}}
+\hline
+Candidate & Domain / paradigm & Difference from our combination & Niche? \\
+\hline
+MAC-Learning (TPAMI 2023) & human skel., anchor contrastive & anchors are contrastive sample pairs; no seed-annotated anchors, no cluster pseudo-label loop & no \\
+Momentum-contrastive teacher (TIP); GRA (TNNLS) & human skel., semi-sup. & consistency/alignment regularization; no anchors, no taxonomy framing & no \\
+PSP-Learning / X-Invariant / Decouple-and-Squeeze / joint-bone fusion (2022) & human skel., semi-sup. & NTU consistency paradigms; none couples seeds+clustering+iteration & no \\
+PAINet (ICCV 2023); HAA4D; ISBFSAR; FICAMA; SMAM; UMEG-Net; SkelHCC & human skel., few/zero-shot & episode/metric learning; no pseudo-label expansion & no \\
+Skeleton-to-image (arXiv 2603.05963) & human skel., VFM features & representation only; no label-expansion loop & no \\
+TP-CanineNet (Animals 2026) & canine \textbf{RGB} video, pseudo-labels & video domain, no skeleton, no anchor clustering & no \\
+SMQ (ICCV 2025); hierarchical ST-VQ & unsup.\ skeleton segmentation & quantizes motion; no taxonomy semantics & no \\
+Point-supervised skeleton segmentation (arXiv 2603.06201) & human skel., prototype pseudo-labels & one labeled frame per segment; no rule-engine anchors, no confidence-filtered iteration, no transition-cost framing & no \\
+TREBA (CVPR 2021) & rodent/fly RGB+pose, task-programmed SSL & representation + probes under a fixed ethogram; no proposals, no label-expansion loop, no taxonomy-change setting & no \\
+h/BehaveMAE (ECCV 2024) & animal mocap, hierarchical masked AE & latents and probe accuracies only; no segmentation into proposals, no seed anchors, no pseudo-label loop & no \\
+ProSL (Machine Learning 2025) & human skel., unsup.\ cluster pseudo-labels & cluster identities train the \emph{encoder}; no external seed anchors, no confidence-filtered recognition loop, no transition-cost framing & no \\
+\hline
+\end{tabularx}
+\end{table}
+
+\section{Reproduction chain}\label{app:repro}
+
+{\raggedright\sloppy
+Data acquisition (provider licenses required): InterPet4D (Hugging Face \texttt{ohicarip/interpet4d}, smal\_npy), Animal Kingdom action-recognition lists + videos (CVPR 2022 release), APTv2 pose pool (official repository), NTU RGB+D 60 frame-50 export (research-use license). Then, in order: \texttt{scripts/export\_interpet4d.py} (p01 views) $\to$ physics pretext \texttt{scripts/train\_aimclr.py} $\to$ \texttt{scripts/eval\_aimclr.py} (E1) $\to$ SMQ \texttt{scripts/train\_smq\_segmentation.py} + \texttt{eval\_smq\_segmentation.py} + \texttt{diag\_p02\_motion\_words.py} (E2) $\to$ \texttt{scripts/run\_p03\_phasea.py} (E3) $\to$ \texttt{scripts/run\_p04\_tcl.py} (E4) $\to$ \texttt{scripts/run\_p05\_al\_warmstart.py} (warm-start) $\to$ synthetic tier: \texttt{gen\_synth\_22class.py} $\to$ \texttt{run\_p05\_full.py} (96.6\%) $\to$ \texttt{run\_c1\_decouple.py} (C1) $\to$ \texttt{run\_p05\_al\_efficiency.py} (C7/fig4) $\to$ \texttt{run\_ablation\_pretrain.py} (tab3 gradient) $\to$ \texttt{seg\_strategy\_ablation.py} (tab3 segmentation) $\to$ \texttt{scripts/run\_p05\_public\_real\_full12.py} \texttt{--stage manifest|extract} + \texttt{run\_p05\_public\_real\_full12\_train.py} (v1 tier; dataset paths configurable via the constants block) + \texttt{run\_p05\_public\_real\_full12\_endtoend.py} (five-arm study, Section~4.5 of the main text) $\to$ \texttt{run\_p07\_endtoend\_ak.py}, \texttt{run\_p08\_aimclr\_arm.py}, \texttt{run\_p10\_seedexpansion.py} (E7 and the warm-start ablation; superseded protocol, see the errata notes in the p07/p08/p10/p12/p14 reports) $\to$ \texttt{run\_r16\_endtoend\_pseudo.py} (reported end-to-end arms) $\to$ \texttt{run\_p11\_ak\_v2\_build.py}, \texttt{run\_p12\_ak\_v2\_replicate.py}, \texttt{run\_p13\_v2\_finetune.py} (E7b).
+
+NTU equivalence verification: \texttt{run\_ntu\_phaseb.py} + \texttt{run\_ntu\_lineareval.py} + \texttt{ntu\_ensemble\_3s.py}; then \texttt{run\_p14\_ntu\_featuredump.py}, \texttt{run\_p14\_ntu\_lowres.py} (E9; superseded protocol, see errata), \texttt{run\_r16\_ntu\_pseudo.py} (reported E9 arm), \texttt{run\_r12\_artifacts.py} (statistics artifacts cited in E7b/tab3), \texttt{run\_r16\_holm\_p04.py} (E4 Holm artifact).
+
+Every report JSON cited in the text is committed under \texttt{reports/}.\par}
+
+\section{Five-arm end-to-end comparison on the public-real tier}\label{app:fivearm}
+
+To complete the comparison matrix of the main text (Section~4.5), five new arms were run on the 12-class public-real protocol (9 classes with samples; 197 self-extracted clips; three seeds; identical budgets), reported alongside the two frozen-backbone conditions at full training-split budget. The seven reported conditions are: the two frozen-backbone head-retrain arms (warm vs.\ random backbone, trained on the full training split), the same two initializations with \emph{full} fine-tuning (no freezing), and three trivial baselines. Under the frozen protocol---the usage mode the decoupled design prescribes---the pretrained backbone outperforms a random one by $+8.3$\,pp (35.71\% vs.\ 27.38\%; seed-level std reported as dispersion, not a confidence interval). Under full fine-tuning, however, the advantage disappears (36.90\% vs.\ 36.90\%; the from-scratch arm even attains the best macro-F1, 0.119 vs.\ 0.103---macro-F1 over the 12-slot label space with absent classes counted as zero, same caliber across arms), which corroborates the gradient-ablation crossover finding of Section~5 of the main text: past the crossover annotation budget, the pretrained prior adds no value \emph{as a fine-tuning initialization}---the frozen-head usage mode the decoupled design prescribes retains the prior's benefit at full budget (the E6-real replication). Most tellingly, every deep arm and a flatten-plus-logistic-regression baseline cluster in a narrow 27--37\% band (random 6.0\%, majority 25.0\%): the ceiling of this tier is set by the self-extraction data bottleneck (197 clips, single-label, severe imbalance), not by the choice of model. The study is therefore evidence of a data bottleneck and of where pretrained priors do and do not help, not a performance claim. Reference calibers on this tier differ by protocol and are not interchangeable: 33.93\% (the unified-label 12-class reference of E7), 35.71\% and 36.90\% (this five-arm study), and 37.50\% and 35.42\% (the v2 re-extraction under two label encodings) span up to 3.6\,pp---a caliber effect, not a model effect; within-protocol arm comparisons are unaffected.
+
+\section{Comparability map and supplementary figures}
+
+\begin{table}[t]
+\centering
+\caption{Comparability map: nearest neighbors, their data and protocol, and the specific mismatch that prevents a head-to-head comparison with PSD. ``Superv.\ type'' is the supervision signal the method's main result is reported under. None of the rows is directly comparable to our three-tier protocol without re-experimentation, which we therefore do not claim as a comparison.}
+\label{tab:compmap}
+\small
+\setlength{\tabcolsep}{4pt}
+\hyphenpenalty=10000
+\emergencystretch=1.5em
+\begin{tabularx}{\linewidth}{p{2.65cm}p{2.3cm}p{2.3cm}p{1.9cm}X}
+\hline
+Method & Data / domain & Task \& protocol & Superv.\ type & Protocol mismatch vs.\ ours \\
+\hline
+TREBA~\citep{sun2021treba} & Mouse fly-courtship / rodent home-cage \textbf{RGB video + pose} & Representation learning; $k$-NN / classification probes, label-efficiency curves & Self-sup. + few expert labels & Image/pose features; no temporal proposals, no semantic layer, no taxonomy-change setting \\
+h/BehaveMAE~\citep{stoffl2024behavemae} & Animal mocap (mice, macaques, ASTM) \textbf{pose seqs.} & Unsup.\ masked pretraining; linear probes at three levels & Unsupervised & Pretraining quality only; no recognition pipeline, no pseudo-label loop, no transition-cost view \\
+ProSL~\citep{qin2025prosl} & Human skeletons (NTU60/120, Kinetics) & Unsup.\ contrastive learning with iterated cluster pseudo-labels; linear eval & Unsupervised (cluster pseudo-labels) & Trains the \emph{representation}; no seed anchors, no confidence-filtered recognition loop, human-only \\
+MAC-Learning~\citep{mac2022learning} & Human skeletons (NTU, Kinetics) & Semi-sup.\ representation learning via anchor contrastive pairs & Partial labels & Anchors = contrastive pairs, not rule-derived seeds; no cluster pseudo-label iteration \\
+Point-supervised seg.~\citep{pointsup2026} & Human skeletons & Action segmentation from one labeled frame per segment & Point labels & Single-frame labels, not rule seeds; segmentation only; no frozen-physics decoupling \\
+\textbf{Ours (PSD)} & \textbf{Quadruped streams + public human/ape benchmarks} & \textbf{Three-tier pre-registered protocol; recognition + segmentation under taxonomy transitions} & \textbf{Rule-engine seeds (tens of clips)} & --- \\
+\hline
+\end{tabularx}
+\end{table}
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\linewidth]{fig3_segmentation_qualitative.pdf}
+  \caption{Qualitative segmentation boundaries on the two extreme episodes of the public-real tier (lowest- and highest-IoU of the four episodes). Upper band per episode: seed pseudo-ground-truth segments (orange; rule-engine seeds, confidence $\geq 0.8$ and duration $\geq 0.5$\,s---a weak reference, not human annotation); lower band: SMQ predictions (teal; end-to-end K=8, epoch-30 checkpoint). The lower panel aggregates matched IoU against the equal-segment-count random-cut null over all four episodes (0.4577 $\pm$ 0.0488, 4/4 episodes above baseline), consistent with the ablation in Section~5 of the main text. Boundary matching is label-agnostic (Hungarian matching~\citep{kuhn1955hungarian} on IoU), so band colors encode segmentation quality, not class semantics.}
+\end{figure}
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\linewidth]{fig4_al_efficiency.pdf}
+  \caption{Active-learning efficiency on the synthetic layer (short-budget protocol; best validation accuracy, 22-class top-1 on a fixed ground-truth set, $n=330$; mean $\pm$ std, 3 seeds; budget axis on log scale). Panel (a) cold-start scorers; panel (b) warm-started in-domain scorers---the stronger negative evidence. Entropy sampling shows no detectable advantage: in panel (a) $b=20/50$ differences lie within noise, and random leads in mean at $b \geq 100$ (69.9 vs.\ 77.8\% at $b=100$, 2/3 seeds; 80.9 vs.\ 88.0\% at $b=200$, 3/3 seeds); in panel (b) random leads by 4.2--5.0\,pp at every budget above the shared initial set.}
+\end{figure}
 
 \bibliographystyle{elsarticle-num}
 \bibliography{refs}

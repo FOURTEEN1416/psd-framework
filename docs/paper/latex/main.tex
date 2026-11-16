@@ -11,8 +11,9 @@
 %%   pdflatex -interaction=nonstopmode main.tex ; bibtex main ; pdflatex x2
 %% ============================================================================
 
-\documentclass[a4paper,fleqn,review]{cas-sc}
-% ^ review = 双倍行距评审版（投稿用）。终稿清样期去掉 review 改 final。
+\documentclass[a4paper,fleqn]{cas-sc}
+% ^ 2026-11-16 篇幅压缩: 移除 review 选项（review=双倍行距, 59 页超长; final=单倍行距, 30 页达 CVIU 目标）。
+%   PR 时代的 "single-column, double-spaced" 约束随改投 CVIU 一并复核; 如需恢复评审版, 加回 review 选项即可。
 % 若标题页超一页: 加选项 longmktitle。
 
 \usepackage[numbers,sort&compress]{natbib}   % 数字引用（PR 刊出口径）
@@ -36,6 +37,15 @@
 \def\fps@figure{tbp}
 \def\fps@table{tbp}
 \makeatother
+
+%% 篇幅压缩（2026-11-16）: 浮动体间距微调（标准弹性范围低端）+ 参考文献小字+紧排
+\usepackage{setspace}
+\renewcommand{\bibfont}{\footnotesize}
+\setlength{\bibsep}{2.5pt plus 1pt}
+\setlength{\floatsep}{7pt plus 2pt minus 2pt}
+\setlength{\textfloatsep}{9pt plus 2pt minus 4pt}
+\setlength{\intextsep}{7pt plus 2pt minus 2pt}
+\setlength{\abovecaptionskip}{6pt plus 1pt minus 1pt}
 
 \begin{document}
 
@@ -117,13 +127,17 @@
 %%   75.3/79.8/82.6 与同 episode 零重训 remap 界 68.0%（E1 实测, runs/p1_sprint/zerobound_6049）如实写入;
 %%   60→10 coarse-grouping 的 76.8% 与 60→49 不同 episode, 摘要不再使用;
 %%   剩余价值主张按 E3 + k 阶梯 E3b 实测定稿（runs/p1_sprint/split_addition_episode, runs/p1_sprint/k_ladder）:
-%%   全梯度无平价 → 摘要如实写 "residual-value hypothesis not supported at any tested budget", decoupled 仅余成本节省;
+%%   全梯度无平价 → 摘要如实写 "residual-value hypothesis not supported at any budget", decoupled 仅余成本节省;
 %%   已删: 设问句 "This paper asks..."、线性头归因括注（nuance 保留于贡献3/结论/E9 正文）、"an honest negative result" 尾注。
-%%   词数（空白分词、数学组记 1、em/en-dash 不拆）=246，保守口径（em/en-dash 拆开）=249，均 ≤250
-%%   （2026-11-16 终审删词复测：摘要删 "measured"/"new" 各 1 词；计数法：剥 \textbf/\emph 壳保内容、
-%%   其余命令与 $ 脱壳、空白分词、含字母数字判词）；投稿系统计数可能有 ±2 出入）----------------
+%%   词数（空白分词、数学组记 1、em/en-dash 不拆）=242，保守口径（em/en-dash 拆开）=247，两口径均 ≤247（余量 ≥3）
+%%   （2026-11-16 P1 终审删词复测：删 "measured"/"tested" 各 1 词、"never within"→"outside"（−2）、
+%%   删 "at a large accuracy cost"（同句 45.3–72.4 vs 95.9 已量化该成本）；计数法：剥 \textbf/\emph 壳保内容、
+%%   其余命令与 $ 脱壳、空白分词、含字母数字判词（脚本 scripts/p1_sprint/count_abstract_words.py）；
+%%   投稿系统计数可能有 ±2 出入）----------------
+%% 2026-11-16 P1 头对头更新: NTU60 句嵌入外部基线对比（re-implemented AimCLR 66.7 / supervised ST-GCN 66.5, PSD 67.5;
+%%   full-budget 监督 83.5 占优如实写入）, 并为控词数微调压缩（merge 句改 equal-budget alternatives、controls 句紧凑化）。
 \begin{abstract}
-Evaluation criteria in behavior recognition keep evolving; every taxonomy change re-opens annotation and retraining. We propose PSD, a physics--semantics decoupled framework for skeleton-based behavior recognition: a label-free physics layer learns \emph{how skeletons move}; a semantic layer learns \emph{what behaviors are called} from rule-engine seeds via clustering, confidence-filtered pseudo-labels, and warm-started self-training. A pre-registered, tier-separated protocol reports cost against accuracy and publishes failures. A synthetic-tier taxonomy transition is absorbed at \textbf{$\geq$3$\times$ lower retraining cost than full retraining} (measured $6.07\times$). Controls attribute the savings to semantic rebuilding, not freezing: naive freezing collapses accuracy (68.6\% vs.\ 98.2\% full fine-tuning). On the real merge transition, the decoupled rebuild (75.3\%) trails its coupled arm (79.8\%) and matched-solver control (82.6\%); the same-episode zero-retraining remap bound reads 68.0\% at a 10\% labeled-head budget. On synthetic split/addition transitions, a labeled-budget ladder (10--100 labels/class) lifts the decoupled rebuild from 45.2\% to 72.4\% versus coupled 95.9\%---never within the $\pm$2.3\,pp parity band: the residual-value hypothesis is \emph{not supported at any tested budget}, and decoupling buys label and wall-clock savings at a large accuracy cost. The warm-started semantic layer reaches \textbf{82.0\% top-1 on 22 classes from 20 clips} (vs.\ \textbf{96.6\% full-budget}). A frozen-feature pipeline retains \textbf{90.7\% of full-budget linear-probe accuracy at 10\% labels} on NTU60 (88.9\% on NTU120; 85.8\% on PanAf500), collapses on UCF101 (66.6\%), and stays \emph{below chance} on the canine tier at 13\% budget (9.8\% vs.\ 11.1\% chance). Decoupling pays where a frozen backbone is reusable and semantics rebuild cheaply; the protocol exposes where it fails.
+Evaluation criteria in behavior recognition keep evolving; taxonomy changes re-open annotation and retraining. We propose PSD, a physics--semantics decoupled framework for skeleton-based behavior recognition: a label-free physics layer learns \emph{how skeletons move}; a semantic layer learns \emph{what behaviors are called} from rule-engine seeds via clustering, confidence-filtered pseudo-labels, and warm-started self-training. A pre-registered, tier-separated protocol reports cost against accuracy and publishes failures. A synthetic-tier taxonomy transition is absorbed at \textbf{$\geq$3$\times$ lower retraining cost than full retraining} ($6.07\times$). Controls attribute the savings to semantic rebuilding, not freezing (naive freezing: 68.6\% vs.\ 98.2\%). On the real merge transition the decoupled rebuild (75.3\%) trails equal-budget alternatives (coupled 79.8\%, matched-solver 82.6\%); the same-episode zero-retraining bound reads 68.0\% (10\% head budget). On split/addition transitions, a labeled-budget ladder (10--100 labels/class) lifts the decoupled rebuild from 45.3\% to 72.4\% versus coupled 95.9\%---outside the $\pm$2.3\,pp parity band: the residual-value hypothesis is \emph{not supported at any budget}, and decoupling buys only label and wall-clock savings. The warm-started semantic layer reaches \textbf{82.0\% top-1 on 22 classes from 20 clips} (vs.\ \textbf{96.6\% full-budget}). A frozen-feature pipeline retains \textbf{90.7\% of full-budget linear-probe accuracy at 10\% labels} on NTU60 (88.9\% NTU120; 85.8\% PanAf500)---above re-implemented AimCLR (67.5\% vs.\ 66.7\%) and supervised ST-GCN (66.5\%), though full-budget supervision dominates (83.5\%)---collapses on UCF101 (66.6\%), and stays \emph{below chance} on the canine tier at 13\% budget (9.8\% vs.\ 11.1\% chance). Decoupling pays where a frozen backbone is reusable and semantics rebuild cheaply; the protocol exposes where it fails.
 
 \end{abstract}
 %% [E1-INTERFACE·已消费 2026-11-16 统稿] E1（TRANS-002 同 episode 60→49 零重训界重测）已出数并回填三处：
@@ -132,8 +146,8 @@ Evaluation criteria in behavior recognition keep evolving; every taxonomy change
 %%   同步点: 本摘要句 + 01-introduction.tex 贡献1 + 06-conclusion-limitations.tex 结论段与 L12 + 04-experiments.tex
 %%   tab:attribution-controls（60→49 界两行）。60→10 的 76.8%/76.5% 仍是另一 episode 的合法数字, 不可混用。
 %% [E3b-INTERFACE·已消费 2026-11-16 统稿] k 阶梯（E3b: 同 split/addition episode 定义, k∈{10,25,50,100} 新标注/类,
-%%   池扩到 100/类支持 k=100, k=10 档为趋势参照非 E3 复现）: decoupled 45.2/61.0/63.8/72.4%（k=100 三种子 ±0.0）,
-%%   coupled 95.9%（±0.5, k 无关参照）, frozen-head 71.7%；coupled−decoupled 边际 50.69/34.83/32.07/23.45pp,
+%%   池扩到 100/类支持 k=100, k=10 档为趋势参照非 E3 复现）: decoupled 45.3/59.1/65.1/72.4%（全部档位三种子 42/43/44, std ddof=0; k=100 ±0.0）,
+%%   coupled 95.9%（±0.5, k 无关参照）, frozen-head 71.7%；coupled−decoupled 边际 50.57/36.78/30.80/23.45pp,
 %%   全梯度落在 ±2.3pp 平价带外 → k*=None（verdict=no_parity_within_tested_range）。
 %%   摘要剩余价值句据此降级为 "not supported at any tested budget"；decoupled 仅余标注/墙钟节省
 %%   （k=10: 100 vs 1000 新标注, 92s vs 234s, seed 42）。
@@ -150,7 +164,7 @@ Evaluation criteria in behavior recognition keep evolving; every taxonomy change
 \item Decoupled framework absorbs taxonomy evolution cheaply (synthetic tier)
 \item Taxonomy transitions cost $\geq$3x less wall clock (measured 6.07x, synthetic tier)
 \item Warm start: 82.0\% top-1 from 20 clips (vs.\ 96.6\% full-budget, offset tier)
-\item Frozen-feature pipeline retains 90.7\% of full-budget accuracy at 10\% labels (NTU60)
+\item Frozen-feature pipeline retains 90.7\% of full-budget accuracy at 10\% labels (NTU60), above re-implemented AimCLR and supervised ST-GCN baselines
 \item Canine tier stays below chance at 13\% budget (9.8\% vs.\ 11.1\%)---honest boundary
 \end{highlights}
 
@@ -166,6 +180,9 @@ decoupled architecture \sep skeleton-based action recognition \sep taxonomy evol
 \hfuzz=120pt
 \maketitle
 \hfuzz=0.1pt
+
+%% 篇幅压缩: 正文行距 0.94（单倍行距范畴内微调; \begin{document} 后设置以确保生效）
+\setstretch{0.94}
 
 %% ---------------- 正文装配区（truth = 各节 tex，2026-09-10 交割）----------------
 \input{sections/01-introduction}          % hist-draft: introduction.md (Abstract 已内置上方)
@@ -194,21 +211,21 @@ This research did not receive any specific grant from funding agencies in the pu
 
 \section*{Data availability}
 %% truth: reports/submission-package-2026-08-26.md §3.1 + 许可A保守承诺(2026-09-03): 不随包分发派生骨架
-All datasets used in this study are publicly available from their original providers: InterPet4D (Hugging Face, ohicarip/interpet4d, CC BY-NC 4.0)%
+All datasets are publicly available from their original providers: InterPet4D (Hugging Face, ohicarip/interpet4d, CC BY-NC 4.0)%
 %% 【许可A已落实为保守承诺】派生骨架不随包再分发, 仅提供提取脚本
-; Animal Kingdom (CVPR 2022 official release); APTv2 (official repository, ViTAE-Transformer/APTv2); NTU RGB+D 60 (obtained under the provider's research-use license terms)%
+; Animal Kingdom (CVPR 2022 official release); APTv2 (official repository, ViTAE-Transformer/APTv2); NTU RGB+D 60 (provider's research-use license terms)%
 %% 【许可B留档】见 dev-docs/ntu-license-archive-2026-09-03.md
-; and a canine pose corpus derived from publicly released annotations (dog-pose/StanfordExtra lineage). Derived skeleton files from these sources are not redistributed; the released repository provides the extraction and assembly scripts that regenerate them from the original providers' data. The synthetic benchmark is fully generated by our released code with deterministic seeds. No new data were collected by the authors; the pre-registered working-dog pilot protocol (PSD-K9-PREREG-001) is released with the repository.
-All reported numbers are reproducible from archived configurations, released scripts, and the reproduction appendix (Appendix~\ref{app:repro}) in the public repository (github.com/FOURTEEN1416/psd-framework; review snapshots are tagged \texttt{review-snapshot} against the dated commit chain); external datasets and pretrained backbones must be obtained under their own licenses, and derived skeletons regenerate from provider data via the released scripts%
+; and a canine pose corpus derived from publicly released annotations (dog-pose/StanfordExtra lineage). Derived skeleton files are not redistributed; the released repository provides extraction and assembly scripts that regenerate them from the providers' data. The synthetic benchmark is fully generated by released code with deterministic seeds. No new data were collected; the pre-registered working-dog pilot protocol (PSD-K9-PREREG-001) is released with the repository.
+All reported numbers are reproducible from archived configurations, released scripts, and the reproduction chain of the supplementary material, all in the public repository (github.com/FOURTEEN1416/psd-framework; review snapshots tagged \texttt{review-snapshot} against the dated commit chain); external datasets and pretrained backbones must be obtained under their own licenses, and per-experiment evidence files accompany the code%
 %% 【审稿快照锁定: 中间人防护——指向不可变 tag 而非可变 main; tag 在最终 commit 后打, 无自引用; 后续大改重打 tag】
-; per-experiment evidence files accompany the code.
+.
 %% 【投稿前自查清单 · 2026-11-16 回修写手核验】（本注释不进 PDF；投稿前逐项勾销）
 %% [已核·本地在位] runs/p1_sprint/frozen_backbone_contrast/summary.json（68.64/98.18/97.73%；176.9/342.3/365.7s）
 %% [已核·本地在位] runs/p1_sprint/merge_rename_upper/summary.json（76.76/76.51%，60→10 episode；参照 71.5%）
 %% [已核·本地在位] runs/p1_sprint/smq_downstream_ablation/summary.json（Δ=0.0）
 %% [已核·本地在位 2026-11-16 统稿] 本轮四补强实验 summary：runs/p1_sprint/{zerobound_6049（E1: 68.04/67.97/66.05/67.56%, 112.5s）,
 %%     semantic_rebuild_1100（E2: C′44.93/D′60.16/M48.20%, 180.0/6.8/10.2s, 26.47×）, split_addition_episode（E3: 42.99/45.75/68.05/97.13%, 3.02×）,
-%%     k_ladder（E3b: 45.17/61.03/63.79/72.41%, coupled 95.86±0.49, frozen-head 71.72±0.49, 边际 50.69/34.83/32.07/23.45pp, k*=None）}
+%%     k_ladder（E3b 三种子合并 2026-11-16: 45.29±0.16/59.08±2.52/65.06±1.33/72.41±0.00%, coupled 95.86±0.49, frozen-head 71.72±0.49, 边际 50.57/36.78/30.80/23.45pp, k*=None）}
 %%     ——均已逐字节一致镜像至 reports/p1_sprint_evidence/（含 60→10 界、三臂对照及 E1–E3b 四份 summary 等共 19 文件 + MANIFEST.md）。
 %% [已核·本地在位+git 已跟踪] reports/r22-ntu-transition-2026-09-07.json 与 reports/r23-trans002-*.json（含 mexp）
 %% [已核·网络] 仓库公开可访问（github.com/FOURTEEN1416/psd-framework，HTTP 200，repository_public=true，2026-11-16 抓取）
@@ -222,55 +239,15 @@ All reported numbers are reproducible from archived configurations, released scr
 
 \section*{Ethics statement}
 %% truth: reports/submission-package-2026-08-26.md §3.2 + InterPet4D 官方卡 "Ethical Considerations" 节逐字引用（本地镜像 data/interpet4d/README.md L165-169, 2026-09-03 取证）
-This study exclusively re-analyzes publicly available, previously published datasets collected by third-party research groups; the authors conducted no new experiments on animals or human subjects. Original data collection complied with the protocols of the respective providers cited in Section~\ref{sec:datasets} (InterPet4D, Animal Kingdom, APTv2, NTU RGB+D); the public canine pose corpora used for skeleton extraction (dog-pose/StanfordExtra lineage) are described in the Data availability statement. For InterPet4D, the dataset providers state that ``All participants provided informed consent for data release'', that ``No personally identifying information (faces / voices of bystanders) is included'', and that ``all interactions were supervised and non-coercive'' with respect to pet welfare. Sex- and gender-based analyses were not performed; this scope restriction is acknowledged within the limitations on cross-family generalization (Section~\ref{sec:conclusion}). The application context (working-dog training) involves no intervention by this work; all reported systems are offline analysis pipelines.
+This study exclusively re-analyzes publicly available, previously published datasets collected by third-party research groups; the authors conducted no new experiments on animals or human subjects. Original data collection complied with the providers' protocols cited in Section~\ref{sec:datasets}; the public canine pose corpora (dog-pose/StanfordExtra lineage) are described in the Data availability statement. For InterPet4D, the providers state that ``All participants provided informed consent for data release'', that ``No personally identifying information (faces / voices of bystanders) is included'', and that ``all interactions were supervised and non-coercive'' with respect to pet welfare. Sex- and gender-based analyses were not performed; this scope restriction is acknowledged within the limitations on cross-family generalization (Section~\ref{sec:conclusion}). The application context (working-dog training) involves no intervention by this work; all reported systems are offline analysis pipelines.
 
 \section*{Declaration of generative AI use}
 %% GenAI 披露颗粒度终裁(2026-09-11 用户裁决): 点名 GLM-5.3-Flash (Zhipu AI); 工具清单如有增补须同步更新本段
 During the preparation of this work the authors used GLM-5.3-Flash (Zhipu AI) to assist with code development, experiment orchestration, and language editing. After using this tool, the authors reviewed and edited the content as needed and take full responsibility for the content of the published article.
 
-%% ---------------- 附录（R12 启用: 首次性证据矩阵 + 复现链, 消除"Supplementary Material 不存在"指控）----------------
-\appendix
-%% 跨文档引用: m_c 完整形式在独立编译的补充材料 supplementary.tex（R2-4 承诺兑现, 附录 A 编号 app:mc）
-\section{The frequency-aware margin factor $m_c$: exact instantiation}\label{app:mc}
-This appendix summarizes the $m_c$ instantiation whose full version is Section~A of the supplementary material: $m_c = \max(\rho, (\pi_c/\pi_{\max})^{\alpha})$ with defaults $\alpha = 1.0$ and $\rho = 0.5$ (floor ratio), base threshold $\tau$ fixed by quantile targeting at first-round coverage $0.35$, and two pre-registered ablation hooks ($\alpha \in \{0, 0.5, 1\}$; coverage target $\in \{0.25, 0.35, 0.50\}$). The reference implementation is \texttt{frequency\_aware\_thresholds} in \texttt{psd/training/jia\_prototype.py} of the released repository.
-
-\section{Novelty survey matrix}\label{app:novelty}
-
-Table~\ref{tab:novelty} records the repository-scale survey behind the firstness claim (Section~\ref{sec:related}): ten query groups over GitHub code search, the last a full scan of the maintained awesome-skeleton-AR catalog (18 survey candidates; the submission-time arXiv/CrossRef re-verification added the point-supervised row, and the revision added the three nearest-neighbor rows of Section~\ref{ssec:rw-position}, giving 22 candidate works across 11 table rows), each candidate checked against the three-part mechanism (self-supervised skeleton encoder $\to$ rule-engine seed anchors $\to$ clustered, confidence-filtered iterated pseudo-labels).
-
-\begin{table}[pos=t]
-\centering
-\caption{Novelty survey matrix. ``Occupies niche?'' = does the work instantiate all three mechanism parts for temporal skeleton recognition. Rows are identified by name and venue; bibliography keys for works cited in the body appear in Section~\ref{sec:related} (TREBA, h/BehaveMAE, and ProSL are the nearest neighbors of Section~\ref{ssec:rw-position}), and the full check table is in the released repository's survey log.}
-\label{tab:novelty}
-\small
-\hyphenpenalty=10000
-\begin{tabularx}{\linewidth}{p{3.1cm}p{2.2cm}X p{1.2cm}}
-\hline
-Candidate & Domain / paradigm & Difference from our combination & Niche? \\
-\hline
-MAC-Learning (TPAMI 2023) & human skel., anchor contrastive & anchors are contrastive sample pairs; no seed-annotated anchors, no cluster pseudo-label loop & no \\
-Momentum-contrastive teacher (TIP); GRA (TNNLS) & human skel., semi-sup. & consistency/alignment regularization; no anchors, no taxonomy framing & no \\
-PSP-Learning / X-Invariant / Decouple-and-Squeeze / joint-bone fusion (2022) & human skel., semi-sup. & NTU consistency paradigms; none couples seeds+clustering+iteration & no \\
-PAINet (ICCV 2023); HAA4D; ISBFSAR; FICAMA; SMAM; UMEG-Net; SkelHCC & human skel., few/zero-shot & episode/metric learning; no pseudo-label expansion & no \\
-Skeleton-to-image (arXiv 2603.05963) & human skel., VFM features & representation only; no label-expansion loop & no \\
-TP-CanineNet (Animals 2026) & canine \textbf{RGB} video, pseudo-labels & video domain, no skeleton, no anchor clustering & no \\
-SMQ (ICCV 2025); hierarchical ST-VQ & unsup.\ skeleton segmentation & quantizes motion; no taxonomy semantics & no \\
-Point-supervised skeleton segmentation (arXiv 2603.06201) & human skel., prototype pseudo-labels & one labeled frame per segment; no rule-engine anchors, no confidence-filtered iteration, no transition-cost framing & no \\
-TREBA (CVPR 2021) & rodent/fly RGB+pose, task-programmed SSL & representation + probes under a fixed ethogram; no proposals, no label-expansion loop, no taxonomy-change setting & no \\
-h/BehaveMAE (ECCV 2024) & animal mocap, hierarchical masked AE & latents and probe accuracies only; no segmentation into proposals, no seed anchors, no pseudo-label loop & no \\
-ProSL (Machine Learning 2025) & human skel., unsup.\ cluster pseudo-labels & cluster identities train the \emph{encoder}; no external seed anchors, no confidence-filtered recognition loop, no transition-cost framing & no \\
-\hline
-\end{tabularx}
-\end{table}
-
-\section{Reproduction chain}\label{app:repro}
-
-{\raggedright\sloppy
-Data acquisition (provider licenses required): InterPet4D (Hugging Face \texttt{ohicarip/interpet4d}, smal\_npy), Animal Kingdom action-recognition lists + videos (CVPR 2022 release), APTv2 pose pool (official repository), NTU RGB+D 60 frame-50 export (research-use license). Then, in order: \texttt{scripts/export\_interpet4d.py} (p01 views) $\to$ physics pretext \texttt{scripts/train\_aimclr.py} $\to$ \texttt{scripts/eval\_aimclr.py} (E1) $\to$ SMQ \texttt{scripts/train\_smq\_segmentation.py} + \texttt{eval\_smq\_segmentation.py} + \texttt{diag\_p02\_motion\_words.py} (E2) $\to$ \texttt{scripts/run\_p03\_phasea.py} (E3) $\to$ \texttt{scripts/run\_p04\_tcl.py} (E4) $\to$ \texttt{scripts/run\_p05\_al\_warmstart.py} (warm-start) $\to$ synthetic tier: \texttt{gen\_synth\_22class.py} $\to$ \texttt{run\_p05\_full.py} (96.6\%) $\to$ \texttt{run\_c1\_decouple.py} (C1) $\to$ \texttt{run\_p05\_al\_efficiency.py} (C7/fig4) $\to$ \texttt{run\_ablation\_pretrain.py} (tab3 gradient) $\to$ \texttt{seg\_strategy\_ablation.py} (tab3 segmentation) $\to$ \texttt{scripts/run\_p05\_public\_real\_full12.py} \texttt{--stage manifest|extract} + \texttt{run\_p05\_public\_real\_full12\_train.py} (v1 tier; dataset paths configurable via the constants block) + \texttt{run\_p05\_public\_real\_full12\_endtoend.py} (five-arm study, Section~\ref{sec:comparison}) $\to$ \texttt{run\_p07\_endtoend\_ak.py}, \texttt{run\_p08\_aimclr\_arm.py}, \texttt{run\_p10\_seedexpansion.py} (E7 and the warm-start ablation; superseded protocol, see the errata notes in the p07/p08/p10/p12/p14 reports) $\to$ \texttt{run\_r16\_endtoend\_pseudo.py} (reported end-to-end arms) $\to$ \texttt{run\_p11\_ak\_v2\_build.py}, \texttt{run\_p12\_ak\_v2\_replicate.py}, \texttt{run\_p13\_v2\_finetune.py} (E7b).
-
-NTU equivalence verification: \texttt{run\_ntu\_phaseb.py} + \texttt{run\_ntu\_lineareval.py} + \texttt{ntu\_ensemble\_3s.py}; then \texttt{run\_p14\_ntu\_featuredump.py}, \texttt{run\_p14\_ntu\_lowres.py} (E9; superseded protocol, see errata), \texttt{run\_r16\_ntu\_pseudo.py} (reported E9 arm), \texttt{run\_r12\_artifacts.py} (statistics artifacts cited in E7b/tab3), \texttt{run\_r16\_holm\_p04.py} (E4 Holm artifact).
-
-Every report JSON cited in the text is committed under \texttt{reports/}.\par}
+%% ---------------- 附录已整体移入补充材料（2026-11-16 篇幅压缩）----------------
+%% m_c 完整实例化 = supplementary.tex Section 1（app:mc）; 新颖性调研矩阵 = Section 6; 复现链 = Section 7;
+%% 复现链 = reproduction-chain section。正文引用一律写 "the supplementary material" 文字引用。
 
 %% ---------------- 参考文献 ----------------
 
