@@ -16,8 +16,8 @@
 %   PR 时代的 "single-column, double-spaced" 约束随改投 CVIU 一并复核; 如需恢复评审版, 加回 review 选项即可。
 % 若标题页超一页: 加选项 longmktitle。
 
-\usepackage[numbers,sort&compress]{natbib}   % 数字引用（PR 刊出口径）
-%\usepackage[authoryear]{natbib}             % 备选: 著者-年份制（配 cas-model2-names）
+\usepackage[authoryear]{natbib}              % 著者-年份引用（CVIU GFA References 节要求 author-year，2026-11-16 复核）
+%\usepackage[numbers,sort&compress]{natbib}  % 备选: 数字引用（PR 时代口径）
 \usepackage{xcolor}
 \usepackage{tabularx}                         % 表格自动换行（tab1/tab2/tab3 版心适配）
 \usepackage{algorithm}                        % Algorithm 1 伪代码（03-method）
@@ -251,8 +251,8 @@ During the preparation of this work the authors used GLM-5.3-Flash (Zhipu AI) to
 
 %% ---------------- 参考文献 ----------------
 
-\bibliographystyle{elsarticle-num}           % 官方 Elsevier 数字样式（MiKTeX 自带）
-%\bibliographystyle{cas-model2-names}        % 备选: CAS 著者-年份样式
+\bibliographystyle{cas-model2-names}         % CAS 著者-年份样式（CVIU GFA References 节要求 author-year，2026-11-16 复核）
+%\bibliographystyle{elsarticle-num}          % 备选: 官方 Elsevier 数字样式
 \bibliography{refs}
 
 %% lastpage 修复: 强制浮动体在 \AtEndDocument 记录 LastPage 之前输出,
