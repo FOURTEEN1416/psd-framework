@@ -12,6 +12,9 @@
 %%      E3b 标注预算阶梯 k∈{10,25,50,100}(app:kladder)
 %%      —— 数字全部取自 runs/p1_sprint/{zerobound_6049,semantic_rebuild_1100,split_addition_episode,k_ladder}/summary.json
 %%      （reports/p1_sprint_evidence/ 有逐字节一致副本）, 禁编造;
+%%   B+ 真实 tier 冻结编码器对照（app:frozenreal, 2026-11-16 执行）: NTU120/UCF101/PanAf500 三臂 C/A/B + NTU60 未重跑注记;
+%%      数字源 runs/p1_sprint/{ntu120,ucf101,panaf500}/summary.json, 与 reports/p5b-ntu120|p5b-ucf101|p23-panaf-retention-2026-09-07.json
+%%      逐位一致（weights_provenance=retrained_same_protocol_saved 已披露）, 禁编造。
 %%   E  CIL 定位说明段(app:cil, 与正文 02-related-work 的 Relation to class-incremental and continual learning 段对齐)。
 %% 编译: pdflatex -interaction=nonstopmode supplementary.tex ; bibtex supplementary ; pdflatex x2
 %% 纪律: pdflatex 非 Unicode 引擎——排版面禁 CJK; 数字只来自实验产物, 禁编造;
@@ -42,7 +45,7 @@
 \noindent
 This supplement documents three items referenced from the main text.
 Section~\ref{app:mc} gives the complete instantiation of the frequency-aware margin factor $m_c$, whose summary appears in Appendix~A of the main text and whose required shape is stated in Section~3.3.2 there.
-Section~\ref{app:trans} gives the full pre-registered protocols for the taxonomy-transition replications (PSD-NTU-TRANS-001/002, referenced from Sections~4.3 and 4.5 of the main text) and for the two attribution controls of the main text's attribution-controls table (Section~4.4 there): the synthetic-tier frozen-backbone three-arm contrast and the merge/rename zero-retraining bound; it also lists the per-seed paired wall-clock ratios behind the synthetic-tier E6 headline ratio (Section~\ref{app:e6seeds}).
+Section~\ref{app:trans} gives the full pre-registered protocols for the taxonomy-transition replications (PSD-NTU-TRANS-001/002, referenced from Sections~4.3 and 4.5 of the main text) and for the two attribution controls of the main text's attribution-controls table (Section~4.4 there): the synthetic-tier frozen-backbone three-arm contrast---extended in this revision to the real E9-series tiers NTU120/UCF101/PanAf500 as explicit frozen-encoder arms (Section~\ref{app:frozenreal})---and the merge/rename zero-retraining bound; it also lists the per-seed paired wall-clock ratios behind the synthetic-tier E6 headline ratio (Section~\ref{app:e6seeds}).
 Section~\ref{app:smq} gives the protocol and result of the controlled downstream ablation of the SMQ segmentation step.
 Section~\ref{app:reinforce} documents the four reinforcement protocols of the decoupling claim---E1 (the zero-retraining bound re-measured on the same $60\to49$ episode as the TRANS-002 rebuild), E2 (the three TRANS-002 arms re-run at the three-arm contrast's 1{,}100-clip budget), E3 (a synthetic-tier split/addition migration episode), and E3b (a labeled-budget ladder on the same episode)---specified in advance (same-day; protocol text committed before runs), executed the same day, and backfilled verbatim from the released artifacts.
 Section~\ref{app:cil} restates the relation to class-incremental learning for readers of the supplement alone.
@@ -231,6 +234,34 @@ C: scratch & 97.73\% & 81 & 96.82\% & 365.7\,s & 926{,}491 / 926{,}491 \\
 
 \paragraph{Reading (the registered interpretation).}
 Naive freezing collapses accuracy: the frozen arm reaches 68.64\% against 98.18\% for full fine-tuning ($-29.5$\,pp) while saving only part of the wall-clock (176.9\,s vs.\ 342.3\,s, a $1.9\times$ difference). A generic frozen-backbone-plus-standard-head design therefore does \emph{not} reproduce the decoupled result on this tier, and the $\geq 3\times$ retraining saving is not ``freezing for free'': freezing alone buys a modest speedup at a large accuracy price. The mechanism that preserves accuracy at reduced cost is the semantic-layer rebuild---in E6 (main text, Section~4.3) the decoupled semantic-layer rebuild averages 31.1\,s against 188.7\,s for full-pipeline retraining ($6.07\times$; same-seed paired ratios never below $3.99\times$) with the accuracy difference inside the pre-registered $\pm 2.3$\,pp noise band. Budget caliber: this contrast runs at 50 clips per class (1{,}100 clips) whereas the E6 comparison runs at $n{=}30$/$n{=}100$ clips per class, so the 31.1\,s versus 188.7\,s figures are not same-budget with the arms above; the cross-experiment comparison is mechanistic, not a shared-budget cost ratio (per-seed E6 ratios in Section~\ref{app:e6seeds}). Both full-fine-tuning arms converge to the same ceiling (98.18\% fullft vs.\ 97.73\% scratch), consistent with the gradient-ablation crossover finding of the main text (Section~5): at a saturated budget the pretrained initialization adds no fine-tuning value. The load-bearing comparison for the decoupling claim is thus frozen-plus-standard-head (collapses) versus the semantic rebuild (matches full retraining at lower cost), not freezing alone.
+
+\subsection{Real-tier frozen-encoder control (NTU120, UCF101, PanAf500)}\label{app:frozenreal}
+
+\paragraph{Status and provenance.}
+Extension of the synthetic-tier question above to the real E9-series tiers, closing the gap that the main text's attribution-controls table previously held synthetic-layer frozen evidence only (reviewer remark on the original submission: is freezing sufficient on the real tiers?). Registered protocols: PSD-NTU120-PREREG-001, PSD-UCF101-PREREG-001, and PSD-PANAF-PREREG-001 (frozen-encoder arms), reusing each tier's reported E9-series pipeline item by item---base pipelines \texttt{scripts/run\_p5b\_generic\_retention.py} (NTU120, UCF101; reported 2026-09-07) and \texttt{scripts/run\_p23\_panaf\_retention.py} (PanAf500; reported 2026-09-07); drivers \texttt{scripts/p1\_sprint/frozen\_ntu120.py}, \texttt{frozen\_ucf101.py}, and \texttt{frozen\_panaf500.py}; evidence \texttt{runs/p1\_sprint/ntu120/summary.json}, \texttt{runs/p1\_sprint/ucf101/summary.json}, and \texttt{runs/p1\_sprint/panaf500/summary.json} (mode \texttt{full}).
+
+\paragraph{Protocol (the only differing variable is the encoder's trainability).}
+Data, preprocessing, encoder, budgets, and heads are identical to each tier's reported E9 pipeline: same pkl and loading/preprocessing (NTU120 \texttt{data/pyskl/ntu120\_hrnet.pkl}, 12{,}000 clips; UCF101 \texttt{data/pyskl/ucf101\_hrnet.pkl}, 10{,}000 clips; PanAf500 \texttt{runs/p7\_asbar/panaf500\_T30.pkl}, 500 clips, nine classes), same joint-MLP encoder (flatten($T{\times}V{\times}3$) $\to$ 512 $\to$ ReLU $\to$ 256; seed 42, 80 epochs, AdamW, lr $10^{-3}$, weight decay $10^{-4}$), same 10\% stratified labeled-budget draw, same heads. The single difference: after pretext training the encoder is explicitly frozen---every parameter set \texttt{requires\_grad=False} and evaluated in inference mode, with trainable parameters asserted to be zero (0/930{,}620 NTU120; 0/941{,}157 UCF101; 0/1{,}240{,}073 PanAf500)---and the frozen checkpoint is persisted per tier (\texttt{encoder.pt}). Three arms are then trained on the frozen 256-d features: (c)~the full-label linear reference (StandardScaler + logistic regression, \texttt{max\_iter}=1000, on 100\% of the train split); (a)~a 10\% stratified linear head; (b)~the 10\% PSD semantic pipeline (\texttt{run\_selftrain}, E9 parameters) over seeds 42--51 (ten seeds) on NTU120 and UCF101 and seeds 42--71 (thirty seeds) on PanAf500. Decision rule as registered in the E9 series: retention $= \mathrm{mean}(b)/c$; $\geq 90\%$ \textbf{CONFIRMS}, 85--90\% \textbf{PARTIAL}, $< 85\%$ \textbf{FAILS}.
+
+\paragraph{Weights provenance (disclosed).}
+The 2026-09-07 reported runs did not persist encoder weights, so the frozen arms use a same-protocol retrain (same pkl, preprocessing, seed, and 80-epoch schedule): protocol-identical, not bitwise-identical (GPU nondeterminism). The artifacts record this as \texttt{weights\_provenance} = \texttt{retrained\_same\_protocol\_saved} with the caveat inline. Every downstream number below nevertheless reproduces the reported E9-series artifacts field for field---verified by direct comparison against \texttt{reports/p5b-ntu120-retention-2026-09-07.json}, \texttt{reports/p5b-ucf101-retention-2026-09-07.json}, and \texttt{reports/p23-panaf-retention-2026-09-07.json}: \texttt{full\_ref}, \texttt{linear\_10pct}, all per-seed \texttt{b\_arms}, \texttt{retention}, \texttt{linear\_retention}, and \texttt{verdict} are identical.
+
+\paragraph{Results (verbatim from the summary artifacts).}
+\begin{center}
+\begin{tabular}{lccccc}
+\toprule
+Tier & C: full-label lin.\ ref. & A: 10\% linear & B: 10\% PSD (mean $\pm$ std) & Retention (B/C) & Verdict \\
+\midrule
+NTU120 & 54.34\% & 45.42\% & 48.29\% $\pm$ 0.76 (10 seeds) & 88.9\% & \textbf{PARTIAL} \\
+UCF101 & 23.11\% & 14.04\% & 15.40\% $\pm$ 1.89 (10 seeds) & 66.6\% & \textbf{FAILS} \\
+PanAf500 & 60.0\% & 52.0\% & 51.47\% $\pm$ 8.58 (30 seeds) & 85.8\% & \textbf{PARTIAL} \\
+\bottomrule
+\end{tabular}
+\end{center}
+NTU60 was not re-run in this control; its reported E9 frozen-feature reference stands (arm B 67.53\% $\pm$ 0.24 at 10\% labels; arm C 74.45\%; retention 90.7\%). Full-run wall-clock: 1{,}845.1\,s (NTU120), 3{,}365.0\,s (UCF101), 53.2\,s (PanAf500).
+
+\paragraph{Reading.}
+On the two tiers whose full-label frozen-feature references are separable (NTU120 54.34\%, PanAf500 60.0\%), the frozen 10\% arms retain 88.9\% and 85.8\% of the reference (\textbf{PARTIAL}); on UCF101, whose reference is itself weak (23.11\%), retention collapses to 66.6\% (\textbf{FAILS}). The frozen PSD arm trails the full-label reference by 6.05\,pp (NTU120), 8.53\,pp (PanAf500), and 7.71\,pp (UCF101) in absolute top-1, but its relative retention is monotone in reference quality---the same pretext-learnability gradient as the E9 series (NTU60 90.7\% $\to$ NTU120 88.9\% $\to$ UCF101 66.6\%). The semantic layer's margin over the plain 10\% linear head is likewise tier-dependent ($+2.87$\,pp NTU120, $+1.36$\,pp UCF101, $-0.53$\,pp PanAf500): freezing alone is approximately sufficient on the strong-reference tiers and demonstrably insufficient on the weak-reference tier, which is why the decoupled design's claims are scoped to the measured tiers rather than asserted universally.
 
 \subsection{Synthetic-tier transition cost (E6): per-seed paired ratios}\label{app:e6seeds}
 

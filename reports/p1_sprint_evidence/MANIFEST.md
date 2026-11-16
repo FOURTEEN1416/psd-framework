@@ -3,6 +3,7 @@
 > 归档时间：2026-11-16 · 操作：证据归档员（只复制/新建，未删除任何文件，未执行 git add/commit）
 > 来源：`runs/p1_sprint/`（该目录被 `.gitignore:19 /runs/*` 忽略，故将可提交证据镜像至本目录）
 > 完整性校验：全部 19 个文件已用 `cmp` 与源文件逐字节比对，**全部一致**（E1–E3 三份 summary 于 2026-11-16 02:04 补充归档；E3b k 阶梯 summary 于同日统稿时补充归档；本清单更新时已再次 `cmp` 复核，仍与 `runs/p1_sprint/*/summary.json` 逐字节一致）。
+> **2026-11-16 终审回修补充归档（真实 tier 冻结编码器对照）**：`frozen_real_tier/` 子目录新增 3 份 summary（ntu120/ucf101/panaf500，源 `runs/p1_sprint/{ntu120,ucf101,panaf500}/summary.json`，13:04–14:01 执行），逐份 `cmp` 逐字节一致。
 
 ## 一、归档文件（19 个 + 本清单 MANIFEST.md）
 
@@ -18,6 +19,16 @@
 | `semantic_rebuild_1100_summary.json` | `runs/p1_sprint/semantic_rebuild_1100/summary.json` | E2：TRANS-002 三臂 @ 1,100-clip 对照预算（seeds 42/43/44，80 epochs，预算抽取 seed 42）：C′ 0.4493 / 180.0s，D′ **0.6016 / 6.8s**，M 0.4820 / 10.2s；D′−C′ = +15.23pp，成本比 **26.47×** |
 | `split_addition_episode_summary.json` | `runs/p1_sprint/split_addition_episode/summary.json` | E3：合成层 22→29 split/addition 迁移 episode（3 拆分 + 4 新增，seeds 42/43/44，50 clips/class，60 epochs）：remap 0.4299 → decoupled(k=10) 0.4575 → frozen head 0.6805 → coupled **0.9713**；新类精度阶梯 + 中位成本比 **3.02×**（verdict PARTIAL） |
 | `k_ladder_summary.json` | `runs/p1_sprint/k_ladder/summary.json` | E3b：同 episode 定义标注预算阶梯 k∈{10,25,50,100}（episode seed 42；k≤50 单种子 42，k=100 三种子 42/43/44；池扩到 100/类）：decoupled 0.4517/0.6103/0.6379/**0.7241**（k=100 ±0.0），coupled 0.9586±0.0049（k 无关参照），frozen head 0.7172±0.0049；coupled−decoupled 边际 50.69/34.83/32.07/**23.45pp** 全部在 ±2.3pp 平价带外 → **k\*=None（verdict=no_parity_within_tested_range）**；k=10 档 100 vs 1000 新标注、92.1s vs 234.0s（seed 42） |
+
+### 真实 tier 冻结编码器对照 summary（3 个，2026-11-16 终审回修归档，`frozen_real_tier/` 子目录，逐字节校验通过）
+
+| 归档路径 | 源路径 | 关键内容 |
+|---|---|---|
+| `frozen_real_tier/ntu120_summary.json` | `runs/p1_sprint/ntu120/summary.json` | NTU120 frozen-encoder 三臂（12,000-clip/60 类子集，10 seeds）：C 0.5434 / A 0.4542 / B **0.4836 均值**（b_arms），retention **0.8886 PARTIAL**；trainable_params=0（总参 930,620），weights_provenance=retrained_same_protocol_saved |
+| `frozen_real_tier/ucf101_summary.json` | `runs/p1_sprint/ucf101/summary.json` | UCF101 frozen-encoder 三臂（10,000-clip 子集，官方 split1 val 463 clips，10 seeds）：C 0.2311 / A 0.1404 / B 均值 0.1540，retention **0.6664 FAILS**；trainable_params=0（总参 941,157） |
+| `frozen_real_tier/panaf500_summary.json` | `runs/p1_sprint/panaf500/summary.json` | PanAf500 frozen-encoder 三臂（500 clips/9 类，30 seeds）：C 0.60 / A 0.52 / B 均值 0.5147，retention **0.8578 PARTIAL**；trainable_params=0（总参 1,240,073） |
+
+三份 summary 的 full_ref/linear_10pct/b_arms/retention/verdict 与 2026-09-07 已报告 E9 产物（reports/p5b-ntu120|p5b-ucf101|p23-panaf-retention-2026-09-07.json）逐位一致；weights_provenance 与 caveat 如实随件。协议全文：supplementary.tex app:frozenreal；正文载体：04-experiments.tex ssec:boundary + tab:attribution-controls 真实 tier 块。运行日志（ntu120/ucf101/panaf500 的 .log/.err.log）留在 `runs/p1_sprint/` 未镜像。
 
 ### 运行日志 *.log（11 个，顶层平铺；E1–E3 的运行日志仍在 `runs/p1_sprint/` 未镜像，见第四节第 4 条）
 
@@ -63,3 +74,5 @@ git add docs/paper/latex/highlights.tex \
 5. **提交纪律**：本目录仅作证据镜像；`runs/p1_sprint/` 原件保持不动；git add/commit 由用户确认后执行。
 6. ~~**autopilot 两个日志镜像为归档时点快照（源文件其后有追加）**~~ ✅ **已刷新（2026-11-16 终审，待办 F 提交前）**：已执行 `cp runs/p1_sprint/autopilot.log runs/p1_sprint/autopilot_run.log reports/p1_sprint_evidence/`，`cmp` 复核两镜像与源逐字节一致（现含 cycle 9–12+ 的 E1–E3 收割记录至 02:23）；4 份 summary.json（zerobound_6049 / semantic_rebuild_1100 / split_addition_episode / k_ladder）亦复核与源逐字节一致。
 7. **E3b k 阶梯 summary 补充归档（2026-11-16 统稿）**：`k_ladder_summary.json`（源 `runs/p1_sprint/k_ladder/summary.json`，03:10 落盘）由统稿环节归档，`cmp` 逐字节一致；正文载体为 04-experiments.tex 的 Reinforcement E3/E3b 段 + tab:kladder，协议全文在 supplementary.tex app:kladder。E3b 的两份运行日志（`k_ladder.log`、`k_ladder_s43_44.log`）与 E1–E3 日志同例留在 `runs/p1_sprint/` 未镜像。
+
+8. **真实 tier 冻结对照归档（2026-11-16 终审回修）**：`frozen_real_tier/` 3 份 summary 已 `cmp` 逐字节校验后归档；对应驱动脚本 `scripts/p1_sprint/frozen_ntu120.py`、`frozen_ucf101.py`、`frozen_panaf500.py` 随本轮证据提交入库。
