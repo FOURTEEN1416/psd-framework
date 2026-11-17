@@ -1,0 +1,74 @@
+{
+  "doneMarker": "P1_LABELFREE_TIER_UCF101_DONE",
+  "experiment": "p1_labelfree_tier_protocol_return",
+  "tier": "ucf101",
+  "mode": "full",
+  "date": "2026-11-18T00:40:02",
+  "protocol": "protocol-return of the pre-registered from-scratch ST-GCN pretext (150 ep, label-free AimCLR objective, single stream joint); the interim joint-MLP deviation (Amendment 2) is retained as prior readout",
+  "encoder": {
+    "arch": "AimCLR (net.st_gcn base, 16 hidden ch.), from-scratch, label-free",
+    "ckpt": "runs\\p1_sprint\\labelfree_ucf101\\pretext\\epoch150_model.pt",
+    "epochs": 150,
+    "frozen": true,
+    "trainable_params": 0,
+    "total_params": 1840136
+  },
+  "budget_frac": 0.1,
+  "full_ref": 0.1987,
+  "linear_10pct": 0.0994,
+  "b_arms": [
+    0.0864,
+    0.0886,
+    0.0929,
+    0.1296,
+    0.1188,
+    0.0886,
+    0.0864,
+    0.0756,
+    0.1166,
+    0.1317
+  ],
+  "retention": 0.5109,
+  "linear_retention": 0.5,
+  "verdict": "FAILS",
+  "seeds": [
+    42,
+    43,
+    44,
+    45,
+    46,
+    47,
+    48,
+    49,
+    50,
+    51
+  ],
+  "prior_readout": {
+    "full_ref": 0.2311,
+    "linear_10pct": 0.1404,
+    "b_arms": [
+      0.1274,
+      0.1447,
+      0.162,
+      0.1339,
+      0.1469,
+      0.149,
+      0.1512,
+      0.1555,
+      0.1857,
+      0.1836
+    ],
+    "retention": 0.6664,
+    "verdict": "FAILS",
+    "encoder": {
+      "arch": "JointMLP flatten(T*V*3)->512->ReLU->256 (+Linear head)",
+      "ckpt": "runs\\p1_sprint\\ucf101\\encoder.pt",
+      "epochs": 80,
+      "seed": 42,
+      "frozen": true,
+      "trainable_params": 0,
+      "total_params": 941157
+    }
+  },
+  "wall_clock_sec": 1756.5
+}
