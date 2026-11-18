@@ -30,3 +30,16 @@ venv/
 # 环境变量
 .env
 docs/paper/latex/*.abs
+
+# 论文构建产物与状态检查临时目录（2026-11-18 大修轮）
+docs/paper/latex/main.aux
+docs/paper/latex/main.log
+docs/paper/latex/main.out
+docs/paper/latex/main.fdb_latexmk
+docs/paper/latex/main.fls
+docs/paper/latex/main.abs
+docs/paper/latex/supplementary.aux
+docs/paper/latex/supplementary.log
+docs/paper/latex/supplementary.out
+docs/paper/latex/.pstate_tmp/
+.pstate_tmp/

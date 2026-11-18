@@ -1,0 +1,95 @@
+{
+ "doneMarker": "P1_SPRINT_SUPERVISED_STGCN_NTU120_DONE",
+ "experiment": "p1_sprint_supervised_stgcn_ntu120",
+ "mode": "full",
+ "date": "2026-11-18T21:53:19",
+ "method": "Supervised ST-GCN (end-to-end, cross-entropy) on NTU120 (E9b 12,000-clip/60-class subset caliber)",
+ "implementation": "in-repo/official-code ST-GCN (external/AimCLR/net/st_gcn.py); same controlled 16-hidden-channel capacity as the NTU60 head-to-head",
+ "budgets": {
+  "10pct": {
+   "per_seed": {
+    "42": {
+     "top1": 0.3611,
+     "best_epoch": 80,
+     "n_train": 720,
+     "n_params": 836800,
+     "work_dir": "runs/p1_sprint/supervised_stgcn_ntu120/10pct_s42"
+    },
+    "43": {
+     "top1": 0.341,
+     "best_epoch": 80,
+     "n_train": 720,
+     "n_params": 836800,
+     "work_dir": "runs/p1_sprint/supervised_stgcn_ntu120/10pct_s43"
+    },
+    "44": {
+     "top1": 0.377,
+     "best_epoch": 80,
+     "n_train": 720,
+     "n_params": 836800,
+     "work_dir": "runs/p1_sprint/supervised_stgcn_ntu120/10pct_s44"
+    },
+    "45": {
+     "top1": 0.3491,
+     "best_epoch": 80,
+     "n_train": 720,
+     "n_params": 836800,
+     "work_dir": "runs/p1_sprint/supervised_stgcn_ntu120/10pct_s45"
+    },
+    "46": {
+     "top1": 0.3802,
+     "best_epoch": 75,
+     "n_train": 720,
+     "n_params": 836800,
+     "work_dir": "runs/p1_sprint/supervised_stgcn_ntu120/10pct_s46"
+    }
+   },
+   "mean": 0.3617,
+   "std": 0.0171,
+   "seeds": [
+    42,
+    43,
+    44,
+    45,
+    46
+   ]
+  }
+ },
+ "budget_definition": {
+  "frac": 0.1,
+  "seed": 42,
+  "rule": "stratified per-class k=max(1, round(0.10*n_c)) over the 7,337 train clips - same formula as the E9b 10% linear head (44.18%)"
+ },
+ "recipe": {
+  "epochs": 80,
+  "batch": 128,
+  "lr": 0.1,
+  "steps": [
+   50,
+   70
+  ],
+  "weight_decay": 0.0001,
+  "momentum": 0.9,
+  "nesterov": false,
+  "optimizer": "SGD",
+  "loss": "CrossEntropyLoss",
+  "hidden_channels": 16,
+  "hidden_dim": 256,
+  "dropout": 0.5,
+  "graph": "ntu-rgb+d/spatial",
+  "edge_importance_weighting": true,
+  "augmentation": "none",
+  "num_worker": 0,
+  "device": [
+   0
+  ]
+ },
+ "config_echo": {
+  "feeder": "runs/p1_sprint/labelfree_ntu120/feeder",
+  "n_train_full": 7337,
+  "n_train_10pct": 720,
+  "n_val": 4663,
+  "classes": 60
+ },
+ "wall_clock_sec": 167.5
+}

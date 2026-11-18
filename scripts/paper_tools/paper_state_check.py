@@ -239,14 +239,15 @@ def main() -> None:
             if not key_number_ok(curtext, n):
                 problems.append(f"{f}: 关键数字 {n} 不在文件中")
 
+    tol = int(cfg.get("caption_tolerance", 10))
     for f, caps in base.get("captions", {}).items():
         curcaps = cur.get("captions", {}).get(f, [])
         if len(curcaps) != len(caps):
             problems.append(f"{f}: caption 数量 {len(caps)}->{len(curcaps)}")
             continue
         for i, (bc, cc) in enumerate(zip(caps, curcaps)):
-            if cc["words"] > bc["words"] + 10:
-                problems.append(f"{f}: 第{i+1}条 caption 词数 {bc['words']}->{cc['words']} (膨胀 >10 词)")
+            if cc["words"] > bc["words"] + tol:
+                problems.append(f"{f}: 第{i+1}条 caption 词数 {bc['words']}->{cc['words']} (膨胀 >{tol} 词)")
 
     ab = cfg.get("abstract", {})
     if ab.get("file") and "abstract" in base:

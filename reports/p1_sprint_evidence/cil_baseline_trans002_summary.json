@@ -1,0 +1,67 @@
+{
+ "doneMarker": "P1_SPRINT_CIL_BASELINE_TRANS002_DONE",
+ "experiment": "p1_sprint_cil_baseline_trans002",
+ "mode": "full",
+ "date": "2026-11-18T21:50:26",
+ "method": "CIL-flavored minimal baseline (LwF distillation + old-class replay) on TRANS-002 (60->49 merge), frozen 256-d pretext features, same harness/eval as all arms",
+ "adaptation_disclosure": "CIL protocols assume class-incremental arrival; the merge episode required an adaptation (logit-aggregation distillation targets + merge-relabeled replay) whose design freedom is exactly why the paper positions CIL as not-directly-comparable - reported honestly as a CIL-flavored reference, not a published-method reproduction",
+ "recipe": {
+  "epochs": 400,
+  "lr": 0.01,
+  "optimizer": "AdamW",
+  "T": 2.0,
+  "lambda": 1.0,
+  "seeds": [
+   42,
+   43,
+   44
+  ],
+  "budgets": [
+   "10pct",
+   "full"
+  ],
+  "init": "old-head rows averaged per merge group",
+  "features": "PRETEXT_CKPT penultimate 256-d (frozen)"
+ },
+ "results": {
+  "budgets": {
+   "10pct": {
+    "per_seed": {
+     "42": 0.6834,
+     "43": 0.6836,
+     "44": 0.6911
+    },
+    "mean": 0.686,
+    "std": 0.0044
+   },
+   "full": {
+    "per_seed": {
+     "42": 0.7291,
+     "43": 0.7288,
+     "44": 0.7283
+    },
+    "mean": 0.7287,
+    "std": 0.0004
+   }
+  },
+  "anchors": {
+   "e1_zero_retraining_bound": 0.6804,
+   "e1_argmax_vote_lower": 0.6797,
+   "decoupled_rebuild_10pct": 0.676,
+   "decoupled_rebuild_full": 0.753,
+   "coupled_three_seed": 0.798,
+   "coupled_ten_seed": 0.797,
+   "matched_solver_ten_seed": 0.826
+  }
+ },
+ "anchors": {
+  "e1_zero_retraining_bound": 0.6804,
+  "e1_argmax_vote_lower": 0.6797,
+  "decoupled_rebuild_10pct": 0.676,
+  "decoupled_rebuild_full": 0.753,
+  "coupled_three_seed": 0.798,
+  "coupled_ten_seed": 0.797,
+  "matched_solver_ten_seed": 0.826
+ },
+ "wall_clock_sec": 10.6
+}

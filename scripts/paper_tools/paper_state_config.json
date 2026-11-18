@@ -36,6 +36,7 @@
     "highlights.tex": 1
   },
   "caption_files": ["sections/04-experiments.tex", "supplementary.tex"],
+  "caption_tolerance": 60,
   "abstract": {
     "file": "main.tex",
     "max_words": 250,
