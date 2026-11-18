@@ -1,0 +1,44 @@
+{
+  "latex_root": "docs/paper/latex",
+  "docs": [
+    { "name": "main", "tex": "main.tex", "pdf": "main.pdf", "log": "main.log" },
+    { "name": "supplementary", "tex": "supplementary.tex", "pdf": "supplementary.pdf", "log": "supplementary.log" }
+  ],
+  "pdf_bad_strings": ["??", "pprox"],
+  "pdf_key_numbers": {
+    "main": ["67.97", "68.04", "76.5", "26.5", "82.5", "90.7", "74.96", "51.09", "58.37", "64.0", "6.07", "43.75", "10.15", "48.3", "15.4"],
+    "supplementary": ["58.37", "44.18", "43.75", "19.87", "9.94", "10.15", "64.0", "52.8", "85.8", "82.5", "74.96"]
+  },
+  "numbers": {
+    "strict": [
+      "sections/02-related-work.tex",
+      "sections/03-method.tex",
+      "sections/04-experiments.tex",
+      "sections/05-ablation-analysis.tex",
+      "highlights.tex"
+    ],
+    "relaxed": {
+      "sections/01-introduction.tex": ["6.07", "90.7", "82.0", "96.6", "82.5", "51.1", "9.8", "11.1", "83.5", "67.5", "66.7", "64.8", "75.0", "88.9", "66.6", "85.8"],
+      "sections/06-conclusion-limitations.tex": ["90.7", "82.0", "6.07", "77.97", "67.53", "66.74", "64.84", "83.46", "9.8", "11.1", "68.6", "98.2", "74.96", "51.09", "82.5", "88.9", "66.6", "85.8", "68.04", "67.97", "45.3", "72.4", "95.9", "23.45", "50.57", "75.3", "79.8", "82.6", "45.7", "97.1"],
+      "supplementary.tex": ["58.37", "54.34", "44.18", "43.75", "19.87", "23.11", "9.94", "10.15", "2.04", "51.09", "64.0", "60.0", "52.8", "9.6", "85.8", "82.5", "90.7", "66.6", "88.9", "74.96"],
+      "main.tex": ["6.07", "90.7", "82.0", "51.1", "9.8", "11.1"]
+    }
+  },
+  "emdash_caps": {
+    "sections/01-introduction.tex": 0,
+    "sections/02-related-work.tex": 22,
+    "sections/03-method.tex": 16,
+    "sections/04-experiments.tex": 3,
+    "sections/05-ablation-analysis.tex": 16,
+    "sections/06-conclusion-limitations.tex": 1,
+    "supplementary.tex": 5,
+    "main.tex": 3,
+    "highlights.tex": 1
+  },
+  "caption_files": ["sections/04-experiments.tex", "supplementary.tex"],
+  "abstract": {
+    "file": "main.tex",
+    "max_words": 250,
+    "external_counter": "scripts/p1_sprint/count_abstract_words.py"
+  }
+}
