@@ -1,5 +1,5 @@
 %% ============================================================================
-%% main.tex — PSD Framework @ Pattern Recognition 投稿主装配文件
+%% main.tex — PSD Framework @ CVIU 投稿主装配文件
 %% 模板: els-cas cas-sc (单栏) — 用户决策 A 定案 2026-08-26（官方 Guide for Authors 直链模板族）
 %% 类选项实证: review => setspace + \doublespacing（cas-sc.cls L67/L138），对应 PR
 %%   "single-column, double-spaced" 投稿硬约束; 页数窗口 20-35 页含参考文献附录。
@@ -20,6 +20,7 @@
 %\usepackage[numbers,sort&compress]{natbib}  % 备选: 数字引用（PR 时代口径）
 \usepackage{xcolor}
 \usepackage{tabularx}                         % 表格自动换行（tab1/tab2/tab3 版心适配）
+\usepackage{longtable}                        % 2026-11-18 硬伤修复: tab:attribution-controls 整表超页(Float too large 361.8pt)改可跨页 longtable, 行内容不变
 \usepackage{algorithm}                        % Algorithm 1 伪代码（03-method）
 \usepackage{algpseudocode}
 
