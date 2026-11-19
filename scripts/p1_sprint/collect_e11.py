@@ -44,7 +44,8 @@ def main() -> None:
     for tag, note in [("sweep_d0", "λ=0 无蒸馏锚"), ("sweep_lr1e2", "lr=1e-2"),
                       ("sweep_lr2e2", "lr=2e-2"), ("sweep_lr4e2", "lr=4e-2（语义臂校准崩溃）"),
                       ("sweep_ep200", "200 epochs"), ("sweep_lr1e2_r16", "lr=1e-2 + rank16"),
-                      ("aug4_lr2e2", "lr=2e-2 + 锚点增广×4"), ("aug4_lr1e2", "lr=1e-2 + 锚点增广×4")]:
+                      ("aug4_lr2e2", "lr=2e-2 + 锚点增广×4"), ("aug4_lr1e2", "lr=1e-2 + 锚点增广×4"),
+                      ("aug8_lr2e2", "lr=2e-2 + 锚点增广×8")]:
         lines.append(row(tag, load(t4 / f"summary_{tag}.json"), note))
 
     lines += ["", "## 2. 预算-分配率曲线（NTU120）", "",
@@ -62,7 +63,7 @@ def main() -> None:
               "|---|---|---|---|---|"]
     for tier, base_path, dual_path, note in [
             ("ntu120", RUNS / "labelfree_ntu120" / "summary.json",
-             RUNS / "adapt_t4_ntu120" / "summary_aug4_lr2e2.json", "lr2e-2+aug4"),
+             RUNS / "adapt_t4_ntu120" / "summary_aug8_lr2e2.json", "lr2e-2+aug8"),
             ("panaf500", RUNS / "labelfree_panaf500" / "summary.json",
              RUNS / "adapt_t4_panaf500" / "summary_aug4.json", "lr1e-2+aug4"),
             ("ucf101", RUNS / "labelfree_ucf101" / "summary.json",

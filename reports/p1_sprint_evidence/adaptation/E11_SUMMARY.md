@@ -13,6 +13,7 @@
 | sweep_lr1e2_r16 | 0.8149 | FAILS | 0.4967 | 0.6095 | lr=1e-2 + rank16 |
 | aug4_lr2e2 | 0.8341 | FAILS | 0.4994 | 0.5987 | lr=2e-2 + 锚点增广×4 |
 | aug4_lr1e2 | 0.8206 | FAILS | 0.5164 | 0.6293 | lr=1e-2 + 锚点增广×4 |
+| aug8_lr2e2 | 0.8516 | PARTIAL | 0.496 | 0.5824 | lr=2e-2 + 锚点增广×8 |
 
 ## 2. 预算-分配率曲线（NTU120）
 
@@ -29,6 +30,6 @@
 
 | tier | 冻结基线 | 双用（最优配置） | Δ | 判定变化 |
 |---|---|---|---|---|
-| ntu120（lr2e-2+aug4） | 0.7496 (FAILS) | 0.8341 (FAILS) | +0.0845 | FAILS→FAILS |
+| ntu120（lr2e-2+aug8） | 0.7496 (FAILS) | 0.8516 (PARTIAL) | +0.1020 | FAILS→PARTIAL |
 | panaf500（lr1e-2+aug4） | 0.825 (FAILS) | 0.9221 (CONFIRMS) | +0.0971 | FAILS→CONFIRMS |
 | ucf101（lr2e-2） | 0.5109 (FAILS) | 0.7121 (FAILS) | +0.2012 | FAILS→FAILS |
