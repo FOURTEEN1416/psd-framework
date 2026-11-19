@@ -62,18 +62,20 @@ for train/eval consistency), then re-run the identical three-arm protocol.
 
 | Tier | Budget | Frozen | Dual-use | Δ | Verdict |
 |---|---|---|---|---|---|
-| NTU120 | 10% | 74.96% | **83.41%** (lr 2e-2, aug×4) | **+8.45 pp** | FAILS → FAILS |
+| NTU120 | 10% | 74.96% | **85.16%** (lr 2e-2, aug×8) | **+10.20 pp** | **FAILS → PARTIAL** |
 | UCF101 | 10% | 51.09% | 71.21% (lr 2e-2) | **+20.12 pp** | FAILS → FAILS |
 | PanAf500 | 10% | 82.50% | **92.21%** (lr 1e-2, aug×4) | **+9.71 pp** | **FAILS → CONFIRMS** |
 
 **Finding 2.** Dual-use recycling converts the same labels into gains everywhere
 we could measure it, and the gain *grows* as reference quality degrades
-(NTU120 +8.5 → PanAf500 +9.7 → UCF101 +20.1 pp, per-tier optimal settings). On
-PanAf500 the pipeline reaches CONFIRMS for the first time — with the caveat
-that its validation set is 25 clips (4% quantization), 6/10 seeds improved with
-2 regressions (sign test n.s.), and part of the retention jump reflects a small
-reference drift (64.0% → 61.6%); we therefore report it as a strong positive
-signal, not a confirmed guarantee.
+(NTU120 +10.2 → PanAf500 +9.7 → UCF101 +20.1 pp, per-tier optimal settings).
+Two of the three weak-reference tiers cross their pre-registered bands:
+NTU120 reaches PARTIAL (85.16%) and PanAf500 reaches CONFIRMS (92.21%) — the
+latter with the caveat that its validation set is 25 clips (4% quantization),
+6/10 seeds improved with 2 regressions (sign test n.s.), and part of the
+retention jump reflects a small reference drift (64.0% → 61.6%); we therefore
+report it as a strong positive signal, not a confirmed guarantee. NTU120's
+PARTIAL margin is likewise thin (0.16 pp above the band edge).
 
 ### 4.4 Where the budget should go
 
@@ -99,14 +101,15 @@ calibration gate rejects the adapted features outright (τ = 0). Epochs (100 vs.
 200), rank (8 vs. 16), and the distillation weight (0, 0.5, 1.0) all move the
 result by ≤ 0.5 pp. Dropping the distillation anchor entirely is safe at 1e-3.
 
-Anchor augmentation (sampling 4× augmented views of the anchors per epoch,
-using the pretext's own shear/padding family) adds a further gain on NTU120:
-82.73% → **83.41%** at lr 2e-2. The optimal recipe is tier-dependent in a way
-that tracks anchor mass: NTU120 (734 anchors) takes the strongest setting
-(lr 2e-2 + augmentation, 83.41%); UCF101 (953 anchors) peaks at lr 2e-2 without
-augmentation (71.21%; the augmented 1e-2 variant gives 68.31%); PanAf500
-(40 anchors) requires the gentlest setting (lr 1e-2 + augmentation, 92.21%) and
-breaks the calibration gate at lr 2e-2 even with augmentation.
+Anchor augmentation (sampling V× augmented views of the anchors per epoch,
+using the pretext's own shear/padding family) yields a monotone dose–response
+on NTU120: 82.73% (no aug) → 83.41% (4×) → **85.16% (8×)**, all at lr 2e-2.
+The optimal recipe is tier-dependent in a way that tracks anchor mass: NTU120
+(734 anchors) takes the strongest setting (lr 2e-2 + 8× augmentation); UCF101
+(953 anchors) peaks at lr 2e-2 without augmentation (71.21%; the augmented
+1e-2 variant gives 68.31%); PanAf500 (40 anchors) requires the gentlest
+setting (lr 1e-2 + 4× augmentation, 92.21%) and breaks the calibration gate at
+lr 2e-2 even with augmentation.
 
 ### 4.6 Boundary: anchor mass and the calibration gate
 
