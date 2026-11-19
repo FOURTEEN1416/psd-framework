@@ -116,6 +116,74 @@ def dump_features(model, tier: str, device: str) -> dict:
     return store
 
 
+def run_arms(model, tier: str, seeds, device: str, budget_frac: float = BUDGET_FRAC) -> dict:
+    """E9 三臂统一测量（唯一实现；adapt 系脚本复用同一把尺，防基线漂移）:
+      (c) 全量线性参照 / (a) 10% 分层线性头 / (b) 10%+PSD 语义管线 ×seeds。
+    判据同 E9: ≥90 CONFIRMS / 85-90 PARTIAL / <85 FAILS。
+    返回 dict 含 store(train/val 特征与标签) 与 last_b(末种子伪标签工件，
+    供伪标签回灌线 supcon_feedback_tier 复用)。"""
+    from psd.training.tcl_selftrain import run_selftrain  # noqa: E402
+    from run_p5b_generic_retention import KW  # noqa: E402  （与已报告运行同参）
+
+    store = dump_features(model, tier, device)
+    tr_feat, tr_lab = store["train_feat"], store["train_label"]
+    va_feat, va_lab = store["val_feat"], store["val_label"]
+
+    # (c) 100% 线性参照
+    ref = float(np.mean(ScaledLR().fit(tr_feat, tr_lab).predict(va_feat) == va_lab))
+    print(f"[c] full ref: {ref:.4f}", flush=True)
+
+    # (a) 10% 分层子集线性头（E9 逐行同式, seed 42）
+    rng = np.random.default_rng(42)
+    mask_a = np.zeros(len(tr_lab), dtype=bool)
+    for c in sorted(set(tr_lab.tolist())):
+        ci = np.where(tr_lab == c)[0]
+        k = max(1, int(round(len(ci) * budget_frac)))
+        mask_a[rng.choice(ci, size=k, replace=False)] = True
+    acc_a = float(np.mean(ScaledLR().fit(tr_feat[mask_a], tr_lab[mask_a])
+                          .predict(va_feat) == va_lab))
+    print(f"[a] 10% linear: {acc_a:.4f}", flush=True)
+
+    # (b) 10% + PSD 语义管线 × seeds（与已报告运行同参同判据）
+    labels_str = np.array([str(l) for l in tr_lab])
+    full_labels_str = np.array([str(l) for l in np.concatenate([tr_lab, va_lab])])
+    class_names = [str(c) for c in sorted(set(tr_lab.tolist()))]
+    accs_b = []
+    last_b: dict = {}
+    for seed in seeds:
+        anchor = np.zeros(len(tr_lab), dtype=bool)
+        rng2 = np.random.default_rng(seed)
+        for c in class_names:
+            ci = np.where(labels_str == c)[0]
+            k = max(1, int(round(len(ci) * budget_frac)))
+            anchor[rng2.choice(ci, size=k, replace=False)] = True
+        universe = np.ones(len(tr_lab), dtype=bool)
+        universe[anchor] = False
+        r = run_selftrain(tr_feat, labels_str, anchor, run_seed=seed,
+                          class_names=class_names,
+                          head_cfg={"hidden_dim": 64, "epochs": 100, "lr": 1e-3,
+                                    "weight_decay": 1e-4, "batch_size": 128, "device": "cpu"},
+                          pool_universe_mask=universe, **KW)
+        tm2 = anchor.copy()
+        tm2[r["final_pool_idx"]] = True
+        y2 = np.array([None] * len(labels_str), dtype=object)
+        y2[anchor] = labels_str[anchor]
+        y2[r["final_pool_idx"]] = r["final_pred_full"][r["final_pool_idx"]]
+        va_lab_str = full_labels_str[len(tr_lab):]  # 字符串域评分（r16 首跑缺陷教训：str/int 比较恒 False）
+        acc_b = float(np.mean(ScaledLR().fit(tr_feat[tm2], y2[tm2]).predict(va_feat)
+                              == va_lab_str))
+        accs_b.append(acc_b)
+        print(f"[b] seed{seed}: {acc_b:.4f} pool={len(r['final_pool_idx'])} stop={r['stop_reason']}", flush=True)
+        last_b = {"seed": int(seed), "anchor": anchor, "train_mask": tm2, "y2": y2,
+                  "final_pool_idx": r["final_pool_idx"], "final_pred_full": r["final_pred_full"],
+                  "stop_reason": r["stop_reason"]}
+
+    ret = float(np.mean(accs_b)) / ref if ref > 0 else 0.0
+    verdict = "CONFIRMS" if ret >= 0.90 else ("PARTIAL" if ret >= 0.85 else "FAILS")
+    return {"full_ref": ref, "linear_10pct": acc_a, "b_arms": accs_b,
+            "retention": ret, "verdict": verdict, "store": store, "last_b": last_b}
+
+
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--tier", required=True, choices=sorted(TIERS))
@@ -143,62 +211,9 @@ def main() -> None:
     print(f"[encoder] frozen verified: trainable=0/{sum(p.numel() for p in model.parameters())}")
 
     t0 = time.time()
-    store = dump_features(model, tier, device)
-    tr_feat, tr_lab = store["train_feat"], store["train_label"]
-    va_feat, va_lab = store["val_feat"], store["val_label"]
-    tr = np.ones(len(tr_lab), dtype=bool)
-
-    from psd.training.tcl_selftrain import run_selftrain  # noqa: E402
-    from run_p5b_generic_retention import KW  # noqa: E402  （与已报告运行同参）
-
-    # (c) 100% 线性参照
-    ref = float(np.mean(ScaledLR().fit(tr_feat, tr_lab).predict(va_feat) == va_lab))
-    print(f"[c] full ref: {ref:.4f}", flush=True)
-
-    # (a) 10% 分层子集线性头（E9 逐行同式, seed 42）
-    rng = np.random.default_rng(42)
-    mask_a = np.zeros(len(tr_lab), dtype=bool)
-    for c in sorted(set(tr_lab.tolist())):
-        ci = np.where(tr_lab == c)[0]
-        k = max(1, int(round(len(ci) * BUDGET_FRAC)))
-        mask_a[rng.choice(ci, size=k, replace=False)] = True
-    acc_a = float(np.mean(ScaledLR().fit(tr_feat[mask_a], tr_lab[mask_a])
-                          .predict(va_feat) == va_lab))
-    print(f"[a] 10% linear: {acc_a:.4f}", flush=True)
-
-    # (b) 10% + PSD 语义管线 × seeds（与已报告运行同参同判据）
-    labels_str = np.array([str(l) for l in tr_lab])
-    full_labels_str = np.array([str(l) for l in np.concatenate([tr_lab, va_lab])])
-    feats_full = np.vstack([tr_feat, va_feat])
-    class_names = [str(c) for c in sorted(set(tr_lab.tolist()))]
-    accs_b = []
-    for seed in seeds:
-        anchor = np.zeros(len(tr_lab), dtype=bool)
-        rng2 = np.random.default_rng(seed)
-        for c in class_names:
-            ci = np.where(labels_str == c)[0]
-            k = max(1, int(round(len(ci) * BUDGET_FRAC)))
-            anchor[rng2.choice(ci, size=k, replace=False)] = True
-        universe = np.ones(len(tr_lab), dtype=bool)
-        universe[anchor] = False
-        r = run_selftrain(tr_feat, labels_str, anchor, run_seed=seed,
-                          class_names=class_names,
-                          head_cfg={"hidden_dim": 64, "epochs": 100, "lr": 1e-3,
-                                    "weight_decay": 1e-4, "batch_size": 128, "device": "cpu"},
-                          pool_universe_mask=universe, **KW)
-        tm2 = anchor.copy()
-        tm2[r["final_pool_idx"]] = True
-        y2 = np.array([None] * len(labels_str), dtype=object)
-        y2[anchor] = labels_str[anchor]
-        y2[r["final_pool_idx"]] = r["final_pred_full"][r["final_pool_idx"]]
-        va_lab_str = full_labels_str[len(tr_lab):]  # 字符串域评分（r16 首跑缺陷教训：str/int 比较恒 False）
-        acc_b = float(np.mean(ScaledLR().fit(tr_feat[tm2], y2[tm2]).predict(va_feat)
-                              == va_lab_str))
-        accs_b.append(acc_b)
-        print(f"[b] seed{seed}: {acc_b:.4f} pool={len(r['final_pool_idx'])} stop={r['stop_reason']}", flush=True)
-
-    ret = float(np.mean(accs_b)) / ref if ref > 0 else 0.0
-    verdict = "CONFIRMS" if ret >= 0.90 else ("PARTIAL" if ret >= 0.85 else "FAILS")
+    arms = run_arms(model, tier, seeds, device)
+    ref, acc_a = arms["full_ref"], arms["linear_10pct"]
+    accs_b, ret, verdict = arms["b_arms"], arms["retention"], arms["verdict"]
 
     prior_path = REPO / "runs" / "p1_sprint" / tier / "summary.json"
     prior = json.loads(prior_path.read_text(encoding="utf-8")) if prior_path.exists() else {}

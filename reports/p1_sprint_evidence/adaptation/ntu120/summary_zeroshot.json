@@ -1,0 +1,38 @@
+{
+  "doneMarker": "P1_ADAPT_LORAZS_NTU120_DONE",
+  "experiment": "e10_t2b_cross_domain_zero_shot",
+  "tier": "ntu120",
+  "mode": "cross_domain",
+  "zero_shot": true,
+  "date": "2026-11-19T15:20:00",
+  "ckpt": "runs/ntu_phaseB/joint_pretext/epoch300_model.pt",
+  "full_ref": 0.558,
+  "linear_10pct": 0.407,
+  "b_arms": [
+    0.3839,
+    0.3899,
+    0.4023,
+    0.3811,
+    0.3903,
+    0.3732,
+    0.3972,
+    0.4068,
+    0.3727,
+    0.3959
+  ],
+  "retention": 0.6977,
+  "verdict": "FAILS",
+  "seeds": [
+    42,
+    43,
+    44,
+    45,
+    46,
+    47,
+    48,
+    49,
+    50,
+    51
+  ],
+  "reconstructed_from_log": "runs/p1_sprint/adapt_loraxfer_zeroshot_run.log (summary write crashed on a path bug now fixed; all 10 seed measurements completed and are transcribed verbatim)"
+}

@@ -1,0 +1,76 @@
+{
+  "doneMarker": "P1_ADAPT_SUPCON_NTU120_DONE",
+  "experiment": "e10_t3_supcon_pseudo_feedback",
+  "tier": "ntu120",
+  "mode": "full",
+  "date": "2026-11-19T13:24:30",
+  "protocol": "PSD pseudo-label feedback loop: confidence-gated pseudo-labels from the (b) semantic pipeline retrain the physical encoder via supervised contrastive loss (LoRA low-rank, cosine distillation anchor to the frozen pretext encoder); E9 three arms re-measured with the unified ruler",
+  "ckpt": "runs\\p1_sprint\\labelfree_ntu120\\pretext\\epoch150_model.pt",
+  "train": {
+    "rounds": 1,
+    "epochs_per_round": 20,
+    "batch": 256,
+    "lr": 0.001,
+    "temperature": 0.1,
+    "distill_lambda": 1.0,
+    "psd_seed": 42,
+    "loss_curve_tail": [
+      4.091,
+      4.0797,
+      4.0998,
+      4.0598,
+      4.0528
+    ]
+  },
+  "rounds": [
+    {
+      "round": 1,
+      "pseudo_labeled": 7239,
+      "full_ref": 0.576,
+      "linear_10pct": 0.4338,
+      "b_arms": [
+        0.4246,
+        0.4311,
+        0.4383,
+        0.4302,
+        0.4383,
+        0.4338,
+        0.4343,
+        0.4178,
+        0.4353,
+        0.4353
+      ],
+      "retention": 0.7498,
+      "verdict": "FAILS"
+    }
+  ],
+  "full_ref": 0.576,
+  "linear_10pct": 0.4338,
+  "b_arms": [
+    0.4246,
+    0.4311,
+    0.4383,
+    0.4302,
+    0.4383,
+    0.4338,
+    0.4343,
+    0.4178,
+    0.4353,
+    0.4353
+  ],
+  "retention": 0.7498,
+  "verdict": "FAILS",
+  "seeds": [
+    42,
+    43,
+    44,
+    45,
+    46,
+    47,
+    48,
+    49,
+    50,
+    51
+  ],
+  "wall_clock_sec": 1608.4
+}

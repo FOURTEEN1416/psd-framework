@@ -1,0 +1,38 @@
+{
+  "doneMarker": "P1_ADAPT_EVAL_NTU120_DONE",
+  "experiment": "e10_eval_adapted_arms",
+  "tier": "ntu120",
+  "date": "2026-11-19T13:25:45",
+  "ckpt": "runs\\p1_sprint\\adapt_lora_xfer_ntu120\\lora_epoch30_model.pt",
+  "source_ckpt": "runs/ntu_phaseB/joint_pretext/epoch300_model.pt",
+  "lora_loaded": true,
+  "full_ref": 0.5966,
+  "linear_10pct": 0.4527,
+  "b_arms": [
+    0.4278,
+    0.4287,
+    0.4364,
+    0.4193,
+    0.4214,
+    0.4253,
+    0.4343,
+    0.4244,
+    0.4276,
+    0.4495
+  ],
+  "retention": 0.7198,
+  "verdict": "FAILS",
+  "seeds": [
+    42,
+    43,
+    44,
+    45,
+    46,
+    47,
+    48,
+    49,
+    50,
+    51
+  ],
+  "wall_clock_sec": 1683.6
+}
