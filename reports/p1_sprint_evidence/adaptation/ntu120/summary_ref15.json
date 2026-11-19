@@ -1,0 +1,37 @@
+{
+  "doneMarker": "P1_ADAPT_T4_REF15_NTU120_DONE",
+  "experiment": "e10_t4_budget_split",
+  "arm": "ref15",
+  "tier": "ntu120",
+  "budget_frac": 0.15,
+  "date": "2026-11-19T17:49:17",
+  "full_ref": 0.5846,
+  "linear_10pct_note": "arm (a) inside run_arms used budget_frac too",
+  "b_arms": [
+    0.4598,
+    0.4493,
+    0.4716,
+    0.4527,
+    0.4682,
+    0.4581,
+    0.4682,
+    0.4609,
+    0.4613,
+    0.4709
+  ],
+  "retention": 0.7904,
+  "verdict": "FAILS",
+  "seeds": [
+    42,
+    43,
+    44,
+    45,
+    46,
+    47,
+    48,
+    49,
+    50,
+    51
+  ],
+  "wall_clock_sec": 370.8
+}

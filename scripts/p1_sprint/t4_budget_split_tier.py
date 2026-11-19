@@ -60,13 +60,14 @@ def finetune_lora_ce(model, teacher, X_t, anchor_idx: np.ndarray, y_anchor: np.n
     x_all = X_t[anchor_idx].float().to(device)
     y_all = torch.from_numpy(y_anchor.astype(np.int64)).to(device)
     n = len(x_all)
+    eff_batch = min(batch, n)  # 小 tier 锚点可能少于 batch（如 PanAf 40 个）——否则零迭代
     rng = np.random.default_rng(42)
     losses, accs = [], []
     for ep in range(1, epochs + 1):
         perm = rng.permutation(n)
         ep_l = []
-        for i in range(0, n - n % batch, batch):
-            idx = perm[i:i + batch]
+        for i in range(0, n - n % eff_batch, eff_batch):
+            idx = perm[i:i + eff_batch]
             x = x_all[idx]
             y = y_all[idx]
             f_s = extract_backbone(model.encoder_q, x)
@@ -123,32 +124,52 @@ def run_semantic_arm(tr_feat, va_feat, tr_lab, va_lab, anchor, seed, budget_frac
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--tier", default="ntu120")
-    ap.add_argument("--arm", required=True, choices=["ref5", "same10", "split5"])
+    ap.add_argument("--arm", required=True,
+                    choices=["ref5", "same10", "split5", "ref15", "dual15"])
     ap.add_argument("--seeds", type=int, default=10)
     ap.add_argument("--epochs", type=int, default=100)
     ap.add_argument("--batch", type=int, default=64)
     ap.add_argument("--lr", type=float, default=1e-3)
     ap.add_argument("--distill", type=float, default=1.0)
     ap.add_argument("--rank", type=int, default=8)
+    ap.add_argument("--tag", default=None,
+                    help="输出文件名标签（默认=arm 名；扫参时必须显式给，防覆盖）")
     ap.add_argument("--smoke", action="store_true")
+    ap.add_argument("--seed-list", type=int, nargs="+", default=None,
+                    help="显式种子列表（断点续跑单种子用；配合 summary_<tag>.json 已有 per_seed 跳过）")
     args = ap.parse_args()
     tier = args.tier
+    tag = args.tag or args.arm
     device = "cuda" if torch.cuda.is_available() else "cpu"
     if args.smoke:
         args.seeds, args.epochs = 1, 5
-    seeds = list(range(42, 42 + args.seeds))
-    budget = {"ref5": 0.05, "same10": 0.10, "split5": 0.05}[args.arm]
+    seeds = list(args.seed_list) if args.seed_list else list(range(42, 42 + args.seeds))
+    budget = {"ref5": 0.05, "same10": 0.10, "split5": 0.05,
+              "ref15": 0.15, "dual15": 0.15}[args.arm]
+    # 断点续跑: 读取已有 summary 的 per_seed 行，跳过已完成种子（前台分片执行用）
+    out_path = adapt_out_dir("t4", tier) / f"summary_{tag}.json"
+    done_rows: dict = {}
+    if out_path.exists():
+        try:
+            for r in json.loads(out_path.read_text(encoding="utf-8")).get("per_seed", []):
+                if r.get("ft_anchor_acc") is not None:
+                    done_rows[int(r["seed"])] = r
+        except (json.JSONDecodeError, KeyError, TypeError):
+            done_rows = {}
+    seeds = [s for s in seeds if s not in done_rows]
+    if done_rows:
+        print(f"[resume] {len(done_rows)} seeds already done: {sorted(done_rows)}", flush=True)
     t0 = time.time()
 
     from labelfree_tier_replication import dump_features
     from labelfree_tier_replication import ScaledLR
 
-    if args.arm == "ref5":
+    if args.arm in ("ref5", "ref15"):
         model, ckpt = load_frozen_model(tier, device)
         from labelfree_tier_replication import run_arms
         arms = run_arms(model, tier, tuple(seeds), device, budget_frac=budget)
         result = {
-            "doneMarker": f"P1_ADAPT_T4_REF5_{tier.upper()}_DONE",
+            "doneMarker": f"P1_ADAPT_T4_{args.arm.upper()}_{tier.upper()}_DONE",
             "experiment": "e10_t4_budget_split", "arm": args.arm, "tier": tier,
             "budget_frac": budget, "date": datetime.now().isoformat(timespec="seconds"),
             "full_ref": round(arms["full_ref"], 4),
@@ -158,7 +179,7 @@ def main() -> None:
             "seeds": seeds,
             "wall_clock_sec": round(time.time() - t0, 1),
         }
-        out = adapt_out_dir("t4", tier) / f"summary_{args.arm}.json"
+        out = adapt_out_dir("t4", tier) / f"summary_{tag}.json"
         out.write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8")
         print(f"\n[done] {out}")
         print(json.dumps({k: result[k] for k in ("retention", "verdict")},
@@ -176,6 +197,7 @@ def main() -> None:
                          / "feeder" / "train_position.npy", mmap_mode="r"))
     X_t = torch.from_numpy(X)
     rows = []
+    done_rows_list = list(done_rows.values())
     teacher = None
     labels_checked = False
     for seed in seeds:
@@ -219,9 +241,22 @@ def main() -> None:
                      "ft_anchor_acc": accs[-1], "ft_loss_tail": losses[-3:]})
         print(f"[{args.arm}] seed{seed}: ref={ref_j:.4f} b={acc_b:.4f} "
               f"ret={rows[-1]['retention_seed']:.4f} pool={pool}", flush=True)
+        # 每种子落盘部分结果（前台分片执行时防丢）
+        all_rows = sorted(done_rows_list + rows, key=lambda r: r["seed"])
+        _mb = round(float(np.mean([r["b_arm"] for r in all_rows])), 4)
+        _mr = round(float(np.mean([r["full_ref"] for r in all_rows])), 4)
+        _rt = round(_mb / _mr, 4) if _mr > 0 else 0.0
+        out_path.parent.mkdir(parents=True, exist_ok=True)
+        out_path.write_text(json.dumps({
+            "experiment": "e10_t4_budget_split", "arm": args.arm, "tier": tier,
+            "budget_frac": budget, "per_seed": all_rows, "mean_b": _mb,
+            "mean_full_ref": _mr, "retention": _rt, "partial": True,
+            "seeds": sorted(r["seed"] for r in all_rows),
+        }, ensure_ascii=False, indent=2), encoding="utf-8")
 
-    mean_b = round(float(np.mean([r["b_arm"] for r in rows])), 4)
-    mean_ref = round(float(np.mean([r["full_ref"] for r in rows])), 4)
+    all_rows = sorted(done_rows_list + rows, key=lambda r: r["seed"])
+    mean_b = round(float(np.mean([r["b_arm"] for r in all_rows])), 4)
+    mean_ref = round(float(np.mean([r["full_ref"] for r in all_rows])), 4)
     ret = round(mean_b / mean_ref, 4) if mean_ref > 0 else 0.0
     verdict = "CONFIRMS" if ret >= 0.90 else ("PARTIAL" if ret >= 0.85 else "FAILS")
     result = {
@@ -235,11 +270,11 @@ def main() -> None:
         "date": datetime.now().isoformat(timespec="seconds"),
         "train": {"epochs": args.epochs, "batch": args.batch, "lr": args.lr,
                   "distill_lambda": args.distill, "rank": args.rank},
-        "per_seed": rows, "mean_b": mean_b, "mean_full_ref": mean_ref,
-        "retention": ret, "verdict": verdict, "seeds": seeds,
+        "per_seed": all_rows, "mean_b": mean_b, "mean_full_ref": mean_ref,
+        "retention": ret, "verdict": verdict, "seeds": sorted(r["seed"] for r in all_rows),
         "wall_clock_sec": round(time.time() - t0, 1),
     }
-    out = adapt_out_dir("t4", tier) / f"summary_{args.arm}.json"
+    out = adapt_out_dir("t4", tier) / f"summary_{tag}.json"
     out.write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8")
     print(f"\n[done] {out}")
     print(json.dumps({"mean_b": mean_b, "mean_full_ref": mean_ref,

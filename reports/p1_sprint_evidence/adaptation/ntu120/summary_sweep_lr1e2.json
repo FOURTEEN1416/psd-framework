@@ -1,0 +1,176 @@
+{
+  "doneMarker": "P1_ADAPT_T4_SAME10_NTU120_DONE",
+  "experiment": "e10_t4_budget_split",
+  "arm": "same10",
+  "tier": "ntu120",
+  "mode": "full",
+  "budget_frac": 0.1,
+  "protocol": "per-seed coupled: LoRA-CE fine-tune on THIS seed's anchors (+cosine distill anchor, BN running stats frozen), then re-dump features, full-label linear ref, and the SAME-anchor (b) semantic arm",
+  "date": "2026-11-19T16:57:33",
+  "train": {
+    "epochs": 100,
+    "batch": 64,
+    "lr": 0.01,
+    "distill_lambda": 1.0,
+    "rank": 8
+  },
+  "per_seed": [
+    {
+      "seed": 42,
+      "full_ref": 0.6028,
+      "b_arm": 0.4892,
+      "retention_seed": 0.8115,
+      "pool": 6593,
+      "stop": "converged",
+      "ft_anchor_acc": 0.9583,
+      "ft_loss_tail": [
+        0.345,
+        0.265,
+        0.2533
+      ]
+    },
+    {
+      "seed": 43,
+      "full_ref": 0.6095,
+      "b_arm": 0.4845,
+      "retention_seed": 0.7949,
+      "pool": 6602,
+      "stop": "converged",
+      "ft_anchor_acc": 0.9486,
+      "ft_loss_tail": [
+        0.2401,
+        0.385,
+        0.2976
+      ]
+    },
+    {
+      "seed": 44,
+      "full_ref": 0.6088,
+      "b_arm": 0.4982,
+      "retention_seed": 0.8182,
+      "pool": 6600,
+      "stop": "converged",
+      "ft_anchor_acc": 0.95,
+      "ft_loss_tail": [
+        0.2948,
+        0.2203,
+        0.2471
+      ]
+    },
+    {
+      "seed": 45,
+      "full_ref": 0.614,
+      "b_arm": 0.5179,
+      "retention_seed": 0.8435,
+      "pool": 6596,
+      "stop": "converged",
+      "ft_anchor_acc": 0.9236,
+      "ft_loss_tail": [
+        0.3004,
+        0.3179,
+        0.2351
+      ]
+    },
+    {
+      "seed": 46,
+      "full_ref": 0.6185,
+      "b_arm": 0.5113,
+      "retention_seed": 0.8266,
+      "pool": 6595,
+      "stop": "converged",
+      "ft_anchor_acc": 0.9208,
+      "ft_loss_tail": [
+        0.2923,
+        0.2904,
+        0.2894
+      ]
+    },
+    {
+      "seed": 47,
+      "full_ref": 0.5936,
+      "b_arm": 0.4967,
+      "retention_seed": 0.8367,
+      "pool": 6604,
+      "stop": "converged",
+      "ft_anchor_acc": 0.9625,
+      "ft_loss_tail": [
+        0.2179,
+        0.2795,
+        0.2902
+      ]
+    },
+    {
+      "seed": 48,
+      "full_ref": 0.6043,
+      "b_arm": 0.4982,
+      "retention_seed": 0.8243,
+      "pool": 6606,
+      "stop": "converged",
+      "ft_anchor_acc": 0.9389,
+      "ft_loss_tail": [
+        0.2444,
+        0.2833,
+        0.3384
+      ]
+    },
+    {
+      "seed": 49,
+      "full_ref": 0.6073,
+      "b_arm": 0.4883,
+      "retention_seed": 0.804,
+      "pool": 6598,
+      "stop": "converged",
+      "ft_anchor_acc": 0.9292,
+      "ft_loss_tail": [
+        0.2384,
+        0.2627,
+        0.2631
+      ]
+    },
+    {
+      "seed": 50,
+      "full_ref": 0.6005,
+      "b_arm": 0.498,
+      "retention_seed": 0.8293,
+      "pool": 6585,
+      "stop": "converged",
+      "ft_anchor_acc": 0.9556,
+      "ft_loss_tail": [
+        0.2534,
+        0.2529,
+        0.2779
+      ]
+    },
+    {
+      "seed": 51,
+      "full_ref": 0.5968,
+      "b_arm": 0.4917,
+      "retention_seed": 0.8239,
+      "pool": 6607,
+      "stop": "converged",
+      "ft_anchor_acc": 0.9819,
+      "ft_loss_tail": [
+        0.2536,
+        0.3106,
+        0.2634
+      ]
+    }
+  ],
+  "mean_b": 0.4974,
+  "mean_full_ref": 0.6056,
+  "retention": 0.8213,
+  "verdict": "FAILS",
+  "seeds": [
+    42,
+    43,
+    44,
+    45,
+    46,
+    47,
+    48,
+    49,
+    50,
+    51
+  ],
+  "wall_clock_sec": 3955.8
+}
