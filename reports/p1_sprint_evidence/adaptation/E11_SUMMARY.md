@@ -25,8 +25,8 @@
 
 ## 3. 跨 tier 铺开（same10 双用 vs 冻结基线）
 
-| tier | 冻结基线 | same10 双用 | Δ | 判定变化 |
+| tier | 冻结基线 | 双用（最优配置） | Δ | 判定变化 |
 |---|---|---|---|---|
-| ntu120 | 0.7496 (FAILS) | 0.7887 (FAILS) | +0.0391 | FAILS→FAILS |
-| panaf500 | 0.825 (FAILS) | 0.825 (FAILS) | +0.0000 | FAILS→FAILS |
-| ucf101 | 0.5109 (FAILS) | 0.7121 (FAILS) | +0.2012 | FAILS→FAILS |
+| ntu120（lr1e-3） | 0.7496 (FAILS) | 0.7887 (FAILS) | +0.0391 | FAILS→FAILS |
+| panaf500（lr1e-2+aug4） | 0.825 (FAILS) | 0.9221 (CONFIRMS) | +0.0971 | FAILS→CONFIRMS |
+| ucf101（lr2e-2） | 0.5109 (FAILS) | 0.7121 (FAILS) | +0.2012 | FAILS→FAILS |

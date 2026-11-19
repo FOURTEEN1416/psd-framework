@@ -46,11 +46,13 @@ def build_anchor(labels_str: np.ndarray, seed: int, budget_frac: float) -> np.nd
 
 def finetune_lora_ce(model, teacher, X_t, anchor_idx: np.ndarray, y_anchor: np.ndarray,
                      n_cls: int, device: str, epochs: int, batch: int, lr: float,
-                     distill: float):
-    """LoRA + 新线性头在锚点上 CE 微调；BN running stats 冻结（eval 口径一致）。"""
-    from labelfree_tier_replication import TIERS
-    del n_cls
-    head = torch.nn.Linear(256, int(y_anchor.max()) + 1).to(device)
+                     distill: float, aug_views: int = 1, feeder_args: dict | None = None):
+    """LoRA + 新线性头在锚点上 CE 微调；BN running stats 冻结（eval 口径一致）。
+
+    aug_views>1: 锚点经 Feeder_single 增广（shear 0.5 / temporal pad 6，与 pretext
+    同族），每 epoch 采样 n*aug_views 个增广视图——小锚集（如 PanAf 40）数据饥饿的主干预。
+    """
+    head = torch.nn.Linear(256, n_cls).to(device)
     torch.nn.init.xavier_uniform_(head.weight)
     params = lora_parameters(model.encoder_q) + list(head.parameters())
     for p in model.encoder_q.parameters():
@@ -63,35 +65,70 @@ def finetune_lora_ce(model, teacher, X_t, anchor_idx: np.ndarray, y_anchor: np.n
     eff_batch = min(batch, n)  # 小 tier 锚点可能少于 batch（如 PanAf 40 个）——否则零迭代
     rng = np.random.default_rng(42)
     losses, accs = [], []
-    for ep in range(1, epochs + 1):
-        perm = rng.permutation(n)
-        ep_l = []
-        for i in range(0, n - n % eff_batch, eff_batch):
-            idx = perm[i:i + eff_batch]
-            x = x_all[idx]
-            y = y_all[idx]
-            f_s = extract_backbone(model.encoder_q, x)
-            with torch.no_grad():
-                f_t = extract_backbone(teacher, x)
-            logits = head(f_s)
-            loss = F.cross_entropy(logits, y)
-            if distill > 0:
-                loss = loss + distill * cosine_distill(f_s, f_t)
-            if not torch.isfinite(loss):
-                continue
-            opt.zero_grad()
-            loss.backward()
-            torch.nn.utils.clip_grad_norm_(params, max_norm=1.0)
-            opt.step()
-            ep_l.append(float(loss.item()))
+    if aug_views > 1:
+        from feeder.ntu_feeder import Feeder_single  # noqa: E402  (external/AimCLR)
+        feeder = Feeder_single(feeder_args["data_path"], feeder_args["label_path"],
+                               shear_amplitude=0.5, temperal_padding_ratio=6, mmap=True)
+        steps = max(1, (n * aug_views) // batch)
+        for ep in range(1, epochs + 1):
+            ep_l = []
+            for _ in range(steps):
+                pick = rng.choice(n, size=batch, replace=True)
+                xs = torch.stack([
+                    torch.from_numpy(np.asarray(feeder[int(anchor_idx[p])][0])).float()
+                    for p in pick]).to(device)
+                ys = torch.from_numpy(y_anchor[pick].astype(np.int64)).to(device)
+                f_s = extract_backbone(model.encoder_q, xs)
+                with torch.no_grad():
+                    f_t = extract_backbone(teacher, xs)
+                loss = F.cross_entropy(head(f_s), ys)
+                if distill > 0:
+                    loss = loss + distill * cosine_distill(f_s, f_t)
+                if not torch.isfinite(loss):
+                    continue
+                opt.zero_grad()
+                loss.backward()
+                torch.nn.utils.clip_grad_norm_(params, max_norm=1.0)
+                opt.step()
+                ep_l.append(float(loss.item()))
+        losses.append(round(float(np.mean(ep_l)), 4) if ep_l else None)
         with torch.no_grad():
             acc = float((head(extract_backbone(model.encoder_q, x_all)).argmax(1)
                          == y_all).float().mean())
-        losses.append(round(float(np.mean(ep_l)), 4) if ep_l else None)
         accs.append(round(acc, 4))
         if ep % max(1, epochs // 5) == 0 or ep == epochs:
             print(f"  [ft] epoch {ep}/{epochs} loss={losses[-1]} anchor_acc={acc:.3f}",
                   flush=True)
+    else:
+        for ep in range(1, epochs + 1):
+            perm = rng.permutation(n)
+            ep_l = []
+            for i in range(0, n - n % eff_batch, eff_batch):
+                idx = perm[i:i + eff_batch]
+                x = x_all[idx]
+                y = y_all[idx]
+                f_s = extract_backbone(model.encoder_q, x)
+                with torch.no_grad():
+                    f_t = extract_backbone(teacher, x)
+                logits = head(f_s)
+                loss = F.cross_entropy(logits, y)
+                if distill > 0:
+                    loss = loss + distill * cosine_distill(f_s, f_t)
+                if not torch.isfinite(loss):
+                    continue
+                opt.zero_grad()
+                loss.backward()
+                torch.nn.utils.clip_grad_norm_(params, max_norm=1.0)
+                opt.step()
+                ep_l.append(float(loss.item()))
+            with torch.no_grad():
+                acc = float((head(extract_backbone(model.encoder_q, x_all)).argmax(1)
+                             == y_all).float().mean())
+            losses.append(round(float(np.mean(ep_l)), 4) if ep_l else None)
+            accs.append(round(acc, 4))
+            if ep % max(1, epochs // 5) == 0 or ep == epochs:
+                print(f"  [ft] epoch {ep}/{epochs} loss={losses[-1]} anchor_acc={acc:.3f}",
+                      flush=True)
     return model, head, losses, accs
 
 
@@ -132,6 +169,8 @@ def main() -> None:
     ap.add_argument("--lr", type=float, default=1e-3)
     ap.add_argument("--distill", type=float, default=1.0)
     ap.add_argument("--rank", type=int, default=8)
+    ap.add_argument("--aug-views", type=int, default=1,
+                    help="锚点增广视图倍数（>1 时经 Feeder_single shear0.5/pad6 采样）")
     ap.add_argument("--tag", default=None,
                     help="输出文件名标签（默认=arm 名；扫参时必须显式给，防覆盖）")
     ap.add_argument("--smoke", action="store_true")
@@ -220,9 +259,13 @@ def main() -> None:
             teacher.eval()
         inject_lora(model.encoder_q, r=args.rank)
         model = model.to(device)
+        fd = REPO / "runs" / "p1_sprint" / f"labelfree_{tier}" / "feeder"
         model, head, losses, accs = finetune_lora_ce(
             model, teacher, X_t, anchor_idx, y_anchor, len(set(tr_lab0.tolist())),
-            device, args.epochs, args.batch, args.lr, args.distill)
+            device, args.epochs, args.batch, args.lr, args.distill,
+            aug_views=args.aug_views,
+            feeder_args={"data_path": str(fd / "train_position.npy"),
+                         "label_path": str(fd / "train_label.pkl")})
         model.eval()
         for p in model.parameters():
             p.requires_grad_(False)
@@ -269,7 +312,8 @@ def main() -> None:
                     "features, full-label linear ref, and the SAME-anchor (b) semantic arm",
         "date": datetime.now().isoformat(timespec="seconds"),
         "train": {"epochs": args.epochs, "batch": args.batch, "lr": args.lr,
-                  "distill_lambda": args.distill, "rank": args.rank},
+                  "distill_lambda": args.distill, "rank": args.rank,
+                  "aug_views": args.aug_views},
         "per_seed": all_rows, "mean_b": mean_b, "mean_full_ref": mean_ref,
         "retention": ret, "verdict": verdict, "seeds": sorted(r["seed"] for r in all_rows),
         "wall_clock_sec": round(time.time() - t0, 1),

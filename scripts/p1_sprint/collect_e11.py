@@ -57,20 +57,24 @@ def main() -> None:
     lines.append(row("15% 双用", load(t4 / "summary_dual15.json")))
 
     lines += ["", "## 3. 跨 tier 铺开（same10 双用 vs 冻结基线）", "",
-              "| tier | 冻结基线 | same10 双用 | Δ | 判定变化 |",
+              "| tier | 冻结基线 | 双用（最优配置） | Δ | 判定变化 |",
               "|---|---|---|---|---|"]
-    for tier, base_path in [("ntu120", RUNS / "labelfree_ntu120" / "summary.json"),
-                            ("panaf500", RUNS / "labelfree_panaf500" / "summary.json"),
-                            ("ucf101", RUNS / "labelfree_ucf101" / "summary.json")]:
+    for tier, base_path, dual_path, note in [
+            ("ntu120", RUNS / "labelfree_ntu120" / "summary.json",
+             RUNS / "adapt_t4_ntu120" / "summary_same10.json", "lr1e-3"),
+            ("panaf500", RUNS / "labelfree_panaf500" / "summary.json",
+             RUNS / "adapt_t4_panaf500" / "summary_aug4.json", "lr1e-2+aug4"),
+            ("ucf101", RUNS / "labelfree_ucf101" / "summary.json",
+             RUNS / "adapt_t4_ucf101" / "summary_same10.json", "lr2e-2")]:
         b = load(base_path)
-        s = load(RUNS / f"adapt_t4_{tier}" / "summary_same10.json")
+        s = load(dual_path)
         if b and s:
             delta = round(s["retention"] - b["retention"], 4)
-            lines.append(f"| {tier} | {b['retention']} ({b['verdict']}) "
+            lines.append(f"| {tier}（{note}） | {b['retention']} ({b['verdict']}) "
                          f"| {s['retention']} ({s['verdict']}) | {delta:+.4f} "
                          f"| {b['verdict']}→{s['verdict']} |")
         else:
-            lines.append(f"| {tier} | {b['retention'] if b else '—'} "
+            lines.append(f"| {tier}（{note}） | {b['retention'] if b else '—'} "
                          f"| {s['retention'] if s else '—'} | — | — |")
 
     text = "\n".join(lines) + "\n"

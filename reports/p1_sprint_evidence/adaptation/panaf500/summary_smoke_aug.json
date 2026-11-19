@@ -1,0 +1,40 @@
+{
+  "doneMarker": "P1_ADAPT_T4_SAME10_PANAF500_DONE",
+  "experiment": "e10_t4_budget_split",
+  "arm": "same10",
+  "tier": "panaf500",
+  "mode": "full",
+  "budget_frac": 0.1,
+  "protocol": "per-seed coupled: LoRA-CE fine-tune on THIS seed's anchors (+cosine distill anchor, BN running stats frozen), then re-dump features, full-label linear ref, and the SAME-anchor (b) semantic arm",
+  "date": "2026-11-19T21:45:47",
+  "train": {
+    "epochs": 50,
+    "batch": 64,
+    "lr": 0.01,
+    "distill_lambda": 1.0,
+    "rank": 8,
+    "aug_views": 4
+  },
+  "per_seed": [
+    {
+      "seed": 99,
+      "full_ref": 0.6,
+      "b_arm": 0.48,
+      "retention_seed": 0.8,
+      "pool": 344,
+      "stop": "budget",
+      "ft_anchor_acc": 0.4762,
+      "ft_loss_tail": [
+        1.8584
+      ]
+    }
+  ],
+  "mean_b": 0.48,
+  "mean_full_ref": 0.6,
+  "retention": 0.8,
+  "verdict": "FAILS",
+  "seeds": [
+    99
+  ],
+  "wall_clock_sec": 14.4
+}
