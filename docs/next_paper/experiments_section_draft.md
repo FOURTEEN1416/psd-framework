@@ -62,17 +62,18 @@ for train/eval consistency), then re-run the identical three-arm protocol.
 
 | Tier | Budget | Frozen | Dual-use | Δ | Verdict |
 |---|---|---|---|---|---|
-| NTU120 | 10% | 74.96% | 78.87% | +3.91 pp | FAILS → FAILS |
-| UCF101 | 10% | 51.09% | 71.21% | **+20.12 pp** | FAILS → FAILS |
-| PanAf500 | 10% | 82.50% | **92.21%** | **+9.71 pp** | **FAILS → CONFIRMS** |
+| NTU120 | 10% | 74.96% | **83.41%** (lr 2e-2, aug×4) | **+8.45 pp** | FAILS → FAILS |
+| UCF101 | 10% | 51.09% | 71.21% (lr 2e-2) | **+20.12 pp** | FAILS → FAILS |
+| PanAf500 | 10% | 82.50% | **92.21%** (lr 1e-2, aug×4) | **+9.71 pp** | **FAILS → CONFIRMS** |
 
 **Finding 2.** Dual-use recycling converts the same labels into gains everywhere
 we could measure it, and the gain *grows* as reference quality degrades
-(NTU120 +3.9 → UCF101 +20.1 pp). On PanAf500 the pipeline reaches CONFIRMS for
-the first time — with the caveat that its validation set is 25 clips
-(4% quantization), 6/10 seeds improved with 2 regressions (sign test n.s.), and
-part of the retention jump reflects a small reference drift (64.0% → 61.6%); we
-therefore report it as a strong positive signal, not a confirmed guarantee.
+(NTU120 +8.5 → PanAf500 +9.7 → UCF101 +20.1 pp, per-tier optimal settings). On
+PanAf500 the pipeline reaches CONFIRMS for the first time — with the caveat
+that its validation set is 25 clips (4% quantization), 6/10 seeds improved with
+2 regressions (sign test n.s.), and part of the retention jump reflects a small
+reference drift (64.0% → 61.6%); we therefore report it as a strong positive
+signal, not a confirmed guarantee.
 
 ### 4.4 Where the budget should go
 
@@ -86,7 +87,9 @@ Varying the budget on NTU120 with everything else fixed:
 
 **Finding 3.** The dual-use advantage widens with budget, and at 15% the
 pipeline reaches 83.6% — 1.4 pp below the PARTIAL band. Labels are better spent
-shaping *both* layers than the semantic layer alone.
+shaping *both* layers than the semantic layer alone. (These points use the
+original lr 1e-3 recipe; §4.5 shows that augmentation and a higher learning
+rate lift NTU120 further to 83.41% at the same 10% budget.)
 
 ### 4.5 Hyperparameter sensitivity
 
@@ -96,20 +99,28 @@ calibration gate rejects the adapted features outright (τ = 0). Epochs (100 vs.
 200), rank (8 vs. 16), and the distillation weight (0, 0.5, 1.0) all move the
 result by ≤ 0.5 pp. Dropping the distillation anchor entirely is safe at 1e-3.
 
+Anchor augmentation (sampling 4× augmented views of the anchors per epoch,
+using the pretext's own shear/padding family) adds a further gain on NTU120:
+82.73% → **83.41%** at lr 2e-2. The optimal recipe is tier-dependent in a way
+that tracks anchor mass: NTU120 (734 anchors) takes the strongest setting
+(lr 2e-2 + augmentation, 83.41%); UCF101 (953 anchors) peaks at lr 2e-2 without
+augmentation (71.21%; the augmented 1e-2 variant gives 68.31%); PanAf500
+(40 anchors) requires the gentlest setting (lr 1e-2 + augmentation, 92.21%) and
+breaks the calibration gate at lr 2e-2 even with augmentation.
+
 ### 4.6 Boundary: anchor mass and the calibration gate
 
 The dual-use effect has a minimum anchor mass. On PanAf500 (400 clips → 40
 anchors), naive dual-use leaves every outcome bit-identical to the frozen
 pipeline: 40 CE examples cannot move the encoder against the distillation
 anchor, and the whole chain is bit-reproducible. Restoring the effect required
-anchor **augmentation** (sampling 4× augmented views of the same 40 anchors per
-epoch, using the pretext's own shear/padding family) at a gentler learning rate
-(1e-2, 50 epochs) — the configuration that produced the 92.21% CONFIRMS above.
-Conversely, adaptation pressure that is too high (lr 4e-2, or 8× augmentation
-with the anchor removed) trips the semantic layer's calibration gate (τ = 0),
-which fails loudly rather than emitting degenerate pseudo-labels. Adaptation
-strength therefore has a two-sided envelope: too little leaves the boundary
-intact, too much destroys the semantic layer's calibration.
+anchor **augmentation** at a gentler learning rate — the configuration that
+produced the 92.21% CONFIRMS above. Conversely, adaptation pressure that is too
+high (lr 4e-2 on NTU120; lr 2e-2 with augmentation on PanAf500) trips the
+semantic layer's calibration gate (τ = 0), which fails loudly rather than
+emitting degenerate pseudo-labels. Adaptation strength therefore has a
+two-sided envelope: too little leaves the boundary intact, too much destroys
+the semantic layer's calibration.
 
 ### 4.7 Threats to validity
 
