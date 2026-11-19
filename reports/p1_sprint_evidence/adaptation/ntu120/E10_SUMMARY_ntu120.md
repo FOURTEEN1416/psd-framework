@@ -8,3 +8,6 @@
 | T2b zero-shot NTU60→tier | 0.6977 | FAILS | 0.558 | 0.407 |  |
 | T2b LoRA cross-domain | 0.7198 | FAILS | 0.5966 | 0.4527 |  |
 | T3 SupCon feedback | 0.7498 | FAILS | 0.576 | 0.4338 | PSD pseudo-label feedback loop: confidence-gated pseudo-labels from the (b) sema |
+| T4 ref5 (frozen + 5% semantic) | 0.6461 | FAILS | 0.5846 | — |  |
+| T4 split5 (5% enc-CE + 5% semantic) | 0.6751 | FAILS | — | — | per-seed coupled: LoRA-CE fine-tune on THIS seed's anchors (+cosine distill anch |
+| T4 same10 (10% enc-CE + 10% semantic) | 0.7887 | FAILS | — | — | per-seed coupled: LoRA-CE fine-tune on THIS seed's anchors (+cosine distill anch |

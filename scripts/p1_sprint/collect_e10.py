@@ -35,6 +35,9 @@ def main() -> None:
         ("T2b zero-shot NTU60→tier", RUNS / f"adapt_lora_xfer_{tier}" / "summary_zeroshot.json"),
         ("T2b LoRA cross-domain", RUNS / f"adapt_eval_{tier}" / "summary_lora_xfer.json"),
         ("T3 SupCon feedback", RUNS / f"adapt_supcon_{tier}" / "summary.json"),
+        ("T4 ref5 (frozen + 5% semantic)", RUNS / f"adapt_t4_{tier}" / "summary_ref5.json"),
+        ("T4 split5 (5% enc-CE + 5% semantic)", RUNS / f"adapt_t4_{tier}" / "summary_split5.json"),
+        ("T4 same10 (10% enc-CE + 10% semantic)", RUNS / f"adapt_t4_{tier}" / "summary_same10.json"),
     ]:
         d = load(path)
         if d:
