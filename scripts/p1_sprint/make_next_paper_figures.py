@@ -65,10 +65,10 @@ def fig1():
     ax.bar(x - 0.18, vals, 0.36, label="Budget retention (10%)", color=C_DUAL)
     ax.bar(x + 0.18, refs, 0.36, label="Full-label linear reference", color=C_FROZEN)
     for xi, v in zip(x, vals):
-        ax.text(xi - 0.18, v + 1.2, f"{v:.2f}" if v % 1 else f"{v:.1f}",
+        ax.text(xi - 0.18, v + 1.2, f"{v:.2f}",
                 ha="center", fontsize=8.5, bbox=HALO)
     for xi, v in zip(x, refs):
-        ax.text(xi + 0.18, v + 1.2, f"{v:.2f}" if v % 1 else f"{v:.1f}",
+        ax.text(xi + 0.18, v + 1.2, f"{v:.2f}",
                 ha="center", fontsize=8.5, color="#555555", bbox=HALO)
     ax.set_xticks(x)
     ax.set_xticklabels(tiers)
