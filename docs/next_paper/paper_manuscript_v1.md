@@ -399,11 +399,11 @@ rate lift the 10% budget point past that band.
 
 ### 4.5 Hyperparameter sensitivity
 
-On NTU120 (ten seeds per cell unless noted), only two factors matter. The adaptation
+On NTU120 (ten seeds per cell), only two factors matter. The adaptation
 learning rate: 78.87% (1e-3) → 82.13% (1e-2) → 82.73% (2e-2) without
 augmentation; 4e-2 trips the calibration gate (§4.6). The augmentation dose:
-with lr 2e-2, 82.73% (×1) → 83.41% (×4) → **85.16% (×8)** → 82.47% (×12,
-single-seed probe), a unimodal dose–response (Figure 4). Epochs (100 vs. 200: 78.88%) and the
+with lr 2e-2, 82.73% (×1) → 83.41% (×4) → **85.16% (×8)** → 84.38% (×12),
+peaking at ×8 (Figure 4). Epochs (100 vs. 200: 78.88%) and the
 distillation weight (removing it entirely: 79.05% at lr 1e-3, slightly above
 the 78.87% with λ = 1) each move the result by ≤ 0.5 pp. The LoRA rank
 shifts the result more: at lr 1e-2, doubling the rank from 8 to 16 yields
@@ -411,9 +411,8 @@ shifts the result more: at lr 1e-2, doubling the rank from 8 to 16 yields
 separately rather than treating it as negligible.
 
 ![Figure 4. Augmentation dose–response on NTU120 at lr 2e-2. Boxes give the
-interquartile range over ten seeds, dots individual seeds, and the orange line
-the mean; V = 12 is a single-seed probe (diamond). The dashed line marks the
-85% PARTIAL threshold.](figures/fig4_aug_dose_response.png)
+interquartile range over ten seeds, dots individual seeds, and the coral line
+the mean. The dashed line marks the 85% PARTIAL threshold.](figures/fig4_aug_dose_response.png)
 
 The optimal recipe differs across tiers in a way that tracks anchor mass:
 NTU120 (734 anchors) takes the strongest setting (lr 2e-2, 8× augmentation);

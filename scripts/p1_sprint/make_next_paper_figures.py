@@ -263,36 +263,32 @@ def fig4():
     sums = [load(RUNS / "adapt_t4_ntu120" / f"summary_{t}.json") for t in tags]
     data = [np.array([r["retention_seed"] for r in s["per_seed"]]) * 100 for s in sums]
     means = [s["retention"] * 100 for s in sums]
-    assert [len(d) for d in data] == [10, 10, 10, 1], [len(d) for d in data]
-    assert np.allclose(means, [82.73, 83.41, 85.16, 82.47], atol=0.02), means
+    assert all(len(d) == 10 for d in data), [len(d) for d in data]
+    assert np.allclose(means[:3], [82.73, 83.41, 85.16], atol=0.02), means
 
     fig, ax = plt.subplots(figsize=(110 * MM, 78 * MM))
     fig.subplots_adjust(left=0.145, right=0.975, top=0.875, bottom=0.175)
 
     pos = np.arange(4)
-    ax.boxplot(data[:3], positions=pos[:3], widths=0.50, patch_artist=True,
+    ax.boxplot(data, positions=pos, widths=0.50, patch_artist=True,
                showfliers=False, whiskerprops=dict(color=LINE, lw=1.0),
                capprops=dict(color=LINE, lw=1.0),
                medianprops=dict(color=BLUE_TXT, lw=1.6),
                boxprops=dict(facecolor="#C9EEFB", edgecolor=LINE, lw=1.1))
     rng = np.random.default_rng(11)
-    for i in range(3):
+    for i in range(4):
         d = data[i]
         jit = rng.uniform(-0.11, 0.11, size=len(d))
         ax.scatter(i + jit, d, s=16, color=LINE, alpha=0.95, lw=0.6,
                    edgecolor="white", zorder=4)
-    # ×12：单种子探针，用空心菱形表示，不做箱线
-    ax.plot([3], [means[3]], "D", ms=7.2, mfc="white", mec=WARM2, mew=1.6, zorder=6)
-    ax.text(3, means[3] - 1.0, "n=1", ha="center", va="top", fontsize=6.6, color=NEU_D)
-
     ax.plot(pos, means, "-o", color=WARM, lw=2.2, ms=5.2, mfc="white",
             mec=WARM, mew=1.6, zorder=5, label="Mean")
 
     ax.axhline(85, color=NEU_D, lw=0.9, ls=(0, (2.6, 2.2)), zorder=1)
-    ax.text(3.42, 85.12, "PARTIAL ≥ 85", ha="right", va="bottom",
-            fontsize=7.6, color=WARM2)
+    ax.text(0.02, 0.97, "PARTIAL ≥ 85", transform=ax.transAxes, ha="left",
+            va="top", fontsize=7.6, color=WARM2)
     ax.text(2, means[2] + 1.0, f"{means[2]:.2f}", ha="center", va="bottom",
-            fontsize=8.6, fontweight="bold", color=INK)
+            fontsize=8.6, fontweight="bold", color=BLUE_TXT)
 
     ax.set_xlim(-0.55, 3.55)
     ax.set_ylim(79.0, 88.6)

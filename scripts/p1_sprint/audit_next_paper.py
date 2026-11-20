@@ -58,7 +58,7 @@ CHECKS: list[tuple[str, list[str]]] = [
     ("82.73", ["MANIFEST.md", f"{A}/ntu120/summary_sweep_lr2e2.json"]),
     ("83.41", ["MANIFEST.md", f"{A}/ntu120/summary_aug4_lr2e2.json"]),
     ("85.16", [f"{A}/ntu120/summary_aug8_lr2e2.json"]),
-    ("82.47", ["MANIFEST.md", f"{A}/ntu120/summary_aug12_lr2e2.json"]),
+    ("84.38", ["MANIFEST.md", f"{A}/ntu120/summary_aug12_lr2e2.json"]),
     ("79.05", ["MANIFEST.md", f"{A}/ntu120/summary_sweep_d0.json"]),
     ("81.49", ["MANIFEST.md", f"{A}/ntu120/summary_sweep_lr1e2_r16.json"]),
     ("78.88", ["MANIFEST.md", f"{A}/ntu120/summary_sweep_ep200.json"]),

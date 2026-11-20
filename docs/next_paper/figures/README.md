@@ -77,8 +77,7 @@ encoding), per the palette skill's rules.
   `summary_aug8_lr2e2.json`, `summary_aug12_lr2e2.json` — all NTU120, lr 2e-2,
   10 seeds.
 * Encodings: boxes = interquartile range over ten seeds, dots = individual seeds,
-  coral line = mean across doses; V = 12 is a single-seed probe (open diamond,
-  labelled n = 1); dashed line = 85% PARTIAL threshold.
+  coral line = mean across doses; dashed line = 85% PARTIAL threshold.
 
 ## QA status (2026-11-20)
 
@@ -87,5 +86,5 @@ encoding), per the palette skill's rules.
 * Numbers re-verified by `scripts/p1_sprint/audit_next_paper.py` (50/50, AUDIT_OK).
 * Visual pass on all four PNGs at 300 dpi, plus local crops. v4 adopts the
   summer-beach palette and four distinct chart types (bars, small-multiple
-  slopes, area line, box + strip); the ×12 dose is explicitly marked as a
-  single-seed probe after the n = 1 check.
+  slopes, area line, box + strip). The ×12 cell was completed to ten seeds on
+  2026-11-21 (84.38%, replacing the earlier single-seed 82.47% probe).
