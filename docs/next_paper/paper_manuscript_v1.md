@@ -97,9 +97,9 @@ band), +9.7 pp on PanAf500 (82.50% → 92.21%, crossing into CONFIRMS), and
 +20.1 pp on UCF101 (51.09% → 71.21%). A budget-allocation sweep shows the
 advantage widens with budget (+2.9 pp at 5%, +3.9 pp at 10%, +4.6 pp at 15%),
 and a hyperparameter study isolates the adaptation learning rate and the
-anchor-augmentation dose as the dominant factors, with a
-unimodal dose–response (82.73% → 83.41% → 85.16% → 82.47% for augmentation
-doses 1/4/8/12) and a hard calibration-gate boundary at high pressure.
+anchor-augmentation dose as the dominant factors, with a unimodal
+dose–response peaking at ×8 (85.16%) and a hard calibration-gate boundary at
+high pressure.
 
 Our contributions are:
 
@@ -291,8 +291,8 @@ and the harness are released. Figure 1 shows the resulting four-tier gradient of
 retention.
 
 ![Figure 1. Four-tier gradient of budget retention (10% anchors). Bars give
-each tier's retention on a common 0–100 scale; the grey line under each tier
-name gives the full-label linear-probe accuracy that defines its denominator.
+each tier's retention on a common 0–100 scale; the grey label under each tier name
+gives the full-label linear-probe accuracy that defines its denominator.
 Vertical lines mark the 85% and 90% verdict thresholds (PARTIAL and CONFIRMS).](figures/fig1_four_tier_gradient.png)
 
 ### 4.2 Zero-label adaptation does not move a frozen physical layer
@@ -356,11 +356,10 @@ optimal settings of §4.5).
 | UCF101   |     953 | 10%    |  51.09% | 71.21% (lr 2e-2)             | **+20.12 pp** | FAILS → FAILS        |
 
 ![Figure 2. Per-tier main results of anchor recycling at the 10% budget
-(Table 2). Each arrow runs from the frozen mean to the recycled mean over ten
-seeds; red numbers give the gain, and the post-recycling verdict is printed
-under each tier name. Shaded zones mark the pre-registered PARTIAL (85–90%)
-and CONFIRMS (≥90%) bands. NTU120 74.96% → 85.16%, PanAf500 82.50% →
-92.21%, UCF101 51.09% → 71.21%.](figures/fig2_tier_main_results.png)
+(Table 2). Each panel shows one tier: thin grey lines are individual seeds
+(n = 10), the thick line runs from the frozen mean to the recycled mean, and
+the gain and post-recycling verdict are printed with the panel. NTU120 74.96%
+→ 85.16%, PanAf500 82.50% → 92.21%, UCF101 51.09% → 71.21%.](figures/fig2_tier_main_results.png)
 
 Two of the three weak-reference tiers cross their pre-registered bands, and
 the third improves by 20 pp. On NTU120 the pipeline gain (43.75% →
@@ -400,20 +399,21 @@ rate lift the 10% budget point past that band.
 
 ### 4.5 Hyperparameter sensitivity
 
-On NTU120 (ten seeds per cell), only two factors matter. The adaptation
+On NTU120 (ten seeds per cell unless noted), only two factors matter. The adaptation
 learning rate: 78.87% (1e-3) → 82.13% (1e-2) → 82.73% (2e-2) without
 augmentation; 4e-2 trips the calibration gate (§4.6). The augmentation dose:
-with lr 2e-2, 82.73% (×1) → 83.41% (×4) → **85.16% (×8)** → 82.47% (×12), a
-unimodal dose–response (Figure 4). Epochs (100 vs. 200: 78.88%) and the
+with lr 2e-2, 82.73% (×1) → 83.41% (×4) → **85.16% (×8)** → 82.47% (×12,
+single-seed probe), a unimodal dose–response (Figure 4). Epochs (100 vs. 200: 78.88%) and the
 distillation weight (removing it entirely: 79.05% at lr 1e-3, slightly above
 the 78.87% with λ = 1) each move the result by ≤ 0.5 pp. The LoRA rank
 shifts the result more: at lr 1e-2, doubling the rank from 8 to 16 yields
 81.49%, versus 82.13% for rank 8 at the same learning rate, so we report it
 separately rather than treating it as negligible.
 
-![Figure 4. Augmentation dose–response on NTU120 at lr 2e-2 (V = 1/4/8/12
-views per anchor; peak 85.16% at V = 8). The dashed line marks the 85%
-PARTIAL threshold.](figures/fig4_aug_dose_response.png)
+![Figure 4. Augmentation dose–response on NTU120 at lr 2e-2. Boxes give the
+interquartile range over ten seeds, dots individual seeds, and the orange line
+the mean; V = 12 is a single-seed probe (diamond). The dashed line marks the
+85% PARTIAL threshold.](figures/fig4_aug_dose_response.png)
 
 The optimal recipe differs across tiers in a way that tracks anchor mass:
 NTU120 (734 anchors) takes the strongest setting (lr 2e-2, 8× augmentation);

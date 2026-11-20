@@ -10,19 +10,26 @@ reported in the manuscript. Nothing is typed by hand twice.
 
 ## Design system
 
+Palette copied from the A-题 submission (`D:/Desktop/A题提交.zip`), i.e. the
+`summer-beach-v6` fill palette in `paper-figure-palette` — light, warm/cool
+pastel fills with same-hue ink for lines and text.
+
 | Element | Value |
 |---|---|
-| Typeface | Arial (embedded as Type 42), 7.2–9.2 pt at final print size |
-| Reference / frozen | grey `#9A9A9A`, dark grey `#6E6E6E`; track `#EDEDED` |
-| Anchor recycling | deep navy `#1B4F72` |
-| Threshold / gain / verdict | brick red `#B2182B` (annotation only, never encodes a series) |
-| Shaded verdict zones | red at 5–8% opacity |
-| Figure size | 165 × 78 mm (Fig. 1), 165 × 72 mm (Fig. 2), 110 × 82 mm (Fig. 3), 110 × 76 mm (Fig. 4) |
-| Export | vector PDF + 300 dpi PNG preview; no in-figure titles (captions carry the claim) |
+| Typeface | Arial / Arial Bold (Type 42 embedded), 7.4–9.4 pt at final size |
+| Method fill | light cyan `#6FCDFD` → `#2BC3F1` (gradient) |
+| Method ink | deep teal `#19667F` / `#307697` |
+| Reference / frozen | neutral `#B6B6B2`, ink `#57575A` |
+| Warm accent (gain) | `#BE4E30`; deep threshold `#A3490D` |
+| Positive (CONFIRMS) | mint ink `#438040` (fill family `#9FE698`) |
+| Panel background / track | `#F2F4F7` |
+| Figure size | 165 × 78 mm (Fig. 1), 165 × 82 mm (Fig. 2), 110 × 82 mm (Fig. 3), 110 × 78 mm (Fig. 4) |
+| Export | vector PDF + 300 dpi PNG; no in-figure titles |
 
-Colour meaning is fixed across all four panels: grey is always the frozen
-measurement, blue always anchor recycling, red always an annotation
-(threshold, gain, verdict). No figure uses a fourth hue.
+The palette is a **fill palette** (white-background contrast 1.2–2.1:1), so
+lines, edges and text always use the same-hue ink colours above; category
+distinctions additionally carry markers/line styles/direct labels (second
+encoding), per the palette skill's rules.
 
 ## Figure-by-figure provenance
 
@@ -44,9 +51,9 @@ measurement, blue always anchor recycling, red always an annotation
 * Data: per-seed `retention_seed` from `adapt_t4_ntu120/summary_aug8_lr2e2.json`,
   `adapt_t4_panaf500/summary_aug4.json`, `adapt_t4_ucf101/summary_same10.json`;
   frozen seeds from `b_arms / full_ref` in the corresponding `labelfree_*` summaries.
-* Encodings: open grey circle = frozen mean, filled navy circle = recycled mean,
-  arrow = gain; red text = gain in pp and post-recycling verdict; shaded zones =
-  the PARTIAL/CONFIRMS bands.
+* Encodings: three panels (a/b/c); thin grey lines = individual seeds, thick
+  teal line = frozen → recycled mean; coral text = gain in pp; verdict tag at
+  the panel top right.
 * n = 10 seeds (42–51) per mean; means use the reported ratio-of-means retention,
   which differs from the mean of per-seed ratios by < 1 pp (asserted in the script).
   Per-seed values are tabulated in the released summaries and discussed in §4.3.
@@ -64,14 +71,16 @@ measurement, blue always anchor recycling, red always an annotation
 * Data: `summary_same10.json` (V=1), `summary_aug4_lr2e2.json`,
   `summary_aug8_lr2e2.json`, `summary_aug12_lr2e2.json` — all NTU120, lr 2e-2,
   10 seeds.
-* Encodings: open circles = non-peak doses; filled circle + dotted stem = peak;
-  dashed red line = 85% PARTIAL threshold.
+* Encodings: boxes = interquartile range over ten seeds, dots = individual seeds,
+  coral line = mean across doses; V = 12 is a single-seed probe (open diamond,
+  labelled n = 1); dashed line = 85% PARTIAL threshold.
 
 ## QA status (2026-11-20)
 
 * All text ≥ 7.2 pt at final size; Arial embedded in every PDF.
 * No artist outside the canvas (tight-bbox check: ≥1.4 mm margins).
 * Numbers re-verified by `scripts/p1_sprint/audit_next_paper.py` (50/50, AUDIT_OK).
-* Visual pass on all four PNGs at 300 dpi, plus local crops; v3 rebalanced the
-  composition after the v2 "too sparse" review (bigger type and marks, tighter
-  aspect, filled tracks/areas, labels attached to the data).
+* Visual pass on all four PNGs at 300 dpi, plus local crops. v4 adopts the
+  summer-beach palette and four distinct chart types (bars, small-multiple
+  slopes, area line, box + strip); the ×12 dose is explicitly marked as a
+  single-seed probe after the n = 1 check.

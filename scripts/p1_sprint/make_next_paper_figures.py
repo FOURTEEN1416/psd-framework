@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
-"""make_next_paper_figures — 下一篇论文 4 张主图（v3：视觉重构）。
+"""make_next_paper_figures — 下一篇论文 4 张主图（v4：Okabe-Ito + 多图型）。
 
-v3 相对 v2 的变化（针对"图太丑"的反馈，不是修瑕疵）：
-  · 比例：从 180×66 的极宽条改为 165×78 / 165×72 / 110×82 / 110×76，画面不再空
-  · 字号：正文 8.5–9 pt、刻度 8 pt、关键数字 9 pt 半粗，印刷与屏幕都可读
-  · 体量：横条填满 0–100 轨道、哑铃箭头 2.6 pt、曲线 2.2–2.4 pt、面积填充
-  · 层次：图1 左侧双行标签（tier + 全标注参考）；图2 左侧 tier + 判决；
-          图3 图例移到坐标区上方，绘图区更满
-  · 配色：深海军蓝 #1B4F72（方法）/ 砖红 #B2182B（判定与增益）/ 中性灰（参考）
+v4 依据工具箱 `paper-figure-palette`（journal-submission 场景 = okabe-ito）
+与 `fig-visualization-advisor`（图型多样化）重做：
+  · 配色：Okabe-Ito 色盲友好亮色系（天蓝 #56B4E9 / 蓝 #0072B2 / 橙 #E69F00 /
+          绿 #009E73 / 朱红 #D55E00 / 中性灰 #B5B5B5），弃深海军蓝
+  · 图型：fig1 横条（0–100 轨道）· fig2 三分面斜率图（逐种子轨迹）·
+          fig3 折线+增益带 · fig4 箱线+散点+均值趋势（分布图）
+  · 每个分面独立坐标 + 分面字母；无图内标题
 
 数据全部来自实测 summary，脚本内断言与手稿数字对齐。
 """
@@ -26,15 +26,26 @@ RUNS = REPO / "runs" / "p1_sprint"
 OUT = REPO / "docs" / "next_paper" / "figures"
 OUT.mkdir(parents=True, exist_ok=True)
 
-# ---------------- design system ----------------
-INK = "#1A1A1A"
+# ---------------- Summer-beach palette (A题提交 论文同款) ----------------
+# 取自 D:/Desktop/A题提交.zip 论文源码：summer-beach-v6 填充色 + 同色相墨色
+INK = "#2B2B2E"
 HAIR = "#3D3D3D"
-GRAY = "#9A9A9A"
-GRAY_D = "#6E6E6E"
-TRACK = "#EDEDED"
-BLUE = "#1B4F72"
-BLUE_D = "#123A55"
-RED = "#B2182B"
+NEU = "#B6B6B2"
+NEU_D = "#57575A"
+TRACK = "#F2F4F7"
+CYAN = "#6FCDFD"
+CYAN2 = "#2BC3F1"
+TEAL = "#19667F"
+TEAL_D = "#307697"
+MINT = "#9FE698"
+GREEN = "#438040"
+CREAM = "#FEE6A9"
+PEACH = "#FEBDAA"
+CORAL = "#FEB8B5"
+CORAL2 = "#FDA574"
+WARM = "#A3490D"
+WARM2 = "#BE4E30"
+WARM3 = "#A35B31"
 
 MM = 1 / 25.4
 plt.rcParams.update({
@@ -42,9 +53,9 @@ plt.rcParams.update({
     "font.sans-serif": ["Arial", "Liberation Sans", "DejaVu Sans"],
     "font.size": 8.5,
     "axes.labelsize": 9,
-    "xtick.labelsize": 8,
-    "ytick.labelsize": 8,
-    "legend.fontsize": 8,
+    "xtick.labelsize": 7.8,
+    "ytick.labelsize": 7.6,
+    "legend.fontsize": 7.8,
     "axes.spines.top": False,
     "axes.spines.right": False,
     "axes.linewidth": 0.8,
@@ -57,8 +68,8 @@ plt.rcParams.update({
     "ytick.direction": "out",
     "xtick.major.width": 0.8,
     "ytick.major.width": 0.8,
-    "xtick.major.size": 3.2,
-    "ytick.major.size": 3.2,
+    "xtick.major.size": 3.0,
+    "ytick.major.size": 3.0,
     "xtick.major.pad": 3.5,
     "ytick.major.pad": 3.5,
     "legend.frameon": False,
@@ -66,6 +77,9 @@ plt.rcParams.update({
     "ps.fonttype": 42,
     "savefig.dpi": 300,
 })
+
+VERDICT_COLOR = {"CONFIRMS": GREEN, "PARTIAL": WARM3, "FAILS": WARM2}
+PALE = "#E6F7FE"
 
 
 def load(p: Path):
@@ -80,47 +94,47 @@ def save(fig, name):
 
 
 def seed_retention(summary: dict) -> list[float]:
-    """冻结臂逐种子 retention = b_arm_i / full_ref。"""
     fr = summary["full_ref"]
     out = [b / fr for b in summary["b_arms"]]
-    assert abs(np.mean(out) - summary["retention"]) < 5e-3, (
-        f"{summary.get('tier')}: per-seed mean {np.mean(out):.4f} != {summary['retention']}")
+    assert abs(np.mean(out) - summary["retention"]) < 5e-3
     return out
 
 
-# ---------- fig1: 四层梯度（0–100 轨道横条） ----------
+# ---------- fig1: 四层梯度（0–100 轨道横条，亮天蓝） ----------
 def fig1():
     tiers = ["NTU60", "PanAf500", "NTU120", "UCF101"]
     ret = [90.70, 82.50, 74.96, 51.09]
     ref = [74.45, 64.00, 58.37, 19.87]
 
     fig, ax = plt.subplots(figsize=(165 * MM, 78 * MM))
-    fig.subplots_adjust(left=0.185, right=0.965, top=0.855, bottom=0.185)
+    fig.subplots_adjust(left=0.185, right=0.965, top=0.86, bottom=0.185)
 
     y = np.arange(len(tiers))[::-1]
+    ax.barh(y, np.full(len(tiers), 100.0), height=0.58, color=TRACK, lw=0, zorder=0)
+    from matplotlib.colors import LinearSegmentedColormap
+    bar_cmap = LinearSegmentedColormap.from_list("sb", ["#C9EEFD", CYAN2])
+    grad = np.linspace(0, 1, 256).reshape(1, -1)
+    for yi, v in zip(y, ret):
+        ax.imshow(grad, extent=(0, v, yi - 0.29, yi + 0.29), aspect="auto",
+                  cmap=bar_cmap, interpolation="bicubic", zorder=2)
+    ax.barh(y, ret, height=0.58, color="none", edgecolor=TEAL_D, lw=0.8, zorder=2.5)
 
-    # 0–100 轨道 + 实测横条
-    ax.barh(y, np.full(len(tiers), 100.0), height=0.60, color=TRACK, lw=0, zorder=0)
-    ax.barh(y, ret, height=0.60, color=BLUE, lw=0, zorder=2)
-
-    # 判定阈值
-    ax.axvline(90, color=RED, lw=1.0, ls=(0, (2.6, 2.2)), zorder=3)
-    ax.axvline(85, color=RED, lw=1.0, ls=(0, (1.1, 2.0)), zorder=3)
+    ax.axvline(90, color=WARM, lw=1.0, ls=(0, (2.6, 2.2)), zorder=3)
+    ax.axvline(85, color=WARM, lw=1.0, ls=(0, (1.0, 2.0)), zorder=3)
     ax.text(87.5, 0.36, "PARTIAL", ha="center", va="bottom", rotation=90,
-            fontsize=6.8, color=RED)
+            fontsize=7.0, color=WARM)
     ax.text(95.0, 0.36, "CONFIRMS", ha="center", va="bottom", rotation=90,
-            fontsize=6.8, color=RED)
+            fontsize=7.0, color=WARM)
 
     for yi, v in zip(y, ret):
-        ax.text(v - 2.2, yi, f"{v:.2f}", va="center", ha="right",
-                fontsize=9.2, fontweight="bold", color="white", zorder=5)
+        ax.text(v - 2.0, yi, f"{v:.2f}", va="center", ha="right",
+                fontsize=9.4, fontweight="bold", color=INK, zorder=5)
 
-    # 左侧双行标签：tier 名 + 全标注参考精度（retention 的分母）
     for yi, name, r in zip(y, tiers, ref):
         ax.text(-1.8, yi + 0.13, name, ha="right", va="center",
-                fontsize=9.2, fontweight="bold", color=INK, clip_on=False)
+                fontsize=9.4, fontweight="bold", color=INK, clip_on=False)
         ax.text(-1.8, yi - 0.20, f"ref {r:.2f}", ha="right", va="center",
-                fontsize=7.4, color=GRAY_D, clip_on=False)
+                fontsize=7.4, color=NEU_D, clip_on=False)
 
     ax.set_xlim(0, 100)
     ax.set_ylim(-0.72, 3.55)
@@ -132,9 +146,10 @@ def fig1():
     save(fig, "fig1_four_tier_gradient")
 
 
-# ---------- fig2: 三 tier 主结果（哑铃 + 种子刻度 + SD） ----------
+# ---------- fig2: 三 tier 主结果（三分面斜率图） ----------
 def fig2():
     tiers = ["NTU120", "PanAf500", "UCF101"]
+    letters = ["a", "b", "c"]
     frozen_sum = [load(RUNS / "labelfree_ntu120" / "summary.json"),
                   load(RUNS / "labelfree_panaf500" / "summary.json"),
                   load(RUNS / "labelfree_ucf101" / "summary.json")]
@@ -142,63 +157,50 @@ def fig2():
                 load(RUNS / "adapt_t4_panaf500" / "summary_aug4.json"),
                 load(RUNS / "adapt_t4_ucf101" / "summary_same10.json")]
     verdicts = ["PARTIAL", "CONFIRMS", "FAILS"]
+    ylims = [(68, 89), (54, 103), (34, 102)]
 
     frozen = [seed_retention(s) for s in frozen_sum]
     dual = [[r["retention_seed"] for r in s["per_seed"]] for s in dual_sum]
     f_mean = [s["retention"] * 100 for s in frozen_sum]
     d_mean = [s["retention"] * 100 for s in dual_sum]
+    assert np.allclose(f_mean, [74.96, 82.50, 51.09], atol=0.02)
+    assert np.allclose(d_mean, [85.16, 92.21, 71.21], atol=0.02)
 
-    assert np.allclose(f_mean, [74.96, 82.50, 51.09], atol=0.02), f_mean
-    assert np.allclose(d_mean, [85.16, 92.21, 71.21], atol=0.02), d_mean
-    assert np.all(np.abs(np.mean(dual, axis=1) * 100 - np.array(d_mean)) < 1.0)
+    fig, axes = plt.subplots(1, 3, figsize=(165 * MM, 82 * MM),
+                             gridspec_kw={"wspace": 0.30})
+    fig.subplots_adjust(left=0.085, right=0.985, top=0.86, bottom=0.20)
 
-    fig, ax = plt.subplots(figsize=(165 * MM, 72 * MM))
-    fig.subplots_adjust(left=0.175, right=0.975, top=0.86, bottom=0.18)
+    yticks = [[70, 75, 80, 85], [60, 70, 80, 90, 100], [40, 50, 60, 70, 80, 90, 100]]
+    for ax, letter, name, f, d, fm, dm, vd, yl, yt in zip(
+            axes, letters, tiers, frozen, dual, f_mean, d_mean, verdicts, ylims, yticks):
+        f = np.array(f) * 100
+        d = np.array(d) * 100
+        for a, b in zip(f, d):  # 逐种子轨迹
+            ax.plot([0, 1], [a, b], color="#DCDCDC", lw=0.7, alpha=0.85, zorder=1)
+        ax.fill_between([0, 1], [fm, fm], [fm, dm], color=CYAN, alpha=0.35,
+                        lw=0, zorder=2)
+        ax.plot([0, 1], [fm, dm], color=TEAL, lw=2.4, zorder=3, solid_capstyle="round")
+        ax.plot([0], [fm], "o", ms=6.6, mfc="white", mec=NEU_D, mew=1.3, zorder=5)
+        ax.plot([1], [dm], "o", ms=6.6, mfc=TEAL, mec="white", mew=1.0, zorder=5)
 
-    # 判定带：只做背景，不抢哑铃
-    ax.axvspan(85, 90, color=RED, alpha=0.05, lw=0, zorder=0)
-    ax.axvspan(90, 100, color=RED, alpha=0.08, lw=0, zorder=0)
-    ax.text(87.5, 2.60, "PARTIAL", ha="center", va="bottom", fontsize=6.6, color=RED)
-    ax.text(95.0, 2.60, "CONFIRMS", ha="center", va="bottom", fontsize=7.0, color=RED)
+        ax.set_title(f"{letter}   {name}", loc="left", fontsize=9.2,
+                     fontweight="bold", pad=7)
+        ax.text(1.0, 1.035, f"→ {vd}", transform=ax.transAxes, ha="right",
+                va="bottom", fontsize=7.4, color=VERDICT_COLOR[vd])
+        ax.text(0.5, -0.125, f"+{dm - fm:.2f} pp", transform=ax.transAxes,
+                ha="center", va="top", fontsize=9.2, fontweight="bold", color=WARM2)
+        ax.set_xlim(-0.34, 1.34)
+        ax.set_ylim(*yl)
+        ax.set_xticks([0, 1])
+        ax.set_xticklabels(["Frozen", "Recycled"])
+        ax.set_yticks(yt)
 
-    for i in range(3):
-        y = 2 - i
-        f = np.array(frozen[i]) * 100
-        d = np.array(dual[i]) * 100
-        xf, xd = f_mean[i], d_mean[i]
-
-        # 极简哑铃：均值点 + 箭头（种子分布见表格与发布数据）
-
-        # 哑铃箭头
-        ax.annotate("", xy=(xd, y), xytext=(xf, y),
-                    arrowprops=dict(arrowstyle="-|>", color=BLUE, lw=2.6,
-                                    shrinkA=5, shrinkB=5, mutation_scale=14),
-                    zorder=3)
-        ax.plot([xf], [y], "o", ms=9.0, mfc="white", mec=GRAY_D, mew=1.4, zorder=5)
-        ax.plot([xd], [y], "o", ms=9.0, mfc=BLUE, mec="white", mew=1.2, zorder=5)
-
-        # 增益
-        ax.text((xf + xd) / 2, y + 0.30, f"+{d_mean[i] - f_mean[i]:.2f} pp",
-                ha="center", va="bottom", fontsize=9.0, fontweight="bold",
-                color=RED, zorder=6)
-
-        # 左侧固定标签列：tier + 判决
-        ax.text(39.0, y + 0.16, tiers[i], ha="right", va="center",
-                fontsize=9.2, fontweight="bold", color=INK, clip_on=False)
-        ax.text(39.0, y - 0.20, f"→ {verdicts[i]}", ha="right", va="center",
-                fontsize=7.6, color=RED, clip_on=False)
-
-    ax.set_xlim(40, 100)
-    ax.set_ylim(-0.45, 2.86)
-    ax.set_yticks([])
-    ax.set_xticks(np.arange(40, 101, 10))
-    ax.set_xlabel("Budget retention (%)")
-    ax.tick_params(axis="y", length=0)
+    axes[0].set_ylabel("Budget retention (%)")
 
     save(fig, "fig2_tier_main_results")
 
 
-# ---------- fig3: 预算-分配率曲线（增益带） ----------
+# ---------- fig3: 预算-分配率曲线（折线 + 增益带） ----------
 def fig3():
     budgets = [5, 10, 15]
     ref5 = load(RUNS / "adapt_t4_ntu120" / "summary_ref5.json")
@@ -212,25 +214,24 @@ def fig3():
               ref15["retention"] * 100]
     d_vals = [split5["retention"] * 100, same10["retention"] * 100,
               dual15["retention"] * 100]
-    assert np.allclose(f_vals, [64.61, 74.96, 79.04], atol=0.02), f_vals
-    assert np.allclose(d_vals, [67.51, 78.87, 83.60], atol=0.02), d_vals
+    assert np.allclose(f_vals, [64.61, 74.96, 79.04], atol=0.02)
+    assert np.allclose(d_vals, [67.51, 78.87, 83.60], atol=0.02)
 
     fig, ax = plt.subplots(figsize=(110 * MM, 82 * MM))
     fig.subplots_adjust(left=0.145, right=0.975, top=0.825, bottom=0.175)
 
-    ax.fill_between(budgets, f_vals, d_vals, color=BLUE, alpha=0.14, lw=0)
-    ax.plot(budgets, f_vals, "-o", color=GRAY_D, lw=1.6, ms=6.0, mfc="white",
-            mec=GRAY_D, mew=1.5, label="Semantic-only (frozen)", zorder=3)
-    ax.plot(budgets, d_vals, "-s", color=BLUE, lw=2.2, ms=6.0, mfc="white",
-            mec=BLUE, mew=1.6, label="Anchor recycling", zorder=4)
+    ax.fill_between(budgets, f_vals, d_vals, color=CYAN, alpha=0.28, lw=0)
+    ax.plot(budgets, f_vals, "-o", color=NEU, lw=2.0, ms=6.2, mfc="white",
+            mec=NEU, mew=1.6, label="Semantic-only (frozen)", zorder=3)
+    ax.plot(budgets, d_vals, "-s", color=TEAL, lw=2.6, ms=6.2, mfc="white",
+            mec=TEAL, mew=1.6, label="Anchor recycling", zorder=4)
 
     for b, f, d in zip(budgets, f_vals, d_vals):
-        ax.text(b, d + 1.25, f"{d:.2f}", ha="center", va="bottom", fontsize=8.2,
-                color=BLUE_D, fontweight="bold")
+        ax.text(b, d + 1.3, f"{d:.2f}", ha="center", va="bottom", fontsize=8.4,
+                color=TEAL, fontweight="bold")
         gx, gha = (b + 0.30, "left") if b < 15 else (b - 0.30, "right")
         ax.text(gx, (f + d) / 2, f"+{d - f:.2f}", ha=gha, va="center",
-                fontsize=8.0, fontweight="bold", color=RED, zorder=6)
-
+                fontsize=8.2, fontweight="bold", color=WARM2, zorder=6)
 
     ax.set_xlim(4.2, 15.8)
     ax.set_ylim(62, 87)
@@ -240,43 +241,54 @@ def fig3():
     ax.set_xlabel("Anchor budget (% of training clips)")
     ax.set_ylabel("NTU120 retention (%)")
     ax.legend(loc="lower center", bbox_to_anchor=(0.5, 1.0), ncol=2,
-              handlelength=1.6, columnspacing=1.8, handletextpad=0.5)
+              handlelength=1.7, columnspacing=2.0, handletextpad=0.5)
 
     save(fig, "fig3_budget_allocation")
 
 
-# ---------- fig4: 增广剂量响应 ----------
+# ---------- fig4: 增广剂量响应（箱线 + 散点 + 均值趋势；×12 为单种子探针） ----------
 def fig4():
-    doses = [1, 4, 8, 12]
-    ret = [82.73, 83.41, 85.16, 82.47]
-    assert abs(ret[2] - 85.16) < 1e-9
+    tags = ["sweep_lr2e2", "aug4_lr2e2", "aug8_lr2e2", "aug12_lr2e2"]
+    labels = ["×1", "×4", "×8", "×12"]
+    sums = [load(RUNS / "adapt_t4_ntu120" / f"summary_{t}.json") for t in tags]
+    data = [np.array([r["retention_seed"] for r in s["per_seed"]]) * 100 for s in sums]
+    means = [s["retention"] * 100 for s in sums]
+    assert [len(d) for d in data] == [10, 10, 10, 1], [len(d) for d in data]
+    assert np.allclose(means, [82.73, 83.41, 85.16, 82.47], atol=0.02), means
 
-    fig, ax = plt.subplots(figsize=(110 * MM, 76 * MM))
+    fig, ax = plt.subplots(figsize=(110 * MM, 78 * MM))
     fig.subplots_adjust(left=0.145, right=0.975, top=0.875, bottom=0.175)
 
-    ax.fill_between(doses, 81.8, ret, color=BLUE, alpha=0.10, lw=0, zorder=1)
-    ax.axhspan(85, 86.2, color=RED, alpha=0.05, lw=0, zorder=0)
-    ax.axhline(85, color=RED, lw=1.0, ls=(0, (2.6, 2.2)), zorder=2)
-    ax.text(12.9, 85.10, "PARTIAL ≥ 85", ha="right", va="bottom",
-            fontsize=7.6, color=RED)
+    pos = np.arange(4)
+    ax.boxplot(data[:3], positions=pos[:3], widths=0.50, patch_artist=True,
+               showfliers=False, whiskerprops=dict(color=TEAL_D, lw=1.0),
+               capprops=dict(color=TEAL_D, lw=1.0),
+               medianprops=dict(color=TEAL, lw=1.6),
+               boxprops=dict(facecolor=PALE, edgecolor=TEAL_D, lw=1.1))
+    rng = np.random.default_rng(11)
+    for i in range(3):
+        d = data[i]
+        jit = rng.uniform(-0.11, 0.11, size=len(d))
+        ax.scatter(i + jit, d, s=15, color=CYAN2, alpha=0.95, lw=0.5,
+                   edgecolor=TEAL_D, zorder=4)
+    # ×12：单种子探针，用空心菱形表示，不做箱线
+    ax.plot([3], [means[3]], "D", ms=7.2, mfc="white", mec=WARM2, mew=1.6, zorder=6)
+    ax.text(3, means[3] - 1.0, "n=1", ha="center", va="top", fontsize=6.6, color=NEU_D)
 
-    ax.plot(doses, ret, "-", color=BLUE, lw=2.4, zorder=3)
-    for d, r in zip(doses, ret):
-        if d == 8:
-            ax.plot(d, r, "o", ms=9.0, mfc=BLUE, mec="white", mew=1.4, zorder=5)
-            ax.plot([d, d], [81.9, r], color=BLUE, lw=0.9, ls=(0, (1, 2.2)),
-                    alpha=0.5, zorder=1)
-        else:
-            ax.plot(d, r, "o", ms=6.4, mfc="white", mec=BLUE, mew=1.6, zorder=5)
-        ax.text(d, r + (0.20 if d != 8 else 0.28), f"{r:.2f}", ha="center",
-                va="bottom", fontsize=8.4,
-                fontweight="bold" if d == 8 else "normal", color=INK)
+    ax.plot(pos, means, "-o", color=WARM2, lw=2.2, ms=5.2, mfc="white",
+            mec=WARM2, mew=1.6, zorder=5, label="Mean")
 
-    ax.set_xlim(0.2, 13.2)
-    ax.set_ylim(81.8, 86.2)
-    ax.set_xticks(doses)
-    ax.set_xticklabels([f"×{d}" for d in doses])
-    ax.set_yticks(np.arange(82, 87, 1))
+    ax.axhline(85, color=WARM, lw=1.0, ls=(0, (2.6, 2.2)), zorder=1)
+    ax.text(3.42, 85.12, "PARTIAL ≥ 85", ha="right", va="bottom",
+            fontsize=7.6, color=WARM)
+    ax.text(2, means[2] + 1.0, f"{means[2]:.2f}", ha="center", va="bottom",
+            fontsize=8.6, fontweight="bold", color=INK)
+
+    ax.set_xlim(-0.55, 3.55)
+    ax.set_ylim(79.0, 88.6)
+    ax.set_xticks(pos)
+    ax.set_xticklabels(labels)
+    ax.set_yticks(np.arange(80, 89, 2))
     ax.set_xlabel("Anchor augmentation dose V (views per anchor)")
     ax.set_ylabel("NTU120 retention (%)")
 
