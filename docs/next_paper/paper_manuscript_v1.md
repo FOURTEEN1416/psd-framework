@@ -290,8 +290,10 @@ to be predictive of the adaptation envelope (§4.6). Per-seed values, logs,
 and the harness are released. Figure 1 shows the resulting four-tier gradient of budget
 retention.
 
-![Figure 1. The four-tier gradient of budget retention across the
-reference-quality tiers NTU60 → PanAf500 → NTU120 → UCF101.](figures/fig1_four_tier_gradient.png)
+![Figure 1. Four-tier gradient of budget retention (10% anchors). Each dot
+is a tier's budget-limited retention; the right-hand column gives the
+full-label linear-probe accuracy that defines its denominator. Shaded bands
+mark the pre-registered CONFIRMS (≥90%) and PARTIAL (85–90%) zones.](figures/fig1_four_tier_gradient.png)
 
 ### 4.2 Zero-label adaptation does not move a frozen physical layer
 
@@ -354,8 +356,10 @@ optimal settings of §4.5).
 | UCF101   |     953 | 10%    |  51.09% | 71.21% (lr 2e-2)             | **+20.12 pp** | FAILS → FAILS        |
 
 ![Figure 2. Per-tier main results of anchor recycling at the 10% budget
-(Table 2): NTU120 74.96% → 85.16%, PanAf500 82.50% → 92.21%, UCF101
-51.09% → 71.21%.](figures/fig2_tier_main_results.png)
+(Table 2). Each dot is one seed (n = 10); bars give the reported retention
+(ratio of mean accuracies), and the verdict after recycling is printed
+beneath each tier. NTU120 74.96% → 85.16%, PanAf500 82.50% → 92.21%,
+UCF101 51.09% → 71.21%.](figures/fig2_tier_main_results.png)
 
 Two of the three weak-reference tiers cross their pre-registered bands, and
 the third improves by 20 pp. On NTU120 the pipeline gain (43.75% →
@@ -385,7 +389,8 @@ augmentation, lr 1e-3).
 | 15%    |                 79.04% |           83.60% |   +4.56 pp |
 
 ![Figure 3. Budget-allocation sweep on NTU120 at the 5%, 10%, and 15%
-budgets (Table 3).](figures/fig3_budget_allocation.png)
+budgets (Table 3). The shaded ribbon is the anchor-recycling advantage; red
+numbers give the gain in percentage points over the semantic-only arm.](figures/fig3_budget_allocation.png)
 
 **Finding 3.** The anchor-recycling advantage widens monotonically with budget. At
 15% the pipeline reaches 83.60%, 1.4 pp below the PARTIAL band before
@@ -405,8 +410,9 @@ shifts the result more: at lr 1e-2, doubling the rank from 8 to 16 yields
 81.49%, versus 82.13% for rank 8 at the same learning rate, so we report it
 separately rather than treating it as negligible.
 
-![Figure 4. Augmentation dose–response on NTU120 at lr 2e-2
-(doses ×1/×4/×8/×12; peak 85.16% at ×8).](figures/fig4_aug_dose_response.png)
+![Figure 4. Augmentation dose–response on NTU120 at lr 2e-2 (V = 1/4/8/12
+views per anchor; peak 85.16% at V = 8). The dashed line marks the 85%
+PARTIAL threshold.](figures/fig4_aug_dose_response.png)
 
 The optimal recipe differs across tiers in a way that tracks anchor mass:
 NTU120 (734 anchors) takes the strongest setting (lr 2e-2, 8× augmentation);
