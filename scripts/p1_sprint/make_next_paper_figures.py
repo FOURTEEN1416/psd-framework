@@ -47,6 +47,8 @@ WARM = "#C74C53"         # A题珊瑚描边 #C74C53
 WARM2 = "#B35900"        # A题橙色文字实测 #B35900
 WARM3 = "#B35900"
 BLUE_TXT = "#1F4E79"     # A题蓝色文字实测 #1F4E79
+LINE = "#2BC3F1"         # 高饱和天青主线（清新/艳丽）
+MINT = "#9FE698"
 
 MM = 1 / 25.4
 plt.rcParams.update({
@@ -113,7 +115,7 @@ def fig1():
     y = np.arange(len(tiers))[::-1]
     ax.barh(y, np.full(len(tiers), 100.0), height=0.58, color=TRACK, lw=0, zorder=0)
     from matplotlib.colors import LinearSegmentedColormap
-    bar_cmap = LinearSegmentedColormap.from_list("sb", ["#E8F8FF", CYAN])
+    bar_cmap = LinearSegmentedColormap.from_list("sb", [MINT, CYAN, LINE])
     grad = np.linspace(0, 1, 256).reshape(1, -1)
     for yi, v in zip(y, ret):
         ax.imshow(grad, extent=(0, v, yi - 0.29, yi + 0.29), aspect="auto",
@@ -133,7 +135,7 @@ def fig1():
 
     for yi, name, r in zip(y, tiers, ref):
         ax.text(-1.8, yi + 0.13, name, ha="right", va="center",
-                fontsize=9.4, fontweight="bold", color=INK, clip_on=False)
+                fontsize=9.4, fontweight="bold", color=BLUE_TXT, clip_on=False)
         ax.text(-1.8, yi - 0.20, f"ref {r:.2f}", ha="right", va="center",
                 fontsize=7.4, color=NEU_D, clip_on=False)
 
@@ -178,14 +180,16 @@ def fig2():
         d = np.array(d) * 100
         for a, b in zip(f, d):  # 逐种子轨迹
             ax.plot([0, 1], [a, b], color="#DCDCDC", lw=0.7, alpha=0.85, zorder=1)
-        ax.fill_between([0, 1], [fm, fm], [fm, dm], color=CYAN, alpha=0.35,
+        ax.fill_between([0, 1], [fm, fm], [fm, dm], color=CYAN, alpha=0.45,
                         lw=0, zorder=2)
-        ax.plot([0, 1], [fm, dm], color=TEAL, lw=2.0, zorder=3, solid_capstyle="round")
+        ax.plot([0, 1], [fm, dm], color=LINE, lw=2.4, zorder=3, solid_capstyle="round")
         ax.plot([0], [fm], "o", ms=6.6, mfc="white", mec=NEU_D, mew=1.3, zorder=5)
         ax.plot([1], [dm], "o", ms=6.6, mfc=TEAL, mec="white", mew=1.0, zorder=5)
 
-        ax.set_title(f"{letter}   {name}", loc="left", fontsize=9.2,
-                     fontweight="bold", pad=7)
+        ax.text(0.0, 1.035, letter, transform=ax.transAxes, ha="left", va="bottom",
+                fontsize=10.0, fontweight="bold", color=WARM2)
+        ax.text(0.075, 1.035, name, transform=ax.transAxes, ha="left", va="bottom",
+                fontsize=9.2, fontweight="bold", color=BLUE_TXT)
         ax.text(1.0, 1.035, f"→ {vd}", transform=ax.transAxes, ha="right",
                 va="bottom", fontsize=7.4, color=VERDICT_COLOR[vd])
         ax.text(0.5, -0.125, f"+{dm - fm:.2f} pp", transform=ax.transAxes,
@@ -223,10 +227,11 @@ def fig3():
     fig, ax = plt.subplots(figsize=(110 * MM, 82 * MM))
     fig.subplots_adjust(left=0.145, right=0.975, top=0.825, bottom=0.175)
 
-    ax.fill_between(budgets, f_vals, d_vals, color=CYAN, alpha=0.28, lw=0)
+    ax.fill_between(budgets, 62, d_vals, color=CYAN, alpha=0.12, lw=0, zorder=0)
+    ax.fill_between(budgets, f_vals, d_vals, color=CYAN, alpha=0.40, lw=0)
     ax.plot(budgets, f_vals, "-o", color=NEU, lw=2.0, ms=6.2, mfc="white",
             mec=NEU_D, mew=1.6, label="Semantic-only (frozen)", zorder=3)
-    ax.plot(budgets, d_vals, "-s", color=TEAL, lw=2.0, ms=6.2, mfc="white",
+    ax.plot(budgets, d_vals, "-s", color=LINE, lw=2.6, ms=6.2, mfc="white",
             mec=TEAL, mew=1.6, label="Anchor recycling", zorder=4)
 
     for b, f, d in zip(budgets, f_vals, d_vals):
@@ -266,22 +271,22 @@ def fig4():
 
     pos = np.arange(4)
     ax.boxplot(data[:3], positions=pos[:3], widths=0.50, patch_artist=True,
-               showfliers=False, whiskerprops=dict(color=TEAL_D, lw=1.0),
-               capprops=dict(color=TEAL_D, lw=1.0),
-               medianprops=dict(color=TEAL, lw=1.6),
-               boxprops=dict(facecolor=PALE, edgecolor=TEAL_D, lw=1.1))
+               showfliers=False, whiskerprops=dict(color=LINE, lw=1.0),
+               capprops=dict(color=LINE, lw=1.0),
+               medianprops=dict(color=BLUE_TXT, lw=1.6),
+               boxprops=dict(facecolor="#C9EEFB", edgecolor=LINE, lw=1.1))
     rng = np.random.default_rng(11)
     for i in range(3):
         d = data[i]
         jit = rng.uniform(-0.11, 0.11, size=len(d))
-        ax.scatter(i + jit, d, s=15, color=CYAN2, alpha=0.95, lw=0.5,
-                   edgecolor=TEAL_D, zorder=4)
+        ax.scatter(i + jit, d, s=16, color=LINE, alpha=0.95, lw=0.6,
+                   edgecolor="white", zorder=4)
     # ×12：单种子探针，用空心菱形表示，不做箱线
     ax.plot([3], [means[3]], "D", ms=7.2, mfc="white", mec=WARM2, mew=1.6, zorder=6)
     ax.text(3, means[3] - 1.0, "n=1", ha="center", va="top", fontsize=6.6, color=NEU_D)
 
-    ax.plot(pos, means, "-o", color=WARM, lw=1.9, ms=5.2, mfc="white",
-            mec=WARM2, mew=1.6, zorder=5, label="Mean")
+    ax.plot(pos, means, "-o", color=WARM, lw=2.2, ms=5.2, mfc="white",
+            mec=WARM, mew=1.6, zorder=5, label="Mean")
 
     ax.axhline(85, color=NEU_D, lw=0.9, ls=(0, (2.6, 2.2)), zorder=1)
     ax.text(3.42, 85.12, "PARTIAL ≥ 85", ha="right", va="bottom",
