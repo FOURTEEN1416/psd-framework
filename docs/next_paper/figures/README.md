@@ -16,15 +16,20 @@ pastel fills with same-hue ink for lines and text.
 
 | Element | Value |
 |---|---|
-| Typeface | Arial / Arial Bold (Type 42 embedded), 7.4–9.4 pt at final size |
-| Method fill | light cyan `#6FCDFD` → `#2BC3F1` (gradient) |
-| Method ink | deep teal `#19667F` / `#307697` |
-| Reference / frozen | neutral `#B6B6B2`, ink `#57575A` |
-| Warm accent (gain) | `#BE4E30`; deep threshold `#A3490D` |
-| Positive (CONFIRMS) | mint ink `#438040` (fill family `#9FE698`) |
-| Panel background / track | `#F2F4F7` |
+| Typeface | Arial / Arial Bold (Type 42 embedded), 7.4–9.2 pt at final size |
+| Method fill | pale cyan gradient `#E8F8FF` → `#6FCDFD` |
+| Method ink | slate teal `#307697` / `#3F6B83` (measured stroke colours in the A-题 PDF) |
+| Reference / frozen | `#BFBFBF` line, `#808080` markers |
+| Text colours | blue `#1F4E79`, orange `#B35900`, green `#2E6B4E`, grey `#808080` (measured text colours) |
+| Coral accent | `#C74C53` (measured stroke) |
+| Grid / track | `#BFBFBF` grid at 55%, `#F2F4F7` track |
 | Figure size | 165 × 78 mm (Fig. 1), 165 × 82 mm (Fig. 2), 110 × 82 mm (Fig. 3), 110 × 78 mm (Fig. 4) |
 | Export | vector PDF + 300 dpi PNG; no in-figure titles |
+
+The first extraction pass used the palette skill's **deepened ink map** (`#19667F`, `#BE4E30`),
+which is why it still read dark. The values above are the colours actually measured in the
+A-题 PDF: stroke colours from `page.get_drawings()` and text colours from
+`page.get_text("dict")` spans (`#1F4E79` 10.8k chars, `#B35900` 28.0k, `#2E6B4E` 12.6k, `#808080` 10.2k).
 
 The palette is a **fill palette** (white-background contrast 1.2–2.1:1), so
 lines, edges and text always use the same-hue ink colours above; category

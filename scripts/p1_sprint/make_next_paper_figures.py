@@ -28,24 +28,25 @@ OUT.mkdir(parents=True, exist_ok=True)
 
 # ---------------- Summer-beach palette (A题提交 论文同款) ----------------
 # 取自 D:/Desktop/A题提交.zip 论文源码：summer-beach-v6 填充色 + 同色相墨色
-INK = "#2B2B2E"
+INK = "#2B2B2E"          # 正文
 HAIR = "#3D3D3D"
-NEU = "#B6B6B2"
-NEU_D = "#57575A"
-TRACK = "#F2F4F7"
+NEU = "#BFBFBF"          # 网格/参考（A题 stroke #BFBFBF）
+NEU_D = "#808080"        # A题次要文字 #808080
+TRACK = "#F2F4F7"        # A题面板底 #F2F4F7
 CYAN = "#6FCDFD"
 CYAN2 = "#2BC3F1"
-TEAL = "#19667F"
-TEAL_D = "#307697"
+TEAL = "#307697"         # A题描边实测 #307697
+TEAL_D = "#3F6B83"       # A题描边实测 #3F6B83
 MINT = "#9FE698"
-GREEN = "#438040"
+GREEN = "#2E6B4E"        # A题绿色文字实测 #2E6B4E
 CREAM = "#FEE6A9"
 PEACH = "#FEBDAA"
 CORAL = "#FEB8B5"
 CORAL2 = "#FDA574"
-WARM = "#A3490D"
-WARM2 = "#BE4E30"
-WARM3 = "#A35B31"
+WARM = "#C74C53"         # A题珊瑚描边 #C74C53
+WARM2 = "#B35900"        # A题橙色文字实测 #B35900
+WARM3 = "#B35900"
+BLUE_TXT = "#1F4E79"     # A题蓝色文字实测 #1F4E79
 
 MM = 1 / 25.4
 plt.rcParams.update({
@@ -112,23 +113,23 @@ def fig1():
     y = np.arange(len(tiers))[::-1]
     ax.barh(y, np.full(len(tiers), 100.0), height=0.58, color=TRACK, lw=0, zorder=0)
     from matplotlib.colors import LinearSegmentedColormap
-    bar_cmap = LinearSegmentedColormap.from_list("sb", ["#C9EEFD", CYAN2])
+    bar_cmap = LinearSegmentedColormap.from_list("sb", ["#E8F8FF", CYAN])
     grad = np.linspace(0, 1, 256).reshape(1, -1)
     for yi, v in zip(y, ret):
         ax.imshow(grad, extent=(0, v, yi - 0.29, yi + 0.29), aspect="auto",
                   cmap=bar_cmap, interpolation="bicubic", zorder=2)
     ax.barh(y, ret, height=0.58, color="none", edgecolor=TEAL_D, lw=0.8, zorder=2.5)
 
-    ax.axvline(90, color=WARM, lw=1.0, ls=(0, (2.6, 2.2)), zorder=3)
-    ax.axvline(85, color=WARM, lw=1.0, ls=(0, (1.0, 2.0)), zorder=3)
+    ax.axvline(90, color=NEU_D, lw=0.9, ls=(0, (2.6, 2.2)), zorder=3)
+    ax.axvline(85, color=NEU_D, lw=0.9, ls=(0, (1.0, 2.0)), zorder=3)
     ax.text(87.5, 0.36, "PARTIAL", ha="center", va="bottom", rotation=90,
-            fontsize=7.0, color=WARM)
+            fontsize=7.0, color=WARM2)
     ax.text(95.0, 0.36, "CONFIRMS", ha="center", va="bottom", rotation=90,
-            fontsize=7.0, color=WARM)
+            fontsize=7.0, color=WARM2)
 
     for yi, v in zip(y, ret):
         ax.text(v - 2.0, yi, f"{v:.2f}", va="center", ha="right",
-                fontsize=9.4, fontweight="bold", color=INK, zorder=5)
+                fontsize=9.4, fontweight="bold", color=BLUE_TXT, zorder=5)
 
     for yi, name, r in zip(y, tiers, ref):
         ax.text(-1.8, yi + 0.13, name, ha="right", va="center",
@@ -179,7 +180,7 @@ def fig2():
             ax.plot([0, 1], [a, b], color="#DCDCDC", lw=0.7, alpha=0.85, zorder=1)
         ax.fill_between([0, 1], [fm, fm], [fm, dm], color=CYAN, alpha=0.35,
                         lw=0, zorder=2)
-        ax.plot([0, 1], [fm, dm], color=TEAL, lw=2.4, zorder=3, solid_capstyle="round")
+        ax.plot([0, 1], [fm, dm], color=TEAL, lw=2.0, zorder=3, solid_capstyle="round")
         ax.plot([0], [fm], "o", ms=6.6, mfc="white", mec=NEU_D, mew=1.3, zorder=5)
         ax.plot([1], [dm], "o", ms=6.6, mfc=TEAL, mec="white", mew=1.0, zorder=5)
 
@@ -194,6 +195,8 @@ def fig2():
         ax.set_xticks([0, 1])
         ax.set_xticklabels(["Frozen", "Recycled"])
         ax.set_yticks(yt)
+        ax.grid(axis="y", color=NEU, lw=0.5, alpha=0.55, zorder=0)
+        ax.set_axisbelow(True)
 
     axes[0].set_ylabel("Budget retention (%)")
 
@@ -222,13 +225,13 @@ def fig3():
 
     ax.fill_between(budgets, f_vals, d_vals, color=CYAN, alpha=0.28, lw=0)
     ax.plot(budgets, f_vals, "-o", color=NEU, lw=2.0, ms=6.2, mfc="white",
-            mec=NEU, mew=1.6, label="Semantic-only (frozen)", zorder=3)
-    ax.plot(budgets, d_vals, "-s", color=TEAL, lw=2.6, ms=6.2, mfc="white",
+            mec=NEU_D, mew=1.6, label="Semantic-only (frozen)", zorder=3)
+    ax.plot(budgets, d_vals, "-s", color=TEAL, lw=2.0, ms=6.2, mfc="white",
             mec=TEAL, mew=1.6, label="Anchor recycling", zorder=4)
 
     for b, f, d in zip(budgets, f_vals, d_vals):
         ax.text(b, d + 1.3, f"{d:.2f}", ha="center", va="bottom", fontsize=8.4,
-                color=TEAL, fontweight="bold")
+                color=BLUE_TXT, fontweight="bold")
         gx, gha = (b + 0.30, "left") if b < 15 else (b - 0.30, "right")
         ax.text(gx, (f + d) / 2, f"+{d - f:.2f}", ha=gha, va="center",
                 fontsize=8.2, fontweight="bold", color=WARM2, zorder=6)
@@ -240,6 +243,8 @@ def fig3():
     ax.set_yticks(np.arange(65, 86, 5))
     ax.set_xlabel("Anchor budget (% of training clips)")
     ax.set_ylabel("NTU120 retention (%)")
+    ax.grid(axis="y", color=NEU, lw=0.5, alpha=0.55, zorder=0)
+    ax.set_axisbelow(True)
     ax.legend(loc="lower center", bbox_to_anchor=(0.5, 1.0), ncol=2,
               handlelength=1.7, columnspacing=2.0, handletextpad=0.5)
 
@@ -275,12 +280,12 @@ def fig4():
     ax.plot([3], [means[3]], "D", ms=7.2, mfc="white", mec=WARM2, mew=1.6, zorder=6)
     ax.text(3, means[3] - 1.0, "n=1", ha="center", va="top", fontsize=6.6, color=NEU_D)
 
-    ax.plot(pos, means, "-o", color=WARM2, lw=2.2, ms=5.2, mfc="white",
+    ax.plot(pos, means, "-o", color=WARM, lw=1.9, ms=5.2, mfc="white",
             mec=WARM2, mew=1.6, zorder=5, label="Mean")
 
-    ax.axhline(85, color=WARM, lw=1.0, ls=(0, (2.6, 2.2)), zorder=1)
+    ax.axhline(85, color=NEU_D, lw=0.9, ls=(0, (2.6, 2.2)), zorder=1)
     ax.text(3.42, 85.12, "PARTIAL ≥ 85", ha="right", va="bottom",
-            fontsize=7.6, color=WARM)
+            fontsize=7.6, color=WARM2)
     ax.text(2, means[2] + 1.0, f"{means[2]:.2f}", ha="center", va="bottom",
             fontsize=8.6, fontweight="bold", color=INK)
 
@@ -291,6 +296,8 @@ def fig4():
     ax.set_yticks(np.arange(80, 89, 2))
     ax.set_xlabel("Anchor augmentation dose V (views per anchor)")
     ax.set_ylabel("NTU120 retention (%)")
+    ax.grid(axis="y", color=NEU, lw=0.5, alpha=0.55, zorder=0)
+    ax.set_axisbelow(True)
 
     save(fig, "fig4_aug_dose_response")
 
