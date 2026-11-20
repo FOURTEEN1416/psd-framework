@@ -290,10 +290,10 @@ to be predictive of the adaptation envelope (§4.6). Per-seed values, logs,
 and the harness are released. Figure 1 shows the resulting four-tier gradient of budget
 retention.
 
-![Figure 1. Four-tier gradient of budget retention (10% anchors). Each dot
-is a tier's budget-limited retention; the right-hand column gives the
-full-label linear-probe accuracy that defines its denominator. Shaded bands
-mark the pre-registered CONFIRMS (≥90%) and PARTIAL (85–90%) zones.](figures/fig1_four_tier_gradient.png)
+![Figure 1. Four-tier gradient of budget retention (10% anchors). Bars give
+each tier's retention on a common 0–100 scale; the grey line under each tier
+name gives the full-label linear-probe accuracy that defines its denominator.
+Vertical lines mark the 85% and 90% verdict thresholds (PARTIAL and CONFIRMS).](figures/fig1_four_tier_gradient.png)
 
 ### 4.2 Zero-label adaptation does not move a frozen physical layer
 
@@ -356,10 +356,11 @@ optimal settings of §4.5).
 | UCF101   |     953 | 10%    |  51.09% | 71.21% (lr 2e-2)             | **+20.12 pp** | FAILS → FAILS        |
 
 ![Figure 2. Per-tier main results of anchor recycling at the 10% budget
-(Table 2). Each dot is one seed (n = 10); bars give the reported retention
-(ratio of mean accuracies), and the verdict after recycling is printed
-beneath each tier. NTU120 74.96% → 85.16%, PanAf500 82.50% → 92.21%,
-UCF101 51.09% → 71.21%.](figures/fig2_tier_main_results.png)
+(Table 2). Each arrow runs from the frozen mean to the recycled mean over ten
+seeds; red numbers give the gain, and the post-recycling verdict is printed
+under each tier name. Shaded zones mark the pre-registered PARTIAL (85–90%)
+and CONFIRMS (≥90%) bands. NTU120 74.96% → 85.16%, PanAf500 82.50% →
+92.21%, UCF101 51.09% → 71.21%.](figures/fig2_tier_main_results.png)
 
 Two of the three weak-reference tiers cross their pre-registered bands, and
 the third improves by 20 pp. On NTU120 the pipeline gain (43.75% →

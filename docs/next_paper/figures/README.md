@@ -12,12 +12,12 @@ reported in the manuscript. Nothing is typed by hand twice.
 
 | Element | Value |
 |---|---|
-| Typeface | Arial (embedded as Type 42), 6.0–8.0 pt at final print size |
-| Reference / frozen | grey `#9E9E9E`, dark grey `#6B6B6B` |
-| Anchor recycling | blue `#2166AC` |
-| Threshold / gain / verdict | red `#B2182B` (annotation only, never encodes a series) |
-| Shaded verdict zones | red at 3–6% opacity |
-| Figure width | 180 mm (Figs. 1–2, full width), 120 mm (Figs. 3–4) |
+| Typeface | Arial (embedded as Type 42), 7.2–9.2 pt at final print size |
+| Reference / frozen | grey `#9A9A9A`, dark grey `#6E6E6E`; track `#EDEDED` |
+| Anchor recycling | deep navy `#1B4F72` |
+| Threshold / gain / verdict | brick red `#B2182B` (annotation only, never encodes a series) |
+| Shaded verdict zones | red at 5–8% opacity |
+| Figure size | 165 × 78 mm (Fig. 1), 165 × 72 mm (Fig. 2), 110 × 82 mm (Fig. 3), 110 × 76 mm (Fig. 4) |
 | Export | vector PDF + 300 dpi PNG preview; no in-figure titles (captions carry the claim) |
 
 Colour meaning is fixed across all four panels: grey is always the frozen
@@ -32,8 +32,9 @@ measurement, blue always anchor recycling, red always an annotation
   74.45% reference); PanAf500 / NTU120 / UCF101 from
   `runs/p1_sprint/labelfree_panaf500|ntu120|ucf101/summary.json`
   (82.50 / 74.96 / 51.09), with denominators from the same summaries.
-* Encodings: one dot per tier = 10-seed retention; right-hand column = full-label
-  linear-probe accuracy (the retention denominator, not plotted on the x axis).
+* Encodings: one bar per tier = 10-seed retention on a 0–100 track; the grey
+  "ref" line under each tier name = full-label linear-probe accuracy (the
+  retention denominator, not plotted as a bar); vertical lines = 85/90 thresholds.
 * Statistics: retention = mean of per-seed budget-pipeline accuracy / full-label
   linear-probe accuracy; 10 seeds (42–51). Bands: CONFIRMS ≥ 90%, PARTIAL 85–90%.
 
@@ -43,20 +44,20 @@ measurement, blue always anchor recycling, red always an annotation
 * Data: per-seed `retention_seed` from `adapt_t4_ntu120/summary_aug8_lr2e2.json`,
   `adapt_t4_panaf500/summary_aug4.json`, `adapt_t4_ucf101/summary_same10.json`;
   frozen seeds from `b_arms / full_ref` in the corresponding `labelfree_*` summaries.
-* Encodings: open grey dot = one frozen seed; filled blue dot = one recycled seed;
-  horizontal bar = reported retention (mean accuracy / mean full-label reference);
-  red text = gain and post-recycling verdict.
-* n = 10 seeds per column (42–51). Dots show per-seed ratios; bars use the
-  reported ratio-of-means retention, which differs from the mean of per-seed
-  ratios by < 1 pp (asserted in the script).
+* Encodings: open grey circle = frozen mean, filled navy circle = recycled mean,
+  arrow = gain; red text = gain in pp and post-recycling verdict; shaded zones =
+  the PARTIAL/CONFIRMS bands.
+* n = 10 seeds (42–51) per mean; means use the reported ratio-of-means retention,
+  which differs from the mean of per-seed ratios by < 1 pp (asserted in the script).
+  Per-seed values are tabulated in the released summaries and discussed in §4.3.
 
 ### Fig. 3 — `fig3_budget_allocation`
 * Claim: the dual-use advantage widens monotonically with anchor budget.
 * Data: `adapt_t4_ntu120/summary_ref5.json` (5% frozen), `labelfree_ntu120`
   (10% frozen), `summary_ref15.json` (15% frozen), `summary_split5.json` (5% dual),
   `summary_same10.json` (10% dual), `summary_dual15.json` (15% dual).
-* Encodings: grey circles = semantic-only; blue squares = anchor recycling;
-  shaded ribbon = gain; red numbers = gain in pp.
+* Encodings: grey circles = semantic-only; navy squares = anchor recycling;
+  shaded ribbon = gain; navy numbers = recycling retention; red numbers = gain in pp.
 
 ### Fig. 4 — `fig4_aug_dose_response`
 * Claim: the augmentation dose–response is unimodal, peaking at V = 8.
@@ -68,8 +69,9 @@ measurement, blue always anchor recycling, red always an annotation
 
 ## QA status (2026-11-20)
 
-* All text ≥ 6.0 pt at final size; Arial embedded in every PDF.
-* No artist outside the canvas (tight-bbox check: 2.7–4.8 mm margins).
+* All text ≥ 7.2 pt at final size; Arial embedded in every PDF.
+* No artist outside the canvas (tight-bbox check: ≥1.4 mm margins).
 * Numbers re-verified by `scripts/p1_sprint/audit_next_paper.py` (50/50, AUDIT_OK).
-* Visual pass on all four PNGs at 300 dpi; marker/label collisions fixed after
-  the first render (fig2 mean-label gaps, clipped UCF seed, fig4 threshold band).
+* Visual pass on all four PNGs at 300 dpi, plus local crops; v3 rebalanced the
+  composition after the v2 "too sparse" review (bigger type and marks, tighter
+  aspect, filled tracks/areas, labels attached to the data).
