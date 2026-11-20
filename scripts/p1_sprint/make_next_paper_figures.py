@@ -4,9 +4,9 @@
 产出 docs/next_paper/figures/fig{1,2,3,4}_*.pdf+.png。
 数据源:
   fig1 四层冻结梯度      : runs/p1_sprint/labelfree_*/summary.json（published E9）
-  fig2 预算-分配率曲线   : runs/p1_sprint/adapt_t4_ntu120/summary_{ref5,split5,same10,ref15,dual15}.json
-  fig3 增广剂量响应      : runs/p1_sprint/adapt_t4_ntu120/summary_{same10,aug4_lr2e2,aug8_lr2e2,aug12_lr2e2}.json
-  fig4 三 tier 双用主图  : labelfree_*/summary.json + adapt_t4_*/summary_{same10,aug4,aug8_lr2e2}.json
+  fig2 三 tier 双用主图  : labelfree_*/summary.json + adapt_t4_*/summary_{same10,aug4,aug8_lr2e2}.json
+  fig3 预算-分配率曲线   : runs/p1_sprint/adapt_t4_ntu120/summary_{ref5,split5,same10,ref15,dual15}.json
+  fig4 增广剂量响应      : runs/p1_sprint/adapt_t4_ntu120/summary_{same10,aug4_lr2e2,aug8_lr2e2,aug12_lr2e2}.json
 """
 from __future__ import annotations
 
@@ -36,6 +36,8 @@ plt.rcParams.update({
 C_FROZEN = "#8a8a8a"
 C_DUAL = "#1f6fb4"
 C_BAND = "#d62728"
+# 白色软衬底：标签与判定线/曲线交叠时保证数字可读（不改变任何数据）
+HALO = dict(boxstyle="round,pad=0.18", facecolor="white", edgecolor="none", alpha=0.85)
 
 
 def load(p: Path):
@@ -64,22 +66,23 @@ def fig1():
     ax.bar(x + 0.18, refs, 0.36, label="Full-label linear reference", color=C_FROZEN)
     for xi, v in zip(x, vals):
         ax.text(xi - 0.18, v + 1.2, f"{v:.2f}" if v % 1 else f"{v:.1f}",
-                ha="center", fontsize=8.5)
+                ha="center", fontsize=8.5, bbox=HALO)
     for xi, v in zip(x, refs):
         ax.text(xi + 0.18, v + 1.2, f"{v:.2f}" if v % 1 else f"{v:.1f}",
-                ha="center", fontsize=8.5, color="#555555")
+                ha="center", fontsize=8.5, color="#555555", bbox=HALO)
     ax.set_xticks(x)
     ax.set_xticklabels(tiers)
     ax.set_ylim(0, 104)
     ax.set_ylabel("Accuracy / retention (%)")
     ax.set_title("Four-tier budget-retention gradient (frozen physical layer)")
-    ax.legend(loc="upper right", fontsize=8, frameon=False)
-    ax.text(3.42, 87.5, "PARTIAL", fontsize=7.5, color=C_BAND, ha="right")
-    ax.text(3.42, 91.5, "CONFIRMS", fontsize=7.5, color=C_BAND, ha="right")
+    ax.legend(loc="upper center", bbox_to_anchor=(0.5, -0.10), ncol=2,
+              fontsize=8, frameon=False)
+    ax.text(3.42, 86.4, "PARTIAL", fontsize=7.5, color=C_BAND, ha="right")
+    ax.text(3.42, 92.8, "CONFIRMS", fontsize=7.5, color=C_BAND, ha="right")
     save(fig, "fig1_four_tier_gradient")
 
 
-# ---------- fig2: 预算-分配率曲线 ----------
+# ---------- 预算-分配率曲线（输出 fig3） ----------
 def fig2():
     budgets = [5, 10, 15]
     frozen = [64.61, 74.96, 79.04]
@@ -88,11 +91,15 @@ def fig2():
     ax.plot(budgets, frozen, "o-", color=C_FROZEN, label="Semantic-only (frozen)")
     ax.plot(budgets, dual, "s-", color=C_DUAL, label="Dual-use (recycled)")
     for b, f, d in zip(budgets, frozen, dual):
-        ax.annotate(f"{f:.2f}", (b, f), textcoords="offset points", xytext=(0, -11),
+        ax.annotate(f"{f:.2f}", (b, f), textcoords="offset points", xytext=(0, -18),
                     ha="center", fontsize=8, color="#555555")
-        ax.annotate(f"{d:.2f}", (b, d), textcoords="offset points", xytext=(0, 7),
+        ax.annotate(f"{d:.2f}", (b, d), textcoords="offset points", xytext=(0, 13),
                     ha="center", fontsize=8)
-        ax.annotate(f"+{d-f:.2f}", (b, (f + d) / 2), ha="center", fontsize=7.5,
+        # 增益标注置于两曲线之间的空隙，并按文字宽度处的曲线高度夹取，避免压线
+        lo = max(np.interp(b - 0.5, budgets, frozen), np.interp(b + 0.5, budgets, frozen))
+        hi = min(np.interp(b - 0.5, budgets, dual), np.interp(b + 0.5, budgets, dual))
+        y_gap = float(np.clip((f + d) / 2, lo + 0.7, hi - 1.2))
+        ax.annotate(f"+{d-f:.2f}", (b, y_gap), ha="center", fontsize=7.5,
                     color="#b22222")
     ax.set_xticks(budgets)
     ax.set_xlabel("Anchor budget (% of training clips)")
@@ -100,30 +107,30 @@ def fig2():
     ax.set_title("Budget-allocation curve: dual-use widens with budget")
     ax.set_ylim(60, 90)
     ax.legend(loc="upper left", fontsize=8, frameon=False)
-    save(fig, "fig2_budget_allocation")
+    save(fig, "fig3_budget_allocation")
 
 
-# ---------- fig3: 增广剂量响应 ----------
+# ---------- 增广剂量响应（输出 fig4） ----------
 def fig3():
     doses = [1, 4, 8, 12]
     ret = [82.73, 83.41, 85.16, 82.47]
     fig, ax = plt.subplots(figsize=(4.6, 3.2))
     ax.plot(doses, ret, "s-", color=C_DUAL)
     for d, r in zip(doses, ret):
-        ax.annotate(f"{r:.2f}", (d, r), textcoords="offset points", xytext=(0, 7),
+        ax.annotate(f"{r:.2f}", (d, r), textcoords="offset points", xytext=(0, 14),
                     ha="center", fontsize=8)
     ax.axhline(85, color=C_BAND, lw=0.8, ls="--")
     ax.axhspan(85, 87, color=C_BAND, alpha=0.06)
-    ax.annotate("PARTIAL band", (11.6, 85.4), fontsize=7.5, color=C_BAND, ha="right")
+    ax.annotate("PARTIAL band", (11.6, 86.0), fontsize=7.5, color=C_BAND, ha="right")
     ax.set_xticks(doses)
     ax.set_xlabel("Anchor-augmentation dose V (views per anchor)")
     ax.set_ylabel("NTU120 retention (%)")
     ax.set_title("Augmentation dose-response peaks at V=8 (lr 2e-2)")
     ax.set_ylim(81, 87.5)
-    save(fig, "fig3_aug_dose_response")
+    save(fig, "fig4_aug_dose_response")
 
 
-# ---------- fig4: 三 tier 双用主图 ----------
+# ---------- 三 tier 双用主图（输出 fig2） ----------
 def fig4():
     tiers = ["NTU120", "PanAf500", "UCF101"]
     frozen = [74.96, 82.5, 51.09]
@@ -136,18 +143,20 @@ def fig4():
     ax.bar(x - 0.18, frozen, 0.36, label="Frozen physical layer", color=C_FROZEN)
     ax.bar(x + 0.18, dual, 0.36, label="Anchor recycling (best)", color=C_DUAL)
     for xi, f, d, v in zip(x, frozen, dual, verdicts):
-        ax.text(xi - 0.18, f + 1.0, f"{f:.2f}", ha="center", fontsize=8.5)
-        ax.text(xi + 0.18, d + 1.0, f"{d:.2f}", ha="center", fontsize=8.5)
-        ax.text(xi, max(f, d) + 4.2, f"{v}", ha="center", fontsize=8, color=C_BAND)
-        ax.annotate(f"+{d-f:.2f}", (xi, min(f, d) - 5.5), ha="center",
-                    fontsize=8, color="#b22222")
+        ax.text(xi - 0.18, f + 1.0, f"{f:.2f}", ha="center", fontsize=8.5, bbox=HALO)
+        ax.text(xi + 0.18, d + 1.0, f"{d:.2f}", ha="center", fontsize=8.5, bbox=HALO)
+        ax.text(xi, max(f, d) + 4.2, f"{v}", ha="center", fontsize=8, color=C_BAND,
+                bbox=HALO)
+        ax.annotate(f"+{d-f:.2f}", (xi + 0.18, d - 3.0), ha="center", va="top",
+                    fontsize=8, color="white")
     ax.set_xticks(x)
     ax.set_xticklabels(tiers)
     ax.set_ylim(40, 100)
     ax.set_ylabel("Budget retention (%)")
     ax.set_title("Anchor recycling across weak-reference tiers (10% budget)")
-    ax.legend(loc="lower right", fontsize=8, frameon=False)
-    save(fig, "fig4_tier_main_results")
+    ax.legend(loc="upper center", bbox_to_anchor=(0.5, -0.10), ncol=2, fontsize=8,
+              frameon=False)
+    save(fig, "fig2_tier_main_results")
 
 
 if __name__ == "__main__":
