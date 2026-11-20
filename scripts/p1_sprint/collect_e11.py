@@ -45,7 +45,7 @@ def main() -> None:
                       ("sweep_lr2e2", "lr=2e-2"), ("sweep_lr4e2", "lr=4e-2（语义臂校准崩溃）"),
                       ("sweep_ep200", "200 epochs"), ("sweep_lr1e2_r16", "lr=1e-2 + rank16"),
                       ("aug4_lr2e2", "lr=2e-2 + 锚点增广×4"), ("aug4_lr1e2", "lr=1e-2 + 锚点增广×4"),
-                      ("aug8_lr2e2", "lr=2e-2 + 锚点增广×8")]:
+                      ("aug8_lr2e2", "lr=2e-2 + 锚点增广×8"), ("aug12_lr2e2", "lr=2e-2 + 锚点增广×12（过量回落）")]:
         lines.append(row(tag, load(t4 / f"summary_{tag}.json"), note))
 
     lines += ["", "## 2. 预算-分配率曲线（NTU120）", "",
