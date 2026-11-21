@@ -1,11 +1,7 @@
 # Anchor Recycling: Label-Efficient Skeleton Behavior Recognition Under Evolving Taxonomies
 
-> **Manuscript draft v1.0** — 2026-11-20. Prose draft for TMM/PRL submission;
-> references [15], [18], [39], and [41] remain placeholders pending verification
-> (see the editorial notes).
-> All numbers are measured (sources: `runs/p1_sprint/` summaries; evidence mirror
-> `reports/p1_sprint_evidence/adaptation/`). Figures 1–4 in `docs/next_paper/figures/`,
-> embedded at first citation. Editorial notes and pre-submission TODO:
+> **Manuscript draft v1.0** — 2026-11-20. Prose draft for TMM/PRL submission.
+> Editorial notes and pre-submission TODO:
 > `paper_manuscript_v1_editorial_notes.md`.
 
 ---
@@ -19,20 +15,20 @@ adapt only a semantic layer preserve label efficiency, but they cap
 performance in *weak-reference tiers* where labels are few, noisy, or
 indirectly derived. Through a controlled four-tier study (NTU60 → PanAf500 →
 NTU120 → UCF101) governed by a single measurement implementation, we first map
-this ceiling and then test every label-free route around it: test-time entropy
-minimization, low-rank continued pretraining, cross-domain transfer from a
-strong source, and pseudo-label feedback. All four fail: no route gains more
-than +0.1 pp; the ceiling is structural, and what is missing is label signal
-reaching the encoder. We then show the ceiling is not a wall: the *same* small anchor set
+this ceiling and then, on the NTU120 tier, test four label-free routes around
+it: test-time entropy minimization, low-rank continued pretraining,
+cross-domain transfer from a strong source, and pseudo-label feedback. All
+four fail: no route gains more than +0.1 pp, and none of them supplies label
+signal to the encoder. We then show that the ceiling can be raised: the *same* small anchor set
 that drives the semantic layer can be **recycled** to shape the physical layer
 through low-rank supervised adaptation with a distillation anchor. Anchor
-recycling improves budget-limited retention by +10.2 pp on NTU120 (74.96% →
-85.16%, PARTIAL), +9.7 pp on PanAf500 (82.50% → 92.21%, CONFIRMS), and +20.1 pp
-on UCF101 (51.09% → 71.21%), with the gain growing as reference quality
-degrades. The effect has a two-sided envelope: a minimum anchor mass below
+recycling improves budget-limited retention by +10.20 pp on NTU120 (74.96% →
+85.16%, PARTIAL), +9.71 pp on PanAf500 (82.50% → 92.21%, CONFIRMS), and +20.12
+pp on UCF101 (51.09% → 71.21%), the largest gain appearing on the
+weakest-reference tier. The effect has a two-sided envelope: a minimum anchor mass below
 which unaugmented adaptation is inert, and a calibration gate above which the semantic
 layer refuses the adapted features. We map both axes across tiers, with a
-unimodal augmentation dose–response peaking at 85.16%. We release the unified
+unimodal response to augmentation peaking at 85.16%. We release the unified
 measurement harness and all per-seed evidence.
 
 ---
@@ -45,8 +41,8 @@ itself evolves (classes are merged, renamed, split, or added as a deployment
 reveals what actually matters), and new domains arrive with little in-domain
 supervision because the annotations must be produced by scarce domain
 experts. A recognition framework intended for this reality must therefore be
-judged not by its accuracy with full labels, but by how much of that
-accuracy it *retains* as the budget shrinks and the reference degrades.
+judged by how much of its full-label accuracy it *retains* as the budget
+shrinks and the reference degrades.
 
 The physics–semantics decoupling (PSD) framework was designed for exactly
 this regime. A self-supervised **physical layer** (an AimCLR-style [1]
@@ -60,12 +56,12 @@ encoder, with verdict bands CONFIRMS (≥ 90%), PARTIAL (85–90%), and FAILS
 (< 85%). It confirms its label-efficiency claim on the strong-reference
 tier NTU60 (90.7% retention at a 10% budget). On weak-reference
 tiers, however, it hits a ceiling: 82.50% on the chimpanzee behavior tier
-PanAf500, 74.96% on the 60-class merge of NTU120, and 51.09% on UCF101
+PanAf500, 74.96% on the 60-class NTU120 subset, and 51.09% on UCF101
 skeletons.
 
-This paper is about that ceiling, and about the tempting diagnosis that
-"the frozen encoder is the bottleneck, so let it move." We first test whether
-the encoder can be moved *for free*, without spending any additional labels,
+This paper is about that ceiling, and about the natural hypothesis that
+adapting the encoder should close the gap. We first test whether the encoder
+can be adapted *for free*, without spending any additional labels,
 and answer negatively with a systematic negative-result study. On the NTU120
 tier we evaluate four families of label-free adaptation: (i) test-time
 entropy minimization over BatchNorm affine parameters; (ii) low-rank
@@ -74,8 +70,8 @@ cross-domain transfer, initializing from a strong NTU60 source encoder and
 adapting to the weak target; and (iv) pseudo-label feedback, using the
 semantic layer's own confidence-gated pseudo-labels to retrain the encoder
 with supervised contrastive learning. Every family leaves budget-limited
-retention within +0.1 to −5.2 pp of the frozen baseline. The ceiling is
-structural: what is missing is *true label signal reaching the encoder*.
+retention within +0.1 to −5.2 pp of the frozen baseline. The ceiling persists
+because *true label signal never reaches the encoder*.
 Each failure mode helps to explain this conclusion,
 from a BatchNorm statistics trap to a feature-geometry/harvest mismatch.
 
@@ -91,21 +87,21 @@ encoder re-enters the *same* three-arm protocol, measured by the *same*
 implementation. We call this **anchor recycling**: a second use of labels
 that already existed.
 
-Anchor recycling delivers consistent gains that grow as the reference
-degrades: +10.2 pp on NTU120 (74.96% → 85.16%, crossing into the PARTIAL
-band), +9.7 pp on PanAf500 (82.50% → 92.21%, crossing into CONFIRMS), and
-+20.1 pp on UCF101 (51.09% → 71.21%). A budget-allocation sweep shows the
-advantage widens with budget (+2.9 pp at 5%, +3.9 pp at 10%, +4.6 pp at 15%),
+Anchor recycling delivers consistent gains across the three weak-reference
+tiers: +10.20 pp on NTU120 (74.96% → 85.16%, crossing into the PARTIAL
+band), +9.71 pp on PanAf500 (82.50% → 92.21%, crossing into CONFIRMS), and
++20.12 pp on UCF101 (51.09% → 71.21%). A budget-allocation sweep shows the
+advantage widens with budget (+2.90 pp at 5%, +3.91 pp at 10%, +4.56 pp at 15%),
 and a hyperparameter study isolates the adaptation learning rate and the
-anchor-augmentation dose as the dominant factors, with a unimodal
-dose–response peaking at ×8 (85.16%) and a hard calibration-gate boundary at
-high pressure.
+anchor-augmentation multiplier as the dominant factors, with a unimodal
+response to augmentation peaking at ×8 (85.16%) and a hard calibration-gate
+boundary at high pressure.
 
 Our contributions are:
 
 1. **A weak-reference evaluation protocol** for skeleton recognition under
    evolving taxonomies: four tiers of graded reference quality, a fixed
-   budget-retention ruler implemented once and shared by every number in the
+   budget-retention protocol implemented once and shared by every number in the
    paper, and pre-registered verdict bands.
 2. **A systematic negative-result study** establishing that four families of
    label-free encoder adaptation cannot close the weak-reference gap, with
@@ -117,12 +113,10 @@ Our contributions are:
    +10.2/+9.7/+20.1 pp on three weak-reference tiers and crossing two
    pre-registered verdict bands.
 4. **A two-sided envelope analysis** (an anchor-mass floor and a
-   calibration-gate ceiling), together with a dose–response map over
-   augmentation, learning rate, and budget that tells practitioners when
-   recycling helps, when it leaves the pipeline unchanged, and when it trips
-   the calibration gate.
-
-All per-seed evidence, logs, and the unified measurement harness are released.
+   calibration-gate ceiling), together with a sensitivity map over
+   augmentation, learning rate, and budget that separates configurations
+   that improve retention from those that leave it unchanged or trip the
+   calibration gate.
 
 ---
 
@@ -142,9 +136,9 @@ self-distilled pretraining [9–11, 32, 33], built on the representations and
 architectures of large-scale image learning [25, 30]. Our physical layer
 follows the AimCLR single-stream joint recipe at
 reduced capacity (16 hidden channels, 1.84 M parameters), chosen so that
-every tier is computable under one protocol. These works ask *how to
-pretrain*; our study asks *what should happen after pretraining, when the
-taxonomy and the budget change*, a question prior work does not answer.
+every tier is computable under one protocol. Our study concerns the stage
+that follows pretraining: *what should happen when the taxonomy and the
+budget change* — a question prior work does not answer.
 
 ### 2.2 Domain and test-time adaptation
 
@@ -153,11 +147,9 @@ data: TENT [7] minimizes prediction entropy over BatchNorm affine parameters,
 and a family of related methods [19–22] adapts normalization statistics or
 low-capacity parameters online. We adopt TENT as one of four label-free
 adaptation baselines and find that, once the BatchNorm train/evaluation
-statistics contract is made consistent, test-time adaptation is neither
-harmful nor helpful for skeleton features under a weak reference: the
-feature geometry, not its calibration, is the constraint. This extends the
-test-time adaptation literature's typical image-classification setting to
-skeleton pipelines with linear-probe evaluation.
+statistics contract is made consistent, test-time adaptation has little
+effect on skeleton features under a weak reference: the feature geometry,
+not its calibration, is the constraint.
 
 ### 2.3 Continual and class-incremental learning under taxonomy change
 
@@ -170,9 +162,9 @@ ladder for split/addition (remap 0% → decoupled 45.75% → frozen 68.05% →
 coupled 97.13%). In this paper we use LwF as an adapted class-incremental
 baseline at matched budget (68.6% at the 10% budget on the TRANS-002 merge —
 the pre-registered NTU60 60→49 taxonomy-transition episode of our prior
-study [41], distinct from the NTU120 60-class merge of §4; 72.9% at full labels)
-and show that anchor recycling is orthogonal to, and
-simpler than, distillation-based incremental schemes.
+study [41], distinct from the 60-class NTU120 subset of §4; 72.9% at full labels)
+and show that anchor recycling is orthogonal to distillation-based
+incremental schemes.
 
 ### 2.4 Label-efficient learning
 
@@ -189,15 +181,15 @@ pipelines instead paired hand-crafted features with classifiers such as
 random forests [39]. Our negative-result
 study applies pseudo-label feedback and SupCon to the encoder itself and
 shows they cannot substitute for true labels in the weak-reference regime.
-Our positive method combines LoRA with supervised anchors, but the
-contribution is not the combination; it is the *demonstration that the same
-anchor set must supervise both layers of a decoupled pipeline*, and the
-mapping of the envelope in which this holds.
+Our positive method combines LoRA with supervised anchors; the contribution
+lies in the *demonstration that the same anchor set must supervise both
+layers of a decoupled pipeline*, and in the mapping of the envelope in which
+this holds.
 
 ### 2.5 Positioning
 
 None of the above studies the weak-reference regime with a fixed
-budget-retention ruler across four tiers of graded reference quality, and
+budget-retention protocol across four tiers of graded reference quality, and
 none asks which layer of a decoupled framework should receive the labels.
 Prior transferability analyses [24, 35] address representation transfer, not
 label allocation between the layers of a decoupled pipeline. That question,
@@ -211,7 +203,8 @@ and its two-sided answer, is the subject of this paper.
 
 The PSD framework separates a **physical layer** from a **semantic layer**.
 The physical layer is a self-supervised AimCLR pretext (ST-GCN [6] base, 16
-hidden channels, 1.84 M parameters, 150 epochs, single-stream joint), frozen
+hidden channels, 1.84 M parameters before the low-rank adaptation of §3.2,
+150 epochs, single-stream joint), frozen
 after pretraining. The semantic layer adapts to the current taxonomy from a
 small stratified anchor set through rule-based seed extraction, anchor
 clustering, confidence-filtered pseudo-labeling, and a self-training
@@ -222,11 +215,10 @@ The evaluation protocol measures **budget retention**: with a stratified
 by the full-label linear-probe accuracy of the same frozen encoder (logistic
 regression via scikit-learn [40]). Verdict
 bands are pre-registered: retention ≥ 90% CONFIRMS, 85–90% PARTIAL, < 85%
-FAILS. Every number in this paper is produced by one shared implementation of
-the three arms: (c) full-label linear reference, (a) `b`% linear head, and
-(b) `b`% + semantic pipeline. Cross-tier and cross-paper comparisons
-thus use a single ruler, and every reported number can be re-derived from the
-released per-seed evidence.
+FAILS. All numbers in this paper are produced by one shared implementation of
+the three arms: (a) `b`% linear head, (b) `b`% + semantic pipeline, and (c)
+full-label linear reference, so that cross-tier and cross-paper comparisons
+use a single protocol.
 
 ### 3.2 Anchor recycling
 
@@ -239,7 +231,11 @@ parallel LoRA branch (rank r = 8, α = 16): `y = conv(x) + (α/r)·B(A(x))`,
 with `B` zero-initialized so that the adapted encoder is functionally
 identical to the frozen one at step zero. The key encoder receives the same
 injection and is momentum-synced; the contrastive machinery is unused during
-recycling. Trainable parameters: 62,616 of 1,965,368 (3.19%).
+recycling. Trainable parameters: 62,616 of 1,965,368 (3.19%); the 62,616 are
+the LoRA branches of the query encoder, the only parameters the optimizer
+updates, while the key encoder's identical branches are momentum-synced and
+not optimizer-trainable. The 1.84 M figure refers to the frozen base encoder
+before injection.
 
 **Step 2 — Objective.** Cross-entropy on the anchor clips through a fresh
 linear head (256 → C), plus a cosine feature distillation anchor
@@ -254,7 +250,7 @@ in §4.2.
 samples `V×|A|` augmented views of the anchors through the pretext's own
 augmentation family (shear amplitude 0.5, temporal padding ratio 6), turning
 even a 40-anchor set into hundreds of distinct gradient signals without new
-labels. The dose `V` is a tier-dependent hyperparameter mapped in §4.5.
+labels. The multiplier `V` is a tier-dependent hyperparameter mapped in §4.5.
 
 **Step 4 — Re-measurement.** The adapted encoder is frozen, features are
 re-exported, and the identical three-arm protocol is re-run, including a
@@ -266,8 +262,9 @@ sees exactly the anchor set that the semantic stage already consumes.
 
 ### 3.3 The calibration gate
 
-The semantic layer includes a calibration step that selects a similarity
-threshold τ from a candidate grid and rejects degenerate calibrations [18]. We
+The semantic layer includes a calibration gate: a step that selects a
+similarity threshold τ from a candidate grid and rejects degenerate
+calibrations [18]. We
 found this gate to be an unexpected safety mechanism during encoder
 adaptation: when recycling pressure is too strong, the adapted feature
 geometry drives the selected τ to zero and the pipeline raises a hard error
@@ -285,10 +282,9 @@ Four tiers are ordered by reference quality: NTU60 [12] (published retention
 (51.09%). Each has
 its own from-scratch label-free pretext (150 epochs) and a 10% stratified
 anchor budget (seeds 42–51; ten seeds for every headline number). NTU120's
-anchors number 734, UCF101's 953, and PanAf500's 40, a spread that turns out
-to be predictive of the adaptation envelope (§4.6). Per-seed values, logs,
-and the harness are released. Figure 1 shows the resulting four-tier gradient of budget
-retention.
+anchors number 734, UCF101's 953, and PanAf500's 40; this spread, together
+with reference quality, shapes the adaptation envelope (§4.5–4.6). Figure 1
+shows the resulting four-tier gradient of budget retention.
 
 ![Figure 1. Four-tier gradient of budget retention (10% anchors). Bars give
 each tier's retention on a common 0–100 scale; the grey label under each tier name
@@ -298,7 +294,9 @@ Vertical lines mark the 85% and 90% verdict thresholds (PARTIAL and CONFIRMS).](
 ### 4.2 Zero-label adaptation does not move a frozen physical layer
 
 We test four label-free adaptation families on NTU120, the tier with the most
-complete instrumentation (Table 1):
+complete instrumentation; the cross-domain family is instantiated as two
+arms (zero-shot transfer and LoRA transfer), giving the five adaptation rows
+of Table 1:
 
 **Table 1.** Label-free adaptation arms on the NTU120 tier (10% budget).
 
@@ -315,7 +313,7 @@ Three diagnostics explain these failures.
 
 First, a naive TENT setup that adapts in BatchNorm train mode collapses to
 27.0%, entirely a train/evaluation statistics artifact; once the statistics
-contract is fixed, TENT leaves this data unchanged.
+contract is fixed, TENT shifts retention by only −0.88 pp (74.96% → 74.08%).
 
 Second, same-domain continued pretraining is saturated: the from-scratch
 pretext has already consumed its own data for 150 epochs, and 30 further
@@ -325,9 +323,9 @@ Third, cross-domain transfer produces the *best absolute separability* of any
 arm: the full-label linear reference rises to 59.66% (vs. 58.37% frozen) and
 the 10% linear head to 45.27% (vs. 44.18%), yet retention *falls* to
 71.98%. The semantic layer's anchor clustering was grown around the frozen
-geometry and cannot harvest the improved features: the binding constraint is
-whether the pipeline's discrete stages can absorb the improvement, rather
-than whether the features can improve.
+geometry and cannot harvest the improved features: improving the features is
+feasible, but the binding constraint is whether the pipeline's discrete
+stages can absorb the improvement.
 
 Pseudo-label feedback closes the loop in the other direction, retraining
 the encoder with the semantic layer's own pseudo-labels via SupCon over 7,239
@@ -353,7 +351,7 @@ optimal settings of §4.5).
 |:---------|--------:|:-------|--------:|:-----------------------------|--------------:|:---------------------|
 | NTU120   |     734 | 10%    |  74.96% | **85.16%** (lr 2e-2, aug ×8) | **+10.20 pp** | FAILS → **PARTIAL**  |
 | PanAf500 |      40 | 10%    |  82.50% | **92.21%** (lr 1e-2, aug ×4) |  **+9.71 pp** | FAILS → **CONFIRMS** |
-| UCF101   |     953 | 10%    |  51.09% | 71.21% (lr 2e-2)             | **+20.12 pp** | FAILS → FAILS        |
+| UCF101   |     953 | 10%    |  51.09% | **71.21%** (lr 2e-2)         | **+20.12 pp** | FAILS → FAILS        |
 
 ![Figure 2. Per-tier main results of anchor recycling at the 10% budget
 (Table 2). Each panel shows one tier: thin grey lines are individual seeds
@@ -370,9 +368,9 @@ opposite of the cross-domain transfer case, where separability rose but the
 semantic layer could not use it. Per-seed pairing on NTU120 shows all ten
 seeds improving.
 
-**Finding 2.** The same labels are worth more when they shape both layers.
-The effect is present in every weak-reference tier and grows as reference
-quality degrades.
+**Finding 2.** Supervising both layers with the same anchor set yields larger
+gains than supervising the semantic layer alone. The effect is present in
+every weak-reference tier and grows as reference quality degrades.
 
 ### 4.4 Where the budget should go
 
@@ -401,16 +399,16 @@ rate lift the 10% budget point past that band.
 
 On NTU120 (ten seeds per cell), only two factors matter. The adaptation
 learning rate: 78.87% (1e-3) → 82.13% (1e-2) → 82.73% (2e-2) without
-augmentation; 4e-2 trips the calibration gate (§4.6). The augmentation dose:
-with lr 2e-2, 82.73% (×1) → 83.41% (×4) → **85.16% (×8)** → 84.38% (×12),
-peaking at ×8 (Figure 4). Epochs (100 vs. 200: 78.88%) and the
-distillation weight (removing it entirely: 79.05% at lr 1e-3, slightly above
-the 78.87% with λ = 1) each move the result by ≤ 0.5 pp. The LoRA rank
-shifts the result more: at lr 1e-2, doubling the rank from 8 to 16 yields
-81.49%, versus 82.13% for rank 8 at the same learning rate, so we report it
-separately rather than treating it as negligible.
+augmentation; 4e-2 trips the calibration gate (§4.6). The augmentation
+multiplier: with lr 2e-2, 82.73% (×1) → 83.41% (×4) → **85.16% (×8)** →
+84.38% (×12), peaking at ×8 (Figure 4). Doubling the adaptation epochs from
+100 to 200 yields 78.88%, and removing the distillation weight entirely
+yields 79.05% at lr 1e-3, slightly above the 78.87% obtained with λ = 1;
+each variation moves the result by ≤ 0.5 pp. The LoRA rank shifts the result
+more: at lr 1e-2, doubling the rank from 8 to 16 yields 81.49%, versus
+82.13% for rank 8 at the same learning rate.
 
-![Figure 4. Augmentation dose–response on NTU120 at lr 2e-2. Boxes give the
+![Figure 4. Effect of the augmentation multiplier on NTU120 at lr 2e-2. Boxes give the
 interquartile range over ten seeds, dots individual seeds, and the coral line
 the mean. The dashed line marks the 85% PARTIAL threshold.](figures/fig4_aug_dose_response.png)
 
@@ -419,11 +417,10 @@ NTU120 (734 anchors) takes the strongest setting (lr 2e-2, 8× augmentation);
 UCF101 (953 anchors) peaks at lr 2e-2 *without* augmentation (71.21%; the
 augmented 1e-2 variant drops to 68.31%); PanAf500 (40 anchors) needs the
 gentlest setting (lr 1e-2, 4× augmentation, 92.21%) and breaks the gate at
-2e-2 even with augmentation. The anchor-mass trend is therefore not
-monotonic across all three tiers: UCF101 has the largest anchor set yet
-takes no augmentation, because its video-derived reference is so weak
-(§4.7) that extra augmented views mostly add variance rather than usable
-signal — reference quality, not anchor mass alone, dominates its recipe.
+2e-2 even with augmentation. UCF101, despite carrying the largest anchor
+set, takes no augmentation: its video-derived reference is so weak (§4.7)
+that extra augmented views mostly add variance rather than usable signal, so
+its recipe is governed by reference quality as much as by anchor mass.
 
 ### 4.6 The envelope: anchor-mass floor and calibration-gate ceiling
 
@@ -433,13 +430,14 @@ frozen pipeline: the entire chain (features → clustering → pseudo-labels →
 predictions) reproduces exactly. With the batch handling fixed and
 augmentation added at the gentle setting, the pipeline moves for the first
 time and reaches CONFIRMS. In this naive, augmentation-free setting,
-recycling is inert below roughly 100 anchors and effective above it; the
-anchor augmentation of §3.2 is what lets the 40-anchor PanAf500 set move at
-all.
+recycling is inert with the 40-anchor PanAf500 set and effective with the
+734- and 953-anchor sets of NTU120 and UCF101; the transition between these
+scales was not measured, and the anchor augmentation of §3.2 is what lets
+the 40-anchor PanAf500 set move at all.
 
 **Calibration-gate ceiling.** When recycling pressure exceeds the envelope
 (lr 4e-2 on NTU120; lr 2e-2 with augmentation on PanAf500), the semantic
-layer's calibration step selects τ = 0 and the
+layer's calibration gate selects τ = 0 and the
 pipeline raises a hard error rather than emitting degenerate pseudo-labels.
 The gate converts silent quality collapse into an explicit, diagnosable
 stop, and marks the ceiling of the adaptation envelope.
@@ -453,8 +451,8 @@ Both edges are reproducible and tier-dependent.
 
 PanAf500's validation set is 25 clips, quantizing accuracies in 4% steps; its
 CONFIRMS verdict rests on 5/10 seeds improving, 3 tying, and 2 regressing
-(sign test n.s.) plus a small reference drift (64.0% → 61.6%), so we read it
-as a strong signal under quantification caveats rather than as proof.
+(sign test, not significant) plus a small reference drift (64.0% → 61.6%),
+and should be interpreted with these quantification caveats in mind.
 NTU120's PARTIAL margin is 0.16 pp above the band edge. UCF101's reference is
 video-derived and weak (full-label linear reference ≈ 19%), so its retentions
 are ratios of small numbers.
@@ -463,18 +461,15 @@ are ratios of small numbers.
 
 ## 5. Discussion
 
-**The mechanism behind recycling.** The negative suite
-isolates the mechanism by elimination. Test-time adaptation changes
-normalization without labels and moves nothing. Continued self-supervised
-pretraining changes the encoder without labels and is equally fruitless.
-Cross-domain transfer changes the encoder with foreign labels: the features
-improve but the semantic layer cannot use them. Pseudo-label feedback changes
-the encoder with *derived* labels, and the derivation inherits the frozen
-geometry, so it reinforces rather than repairs it. Recycling is the only arm
-whose supervision is real, drawn from the target domain, and routed to the
-encoder. The k-ladder study — our prior budget sweep [41] on the synthetic
-episode, which varied the anchor count k — predicted exactly this: encoder
-quality is label-driven.
+**The mechanism behind recycling.** The negative-result study of §4.2
+isolates the mechanism by elimination: the label-free routes leave the
+frozen geometry in place, cross-domain transfer improves features that the
+semantic layer cannot harvest, and pseudo-label feedback entrenches the
+inherited geometry. Recycling is the only arm whose supervision is real,
+drawn from the target domain, and routed to the encoder. The k-ladder study —
+our prior budget sweep [41] on the synthetic episode, which varied the anchor
+count k — is consistent with this outcome: encoder quality responds to label
+signal.
 
 **The geometry–harvest mismatch.**
 The cross-domain arm shows that absolute separability and retention can move
@@ -491,15 +486,16 @@ the two layers coherent during the update.
 synthetic taxonomy-transition benchmark of our earlier experiments [41] show full
 fine-tuning reaches 98.2% while destroying the label-efficiency property it
 is meant to serve. Recycling keeps 96.8% of parameters frozen and preserves
-the frozen inference path: it is the label-efficient point on the adaptation
-spectrum, not the accuracy-maximal one.
+the frozen inference path: it occupies the label-efficient point of the
+adaptation spectrum rather than the accuracy-maximal one.
 
 **The value of mapped negatives.** Each failed route is paired with a
 mechanism: a statistics gap (TENT), saturation (continued pretraining), a
 geometry–harvest mismatch (cross-domain), and label inheritance
 (pseudo-label feedback). For
-practitioners, the map says: do not spend effort on label-free encoder
-tricks in weak-reference regimes; spend the labels you have on both layers.
+practitioners, the map indicates that in weak-reference regimes label-free
+encoder adaptation is unlikely to pay off, and that the available labels are
+better spent supervising both layers.
 
 **Limitations.** Recycling is validated on skeleton data with GCN backbones
 and LoRA-style convolution adapters; transfer to transformer encoders is
@@ -520,19 +516,19 @@ self-supervised pretraining, cross-domain transfer, or pseudo-label feedback)
 moves a frozen physical layer past its ceiling. The ceiling yields to a
 simple idea: **recycle the same anchors that
 drive the semantic layer as supervision for a low-rank physical-layer
-update**. Across three weak-reference tiers this gains +10.2, +9.7, and
-+20.1 pp and crosses two pre-registered verdict bands. The effect's
+update**. Across three weak-reference tiers this gains +10.20, +9.71, and
++20.12 pp and crosses two pre-registered verdict bands. The effect's
 two-sided envelope (an anchor-mass floor for the naive recipe and a
 calibration-gate ceiling) is mapped and released, along with every per-seed
 number and the harness that produced them.
 
 Beyond this paper, anchor recycling suggests a broader principle for
-decoupled systems under evolving taxonomies: *the labels that adapt the
-decision layer should also be allowed to adapt the representation, at a dose
-the representation can absorb.* We believe this principle, and the boundary
-map that motivated it, will generalize to other modalities where
-self-supervised physical encoders meet small, shifting, expert-labeled
-semantic layers.
+decoupled systems under evolving taxonomies: the labels that adapt the
+decision layer can also be used to adapt the representation, provided the
+update is kept within a magnitude the representation can absorb. Whether
+this principle, and the boundary map that motivated it, extends to other
+modalities where self-supervised physical encoders meet small, shifting,
+expert-labeled semantic layers is a question we leave to future work.
 
 ---
 
