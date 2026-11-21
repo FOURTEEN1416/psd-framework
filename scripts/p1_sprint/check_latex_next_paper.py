@@ -30,6 +30,8 @@ def extract_numbers(text: str) -> set[str]:
     text = re.sub(r"(?m)^\s*%.*$", "", text)
     text = re.sub(r"(?m)^#{1,6}\s.*$", "", text)
     text = re.sub(r"\[[\d,\s\u2013\u2014-]+\]", "", text)
+    # 参考文献列表的顺序编号（"29. ..."）由 LaTeX 自动生成，不是内容数字
+    text = re.sub(r"(?m)^\d+\.\s+", " ", text)
     nums = set()
     for m in re.finditer(r"\d[\d,]*(?:\.\d+)?", text):
         tok = m.group(0).rstrip(",")
@@ -41,9 +43,12 @@ def extract_numbers(text: str) -> set[str]:
 def main() -> None:
     md = MD.read_text(encoding="utf-8")
     tex_raw = TEX.read_text(encoding="utf-8")
+    app = TEX.with_name("appendix.tex")
+    if app.exists():
+        tex_raw += "\n" + app.read_text(encoding="utf-8")
     tex = norm_tex(tex_raw)
 
-    md_body = md.split("## References")[0]
+    md_body = md
     missing = sorted(n for n in extract_numbers(md_body) if n not in tex)
     # 过滤 markdown 结构噪声（年份范围、图号等仍应真实存在）
     if missing:

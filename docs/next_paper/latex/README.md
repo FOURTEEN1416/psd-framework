@@ -7,7 +7,8 @@
 
 | 文件 | 作用 |
 |------|------|
-| `main.tex` | 全文（elsarticle preprint，单栏 12pt；三张 booktabs 表 + 四张图） |
+| `main.tex` | 全文（elsarticle preprint，单栏 12pt；三张 booktabs 表 + 四张图 + 参考文献） |
+| `appendix.tex` | 附录 A–E（由 `scripts/p1_sprint/make_next_paper_appendix.py` 生成，勿手改） |
 | `highlights.tex` | Elsevier 投稿独立要件（3–5 条，每条 ≤85 字符） |
 | `preview/` | 视觉验收用页面 PNG（110 dpi，gitignored） |
 
@@ -26,9 +27,10 @@ pdflatex --disable-installer -interaction=nonstopmode main.tex
 
 ## 当前状态（2026-11-21）
 
-- 17 页；0 error / 0 warning / 0 overfull；字体嵌入为 Type1 Times。
+- 22 页（正文 17 页 + 附录 A–E 5 页）；0 error / 0 warning / 0 overfull。
 - 图 1–2 全宽（165 mm 原尺寸等比缩至版心），图 3–4 为 0.72 版心宽。
 - 表 2 的 “Anchors / budget” 合并列以控制宽度；Δ 与 Verdict 之间留 10 pt。
+- 附录表号为 A.1 / B.1–B.2 / C.1–C.2；附录表用 `[H]` 固定位置，避免浮到节标题之前。
 
 ## 投稿前 TODO
 
