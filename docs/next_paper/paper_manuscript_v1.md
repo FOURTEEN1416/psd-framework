@@ -127,10 +127,11 @@ Our contributions are:
 Contrastive and masked-prediction pretexts build strong physical
 representations without labels: AimCLR [1] contrasts extreme augmentations of
 the same clip with a momentum queue; CrosSCLR [2] extends contrast to
-cross-stream views; BehaviorMAE [3] and similar masked-autoencoder approaches
+cross-stream views; hBehaveMAE [3] and similar masked-autoencoder approaches
 learn spatio-temporal recovery for animal behavior; TREBA [4] applies
 temporally guided self-supervision to 3D human pose and action recognition;
-and ProSL [5] extends self-supervision to multiview stereo images. These
+and ProSL [5] progressively refines cluster-level pseudo-labels for
+unsupervised skeleton action recognition. These
 skeleton pretexts descend from a broader vision lineage of contrastive and
 self-distilled pretraining [9–11, 32, 33], built on the representations and
 architectures of large-scale image learning [25, 30]. Our physical layer
@@ -534,24 +535,27 @@ expert-labeled semantic layers is a question we leave to future work.
 
 ## References
 
-1. Y.-F. Li, M.-C. Chang, and S. Lyu, "Only time can tell: Discovering
-   temporal data for temporal skeletonizing," in *Proc. IEEE/CVF Int. Conf.
-   Computer Vision (ICCV)*, 2021. (AimCLR)
-2. Y.-F. Li, M.-C. Chang, L. Ni, and S. Lyu, "Contrastive learning from
-   spatio-temporal features for 3D action recognition," in *Proc. IEEE/CVF
-   Conf. Computer Vision and Pattern Recognition (CVPR)*, 2021. (CrosSCLR)
-3. Z. Wang et al., "BehaviorMAE: Masked autoencoder for animal behavior
-   analysis," 2023. (BehaviorMAE)
+1. T. Guo, H. Liu, Z. Chen, M. Liu, T. Wang, and R. Ding, "Contrastive
+   learning from extremely augmented skeleton sequences for self-supervised
+   action recognition," in *Proc. AAAI Conf. Artificial Intelligence*, vol. 36,
+   2022, pp. 762–770. (AimCLR)
+2. L. Li, M. Wang, B. Ni, H. Wang, J. Yang, and W. Zhang, "3D human action
+   representation learning via cross-view consistency pursuit," in *Proc.
+   IEEE/CVF Conf. Computer Vision and Pattern Recognition (CVPR)*, 2021,
+   pp. 4739–4748. (CrosSCLR)
+3. L. Stoffl, A. Bonnetto, S. d'Ascoli, and A. Mathis, "Elucidating the
+   hierarchical nature of behavior with masked autoencoders," in *Proc.
+   European Conf. Computer Vision (ECCV)*, 2024, pp. 106–125. (hBehaveMAE)
 4. F. Sener, S. Chakraborty, T. Nandakumar, D. Calogiuri, and A. K. Jain,
    "TREBA: Using temporally-guided self-supervision for 3D human pose and
    action recognition," in *Proc. IEEE/CVF Winter Conf. Applications of
    Computer Vision (WACV)*, 2023. (TREBA)
-5. S. B. Ebrahimi Kahou, M. Atigh, J. Laroche, and A. Cheriet, "ProSL:
-   Self-supervised learning for multiview stereo images," in *Proc. IEEE/CVF
-   Winter Conf. Applications of Computer Vision (WACV)*, 2023. (ProSL)
-6. Y. Yan, Q. Xiong, and A. G. Hauptmann, "Spatial temporal graph
-   convolutional networks for skeleton-based action recognition," in *Proc.
-   AAAI Conf. Artificial Intelligence*, 2018. (ST-GCN)
+5. H. Qin, L. Chen, M. Kong, Z. Zhao, X. Zeng, M. Lu, and Q. Zhu,
+   "Progressive semantic learning for unsupervised skeleton-based action
+   recognition," *Machine Learning*, vol. 114, no. 3, art. 64, 2025. (ProSL)
+6. S. Yan, Y. Xiong, and D. Lin, "Spatial temporal graph convolutional
+   networks for skeleton-based action recognition," in *Proc. AAAI Conf.
+   Artificial Intelligence*, 2018, pp. 7444–7451. (ST-GCN)
 7. D. Wang, E. Shelhamer, S. Liu, B. Olshausen, and T. Darrell, "Tent: Fully
    test-time adaptation by entropy minimization," in *Proc. Int. Conf.
    Learning Representations (ICLR)*, 2021. (TENT)
@@ -573,15 +577,16 @@ expert-labeled semantic layers is a question we leave to future work.
     Intelligence*, vol. 42, no. 10, 2020. (NTU120)
 14. K. Soomro, A. R. Zamir, and M. Shah, "UCF101: A dataset of 101 human
     action classes from videos in the wild," CRCV-TR-12-01, 2012. (UCF101)
-15. M. M. C. Lopes et al., "PanAf500: A dataset of wild chimpanzee behavior"
-    (PanAf500, chimpanzee behavior tier). *(placeholder — verify exact
-    citation before submission)*
-16. K. Li and S. Hoiem, "Learning without forgetting," *IEEE Trans. Pattern
+15. O. Brookes et al., "PanAf20K: A large video dataset for wild ape
+    detection and behaviour recognition," *Int. J. Computer Vision*, vol. 132,
+    no. 8, pp. 3086–3102, 2024. (PanAf500 is its fine-grained behaviour
+    subset)
+16. Z. Li and D. Hoiem, "Learning without forgetting," *IEEE Trans. Pattern
     Analysis and Machine Intelligence*, vol. 40, no. 12, 2018. (LwF)
 17. P. Khosla et al., "Supervised contrastive learning," in *Proc. NeurIPS*,
     2020. (SupCon)
-18. E. T. Nalisnick et al., "Learning with a rejection option," / calibration
-    and rejection literature placeholder. *(to be finalized)*
+18. C. Cortes, G. DeSalvo, and M. Mohri, "Learning with rejection," in
+    *Proc. Algorithmic Learning Theory (ALT)*, 2016, pp. 67–82.
 19. Y. Ganin and V. Lempitsky, "Unsupervised domain adaptation by backpropagation,"
     in *Proc. Int. Conf. Machine Learning (ICML)*, 2015. (DANN)
 20. S. Ben-David et al., "A theory of learning from different domains,"
@@ -620,12 +625,11 @@ expert-labeled semantic layers is a question we leave to future work.
     learning method for deep neural networks," in *ICML Workshop*, 2013.
 38. K. Sohn et al., "FixMatch: Simplifying semi-supervised learning with
     consistency and confidence," in *Proc. NeurIPS*, 2020.
-39. L. Breiman, "Random forests," *Machine Learning*, vol. 45, 2001.
-    *(placeholder for classical baselines)*
+39. L. Breiman, "Random forests," *Machine Learning*, vol. 45, no. 1,
+    2001, pp. 5–32.
 40. F. Pedregosa et al., "Scikit-learn: Machine learning in Python," *JMLR*,
     vol. 12, 2011. (LogisticRegression / StandardScaler implementation)
 41. (Authors of this paper), "Physics–semantics decoupled skeleton behavior
-    recognition under evolving taxonomies" (prior study: source of the
-    zero-retraining bound, the adaptation ladder, the TRANS-002 episode, the
-    k-ladder, and the full-fine-tuning contrast). *(self-citation placeholder —
-    finalize authors, venue, and year before submission)*
+    recognition under evolving taxonomies," under review, 2026. (Prior study:
+    source of the zero-retraining bound, the adaptation ladder, the TRANS-002
+    episode, the k-ladder, and the full-fine-tuning contrast.)
