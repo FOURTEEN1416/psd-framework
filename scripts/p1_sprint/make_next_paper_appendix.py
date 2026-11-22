@@ -185,7 +185,7 @@ separability of any arm (full-label reference 59.66% and 10% linear head
 Table C1 lists the per-seed retention of the three headline recycling
 configurations. Every NTU120 seed improves; PanAf500 improves on five seeds,
 ties on three, and regresses on two (the quantization caveat of §4.7);
-UCF101 improves on all ten seeds.
+UCF101 improves on nine of ten seeds (one seed regresses by 1.94 pp).
 
 {md_table(["Seed", "NTU120 (lr 2e-2, x8)", "PanAf500 (lr 1e-2, x4)", "UCF101 (lr 2e-2)"], c1_rows)}
 
@@ -383,7 +383,8 @@ separability of any arm (full-label reference 59.66\% and 10\% linear head
 Table~\ref{{tab:appC1}} lists the per-seed retention of the three headline
 recycling configurations. Every NTU120 seed improves; PanAf500 improves on
 five seeds, ties on three, and regresses on two (the quantization caveat of
-\S4.7); UCF101 improves on all ten seeds.
+\S4.7); UCF101 improves on nine of ten seeds (one seed regresses by
+1.94~pp).
 
 {C1}
 

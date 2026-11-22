@@ -452,7 +452,8 @@ Both edges are reproducible and tier-dependent.
 
 PanAf500's validation set is 25 clips, quantizing accuracies in 4% steps; its
 CONFIRMS verdict rests on 5/10 seeds improving, 3 tying, and 2 regressing
-(sign test, not significant) plus a small reference drift (64.0% → 61.6%),
+in paired (b)-arm accuracy (sign test, not significant) plus a small
+reference drift (64.0% → 61.6%),
 and should be interpreted with these quantification caveats in mind.
 NTU120's PARTIAL margin is 0.16 pp above the band edge. UCF101's reference is
 video-derived and weak (full-label linear reference ≈ 19%), so its retentions
@@ -714,7 +715,7 @@ separability of any arm (full-label reference 59.66% and 10% linear head
 Table C1 lists the per-seed retention of the three headline recycling
 configurations. Every NTU120 seed improves; PanAf500 improves on five seeds,
 ties on three, and regresses on two (the quantization caveat of §4.7);
-UCF101 improves on all ten seeds.
+UCF101 improves on nine of ten seeds (one seed regresses by 1.94 pp).
 
 | Seed | NTU120 (lr 2e-2, x8) | PanAf500 (lr 1e-2, x4) | UCF101 (lr 2e-2) |
 |:-----|:---------------------|:-----------------------|:-----------------|
@@ -814,6 +815,7 @@ mirror under `reports/p1_sprint_evidence/` is byte-identical to the run
 outputs.
 
 <!-- APPENDIX:END -->
+
 
 
 
