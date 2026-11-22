@@ -405,7 +405,9 @@ retention, 4.87 pp below recycling (paired 95% CI [4.29, 5.44]). It fits the
 734 anchors almost perfectly (mean anchor accuracy 98.6%), and the semantic
 layer cannot harvest the resulting geometry. The comparison isolates the
 mechanism: the constrained, distillation-anchored update is what preserves
-label efficiency, not encoder adaptation per se.
+label efficiency, not encoder adaptation per se. BitFit, which trains only
+24,274 biases, reaches 76.02% — 1.06 pp above frozen and 9.14 pp below
+recycling — so the gap is not a parameter-count effect either.
 
 **Table 4.** Matched-budget supervised baselines on NTU120 (10% budget; ten
 seeds).
@@ -414,6 +416,7 @@ seeds).
 |:----|-----------------:|----------:|-------------:|---------------:|
 | Frozen (semantic only) | 0 | 74.96% | — | 58.37% |
 | Full fine-tuning | 1.84 M | 80.32% | +5.36 pp | 60.10% |
+| BitFit (bias only) | 24,274 | 76.02% | +1.06 pp | 60.06% |
 | Anchor recycling (LoRA) | 62,616 (3.19%) | **85.16%** | **+10.20 pp** | 58.24% |
 
 ### 4.5 Hyperparameter sensitivity
