@@ -476,6 +476,27 @@ anchor-mass floor beneath which unaugmented recycling is inert, and a
 calibration-gate ceiling above which it stops in a hard, diagnosable error.
 Both edges are reproducible and tier-dependent.
 
+**Taxonomy-shift episode.** To test the title's claim directly, we run a
+60→49 merge episode on NTU120: 11 adjacent class pairs are merged, matching
+the TRANS-002 scale, and every arm uses the same 10% Y′ anchors. Remap-only,
+which reuses the old 60-class head and sums the probabilities of merged
+classes, reaches 78.04% retention; semantic-only with Y′ anchors reaches
+73.31%; recycling reaches 84.56%. Recycling is 11.25 pp above semantic-only
+(paired 95% CI [9.92, 12.59], 10/10 seeds) and 6.52 pp above remap-only
+([5.40, 7.64], 10/10 seeds). The merge is the easiest case for remap because
+no class disappears; even there, recycling adds 6.5 pp, and its retention is
+within 0.6 pp of the 60-class result (85.16%).
+
+**Table 5.** Taxonomy-shift episode on NTU120 (60→49 merge; 10% Y′ anchors;
+ten seeds).
+
+| Arm | Accuracy | Retention | Δ vs. semantic-only |
+|:----|---------:|----------:|--------------------:|
+| Remap-only (old 60-class head, no new labels) | 45.97% | 78.04% | +4.73 pp |
+| Semantic-only (frozen, Y′ anchors) | 43.18% | 73.31% | — |
+| Recycling (LoRA, Y′ anchors) | **49.19%** | **84.56%** | **+11.25 pp** |
+| Full-label reference (frozen) | 58.91% | — | — |
+
 ### 4.7 Threats to validity
 
 PanAf500's validation set is 25 clips, quantizing accuracies in 4% steps; its
@@ -499,7 +520,9 @@ inherited geometry. Recycling is the only arm whose supervision is real,
 drawn from the target domain, and routed to the encoder. The k-ladder study —
 our prior budget sweep [41] on the synthetic episode, which varied the anchor
 count k — is consistent with this outcome: encoder quality responds to label
-signal.
+signal. The 60→49 merge episode of Table 5 repeats the ordering under a
+changed taxonomy (84.56% vs 73.31% retention), so the effect is not an
+artifact of a fixed label set.
 
 **The geometry–harvest mismatch.**
 The cross-domain arm shows that absolute separability and retention can move
