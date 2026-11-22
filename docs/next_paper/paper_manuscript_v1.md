@@ -407,7 +407,11 @@ layer cannot harvest the resulting geometry. The comparison isolates the
 mechanism: the constrained, distillation-anchored update is what preserves
 label efficiency, not encoder adaptation per se. BitFit, which trains only
 24,274 biases, reaches 76.02% — 1.06 pp above frozen and 9.14 pp below
-recycling — so the gap is not a parameter-count effect either.
+recycling (paired 95% CI [8.30, 10.01]) — so the gap is not a parameter-count
+effect either. A bottleneck Adapter (96,316 parameters) reaches 79.74%,
+still 5.42 pp below recycling (paired 95% CI [3.91, 6.97]); the mean ordering
+BitFit < Adapter < full fine-tuning < recycling holds, with seed-level
+variation in the middle two arms.
 
 **Table 4.** Matched-budget supervised baselines on NTU120 (10% budget; ten
 seeds).
@@ -417,6 +421,7 @@ seeds).
 | Frozen (semantic only) | 0 | 74.96% | — | 58.37% |
 | Full fine-tuning | 1.84 M | 80.32% | +5.36 pp | 60.10% |
 | BitFit (bias only) | 24,274 | 76.02% | +1.06 pp | 60.06% |
+| Adapter (bottleneck) | 96,316 | 79.74% | +4.78 pp | 58.30% |
 | Anchor recycling (LoRA) | 62,616 (3.19%) | **85.16%** | **+10.20 pp** | 58.24% |
 
 ### 4.5 Hyperparameter sensitivity
