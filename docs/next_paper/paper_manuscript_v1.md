@@ -396,6 +396,26 @@ numbers give the gain in percentage points over the semantic-only arm.](figures/
 augmentation is applied; §4.5 shows augmentation and a higher learning
 rate lift the 10% budget point past that band.
 
+**Matched-budget supervised baselines.** To test whether the recycling gain
+is simply fine-tuning under another name, we train the same encoder
+end-to-end on the same 10% anchors (all parameters, same augmentation
+family, BatchNorm statistics frozen). Full fine-tuning raises the
+full-label reference from 58.37% to 60.10% but reaches only 80.32%
+retention, 4.87 pp below recycling (paired 95% CI [4.29, 5.44]). It fits the
+734 anchors almost perfectly (mean anchor accuracy 98.6%), and the semantic
+layer cannot harvest the resulting geometry. The comparison isolates the
+mechanism: the constrained, distillation-anchored update is what preserves
+label efficiency, not encoder adaptation per se.
+
+**Table 4.** Matched-budget supervised baselines on NTU120 (10% budget; ten
+seeds).
+
+| Arm | Trainable params | Retention | Δ vs. frozen | Full-label ref |
+|:----|-----------------:|----------:|-------------:|---------------:|
+| Frozen (semantic only) | 0 | 74.96% | — | 58.37% |
+| Full fine-tuning | 1.84 M | 80.32% | +5.36 pp | 60.10% |
+| Anchor recycling (LoRA) | 62,616 (3.19%) | **85.16%** | **+10.20 pp** | 58.24% |
+
 ### 4.5 Hyperparameter sensitivity
 
 On NTU120 (ten seeds per cell), only two factors matter. The adaptation
