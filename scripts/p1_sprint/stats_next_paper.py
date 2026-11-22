@@ -125,10 +125,34 @@ def analyze_budget(name: str, frozen_path: Path, recycle_path: Path) -> dict:
     }
 
 
+
+def analyze_ratio(name: str, frozen_path: Path, recycle_path: Path) -> dict:
+    """Headline retention = ratio of means; bootstrap seeds jointly."""
+    fz = load(frozen_path)
+    rc = load(recycle_path)
+    base = np.array(fz["b_arms"], dtype=float)
+    ref = float(fz["full_ref"])
+    rows = sorted(rc["per_seed"], key=lambda r: int(r["seed"]))
+    b = np.array([r["b_arm"] for r in rows], dtype=float)
+    fr = np.array([r["full_ref"] for r in rows], dtype=float)
+    frozen = float(base.mean() / ref)
+    rng = np.random.default_rng(0)
+    idx = rng.integers(0, len(b), size=(10000, len(b)))
+    ratios = b[idx].mean(axis=1) / fr[idx].mean(axis=1)
+    diff = (ratios - frozen) * 100
+    return {
+        "tier": name,
+        "headline_pct": float(b.mean() / fr.mean() * 100),
+        "mean_diff_pp": float(diff.mean()),
+        "ci95_pp": [float(np.percentile(diff, 2.5)), float(np.percentile(diff, 97.5))],
+        "share_positive": float((ratios > frozen).mean()),
+    }
+
 def main() -> None:
     out = [analyze(k, *v) for k, v in TIERS.items()]
+    ratio = [analyze_ratio(k, *v) for k, v in TIERS.items()]
     budget = [analyze_budget(k, f, r) for k, f, r in BUDGET]
-    OUT_JSON.write_text(json.dumps({"tiers": out, "budget": budget}, ensure_ascii=False, indent=2), encoding="utf-8")
+    OUT_JSON.write_text(json.dumps({"tiers": out, "ratio": ratio, "budget": budget}, ensure_ascii=False, indent=2), encoding="utf-8")
 
     lines = [
         "# Per-seed paired statistics (recycling vs frozen)",
@@ -158,6 +182,18 @@ def main() -> None:
             f"| {r['tier']} | {r['frozen_retention']*100:.2f} | {r['recycled_retention']*100:.2f} | "
             f"{s['mean_diff_pp']:+.2f} | [{s['ci95_pp'][0]:+.2f}, {s['ci95_pp'][1]:+.2f}] | "
             f"{s['positive']}/{s['ties']}/{s['negative']} | {s['sign_test_p']:.4f} | {s['cohens_dz']:.2f} |"
+        )
+    lines += [
+        "",
+        "## Headline retention (ratio of means, seed bootstrap)",
+        "",
+        "| Tier | Headline (%) | Mean gain (pp) | 95% bootstrap CI | share > frozen |",
+        "|:--|--:|--:|:--|--:|",
+    ]
+    for r in ratio:
+        lines.append(
+            f"| {r['tier']} | {r['headline_pct']:.2f} | {r['mean_diff_pp']:+.2f} | "
+            f"[{r['ci95_pp'][0]:+.2f}, {r['ci95_pp'][1]:+.2f}] | {r['share_positive']*100:.1f}% |"
         )
     lines += [
         "",

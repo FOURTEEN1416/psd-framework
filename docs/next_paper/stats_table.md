@@ -16,6 +16,14 @@
 | PanAf500 | 82.50 | 91.64 | +9.14 | [-0.37, +19.32] | 7/0/3 | 0.3438 | 0.55 |
 | UCF101 | 51.09 | 71.81 | +20.72 | [+11.83, +28.82] | 9/0/1 | 0.0215 | 1.44 |
 
+## Headline retention (ratio of means, seed bootstrap)
+
+| Tier | Headline (%) | Mean gain (pp) | 95% bootstrap CI | share > frozen |
+|:--|--:|--:|:--|--:|
+| NTU120 | 85.16 | +10.21 | [+9.44, +11.06] | 100.0% |
+| PanAf500 | 92.21 | +9.68 | [+1.27, +16.25] | 98.8% |
+| UCF101 | 71.20 | +20.17 | [+12.73, +28.24] | 100.0% |
+
 ## Budget sweep (NTU120, raw (b)-arm accuracy)
 
 | Budget | Mean diff (pp) | 95% bootstrap CI | up/tie/down | Sign-test p |
