@@ -36,9 +36,56 @@ from run_p5b_generic_retention import load_dataset, prep_clip  # noqa: E402
 
 TIERS = {
     "ntu120": {"pkl": REPO / "data/pyskl/ntu120_hrnet.pkl", "max_n": 12000},
+    "ntu120_full": {"pkl": REPO / "data/pyskl/ntu120_hrnet.pkl", "max_n": 24000},
     "ucf101": {"pkl": REPO / "data/pyskl/ucf101_hrnet.pkl", "max_n": 10000},
     "panaf500": {"pkl": REPO / "runs/p7_asbar/panaf500_T30.pkl", "max_n": 500},
 }
+
+def _kp3(a: dict) -> np.ndarray:
+    """与 run_p5b.load_dataset 同式：压掉单人维并补 score 维，返回 (T,V,3)。"""
+    kp = np.asarray(a["keypoint"], dtype=np.float32)
+    while kp.ndim > 3 and kp.shape[0] == 1:
+        kp = kp[0]
+    if kp.ndim == 4:
+        kp = kp[:, 0]
+    kps = np.asarray(a.get("keypoint_score", np.zeros(0)), dtype=np.float32)
+    while kps.ndim > 2 and kps.shape[0] == 1:
+        kps = kps[0]
+    if kps.ndim == 2 and kps.shape == kp.shape[:2]:
+        kps = kps[:, :, np.newaxis]
+    else:
+        kps = np.ones((*kp.shape[:2], 1), np.float32)
+    return prep_clip(np.concatenate([kp, kps], axis=-1).astype(np.float32))
+
+
+def load_balanced(pkl: Path, train_per: int = 100, val_per: int = 20) -> list:
+    """NTU120 全 120 类分层取样：每类 train_per/val_per 条，避免按标注序只取到前 60 类。"""
+    d = pickle.load(open(pkl, "rb"))
+    anns = d["annotations"]
+    split = d["split"]
+    train_keys = set()
+    for k in ("xsub_train", "train1"):
+        train_keys.update(split.get(k, []))
+    val_keys = set()
+    for k in ("xsub_val", "xsub_test", "test1"):
+        val_keys.update(split.get(k, []))
+    tr_cnt: dict[int, int] = {}
+    va_cnt: dict[int, int] = {}
+    rows = []
+    for a in anns:
+        lab = int(a["label"])
+        fd = a["frame_dir"]
+        if fd in train_keys and tr_cnt.get(lab, 0) < train_per:
+            rows.append({"kp": _kp3(a), "label": lab, "split": "train"})
+            tr_cnt[lab] = tr_cnt.get(lab, 0) + 1
+        elif fd in val_keys and va_cnt.get(lab, 0) < val_per:
+            rows.append({"kp": _kp3(a), "label": lab, "split": "val"})
+            va_cnt[lab] = va_cnt.get(lab, 0) + 1
+    n_cls = len(set(int(a["label"]) for a in anns))
+    assert len(tr_cnt) == n_cls and len(va_cnt) == n_cls, (n_cls, len(tr_cnt), len(va_cnt))
+    print(f"[balanced] classes={n_cls} train={sum(tr_cnt.values())} val={sum(va_cnt.values())}")
+    return rows
+
 
 # COCO-17 → NTU-25 槽位映射（-1 = 死位）
 COCO17_TO_NTU25 = {
@@ -102,7 +149,13 @@ def main() -> None:
     cfg = TIERS[args.tier]
     max_n = args.max if args.max else cfg["max_n"]
 
-    if args.tier == "panaf500":
+    if args.tier == "ntu120_full":
+        rows = load_balanced(cfg["pkl"], train_per=100, val_per=20)
+        X = np.stack([r["kp"] for r in rows])
+        labels = np.array([r["label"] for r in rows])
+        splits = np.array([r["split"] for r in rows])
+        mapper = map_to_ntu25
+    elif args.tier == "panaf500":
         # list 格式 pkl（psd full12）——与 interim 读数（run_p23）同一加载器，同源同预处理
         from run_p23_panaf_retention import load_rows  # noqa: E402
         X, labels, splits, _classes = load_rows()      # X 已 prep_clip center，(N,30,24,3)

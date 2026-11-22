@@ -35,7 +35,7 @@ sys.path.insert(0, str(REPO / "scripts"))
 sys.path.insert(0, str(REPO / "external" / "AimCLR"))
 sys.path.insert(0, str(REPO / "external" / "AimCLR" / "torchlight"))
 
-TIERS = {"ntu120": 60, "ucf101": 101, "panaf500": 9}
+TIERS = {"ntu120": 60, "ntu120_full": 120, "ucf101": 101, "panaf500": 9}
 BUDGET_FRAC = 0.10
 SEED_MAP = {10: tuple(range(42, 52))}
 
