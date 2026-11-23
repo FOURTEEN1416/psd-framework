@@ -132,8 +132,13 @@ def finetune_lora_ce(model, teacher, X_t, anchor_idx: np.ndarray, y_anchor: np.n
     return model, head, losses, accs
 
 
-def run_semantic_arm(tr_feat, va_feat, tr_lab, va_lab, anchor, seed, budget_frac):
-    """与 run_arms 的 (b) 臂逐式一致的单种子语义评测。"""
+def run_semantic_arm(tr_feat, va_feat, tr_lab, va_lab, anchor, seed, budget_frac,
+                     return_pred: bool = False):
+    """与 run_arms 的 (b) 臂逐式一致的单种子语义评测。
+
+    return_pred=True 时额外返回 va 逐 clip 预测正确掩码（供旧/新类分解等
+    二次分析；默认 False，既有调用行为不变）。
+    """
     from run_p5b_generic_retention import KW
     from psd.training.tcl_selftrain import run_selftrain
     from labelfree_tier_replication import ScaledLR
@@ -153,8 +158,10 @@ def run_semantic_arm(tr_feat, va_feat, tr_lab, va_lab, anchor, seed, budget_frac
     y2[anchor] = labels_str[anchor]
     y2[r["final_pool_idx"]] = r["final_pred_full"][r["final_pool_idx"]]
     va_lab_str = full_labels_str[len(tr_lab):]
-    acc_b = float(np.mean(ScaledLR()
-                          .fit(tr_feat[tm2], y2[tm2]).predict(va_feat) == va_lab_str))
+    pred_ok = ScaledLR().fit(tr_feat[tm2], y2[tm2]).predict(va_feat) == va_lab_str
+    acc_b = float(np.mean(pred_ok))
+    if return_pred:
+        return acc_b, len(r["final_pool_idx"]), r["stop_reason"], pred_ok
     return acc_b, len(r["final_pool_idx"]), r["stop_reason"]
 
 
