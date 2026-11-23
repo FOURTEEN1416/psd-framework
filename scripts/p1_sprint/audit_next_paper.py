@@ -100,7 +100,7 @@ CHECKS: list[tuple[str, list[str]]] = [
     ("56.85", ["labelfree_tiers/ntu120_32ch_labelfree_summary.json", "MANIFEST.md"]),
     ("61.28", [f"{A}/ntu120_32ch/summary_aug8_lr1e2.json", "MANIFEST.md"]),
     ("51.20", [f"{A}/ntu120_32ch/summary_aug8_lr1e2.json", "MANIFEST.md"]),
-    ("39.04", ["MANIFEST.md"]),
+    ("38.93", ["MANIFEST.md"]),
     ("15.07", ["next_paper_stats.json", "MANIFEST.md"]),
     ("12.27", ["next_paper_stats.json", "MANIFEST.md"]),
     ("13.49", ["next_paper_stats.json", "MANIFEST.md"]),

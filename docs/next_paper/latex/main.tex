@@ -582,7 +582,7 @@ The gate converts silent quality collapse into an explicit, diagnosable
 stop, and marks the ceiling of the adaptation envelope. The ceiling is
 capacity-dependent: on the 32-channel encoder, the lr 2e-2 recipe that is
 stable at 16 channels trips the gate on one seed, and the capacity control
-therefore uses lr 1e-2 (Appendix~\ref{app:gate}).
+therefore uses lr 1e-2 (\ref{app:gate}).
 
 \begin{quote}
 \textbf{Finding 4.} Anchor recycling lives in a two-sided envelope: an
@@ -675,14 +675,14 @@ $+4.43$~pp): with room to grow, part of the label signal lands in the
 representation itself. The gain is larger than at 16 channels ($+10.20$~pp),
 so the mechanism is not an artifact of the small backbone --- if anything,
 the small backbone understates it. The 16-channel-optimal recipe trips the
-calibration gate on one 32-channel seed (Appendix~\ref{app:gate}), so the
+calibration gate on one 32-channel seed (\ref{app:gate}), so the
 control uses lr 1e-2; the envelope's upper edge moves with encoder width.
 
 \begin{table}[H]
 \centering
 \caption{Encoder-capacity control on NTU120 (60 classes; 10\% anchors; ten
 seeds). The 32-channel control uses lr 1e-2 because the 16-channel-optimal
-lr 2e-2 trips the calibration gate on one seed (Appendix~\ref{app:gate});
+lr 2e-2 trips the calibration gate on one seed (\ref{app:gate});
 all other settings match the 16-channel headline.}
 \label{tab:capacity}
 \small

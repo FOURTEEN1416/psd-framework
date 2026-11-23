@@ -544,7 +544,7 @@ pretrained from scratch under the identical label-free objective. Doubling
 the width *lowers* the frozen pipeline: the full-label reference drops from
 58.37% to 56.85% and frozen retention from 74.96% to 68.48% — capacity alone
 does not buy label efficiency. Recycling on the 32-channel encoder raises
-the b-arm from 39.04% to 51.20% and retention to 83.55%, a paired gain of
+the b-arm from 38.93% to 51.20% and retention to 83.55%, a paired gain of
 +15.07 pp (95% CI [13.49, 16.71], 10/10 seeds, p = 0.002); the raw b-arm
 gain is +12.27 pp ([11.40, 13.17], 10/10). Unlike the 16-channel result, the
 update also raises the encoder's full-label reference (56.85% → 61.28%,
@@ -1007,6 +1007,7 @@ mirror under `reports/p1_sprint_evidence/` is byte-identical to the run
 outputs.
 
 <!-- APPENDIX:END -->
+
 
 
 
