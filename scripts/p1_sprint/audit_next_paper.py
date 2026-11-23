@@ -155,6 +155,13 @@ CHECKS: list[tuple[str, list[str]]] = [
     ("7.10", ["taxonomy_addition_stats.json", "MANIFEST.md"]),
     ("8.05", ["taxonomy_addition_stats.json", "MANIFEST.md"]),
     ("600", ["MANIFEST.md"]),
+    # 64ch 预算扫描（Table 9）
+    ("65.64", [f"{A}/ntu120_64ch/summary_ref5.json", "MANIFEST.md"]),
+    ("70.57", [f"{A}/ntu120_64ch/summary_split5.json", "MANIFEST.md"]),
+    ("78.64", [f"{A}/ntu120_64ch/summary_ref15.json", "MANIFEST.md"]),
+    ("89.40", [f"{A}/ntu120_64ch/summary_dual15.json", "MANIFEST.md"]),
+    ("4.93", [f"{A}/ntu120_64ch/budget_sweep_stats.json", "MANIFEST.md"]),
+    ("10.76", [f"{A}/ntu120_64ch/budget_sweep_stats.json", "MANIFEST.md"]),
 ]
 
 

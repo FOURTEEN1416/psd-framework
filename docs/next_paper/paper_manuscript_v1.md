@@ -596,6 +596,21 @@ classes → +60 new classes; old anchors stay spent; ten seeds).
 | recycling (LoRA) | **32.51%** | **34.84%** | **30.19%** | **8.06 pp** |
 | gain (recycling − semantic) | +5.20 pp | +2.85 pp | +7.57 pp | −2.84 pp |
 
+**Budget sweep at the standard width.** Finally, we repeat the budget sweep
+of Table 3 at the standard 64-channel width (ten seeds per point). The
+advantage widens monotonically with budget, exactly as at 16 channels:
++4.93 pp at 5%, +8.84 pp at 10%, and +10.76 pp at 15% (10/10 seeds at every
+point), and the 15% point crosses the PARTIAL band (89.40% retention).
+
+**Table 9.** Budget sweep at the standard 64-channel width (NTU120, 60
+classes; lr 1e-2, 8× augmentation; ten seeds per point).
+
+| Budget | Frozen | Recycling | Gain |
+|:-------|-------:|----------:|-----:|
+| 5%  | 65.64% | 70.57% | +4.93 pp |
+| 10% | 74.78% | 83.62% | +8.84 pp |
+| 15% | 78.64% | 89.40% | +10.76 pp |
+
 ### 4.8 Threats to validity
 
 PanAf500's validation set is 25 clips, quantizing accuracies in 4% steps; its

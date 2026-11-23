@@ -736,6 +736,30 @@ gain (recycling $-$ semantic) & $+5.20$~pp & $+2.85$~pp & $+7.57$~pp & $-2.84$~p
 \end{tabular}
 \end{table}
 
+\textbf{Budget sweep at the standard width.} Finally, we repeat the budget
+sweep of Table~\ref{tab:budget} at the standard 64-channel width (ten seeds
+per point). The advantage widens monotonically with budget, exactly as at 16
+channels: $+4.93$~pp at 5\%, $+8.84$~pp at 10\%, and $+10.76$~pp at 15\%
+(10/10 seeds at every point), and the 15\% point crosses the PARTIAL band
+(89.40\% retention).
+
+\begin{table}[H]
+\centering
+\caption{Budget sweep at the standard 64-channel width (NTU120, 60 classes;
+lr 1e-2, $8\times$ augmentation; ten seeds per point).}
+\label{tab:budget64}
+\small
+\begin{tabular}{@{}lrrr@{}}
+\toprule
+Budget & Frozen & Recycling & Gain \\
+\midrule
+5\%  & 65.64\% & 70.57\% & $+4.93$~pp \\
+10\% & 74.78\% & 83.62\% & $+8.84$~pp \\
+15\% & 78.64\% & \textbf{89.40\%} & $+10.76$~pp \\
+\bottomrule
+\end{tabular}
+\end{table}
+
 \subsection{Threats to validity}
 
 PanAf500's validation set is 25 clips, quantizing accuracies in 4\% steps; its
