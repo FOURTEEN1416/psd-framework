@@ -37,6 +37,10 @@ TIERS = {
         EV / "labelfree_tiers/ucf101_labelfree_summary.json",
         EV / "adaptation/ucf101/summary_same10.json",
     ),
+    "NTU120-120c": (
+        EV / "labelfree_tiers/ntu120_full_labelfree_summary.json",
+        EV / "adaptation/ntu120_full/summary_full10.json",
+    ),
 }
 
 

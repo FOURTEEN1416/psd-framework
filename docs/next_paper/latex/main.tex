@@ -131,7 +131,10 @@ that already existed.
 Anchor recycling delivers consistent gains across the three weak-reference
 tiers: $+10.20$~pp on NTU120 (74.96\% $\rightarrow$ 85.16\%, crossing into the PARTIAL
 band), $+9.71$~pp on PanAf500 (82.50\% $\rightarrow$ 92.21\%, crossing into CONFIRMS), and
-$+20.12$~pp on UCF101 (51.09\% $\rightarrow$ 71.21\%). A budget-allocation sweep shows the
+$+20.12$~pp on UCF101 (51.09\% $\rightarrow$ 71.21\%). A 120-class replication on an
+independently pretrained encoder (Table~\ref{tab:scale120}) reproduces the
+advantage at twice the taxonomy size: $+10.84$~pp retention, 10/10 seeds. A
+budget-allocation sweep shows the
 advantage widens with budget ($+2.90$~pp at 5\%, $+3.91$~pp at 10\%, $+4.56$~pp at 15\%),
 and a hyperparameter study isolates the adaptation learning rate and the
 anchor-augmentation multiplier as the dominant factors, with a unimodal
@@ -152,7 +155,8 @@ Our contributions are:
   \emph{why} each route fails.
 \item \textbf{Anchor recycling}, a label-efficient adaptation mechanism that reuses
   the semantic layer's anchor set to shape the physical layer, yielding
-  $+10.2/+9.7/+20.1$~pp on three weak-reference tiers and crossing two
+  $+10.2/+9.7/+20.1$~pp on three weak-reference tiers, $+10.84$~pp at
+  120-class scale, and crossing two
   pre-registered verdict bands.
 \item \textbf{A two-sided envelope analysis} (an anchor-mass floor and a
   calibration-gate ceiling), together with a sensitivity map over
@@ -547,7 +551,7 @@ UCF101 (953 anchors) peaks at lr 2e-2 \emph{without} augmentation (71.21\%; the
 augmented 1e-2 variant drops to 68.31\%); PanAf500 (40 anchors) needs the
 gentlest setting (lr 1e-2, $4\times$ augmentation, 92.21\%) and breaks the gate at
 2e-2 even with augmentation. UCF101, despite carrying the largest anchor
-set, takes no augmentation: its video-derived reference is so weak (\S4.7)
+set, takes no augmentation: its video-derived reference is so weak (\S4.8)
 that extra augmented views mostly add variance rather than usable signal, so
 its recipe is governed by reference quality as much as by anchor mass.
 
@@ -608,6 +612,44 @@ Full-label reference (frozen) & 58.91\% & --- & --- \\
 \end{tabular}
 \end{table}
 
+\subsection{Scale replication: the full 120-class taxonomy}
+
+The headline NTU120 tier uses a 60-class subset (7,337 training clips). To
+test whether the mechanism survives scale, we build a balanced 120-class tier
+from NTU120: 120 classes $\times$ 100 training and 20 validation clips
+(12,000/2,400 clips), pretrain a fresh AimCLR encoder from scratch for 150
+epochs under the identical label-free objective, and rerun the three-arm
+protocol with 1,200 anchors per seed. Under the full taxonomy the frozen
+pipeline retains 66.33\% (b-arm 29.41\%, full-label reference 44.33\%), far
+below the 85\% band: a 10\% budget spread over 120 classes is simply too
+small. Recycling raises the b-arm to 33.06\% and retention to 77.19\%
+(Table~\ref{tab:scale120}), a paired gain of $+10.84$~pp (95\% CI
+[9.34, 12.68], 10/10 seeds, $p=0.002$); the raw b-arm gain is $+3.65$~pp
+([2.99, 4.40], 10/10). The full-label reference drifts down (44.33\% $\rightarrow$
+42.83\%, $-1.50$~pp), the same signature as the 60-class result: the update
+does not raise linear separability, but the semantic layer extracts more from
+the adapted geometry. The tier remains in the FAILS band, as the frozen
+baseline does; what replicates is not a band crossing but the size and
+consistency of the recycling advantage, under a taxonomy twice as large and
+an encoder that was pretrained independently.
+
+\begin{table}[H]
+\centering
+\caption{Scale replication on the full NTU120 taxonomy (120 classes;
+12,000/2,400 balanced train/val; 10\% = 1,200 anchors; ten seeds).}
+\label{tab:scale120}
+\small
+\begin{tabular}{@{}lrrr@{}}
+\toprule
+Arm & Accuracy & Retention & Full-label ref \\
+\midrule
+Frozen (semantic only) & 29.41\% & 66.33\% & 44.33\% \\
+Anchor recycling (LoRA) & 33.06\% & \textbf{77.19\%} & 42.83\% \\
+Paired gain & $+3.65$~pp & \textbf{$+10.84$~pp} & $-1.50$~pp \\
+\bottomrule
+\end{tabular}
+\end{table}
+
 \subsection{Threats to validity}
 
 PanAf500's validation set is 25 clips, quantizing accuracies in 4\% steps; its
@@ -616,7 +658,9 @@ CONFIRMS verdict rests on 5/10 seeds improving, 3 tying, and 2 regressing
 and should be interpreted with these quantification caveats in mind.
 NTU120's PARTIAL margin is 0.16~pp above the band edge. UCF101's reference is
 video-derived and weak (full-label linear reference $\approx 19\%$), so its retentions
-are ratios of small numbers.
+are ratios of small numbers. The 120-class replication supports the gain, not
+a band crossing: at that scale even the frozen baseline sits at 66.33\%,
+and the absolute retention stays below the PARTIAL band.
 
 % =====================================================================
 \section{Discussion}
@@ -632,7 +676,10 @@ our prior budget sweep~\cite{prior} on the synthetic episode, which varied the a
 count $k$ --- is consistent with this outcome: encoder quality responds to label
 signal. The 60$\rightarrow$49 merge episode of Table~\ref{tab:taxshift} repeats the
 ordering under a changed taxonomy (84.56\% vs 73.31\% retention), so the effect
-is not an artifact of a fixed label set.
+is not an artifact of a fixed label set. The 120-class replication of
+Table~\ref{tab:scale120} extends the ordering to a taxonomy twice as large,
+with an independently pretrained encoder and 1,200 anchors: $+10.84$~pp
+retention, 10/10 seeds.
 
 \textbf{The geometry--harvest mismatch.}
 The cross-domain arm shows that absolute separability and retention can move
@@ -665,7 +712,9 @@ and LoRA-style convolution adapters; transfer to transformer encoders is
 untested. The budget range studied is 5--15\%; we did not measure beyond it,
 though we would expect much larger budgets to converge toward full
 fine-tuning. PanAf500 and UCF101 verdicts carry the quantization
-and weak-reference caveats of \S4.7. The calibration gate, while a useful
+and weak-reference caveats of \S4.8. At 120 classes the absolute retention
+stays in the FAILS band; the replication supports the recycling gain, not a
+band crossing at that scale. The calibration gate, while a useful
 safety mechanism, is itself a hyperparameter surface we did not explore.
 
 % =====================================================================

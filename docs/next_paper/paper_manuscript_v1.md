@@ -90,7 +90,10 @@ that already existed.
 Anchor recycling delivers consistent gains across the three weak-reference
 tiers: +10.20 pp on NTU120 (74.96% → 85.16%, crossing into the PARTIAL
 band), +9.71 pp on PanAf500 (82.50% → 92.21%, crossing into CONFIRMS), and
-+20.12 pp on UCF101 (51.09% → 71.21%). A budget-allocation sweep shows the
++20.12 pp on UCF101 (51.09% → 71.21%). A 120-class replication on an
+independently pretrained encoder (Table 6) reproduces the advantage at twice
+the taxonomy size: +10.84 pp retention, 10/10 seeds. A budget-allocation
+sweep shows the
 advantage widens with budget (+2.90 pp at 5%, +3.91 pp at 10%, +4.56 pp at 15%),
 and a hyperparameter study isolates the adaptation learning rate and the
 anchor-augmentation multiplier as the dominant factors, with a unimodal
@@ -110,8 +113,8 @@ Our contributions are:
    *why* each route fails.
 3. **Anchor recycling**, a label-efficient adaptation mechanism that reuses
    the semantic layer's anchor set to shape the physical layer, yielding
-   +10.2/+9.7/+20.1 pp on three weak-reference tiers and crossing two
-   pre-registered verdict bands.
+   +10.2/+9.7/+20.1 pp on three weak-reference tiers, +10.84 pp at
+   120-class scale, and crossing two pre-registered verdict bands.
 4. **A two-sided envelope analysis** (an anchor-mass floor and a
    calibration-gate ceiling), together with a sensitivity map over
    augmentation, learning rate, and budget that separates configurations
@@ -447,7 +450,7 @@ UCF101 (953 anchors) peaks at lr 2e-2 *without* augmentation (71.21%; the
 augmented 1e-2 variant drops to 68.31%); PanAf500 (40 anchors) needs the
 gentlest setting (lr 1e-2, 4× augmentation, 92.21%) and breaks the gate at
 2e-2 even with augmentation. UCF101, despite carrying the largest anchor
-set, takes no augmentation: its video-derived reference is so weak (§4.7)
+set, takes no augmentation: its video-derived reference is so weak (§4.8)
 that extra augmented views mostly add variance rather than usable signal, so
 its recipe is governed by reference quality as much as by anchor mass.
 
@@ -497,7 +500,36 @@ ten seeds).
 | Recycling (LoRA, Y′ anchors) | **49.19%** | **84.56%** | **+11.25 pp** |
 | Full-label reference (frozen) | 58.91% | — | — |
 
-### 4.7 Threats to validity
+### 4.7 Scale replication: the full 120-class taxonomy
+
+The headline NTU120 tier uses a 60-class subset (7,337 training clips). To
+test whether the mechanism survives scale, we build a balanced 120-class tier
+from NTU120: 120 classes × 100 training and 20 validation clips
+(12,000/2,400 clips), pretrain a fresh AimCLR encoder from scratch for 150
+epochs under the identical label-free objective, and rerun the three-arm
+protocol with 1,200 anchors per seed. Under the full taxonomy the frozen
+pipeline retains 66.33% (b-arm 29.41%, full-label reference 44.33%), far
+below the 85% band: a 10% budget spread over 120 classes is simply too small.
+Recycling raises the b-arm to 33.06% and retention to 77.19% (Table 6), a
+paired gain of +10.84 pp (95% CI [9.34, 12.68], 10/10 seeds, p = 0.002); the
+raw b-arm gain is +3.65 pp ([2.99, 4.40], 10/10). The full-label reference
+drifts down (44.33% → 42.83%, −1.50 pp), the same signature as the 60-class
+result: the update does not raise linear separability, but the semantic layer
+extracts more from the adapted geometry. The tier remains in the FAILS band,
+as the frozen baseline does; what replicates is not a band crossing but the
+size and consistency of the recycling advantage, under a taxonomy twice as
+large and an encoder that was pretrained independently.
+
+**Table 6.** Scale replication on the full NTU120 taxonomy (120 classes;
+12,000/2,400 balanced train/val; 10% = 1,200 anchors; ten seeds).
+
+| Arm | Accuracy | Retention | Full-label ref |
+|:----|---------:|----------:|---------------:|
+| Frozen (semantic only) | 29.41% | 66.33% | 44.33% |
+| Anchor recycling (LoRA) | 33.06% | **77.19%** | 42.83% |
+| Paired gain | +3.65 pp | **+10.84 pp** | −1.50 pp |
+
+### 4.8 Threats to validity
 
 PanAf500's validation set is 25 clips, quantizing accuracies in 4% steps; its
 CONFIRMS verdict rests on 5/10 seeds improving, 3 tying, and 2 regressing
@@ -506,7 +538,9 @@ reference drift (64.0% → 61.6%),
 and should be interpreted with these quantification caveats in mind.
 NTU120's PARTIAL margin is 0.16 pp above the band edge. UCF101's reference is
 video-derived and weak (full-label linear reference ≈ 19%), so its retentions
-are ratios of small numbers.
+are ratios of small numbers. The 120-class replication supports the gain, not
+a band crossing: at that scale even the frozen baseline sits at 66.33%,
+and the absolute retention stays below the PARTIAL band.
 
 ---
 
@@ -522,7 +556,9 @@ our prior budget sweep [41] on the synthetic episode, which varied the anchor
 count k — is consistent with this outcome: encoder quality responds to label
 signal. The 60→49 merge episode of Table 5 repeats the ordering under a
 changed taxonomy (84.56% vs 73.31% retention), so the effect is not an
-artifact of a fixed label set.
+artifact of a fixed label set. The 120-class replication of Table 6 extends
+the ordering to a taxonomy twice as large, with an independently pretrained
+encoder and 1,200 anchors: +10.84 pp retention, 10/10 seeds.
 
 **The geometry–harvest mismatch.**
 The cross-domain arm shows that absolute separability and retention can move
@@ -555,7 +591,9 @@ and LoRA-style convolution adapters; transfer to transformer encoders is
 untested. The budget range studied is 5–15%; we did not measure beyond it,
 though we would expect much larger budgets to converge toward full
 fine-tuning. PanAf500 and UCF101 verdicts carry the quantization
-and weak-reference caveats of §4.7. The calibration gate, while a useful
+and weak-reference caveats of §4.8. At 120 classes the absolute retention
+stays in the FAILS band; the replication supports the recycling gain, not a
+band crossing at that scale. The calibration gate, while a useful
 safety mechanism, is itself a hyperparameter surface we did not explore.
 
 ---
@@ -701,17 +739,19 @@ slots, and the hip root, spine mid, and neck are synthesized from shoulder
 and hip means; slots 16–24 are zero. PanAf500 keypoints arrive in a 24-slot
 PSD24 layout produced by an AP-10K 17-keypoint animal pose model; forelimbs
 map to the arm slots, hindlimbs to the leg slots, and the same torso
-synthesis applies. The three collected tiers therefore share one graph
+synthesis applies. The collected tiers therefore share one graph
 topology, fixed at pretraining, and differ only in data and reference
 quality. Anchor draws are stratified by class at 10% of training clips per
-seed (734, 953, and 40 anchors), with seeds 42–51 throughout.
+seed (734, 953, and 40 anchors for the three headline weak-reference tiers;
+1,200 for the 120-class replication), with seeds 42–51 throughout.
 
 | Tier | Classes | Train | Val | Anchors | Full-label ref (%) | Frozen retention (%) |
 |:-----|:--------|:------|:----|:--------|:-------------------|:---------------------|
-| NTU60 | 60 | — | — | — | 74.45 | 90.70 (published [41]) |
+| NTU60 | 60 | — | — | — | 74.45 | 90.70 [41] |
 | PanAf500 | 9 | 400 | 25 | 40 | 64.00 | 82.50 |
 | NTU120 | 60 | 7,337 | 4,663 | 734 | 58.37 | 74.96 |
 | UCF101 | 101 | 9,537 | 463 | 953 | 19.87 | 51.09 |
+| NTU120-120c | 120 | 12,000 | 2,400 | 1,200 | 44.33 | 66.33 |
 
 NTU60 is not re-run in this paper; its row reports the published retention
 of the prior study [41] and serves as the strong-reference anchor of the
@@ -765,7 +805,7 @@ separability of any arm (full-label reference 59.66% and 10% linear head
 
 Table C1 lists the per-seed retention of the three headline recycling
 configurations. Every NTU120 seed improves; PanAf500 improves on five seeds,
-ties on three, and regresses on two (the quantization caveat of §4.7);
+ties on three, and regresses on two (the quantization caveat of §4.8);
 UCF101 improves on nine of ten seeds (one seed regresses by 1.94 pp).
 
 | Seed | NTU120 (lr 2e-2, x8) | PanAf500 (lr 1e-2, x4) | UCF101 (lr 2e-2) |
@@ -785,7 +825,7 @@ Per-seed retention is the ratio of the seed's (b)-arm accuracy to its own
 full-label reference and can exceed 100% when the (b) arm beats that
 reference on a seed; the headline number is the ratio of means.
 
-Bootstrap of the ratio of means (10,000 resamples over seeds) gives 95% confidence intervals of +10.21 pp [+9.44, +11.06] on NTU120, +9.68 pp [+1.27, +16.25] on PanAf500, and +20.17 pp [+12.73, +28.24] on UCF101. The per-seed sign tests are 10/0/0 ($p=0.002$), 5/3/2 ($p=0.453$), and 9/0/1 ($p=0.022$); PanAf500's sign test is not significant, so its CONFIRMS verdict is descriptive rather than a significance claim. In raw (b)-arm accuracy the corresponding intervals are +5.85 pp [+5.04, +6.72], +4.00 pp [-2.40, +10.80], and +3.63 pp [+2.03, +5.14].
+Bootstrap of the ratio of means (10,000 resamples over seeds) gives 95% confidence intervals of +10.21 pp [+9.44, +11.06] on NTU120, +9.68 pp [+1.27, +16.25] on PanAf500, +20.17 pp [+12.73, +28.24] on UCF101, and +10.82 pp [+9.49, +12.31] on the 120-class replication. The per-seed sign tests are 10/0/0 ($p=0.002$), 5/3/2 ($p=0.453$), 9/0/1 ($p=0.022$), and 10/0/0 ($p=0.002$) on the 120-class replication; PanAf500's sign test is not significant, so its CONFIRMS verdict is descriptive rather than a significance claim. In raw (b)-arm accuracy the corresponding intervals are +5.85 pp [+5.04, +6.72], +4.00 pp [-2.40, +10.80], +3.63 pp [+2.03, +5.14], and +3.65 pp [+2.99, +4.40] on the 120-class replication.
 
 Table C2 gives the full NTU120 sensitivity grid. The augmentation rows use
 50 epochs and the no-augmentation rows 100 epochs, as in the main text;
@@ -805,6 +845,23 @@ gate (Appendix D) and therefore has no retention value.
 | epochs 200 | 1e-3 | 1 | 200 | 1.0 | 8 | 78.88 | FAILS |
 | no distillation | 1e-3 | 1 | 100 | 0.0 | 8 | 79.05 | FAILS |
 | rank 16 | 1e-2 | 1 | 100 | 1.0 | 16 | 81.49 | FAILS |
+
+Table C3 gives the per-seed detail of the 120-class scale replication. Every
+seed improves in both raw (b)-arm accuracy and retention; per-seed retention
+ranges from 74.39% to 82.61%.
+
+| Seed | Frozen b-arm (%) | Recycling b-arm (%) | Recycling retention (%) |
+|:-----|:-----------------|:--------------------|:------------------------|
+| 42 | 29.71 | 32.46 | 77.51 |
+| 43 | 29.79 | 33.75 | 77.51 |
+| 44 | 28.75 | 35.04 | 82.61 |
+| 45 | 28.96 | 33.17 | 74.74 |
+| 46 | 30.29 | 33.21 | 76.20 |
+| 47 | 28.63 | 31.58 | 74.39 |
+| 48 | 28.96 | 32.92 | 77.91 |
+| 49 | 29.04 | 33.50 | 78.21 |
+| 50 | 29.46 | 31.46 | 74.60 |
+| 51 | 30.50 | 33.46 | 78.11 |
 
 ## Appendix D. Calibration-gate failure cases
 
@@ -855,6 +912,12 @@ python scripts/p1_sprint/lora_continue_tier.py --tier ntu120 --epochs 30 --lr 0.
   --source-ckpt runs/p1_sprint/labelfree_ntu120/pretext/epoch150_model.pt
 python scripts/p1_sprint/supcon_feedback_tier.py --tier ntu120 --rounds 1 --epochs 20 \
   --psd-seed 42
+
+# 5) 120-class scale replication (balanced 120 x 100/20, fresh pretext)
+python scripts/p1_sprint/export_tier_feeder.py --tier ntu120_full
+python scripts/p1_sprint/labelfree_tier_replication.py --tier ntu120_full --seeds 10
+python scripts/p1_sprint/t4_budget_split_tier.py --tier ntu120_full --arm same10 \
+  --seeds 10 --epochs 50 --lr 0.02 --aug-views 8 --tag full10
 ```
 
 Checkpoints: the frozen pretexts are
@@ -868,6 +931,10 @@ mirror under `reports/p1_sprint_evidence/` is byte-identical to the run
 outputs.
 
 <!-- APPENDIX:END -->
+
+
+
+
 
 
 

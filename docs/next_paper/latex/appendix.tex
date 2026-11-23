@@ -15,24 +15,26 @@ six leg slots, and the hip root, spine mid, and neck are synthesized from
 shoulder and hip means; slots 16--24 are zero. PanAf500 keypoints arrive in a
 24-slot PSD24 layout produced by an AP-10K 17-keypoint animal pose model;
 forelimbs map to the arm slots, hindlimbs to the leg slots, and the same
-torso synthesis applies. The three collected tiers therefore share one graph
+torso synthesis applies. The collected tiers therefore share one graph
 topology, fixed at pretraining, and differ only in data and reference
 quality. Anchor draws are stratified by class at 10\% of training clips per
-seed (734, 953, and 40 anchors), with seeds 42--51 throughout.
+seed (734, 953, and 40 anchors for the three headline weak-reference tiers;
+1,200 for the 120-class replication), with seeds 42--51 throughout.
 
 \begin{table}[H]
 \centering
-\caption{Tier construction. NTU60 is the published point of the prior study~\cite{prior}; the other three tiers are re-run under the shared protocol.}
+\caption{Tier construction. NTU60 is the published point of the prior study~\cite{prior}; the other tiers are re-run under the shared protocol.}
 \label{tab:appA1}
 \footnotesize
 \begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}lrrrrrr@{}}
 \toprule
-Tier & Classes & Train & Val & Anchors & Full-label ref (\%) & Frozen retention (\%) \\
+Tier & Classes & Train & Val & Anchors & Full ref (\%) & Frozen ret. (\%) \\
 \midrule
-NTU60 & 60 & — & — & — & 74.45 & 90.70 (published [41]) \\
+NTU60 & 60 & — & — & — & 74.45 & 90.70 [41] \\
 PanAf500 & 9 & 400 & 25 & 40 & 64.00 & 82.50 \\
 NTU120 & 60 & 7,337 & 4,663 & 734 & 58.37 & 74.96 \\
 UCF101 & 101 & 9,537 & 463 & 953 & 19.87 & 51.09 \\
+NTU120-120c & 120 & 12,000 & 2,400 & 1,200 & 44.33 & 66.33 \\
 \bottomrule
 \end{tabular*}
 \end{table}
@@ -116,7 +118,7 @@ separability of any arm (full-label reference 59.66\% and 10\% linear head
 Table~\ref{tab:appC1} lists the per-seed retention of the three headline
 recycling configurations. Every NTU120 seed improves; PanAf500 improves on
 five seeds, ties on three, and regresses on two (the quantization caveat of
-\S4.7); UCF101 improves on nine of ten seeds (one seed regresses by
+\S4.8); UCF101 improves on nine of ten seeds (one seed regresses by
 1.94~pp).
 
 \begin{table}[H]
@@ -146,7 +148,7 @@ Per-seed retention is the ratio of the seed's (b)-arm accuracy to its own
 full-label reference and can exceed 100\% when the (b) arm beats that
 reference on a seed; the headline number is the ratio of means.
 
-Bootstrap of the ratio of means (10,000 resamples over seeds) gives $95\%$ confidence intervals of +10.21~pp [+9.44, +11.06] on NTU120, +9.68~pp [+1.27, +16.25] on PanAf500, and +20.17~pp [+12.73, +28.24] on UCF101. The per-seed sign tests are 10/0/0 ($p=0.002$), 5/3/2 ($p=0.453$), and 9/0/1 ($p=0.022$); PanAf500's sign test is not significant, so its CONFIRMS verdict is descriptive rather than a significance claim. In raw (b)-arm accuracy the corresponding intervals are +5.85~pp [+5.04, +6.72], +4.00~pp [-2.40, +10.80], and +3.63~pp [+2.03, +5.14].
+Bootstrap of the ratio of means (10,000 resamples over seeds) gives $95\%$ confidence intervals of +10.21~pp [+9.44, +11.06] on NTU120, +9.68~pp [+1.27, +16.25] on PanAf500, +20.17~pp [+12.73, +28.24] on UCF101, and +10.82~pp [+9.49, +12.31] on the 120-class replication. The per-seed sign tests are 10/0/0 ($p=0.002$), 5/3/2 ($p=0.453$), 9/0/1 ($p=0.022$), and 10/0/0 ($p=0.002$) on the 120-class replication; PanAf500's sign test is not significant, so its CONFIRMS verdict is descriptive rather than a significance claim. In raw (b)-arm accuracy the corresponding intervals are +5.85~pp [+5.04, +6.72], +4.00~pp [-2.40, +10.80], +3.63~pp [+2.03, +5.14], and +3.65~pp [+2.99, +4.40] on the 120-class replication.
 
 Table~\ref{tab:appC2} gives the full NTU120 sensitivity grid. The
 augmentation rows use 50 epochs and the no-augmentation rows 100 epochs, as
@@ -174,6 +176,33 @@ aug x4, lr 1e-2 & 1e-2 & 4 & 50 & 1.0 & 8 & 82.06 & FAILS \\
 epochs 200 & 1e-3 & 1 & 200 & 1.0 & 8 & 78.88 & FAILS \\
 no distillation & 1e-3 & 1 & 100 & 0.0 & 8 & 79.05 & FAILS \\
 rank 16 & 1e-2 & 1 & 100 & 1.0 & 16 & 81.49 & FAILS \\
+\bottomrule
+\end{tabular*}
+\end{table}
+
+Table~\ref{tab:appC3} gives the per-seed detail of the 120-class scale
+replication. Every seed improves in both raw (b)-arm accuracy and retention;
+per-seed retention ranges from 74.39\% to 82.61\%.
+
+\begin{table}[H]
+\centering
+\caption{Per-seed detail of the 120-class scale replication (ten seeds).}
+\label{tab:appC3}
+\small
+\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}rrrr@{}}
+\toprule
+Seed & Frozen b-arm (\%) & Recycling b-arm (\%) & Recycling retention (\%) \\
+\midrule
+42 & 29.71 & 32.46 & 77.51 \\
+43 & 29.79 & 33.75 & 77.51 \\
+44 & 28.75 & 35.04 & 82.61 \\
+45 & 28.96 & 33.17 & 74.74 \\
+46 & 30.29 & 33.21 & 76.20 \\
+47 & 28.63 & 31.58 & 74.39 \\
+48 & 28.96 & 32.92 & 77.91 \\
+49 & 29.04 & 33.50 & 78.21 \\
+50 & 29.46 & 31.46 & 74.60 \\
+51 & 30.50 & 33.46 & 78.11 \\
 \bottomrule
 \end{tabular*}
 \end{table}
@@ -236,6 +265,15 @@ python scripts/p1_sprint/lora_continue_tier.py \
   --source-ckpt runs/p1_sprint/labelfree_ntu120/pretext/epoch150_model.pt
 python scripts/p1_sprint/supcon_feedback_tier.py \
   --tier ntu120 --rounds 1 --epochs 20 --psd-seed 42
+
+# 5) 120-class scale replication (balanced 120 x 100/20, fresh pretext)
+python scripts/p1_sprint/export_tier_feeder.py \
+  --tier ntu120_full
+python scripts/p1_sprint/labelfree_tier_replication.py \
+  --tier ntu120_full --seeds 10
+python scripts/p1_sprint/t4_budget_split_tier.py \
+  --tier ntu120_full --arm same10 --seeds 10 --epochs 50 \
+  --lr 0.02 --aug-views 8 --tag full10
 \end{verbatim}
 }
 

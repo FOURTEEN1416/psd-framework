@@ -78,6 +78,22 @@ CHECKS: list[tuple[str, list[str]]] = [
     ("97.13", ["main.tex", "supplementary.tex"]),
     # SupCon 覆盖（run log）
     ("7,239", ["adapt_supcon_ntu120_run.log"]),
+    # 120 类规模复现（Table 6 + Appendix C3）
+    ("66.33", ["labelfree_tiers/ntu120_full_labelfree_summary.json", "MANIFEST.md"]),
+    ("77.19", [f"{A}/ntu120_full/summary_full10.json", "MANIFEST.md"]),
+    ("29.41", ["MANIFEST.md"]),
+    ("33.06", [f"{A}/ntu120_full/summary_full10.json", "MANIFEST.md"]),
+    ("44.33", ["labelfree_tiers/ntu120_full_labelfree_summary.json", "MANIFEST.md"]),
+    ("42.83", [f"{A}/ntu120_full/summary_full10.json", "MANIFEST.md"]),
+    ("10.84", ["next_paper_stats.json", "MANIFEST.md"]),
+    ("3.65", ["next_paper_stats.json", "MANIFEST.md"]),
+    ("9.34", ["next_paper_stats.json", "MANIFEST.md"]),
+    ("12.68", ["next_paper_stats.json", "MANIFEST.md"]),
+    ("2.99", ["next_paper_stats.json", "MANIFEST.md"]),
+    ("4.40", ["next_paper_stats.json", "MANIFEST.md"]),
+    ("12,000", ["MANIFEST.md"]),
+    ("2,400", ["MANIFEST.md"]),
+    ("1,200", ["MANIFEST.md"]),
 ]
 
 

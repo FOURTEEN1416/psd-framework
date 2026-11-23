@@ -1,0 +1,48 @@
+{
+  "doneMarker": "P1_LABELFREE_TIER_NTU120_FULL_DONE",
+  "experiment": "p1_labelfree_tier_protocol_return",
+  "tier": "ntu120_full",
+  "mode": "full",
+  "date": "2026-11-23T05:36:44",
+  "protocol": "protocol-return of the pre-registered from-scratch ST-GCN pretext (150 ep, label-free AimCLR objective, single stream joint); the interim joint-MLP deviation (Amendment 2) is retained as prior readout",
+  "encoder": {
+    "arch": "AimCLR (net.st_gcn base, 16 hidden ch.), from-scratch, label-free",
+    "ckpt": "runs\\p1_sprint\\labelfree_ntu120_full\\pretext\\epoch150_model.pt",
+    "epochs": 150,
+    "frozen": true,
+    "trainable_params": 0,
+    "total_params": 1840136
+  },
+  "budget_frac": 0.1,
+  "full_ref": 0.4433,
+  "linear_10pct": 0.3396,
+  "b_arms": [
+    0.2971,
+    0.2979,
+    0.2875,
+    0.2896,
+    0.3029,
+    0.2863,
+    0.2896,
+    0.2904,
+    0.2946,
+    0.305
+  ],
+  "retention": 0.6633,
+  "linear_retention": 0.766,
+  "verdict": "FAILS",
+  "seeds": [
+    42,
+    43,
+    44,
+    45,
+    46,
+    47,
+    48,
+    49,
+    50,
+    51
+  ],
+  "prior_readout": {},
+  "wall_clock_sec": 3164.7
+}
