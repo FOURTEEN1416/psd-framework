@@ -585,7 +585,7 @@ to 79.06% (+15.49 pp); under a common frozen denominator it improves to
 75.68% (+12.11 pp) — the recycled encoder's linear reference drops slightly
 (42.96% → 41.14%), so we report both. Together with the 60→49 merge, both
 directions of taxonomy evolution now have direct evidence, and in both,
-recycling wins while touching every class group.
+recycling wins in every class group.
 
 **Table 8.** Class-addition episode on the balanced 120-class tier (old 60
 classes → +60 new classes; old anchors stay spent; ten seeds).
@@ -598,9 +598,10 @@ classes → +60 new classes; old anchors stay spent; ten seeds).
 
 **Budget sweep at the standard width.** Finally, we repeat the budget sweep
 of Table 3 at the standard 64-channel width (ten seeds per point). The
-advantage widens monotonically with budget, exactly as at 16 channels:
-+4.93 pp at 5%, +8.84 pp at 10%, and +10.76 pp at 15% (10/10 seeds at every
-point), and the 15% point crosses the PARTIAL band (89.40% retention).
+advantage widens monotonically with budget, with the same monotonic
+widening as at 16 channels: +4.93 pp at 5%, +8.84 pp at 10%, and +10.76 pp
+at 15% (10/10 seeds at every point), and the 15% point crosses the PARTIAL
+band (89.40% retention).
 
 **Table 9.** Budget sweep at the standard 64-channel width (NTU120, 60
 classes; lr 1e-2, 8× augmentation; ten seeds per point).
