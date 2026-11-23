@@ -150,7 +150,7 @@ Per-seed retention is the ratio of the seed's (b)-arm accuracy to its own
 full-label reference and can exceed 100\% when the (b) arm beats that
 reference on a seed; the headline number is the ratio of means.
 
-Bootstrap of the ratio of means (10,000 resamples over seeds) gives $95\%$ confidence intervals of +10.21~pp [+9.44, +11.06] on NTU120, +9.68~pp [+1.27, +16.25] on PanAf500, +20.17~pp [+12.73, +28.24] on UCF101, and +10.82~pp [+9.49, +12.31] on the 120-class replication, and +15.07~pp [+13.63, +16.60] on the 32-channel capacity control, and +8.84~pp [+8.16, +9.49] on the standard-width (64-channel) control. The per-seed sign tests are 10/0/0 ($p=0.002$), 5/3/2 ($p=0.453$), 9/0/1 ($p=0.022$), and 10/0/0 ($p=0.002$) on the 120-class replication, 10/0/0 ($p=0.002$) on the capacity control, and 10/0/0 ($p=0.002$) on the standard-width control; PanAf500's sign test is not significant, so its CONFIRMS verdict is descriptive rather than a significance claim. In raw (b)-arm accuracy the corresponding intervals are +5.85~pp [+5.04, +6.72], +4.00~pp [-2.40, +10.80], +3.63~pp [+2.03, +5.14], and +3.65~pp [+2.99, +4.40] on the 120-class replication, +12.27~pp [+11.40, +13.17] on the capacity control, and +7.68~pp [+7.06, +8.32] on the standard-width control.
+Bootstrap of the ratio of means (10,000 resamples over seeds) gives $95\%$ confidence intervals of +10.21~pp [+9.44, +11.06] on NTU120, +9.68~pp [+1.27, +16.25] on PanAf500, +20.17~pp [+12.73, +28.24] on UCF101, and +10.82~pp [+9.49, +12.31] on the 120-class replication, and +15.07~pp [+13.63, +16.60] on the 32-channel capacity control, and +8.84~pp [+8.16, +9.49] on the standard-width (64-channel) control. The per-seed sign tests are 10/0/0 ($p=0.002$), 5/3/2 ($p=0.453$), 9/0/1 ($p=0.022$), and 10/0/0 ($p=0.002$) on the 120-class replication, 10/0/0 ($p=0.002$) on the capacity control, and 10/0/0 ($p=0.002$) on the standard-width control; PanAf500's sign test is not significant, so its CONFIRMS verdict is descriptive rather than a significance claim. In raw (b)-arm accuracy the corresponding intervals are +5.85~pp [+5.04, +6.72], +4.00~pp [-2.40, +10.80], +3.63~pp [+2.03, +5.14], and +3.65~pp [+2.99, +4.40] on the 120-class replication, +12.27~pp [+11.40, +13.17] on the capacity control, and +7.68~pp [+7.06, +8.32] on the standard-width control. On the class-addition episode (60->120; Table 8 of the main text) the raw gain is +5.20~pp [+4.70, +5.68], the new-class gain is +7.57~pp [+7.10, +8.05], the retention gain is +15.49~pp [+14.54, +16.55] under the own-denominator convention (+12.11~pp [+10.94, +13.22] under a frozen denominator), and the old-class forgetting is reduced by 2.84~pp [2.03, 3.53]; all sign tests are 10/0/0 ($p=0.002$).
 
 Table~\ref{tab:appC2} gives the full NTU120 sensitivity grid. The
 augmentation rows use 50 epochs and the no-augmentation rows 100 epochs, as
@@ -265,6 +265,33 @@ Seed & Frozen b-arm (\%) & Recycling b-arm (\%) & Recycling retention (\%) \\
 \end{tabular*}
 \end{table}
 
+Table~\ref{tab:appC6} gives the per-seed detail of the class-addition
+episode (60->120; old anchors stay spent). Forgetting is the phase-1
+old-class accuracy minus the phase-2 old-class accuracy.
+
+\begin{table}[H]
+\centering
+\caption{Per-seed detail of the class-addition episode (60->120; old anchors stay spent). P1 old = phase-1 old-class accuracy (\%); Sem./Rec.\ all = phase-2 overall accuracy (\%); New = new-class accuracy (\%); Fgt. = old-class forgetting in pp (phase-1 minus phase-2).}
+\label{tab:appC6}
+\scriptsize
+\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}rrrrrrrr@{}}
+\toprule
+Seed & P1 old & Sem. all & Rec. all & New sem. & New rec. & Fgt. sem. & Fgt. rec. \\
+\midrule
+42 & 44.17 & 28.21 & 32.25 & 22.17 & 30.00 & 9.92 & 9.67 \\
+43 & 41.50 & 25.54 & 29.50 & 21.25 & 27.75 & 11.67 & 10.25 \\
+44 & 42.33 & 26.50 & 32.46 & 20.75 & 29.00 & 10.08 & 6.42 \\
+45 & 43.08 & 27.62 & 32.21 & 22.58 & 30.17 & 10.42 & 8.83 \\
+46 & 41.58 & 27.17 & 33.37 & 22.83 & 31.75 & 10.08 & 6.58 \\
+47 & 42.50 & 28.33 & 33.87 & 25.00 & 32.58 & 10.83 & 7.33 \\
+48 & 43.92 & 26.96 & 32.08 & 23.00 & 30.00 & 13.00 & 9.75 \\
+49 & 41.25 & 28.00 & 33.37 & 23.50 & 30.58 & 8.75 & 5.08 \\
+50 & 43.83 & 26.67 & 32.92 & 22.50 & 30.92 & 13.00 & 8.92 \\
+51 & 44.75 & 28.08 & 33.08 & 22.67 & 29.17 & 11.25 & 7.75 \\
+\bottomrule
+\end{tabular*}
+\end{table}
+
 \section{Calibration-gate failure cases}
 \label{app:gate}
 
@@ -357,6 +384,10 @@ python scripts/p1_sprint/labelfree_tier_replication.py \
 python scripts/p1_sprint/t4_budget_split_tier.py \
   --tier ntu120_64ch --arm same10 --seeds 10 --epochs 50 \
   --lr 0.01 --aug-views 8 --tag aug8_lr1e2
+
+# 8) class-addition taxonomy episode (60 -> 120)
+python scripts/p1_sprint/taxonomy_addition_recycle.py \
+  --seeds 10 --epochs 50 --lr 0.02 --aug-views 8 --tag add60to120
 \end{verbatim}
 }
 

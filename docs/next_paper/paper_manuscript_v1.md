@@ -94,7 +94,8 @@ band), +9.71 pp on PanAf500 (82.50% → 92.21%, crossing into CONFIRMS), and
 independently pretrained encoder (Table 6) reproduces the advantage at twice
 the taxonomy size: +10.84 pp retention, 10/10 seeds. Capacity controls at
 2.83 M and the standard 6.36 M parameters preserve the gain (+15.07/+8.84 pp,
-Table 7). A budget-allocation
+Table 7), and a class-addition episode (60→120) extends the result to
+growing taxonomies (Table 8). A budget-allocation
 sweep shows the
 advantage widens with budget (+2.90 pp at 5%, +3.91 pp at 10%, +4.56 pp at 15%),
 and a hyperparameter study isolates the adaptation learning rate and the
@@ -509,7 +510,7 @@ ten seeds).
 | Recycling (LoRA, Y′ anchors) | **49.19%** | **84.56%** | **+11.25 pp** |
 | Full-label reference (frozen) | 58.91% | — | — |
 
-### 4.7 Scale and capacity replications
+### 4.7 Scale, capacity and taxonomy-growth replications
 
 The headline NTU120 tier uses a 60-class subset (7,337 training clips). To
 test whether the mechanism survives scale, we build a balanced 120-class tier
@@ -567,6 +568,34 @@ seeds). The 32- and 64-channel controls use lr 1e-2 because the
 | 32 ch | 2.83 M | 68.48% | 83.55% | **+15.07 pp** |
 | 64 ch | 6.36 M | 74.78% | 83.62% | +8.84 pp |
 
+**Class-addition episode.** The merge episode of Table 5 contracts the
+taxonomy; this episode grows it. On the balanced 120-class tier, the
+deployment starts with only the first 60 classes: the semantic layer is built
+from 600 old-class anchors (10% of old-class clips) and the remaining 60
+classes are not yet adopted. When the taxonomy grows to all 120 classes, a
+fresh 10% anchor budget arrives for the new classes (600 anchors; the old
+anchors stay spent), and the pipeline is re-measured on all 120 classes
+against the 120-class full-label reference. Adding 60 classes costs the old
+classes 10.90 pp of accuracy under semantic-only (42.89% → 31.99%);
+recycling cuts that forgetting to 8.06 pp, lifts the new classes from 22.62%
+to 30.19% (+7.57 pp, 10/10), and raises overall accuracy from 27.31% to
+32.51% (+5.20 pp, 95% CI [4.70, 5.68], 10/10 seeds, p = 0.002). Under the
+paper's each-arm own-denominator convention, retention improves from 63.57%
+to 79.06% (+15.49 pp); under a common frozen denominator it improves to
+75.68% (+12.11 pp) — the recycled encoder's linear reference drops slightly
+(42.96% → 41.14%), so we report both. Together with the 60→49 merge, both
+directions of taxonomy evolution now have direct evidence, and in both,
+recycling wins while touching every class group.
+
+**Table 8.** Class-addition episode on the balanced 120-class tier (old 60
+classes → +60 new classes; old anchors stay spent; ten seeds).
+
+| Arm | All 120 | Old 60 | New 60 | Forgetting |
+|:----|--------:|-------:|-------:|-----------:|
+| semantic-only (frozen) | 27.31% | 31.99% | 22.62% | 10.90 pp |
+| recycling (LoRA) | **32.51%** | **34.84%** | **30.19%** | **8.06 pp** |
+| gain (recycling − semantic) | +5.20 pp | +2.85 pp | +7.57 pp | −2.84 pp |
+
 ### 4.8 Threats to validity
 
 PanAf500's validation set is 25 clips, quantizing accuracies in 4% steps; its
@@ -601,7 +630,10 @@ controls of Table 7 sharpen the point: across a 4× parameter range the frozen
 baseline scatters (68.48–74.96%) while recycling gains +8.8 to +15.1 pp with
 10/10 seeds at every width, and the update raises the full-label reference at
 32 and 64 channels (to 61.28% and 62.56%) — capacity is harvestable only
-once labels shape it.
+once labels shape it. The class-addition episode of Table 8 completes the
+taxonomy axis: growing the taxonomy from 60 to 120 classes costs the old
+classes 10.90 pp of accuracy under semantic-only, and recycling both reduces
+that forgetting to 8.06 pp and lifts the new classes by +7.57 pp.
 
 **The geometry–harvest mismatch.**
 The cross-domain arm shows that absolute separability and retention can move
@@ -637,7 +669,10 @@ fine-tuning. PanAf500 and UCF101 verdicts carry the quantization
 and weak-reference caveats of §4.8. At 120 classes the absolute retention
 stays in the FAILS band; the replication supports the recycling gain, not a
 band crossing at that scale. The capacity axis spans 1.84–6.36 M parameters
-(16–64 channels) but remains within the GCN family. The calibration gate, while a useful
+(16–64 channels) but remains within the GCN family. In the class-addition
+episode the new classes arrive with clips the pretext never saw; a deployment
+in which unlabeled new-class data accrues gradually before the taxonomy grows
+is untested. The calibration gate, while a useful
 safety mechanism, is itself a hyperparameter surface we did not explore.
 
 ---
@@ -653,9 +688,11 @@ simple idea: **recycle the same anchors that
 drive the semantic layer as supervision for a low-rank physical-layer
 update**. Across three weak-reference tiers this gains +10.20, +9.71, and
 +20.12 pp and crosses two pre-registered verdict bands. The ordering survives
-a 60→49 taxonomy merge (+11.25 pp over semantic-only) and a 120-class
-replication (+10.84 pp, 10/10 seeds), so the gain is not tied to a fixed
-label set or taxonomy size; capacity controls at 2.83 M and 6.36 M parameters
+a 60→49 taxonomy merge (+11.25 pp over semantic-only), a 120-class
+replication (+10.84 pp, 10/10 seeds), and a class-addition episode (+5.20 pp
+with old-class forgetting reduced from 10.90 to 8.06 pp), so the gain is not
+tied to a fixed label set, taxonomy size, or direction of taxonomy change;
+capacity controls at 2.83 M and 6.36 M parameters
 keep the gain between +8.8 and +15.1 pp with 10/10 seeds. The effect's
 two-sided envelope (an anchor-mass floor for the naive recipe and a
 calibration-gate ceiling) is mapped and released, along with every per-seed
@@ -875,7 +912,7 @@ Per-seed retention is the ratio of the seed's (b)-arm accuracy to its own
 full-label reference and can exceed 100% when the (b) arm beats that
 reference on a seed; the headline number is the ratio of means.
 
-Bootstrap of the ratio of means (10,000 resamples over seeds) gives 95% confidence intervals of +10.21 pp [+9.44, +11.06] on NTU120, +9.68 pp [+1.27, +16.25] on PanAf500, +20.17 pp [+12.73, +28.24] on UCF101, and +10.82 pp [+9.49, +12.31] on the 120-class replication, and +15.07 pp [+13.63, +16.60] on the 32-channel capacity control, and +8.84 pp [+8.16, +9.49] on the standard-width (64-channel) control. The per-seed sign tests are 10/0/0 ($p=0.002$), 5/3/2 ($p=0.453$), 9/0/1 ($p=0.022$), and 10/0/0 ($p=0.002$) on the 120-class replication, 10/0/0 ($p=0.002$) on the capacity control, and 10/0/0 ($p=0.002$) on the standard-width control; PanAf500's sign test is not significant, so its CONFIRMS verdict is descriptive rather than a significance claim. In raw (b)-arm accuracy the corresponding intervals are +5.85 pp [+5.04, +6.72], +4.00 pp [-2.40, +10.80], +3.63 pp [+2.03, +5.14], and +3.65 pp [+2.99, +4.40] on the 120-class replication, +12.27 pp [+11.40, +13.17] on the capacity control, and +7.68 pp [+7.06, +8.32] on the standard-width control.
+Bootstrap of the ratio of means (10,000 resamples over seeds) gives 95% confidence intervals of +10.21 pp [+9.44, +11.06] on NTU120, +9.68 pp [+1.27, +16.25] on PanAf500, +20.17 pp [+12.73, +28.24] on UCF101, and +10.82 pp [+9.49, +12.31] on the 120-class replication, and +15.07 pp [+13.63, +16.60] on the 32-channel capacity control, and +8.84 pp [+8.16, +9.49] on the standard-width (64-channel) control. The per-seed sign tests are 10/0/0 ($p=0.002$), 5/3/2 ($p=0.453$), 9/0/1 ($p=0.022$), and 10/0/0 ($p=0.002$) on the 120-class replication, 10/0/0 ($p=0.002$) on the capacity control, and 10/0/0 ($p=0.002$) on the standard-width control; PanAf500's sign test is not significant, so its CONFIRMS verdict is descriptive rather than a significance claim. In raw (b)-arm accuracy the corresponding intervals are +5.85 pp [+5.04, +6.72], +4.00 pp [-2.40, +10.80], +3.63 pp [+2.03, +5.14], and +3.65 pp [+2.99, +4.40] on the 120-class replication, +12.27 pp [+11.40, +13.17] on the capacity control, and +7.68 pp [+7.06, +8.32] on the standard-width control. On the class-addition episode (60->120; Table 8 of the main text) the raw gain is +5.20 pp [+4.70, +5.68], the new-class gain is +7.57 pp [+7.10, +8.05], the retention gain is +15.49 pp [+14.54, +16.55] under the own-denominator convention (+12.11 pp [+10.94, +13.22] under a frozen denominator), and the old-class forgetting is reduced by 2.84 pp [2.03, 3.53]; all sign tests are 10/0/0 (p=0.002).
 
 Table C2 gives the full NTU120 sensitivity grid. The augmentation rows use
 50 epochs and the no-augmentation rows 100 epochs, as in the main text;
@@ -948,6 +985,23 @@ mean is 52.31%.
 | 49 | 44.35 | 51.36 | 82.70 |
 | 50 | 44.74 | 51.88 | 81.97 |
 | 51 | 45.51 | 51.30 | 82.26 |
+
+Table C6 gives the per-seed detail of the class-addition episode (60->120;
+old anchors stay spent). Forgetting is the phase-1 old-class accuracy minus
+the phase-2 old-class accuracy.
+
+| Seed | Phase1 old (%) | Semantic all (%) | Recycling all (%) | New sem. (%) | New rec. (%) | Forget. sem. (pp) | Forget. rec. (pp) |
+|:-----|:---------------|:-----------------|:------------------|:-------------|:-------------|:------------------|:------------------|
+| 42 | 44.17 | 28.21 | 32.25 | 22.17 | 30.00 | 9.92 | 9.67 |
+| 43 | 41.50 | 25.54 | 29.50 | 21.25 | 27.75 | 11.67 | 10.25 |
+| 44 | 42.33 | 26.50 | 32.46 | 20.75 | 29.00 | 10.08 | 6.42 |
+| 45 | 43.08 | 27.62 | 32.21 | 22.58 | 30.17 | 10.42 | 8.83 |
+| 46 | 41.58 | 27.17 | 33.37 | 22.83 | 31.75 | 10.08 | 6.58 |
+| 47 | 42.50 | 28.33 | 33.87 | 25.00 | 32.58 | 10.83 | 7.33 |
+| 48 | 43.92 | 26.96 | 32.08 | 23.00 | 30.00 | 13.00 | 9.75 |
+| 49 | 41.25 | 28.00 | 33.37 | 23.50 | 30.58 | 8.75 | 5.08 |
+| 50 | 43.83 | 26.67 | 32.92 | 22.50 | 30.92 | 13.00 | 8.92 |
+| 51 | 44.75 | 28.08 | 33.08 | 22.67 | 29.17 | 11.25 | 7.75 |
 
 ## Appendix D. Calibration-gate failure cases
 
@@ -1022,6 +1076,10 @@ python scripts/run_ntu_phaseb.py --config configs/labelfree_ntu120_64ch_pretext.
 python scripts/p1_sprint/labelfree_tier_replication.py --tier ntu120_64ch --seeds 10
 python scripts/p1_sprint/t4_budget_split_tier.py --tier ntu120_64ch --arm same10 \
   --seeds 10 --epochs 50 --lr 0.01 --aug-views 8 --tag aug8_lr1e2
+
+# 8) class-addition taxonomy episode (60 -> 120)
+python scripts/p1_sprint/taxonomy_addition_recycle.py --seeds 10 \
+  --epochs 50 --lr 0.02 --aug-views 8 --tag add60to120
 ```
 
 Checkpoints: the frozen pretexts are
@@ -1035,6 +1093,9 @@ mirror under `reports/p1_sprint_evidence/` is byte-identical to the run
 outputs.
 
 <!-- APPENDIX:END -->
+
+
+
 
 
 

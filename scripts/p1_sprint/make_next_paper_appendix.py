@@ -63,6 +63,8 @@ scale32 = load(EV / "adaptation/ntu120_32ch/summary_aug8_lr1e2.json")
 frozen32 = load(EV / "labelfree_tiers/ntu120_32ch_labelfree_summary.json")
 scale64 = load(EV / "adaptation/ntu120_64ch/summary_aug8_lr1e2.json")
 frozen64 = load(EV / "labelfree_tiers/ntu120_64ch_labelfree_summary.json")
+addition = load(EV / "adaptation/ntu120/summary_taxadd_add60to120.json")
+addition_stats = load(EV / "taxonomy_addition_stats.json")
 grid = [
     ("lr 1e-3", "1e-3", "1", "100", "1.0", "8", EV / "adaptation/ntu120/summary_same10.json"),
     ("lr 1e-2", "1e-2", "1", "100", "1.0", "8", EV / "adaptation/ntu120/summary_sweep_lr1e2.json"),
@@ -150,6 +152,13 @@ c5_rows = [
     [str(s), b_arms_pct(frozen64)[i], pct(r["b_arm"]), pct(r["retention_seed"])]
     for i, (s, r) in enumerate(zip(SEEDS, scale64_rows))
 ]
+addition_rows = sorted(addition["per_seed"], key=lambda r: int(r["seed"]))
+c6_rows = [
+    [str(r["seed"]), pct(r["acc_old_phase1"]), pct(r["acc_all_semantic"]),
+     pct(r["acc_all_recycling"]), pct(r["acc_new_semantic"]), pct(r["acc_new_recycling"]),
+     f"{r['forgetting_semantic_pp']:.2f}", f"{r['forgetting_recycling_pp']:.2f}"]
+    for r in addition_rows
+]
 
 a1_rows = [
     ["NTU60", "60", "—", "—", "—", "74.45", "90.70 [41]"],
@@ -200,7 +209,20 @@ stats_md = (
     f"{_ci('NTU120', 'raw_b_arm')}, {_ci('PanAf500', 'raw_b_arm')}, {_ci('UCF101', 'raw_b_arm')}, and "
     f"{_ci('NTU120-120c', 'raw_b_arm')} on the 120-class replication, "
     f"{_ci('NTU120-32ch', 'raw_b_arm')} on the capacity control, and "
-    f"{_ci('NTU120-64ch', 'raw_b_arm')} on the standard-width control."
+    f"{_ci('NTU120-64ch', 'raw_b_arm')} on the standard-width control. "
+    f"On the class-addition episode (60->120; Table 8 of the main text) the raw gain is "
+    f"{addition_stats['raw_gain']['mean_pp']:+.2f} pp "
+    f"[{addition_stats['raw_gain']['ci95'][0]:+.2f}, {addition_stats['raw_gain']['ci95'][1]:+.2f}], "
+    f"the new-class gain is {addition_stats['new_class_gain']['mean_pp']:+.2f} pp "
+    f"[{addition_stats['new_class_gain']['ci95'][0]:+.2f}, {addition_stats['new_class_gain']['ci95'][1]:+.2f}], "
+    f"the retention gain is {addition_stats['retention_gain_ownref']['mean_pp']:+.2f} pp "
+    f"[{addition_stats['retention_gain_ownref']['ci95'][0]:+.2f}, {addition_stats['retention_gain_ownref']['ci95'][1]:+.2f}] "
+    f"under the own-denominator convention ({addition_stats['retention_gain_frozenref']['mean_pp']:+.2f} pp "
+    f"[{addition_stats['retention_gain_frozenref']['ci95'][0]:+.2f}, {addition_stats['retention_gain_frozenref']['ci95'][1]:+.2f}] "
+    f"under a frozen denominator), and the old-class forgetting is reduced by "
+    f"{addition_stats['forgetting_reduction']['mean_pp']:.2f} pp "
+    f"[{addition_stats['forgetting_reduction']['ci95'][0]:.2f}, {addition_stats['forgetting_reduction']['ci95'][1]:.2f}]; "
+    "all sign tests are 10/0/0 (p=0.002)."
 )
 stats_tex = (
     "Bootstrap of the ratio of means (10,000 resamples over seeds) gives $95\\%$ "
@@ -227,7 +249,20 @@ stats_tex = (
     f"{_ci('NTU120', 'raw_b_arm', True)}, {_ci('PanAf500', 'raw_b_arm', True)}, {_ci('UCF101', 'raw_b_arm', True)}, and "
     f"{_ci('NTU120-120c', 'raw_b_arm', True)} on the 120-class replication, "
     f"{_ci('NTU120-32ch', 'raw_b_arm', True)} on the capacity control, and "
-    f"{_ci('NTU120-64ch', 'raw_b_arm', True)} on the standard-width control."
+    f"{_ci('NTU120-64ch', 'raw_b_arm', True)} on the standard-width control. "
+    f"On the class-addition episode (60->120; Table 8 of the main text) the raw gain is "
+    f"{addition_stats['raw_gain']['mean_pp']:+.2f}~pp "
+    f"[{addition_stats['raw_gain']['ci95'][0]:+.2f}, {addition_stats['raw_gain']['ci95'][1]:+.2f}], "
+    f"the new-class gain is {addition_stats['new_class_gain']['mean_pp']:+.2f}~pp "
+    f"[{addition_stats['new_class_gain']['ci95'][0]:+.2f}, {addition_stats['new_class_gain']['ci95'][1]:+.2f}], "
+    f"the retention gain is {addition_stats['retention_gain_ownref']['mean_pp']:+.2f}~pp "
+    f"[{addition_stats['retention_gain_ownref']['ci95'][0]:+.2f}, {addition_stats['retention_gain_ownref']['ci95'][1]:+.2f}] "
+    f"under the own-denominator convention ({addition_stats['retention_gain_frozenref']['mean_pp']:+.2f}~pp "
+    f"[{addition_stats['retention_gain_frozenref']['ci95'][0]:+.2f}, {addition_stats['retention_gain_frozenref']['ci95'][1]:+.2f}] "
+    f"under a frozen denominator), and the old-class forgetting is reduced by "
+    f"{addition_stats['forgetting_reduction']['mean_pp']:.2f}~pp "
+    f"[{addition_stats['forgetting_reduction']['ci95'][0]:.2f}, {addition_stats['forgetting_reduction']['ci95'][1]:.2f}]; "
+    "all sign tests are 10/0/0 ($p=0.002$)."
 )
 
 
@@ -324,6 +359,12 @@ mean is {pct(scale64["mean_b"])}%.
 
 {md_table(["Seed", "Frozen b-arm (%)", "Recycling b-arm (%)", "Recycling retention (%)"], c5_rows)}
 
+Table C6 gives the per-seed detail of the class-addition episode (60->120;
+old anchors stay spent). Forgetting is the phase-1 old-class accuracy minus
+the phase-2 old-class accuracy.
+
+{md_table(["Seed", "Phase1 old (%)", "Semantic all (%)", "Recycling all (%)", "New sem. (%)", "New rec. (%)", "Forget. sem. (pp)", "Forget. rec. (pp)"], c6_rows)}
+
 ## Appendix D. Calibration-gate failure cases
 
 The calibration gate turns a silent quality collapse into an explicit
@@ -397,6 +438,10 @@ python scripts/run_ntu_phaseb.py --config configs/labelfree_ntu120_64ch_pretext.
 python scripts/p1_sprint/labelfree_tier_replication.py --tier ntu120_64ch --seeds 10
 python scripts/p1_sprint/t4_budget_split_tier.py --tier ntu120_64ch --arm same10 \\
   --seeds 10 --epochs 50 --lr 0.01 --aug-views 8 --tag aug8_lr1e2
+
+# 8) class-addition taxonomy episode (60 -> 120)
+python scripts/p1_sprint/taxonomy_addition_recycle.py --seeds 10 \\
+  --epochs 50 --lr 0.02 --aug-views 8 --tag add60to120
 ```
 
 Checkpoints: the frozen pretexts are
@@ -477,6 +522,17 @@ C5 = tex_table(
     ["Seed", "Frozen b-arm (\\%)", "Recycling b-arm (\\%)", "Recycling retention (\\%)"],
     c5_rows,
     "Per-seed detail of the standard-width (64-channel) control (ten seeds).", "tab:appC5", r"\small")
+
+C6 = tex_table(
+    "rrrrrrrr",
+    ["Seed", "P1 old", "Sem. all", "Rec. all",
+     "New sem.", "New rec.", "Fgt. sem.", "Fgt. rec."],
+    c6_rows,
+    "Per-seed detail of the class-addition episode (60->120; old anchors stay "
+    "spent). P1 old = phase-1 old-class accuracy (\\%); Sem./Rec.\\ all = "
+    "phase-2 overall accuracy (\\%); New = new-class accuracy (\\%); Fgt. = "
+    "old-class forgetting in pp (phase-1 minus phase-2).",
+    "tab:appC6", r"\scriptsize")
 
 A1 = tex_table(
     "lrrrrrr",
@@ -589,6 +645,12 @@ recycled mean is {pct(scale64["mean_b"])}\%.
 
 {C5}
 
+Table~\ref{{tab:appC6}} gives the per-seed detail of the class-addition
+episode (60->120; old anchors stay spent). Forgetting is the phase-1
+old-class accuracy minus the phase-2 old-class accuracy.
+
+{C6}
+
 \section{{Calibration-gate failure cases}}
 \label{{app:gate}}
 
@@ -681,6 +743,10 @@ python scripts/p1_sprint/labelfree_tier_replication.py \
 python scripts/p1_sprint/t4_budget_split_tier.py \
   --tier ntu120_64ch --arm same10 --seeds 10 --epochs 50 \
   --lr 0.01 --aug-views 8 --tag aug8_lr1e2
+
+# 8) class-addition taxonomy episode (60 -> 120)
+python scripts/p1_sprint/taxonomy_addition_recycle.py \
+  --seeds 10 --epochs 50 --lr 0.02 --aug-views 8 --tag add60to120
 \end{{verbatim}}
 }}
 

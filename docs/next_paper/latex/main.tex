@@ -135,7 +135,9 @@ $+20.12$~pp on UCF101 (51.09\% $\rightarrow$ 71.21\%). A 120-class replication o
 independently pretrained encoder (Table~\ref{tab:scale120}) reproduces the
 advantage at twice the taxonomy size: $+10.84$~pp retention, 10/10 seeds.
 Capacity controls at 2.83\,M and the standard 6.36\,M parameters preserve the
-gain ($+15.07$/$+8.84$~pp, Table~\ref{tab:capacity}). A
+gain ($+15.07$/$+8.84$~pp, Table~\ref{tab:capacity}), and a class-addition
+episode (60$\rightarrow$120) extends the result to growing taxonomies
+(Table~\ref{tab:addition}). A
 budget-allocation sweep shows the
 advantage widens with budget ($+2.90$~pp at 5\%, $+3.91$~pp at 10\%, $+4.56$~pp at 15\%),
 and a hyperparameter study isolates the adaptation learning rate and the
@@ -621,7 +623,7 @@ Full-label reference (frozen) & 58.91\% & --- & --- \\
 \end{tabular}
 \end{table}
 
-\subsection{Scale and capacity replications}
+\subsection{Scale, capacity and taxonomy-growth replications}
 
 The headline NTU120 tier uses a 60-class subset (7,337 training clips). To
 test whether the mechanism survives scale, we build a balanced 120-class tier
@@ -697,6 +699,43 @@ Encoder & Params & Frozen retention & Recycling retention & Paired gain \\
 \end{tabular}
 \end{table}
 
+\textbf{Class-addition episode.} The merge episode of Table~\ref{tab:taxshift}
+contracts the taxonomy; this episode grows it. On the balanced 120-class
+tier, the deployment starts with only the first 60 classes: the semantic
+layer is built from 600 old-class anchors (10\% of old-class clips) and the
+remaining 60 classes are not yet adopted. When the taxonomy grows to all 120
+classes, a fresh 10\% anchor budget arrives for the new classes (600 anchors;
+the old anchors stay spent), and the pipeline is re-measured on all 120
+classes against the 120-class full-label reference. Adding 60 classes costs
+the old classes 10.90~pp of accuracy under semantic-only (42.89\%
+$\rightarrow$ 31.99\%); recycling cuts that forgetting to 8.06~pp, lifts the
+new classes from 22.62\% to 30.19\% ($+7.57$~pp, 10/10), and raises overall
+accuracy from 27.31\% to 32.51\% ($+5.20$~pp, 95\% CI [4.70, 5.68], 10/10
+seeds, $p=0.002$). Under the paper's each-arm own-denominator convention,
+retention improves from 63.57\% to 79.06\% ($+15.49$~pp); under a common
+frozen denominator it improves to 75.68\% ($+12.11$~pp) --- the recycled
+encoder's linear reference drops slightly (42.96\% $\rightarrow$ 41.14\%),
+so we report both. Together with the 60$\rightarrow$49 merge, both
+directions of taxonomy evolution now have direct evidence, and in both,
+recycling wins while touching every class group.
+
+\begin{table}[H]
+\centering
+\caption{Class-addition episode on the balanced 120-class tier (old 60
+classes $\rightarrow$ $+60$ new classes; old anchors stay spent; ten seeds).}
+\label{tab:addition}
+\small
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+Arm & All 120 & Old 60 & New 60 & Forgetting \\
+\midrule
+semantic-only (frozen) & 27.31\% & 31.99\% & 22.62\% & 10.90~pp \\
+recycling (LoRA) & \textbf{32.51\%} & \textbf{34.84\%} & \textbf{30.19\%} & \textbf{8.06~pp} \\
+gain (recycling $-$ semantic) & $+5.20$~pp & $+2.85$~pp & $+7.57$~pp & $-2.84$~pp \\
+\bottomrule
+\end{tabular}
+\end{table}
+
 \subsection{Threats to validity}
 
 PanAf500's validation set is 25 clips, quantizing accuracies in 4\% steps; its
@@ -731,7 +770,11 @@ sharpen the point: across a $4\times$ parameter range the frozen baseline
 scatters (68.48--74.96\%) while recycling gains $+8.8$ to $+15.1$~pp with
 10/10 seeds at every width, and the update raises the full-label reference at
 32 and 64 channels (to 61.28\% and 62.56\%) --- capacity is harvestable only
-once labels shape it.
+once labels shape it. The class-addition episode of Table~\ref{tab:addition}
+completes the taxonomy axis: growing the taxonomy from 60 to 120 classes
+costs the old classes 10.90~pp of accuracy under semantic-only, and
+recycling both reduces that forgetting to 8.06~pp and lifts the new classes
+by $+7.57$~pp.
 
 \textbf{The geometry--harvest mismatch.}
 The cross-domain arm shows that absolute separability and retention can move
@@ -767,7 +810,10 @@ fine-tuning. PanAf500 and UCF101 verdicts carry the quantization
 and weak-reference caveats of \S4.8. At 120 classes the absolute retention
 stays in the FAILS band; the replication supports the recycling gain, not a
 band crossing at that scale. The capacity axis spans 1.84--6.36\,M parameters
-(16--64 channels) but remains within the GCN family. The calibration gate, while a useful
+(16--64 channels) but remains within the GCN family. In the class-addition
+episode the new classes arrive with clips the pretext never saw; a deployment
+in which unlabeled new-class data accrues gradually before the taxonomy grows
+is untested. The calibration gate, while a useful
 safety mechanism, is itself a hyperparameter surface we did not explore.
 
 % =====================================================================
@@ -785,7 +831,9 @@ update}. Across three weak-reference tiers this gains $+10.20$, $+9.71$, and
 $+20.12$~pp and crosses two pre-registered verdict bands. The ordering
 survives a 60$\rightarrow$49 taxonomy merge ($+11.25$~pp over semantic-only)
 and a 120-class replication ($+10.84$~pp, 10/10 seeds), so the gain is not
-tied to a fixed label set or taxonomy size; capacity controls at 2.83\,M and
+tied to a fixed label set or taxonomy size; a class-addition episode
+($+5.20$~pp with old-class forgetting reduced from 10.90 to 8.06~pp) covers
+the growth direction; capacity controls at 2.83\,M and
 6.36\,M parameters keep the gain between $+8.8$ and $+15.1$~pp with 10/10
 seeds. The effect's
 two-sided envelope (an anchor-mass floor for the naive recipe and a

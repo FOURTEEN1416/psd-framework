@@ -1,0 +1,82 @@
+{
+  "n": 10,
+  "seeds": [
+    42,
+    43,
+    44,
+    45,
+    46,
+    47,
+    48,
+    49,
+    50,
+    51
+  ],
+  "phase1_old_acc": 42.89,
+  "semantic_all": 27.31,
+  "recycling_all": 32.51,
+  "raw_gain": {
+    "mean_pp": 5.2,
+    "ci95": [
+      4.7,
+      5.68
+    ],
+    "pos": 10,
+    "neg": 0,
+    "p": 0.002,
+    "dz": 6.31
+  },
+  "retention_semantic": 63.57,
+  "retention_recycling_ownref": 79.06,
+  "retention_gain_ownref": {
+    "mean_pp": 15.49,
+    "ci95": [
+      14.54,
+      16.55
+    ],
+    "pos": 10,
+    "neg": 0,
+    "p": 0.002,
+    "dz": 8.95
+  },
+  "retention_recycling_frozenref": 75.68,
+  "retention_gain_frozenref": {
+    "mean_pp": 12.11,
+    "ci95": [
+      10.94,
+      13.22
+    ],
+    "pos": 10,
+    "neg": 0,
+    "p": 0.002,
+    "dz": 6.3
+  },
+  "full_ref_frozen": 42.96,
+  "full_ref_recycled": 41.14,
+  "forgetting_semantic_pp": 10.9,
+  "forgetting_recycling_pp": 8.06,
+  "forgetting_reduction": {
+    "mean_pp": 2.84,
+    "ci95": [
+      2.03,
+      3.53
+    ],
+    "pos": 10,
+    "neg": 0,
+    "p": 0.002,
+    "dz": 2.23
+  },
+  "new_class_semantic": 22.62,
+  "new_class_recycling": 30.19,
+  "new_class_gain": {
+    "mean_pp": 7.57,
+    "ci95": [
+      7.1,
+      8.05
+    ],
+    "pos": 10,
+    "neg": 0,
+    "p": 0.002,
+    "dz": 9.32
+  }
+}
