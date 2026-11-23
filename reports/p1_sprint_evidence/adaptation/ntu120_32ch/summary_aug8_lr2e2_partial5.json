@@ -1,0 +1,79 @@
+{
+  "experiment": "e10_t4_budget_split",
+  "arm": "same10",
+  "tier": "ntu120_32ch",
+  "budget_frac": 0.1,
+  "per_seed": [
+    {
+      "seed": 42,
+      "full_ref": 0.576,
+      "b_arm": 0.4746,
+      "retention_seed": 0.8239,
+      "pool": 6579,
+      "stop": "converged",
+      "ft_anchor_acc": 0.8292,
+      "ft_loss_tail": [
+        0.8156
+      ]
+    },
+    {
+      "seed": 43,
+      "full_ref": 0.5698,
+      "b_arm": 0.4727,
+      "retention_seed": 0.8295,
+      "pool": 6588,
+      "stop": "converged",
+      "ft_anchor_acc": 0.8292,
+      "ft_loss_tail": [
+        0.9377
+      ]
+    },
+    {
+      "seed": 44,
+      "full_ref": 0.5848,
+      "b_arm": 0.483,
+      "retention_seed": 0.8258,
+      "pool": 6571,
+      "stop": "converged",
+      "ft_anchor_acc": 0.8111,
+      "ft_loss_tail": [
+        0.9119
+      ]
+    },
+    {
+      "seed": 45,
+      "full_ref": 0.5775,
+      "b_arm": 0.4892,
+      "retention_seed": 0.847,
+      "pool": 6580,
+      "stop": "converged",
+      "ft_anchor_acc": 0.8389,
+      "ft_loss_tail": [
+        0.8858
+      ]
+    },
+    {
+      "seed": 46,
+      "full_ref": 0.5765,
+      "b_arm": 0.5093,
+      "retention_seed": 0.8836,
+      "pool": 6580,
+      "stop": "converged",
+      "ft_anchor_acc": 0.8458,
+      "ft_loss_tail": [
+        0.8454
+      ]
+    }
+  ],
+  "mean_b": 0.4858,
+  "mean_full_ref": 0.5769,
+  "retention": 0.8421,
+  "partial": true,
+  "seeds": [
+    42,
+    43,
+    44,
+    45,
+    46
+  ]
+}

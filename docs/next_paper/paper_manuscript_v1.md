@@ -92,7 +92,8 @@ tiers: +10.20 pp on NTU120 (74.96% → 85.16%, crossing into the PARTIAL
 band), +9.71 pp on PanAf500 (82.50% → 92.21%, crossing into CONFIRMS), and
 +20.12 pp on UCF101 (51.09% → 71.21%). A 120-class replication on an
 independently pretrained encoder (Table 6) reproduces the advantage at twice
-the taxonomy size: +10.84 pp retention, 10/10 seeds. A budget-allocation
+the taxonomy size: +10.84 pp retention, 10/10 seeds. A doubled-width encoder
+control enlarges the gain to +15.07 pp (Table 7). A budget-allocation
 sweep shows the
 advantage widens with budget (+2.90 pp at 5%, +3.91 pp at 10%, +4.56 pp at 15%),
 and a hyperparameter study isolates the adaptation learning rate and the
@@ -140,7 +141,9 @@ self-distilled pretraining [9–11, 32, 33], built on the representations and
 architectures of large-scale image learning [25, 30]. Our physical layer
 follows the AimCLR single-stream joint recipe at
 reduced capacity (16 hidden channels, 1.84 M parameters), chosen so that
-every tier is computable under one protocol. Our study concerns the stage
+every tier is computable under one protocol; a 32-channel control
+(2.83 M parameters) checks that the findings are not an artifact of that
+width. Our study concerns the stage
 that follows pretraining: *what should happen when the taxonomy and the
 budget change* — a question prior work does not answer.
 
@@ -287,7 +290,9 @@ Four tiers are ordered by reference quality: NTU60 [12] (published retention
 its own from-scratch label-free pretext (150 epochs) and a 10% stratified
 anchor budget (seeds 42–51; ten seeds for every headline number). NTU120's
 anchors number 734, UCF101's 953, and PanAf500's 40; this spread, together
-with reference quality, shapes the adaptation envelope (§4.5–4.6). Figure 1
+with reference quality, shapes the adaptation envelope (§4.5–4.6). A
+32-channel NTU120 encoder (2.83 M parameters) repeats the 60-class experiment
+as a capacity control (§4.7). Figure 1
 shows the resulting four-tier gradient of budget retention.
 
 ![Figure 1. Four-tier gradient of budget retention (10% anchors). Bars give
@@ -472,7 +477,10 @@ the 40-anchor PanAf500 set move at all.
 layer's calibration gate selects τ = 0 and the
 pipeline raises a hard error rather than emitting degenerate pseudo-labels.
 The gate converts silent quality collapse into an explicit, diagnosable
-stop, and marks the ceiling of the adaptation envelope.
+stop, and marks the ceiling of the adaptation envelope. The ceiling is
+capacity-dependent: on the 32-channel encoder, the lr 2e-2 recipe that is
+stable at 16 channels trips the gate on one seed, and the capacity control
+therefore uses lr 1e-2 (Appendix D).
 
 **Finding 4.** Anchor recycling lives in a two-sided envelope: an
 anchor-mass floor beneath which unaugmented recycling is inert, and a
@@ -500,7 +508,7 @@ ten seeds).
 | Recycling (LoRA, Y′ anchors) | **49.19%** | **84.56%** | **+11.25 pp** |
 | Full-label reference (frozen) | 58.91% | — | — |
 
-### 4.7 Scale replication: the full 120-class taxonomy
+### 4.7 Scale and capacity replications
 
 The headline NTU120 tier uses a 60-class subset (7,337 training clips). To
 test whether the mechanism survives scale, we build a balanced 120-class tier
@@ -527,7 +535,35 @@ large and an encoder that was pretrained independently.
 |:----|---------:|----------:|---------------:|
 | Frozen (semantic only) | 29.41% | 66.33% | 44.33% |
 | Anchor recycling (LoRA) | 33.06% | **77.19%** | 42.83% |
-| Paired gain | +3.65 pp | **+10.84 pp** | −1.50 pp |
+| Δ (recycling − frozen) | +3.65 pp | **+10.84 pp** | −1.50 pp |
+
+**Encoder capacity.** The main study deliberately uses a small encoder, so
+the capacity control tests whether the gain depends on that choice. We repeat
+the NTU120 60-class experiment with a 32-channel encoder (2.83 M parameters)
+pretrained from scratch under the identical label-free objective. Doubling
+the width *lowers* the frozen pipeline: the full-label reference drops from
+58.37% to 56.85% and frozen retention from 74.96% to 68.48% — capacity alone
+does not buy label efficiency. Recycling on the 32-channel encoder raises
+the b-arm from 39.04% to 51.20% and retention to 83.55%, a paired gain of
++15.07 pp (95% CI [13.49, 16.71], 10/10 seeds, p = 0.002); the raw b-arm
+gain is +12.27 pp ([11.40, 13.17], 10/10). Unlike the 16-channel result, the
+update also raises the encoder's full-label reference (56.85% → 61.28%,
++4.43 pp): with room to grow, part of the label signal lands in the
+representation itself. The gain is larger than at 16 channels (+10.20 pp),
+so the mechanism is not an artifact of the small backbone — if anything, the
+small backbone understates it. The 16-channel-optimal recipe trips the
+calibration gate on one 32-channel seed (Appendix D), so the control uses
+lr 1e-2; the envelope's upper edge moves with encoder width.
+
+**Table 7.** Encoder-capacity control on NTU120 (60 classes; 10% anchors; ten
+seeds). The 32-channel control uses lr 1e-2 because the 16-channel-optimal
+lr 2e-2 trips the calibration gate on one seed (Appendix D); all other
+settings match the 16-channel headline.
+
+| Encoder | Params | Frozen retention | Recycling retention | Paired gain |
+|:--------|-------:|-----------------:|--------------------:|------------:|
+| 16 ch | 1.84 M | 74.96% | 85.16% | +10.20 pp |
+| 32 ch | 2.83 M | 68.48% | **83.55%** | **+15.07 pp** |
 
 ### 4.8 Threats to validity
 
@@ -558,7 +594,11 @@ signal. The 60→49 merge episode of Table 5 repeats the ordering under a
 changed taxonomy (84.56% vs 73.31% retention), so the effect is not an
 artifact of a fixed label set. The 120-class replication of Table 6 extends
 the ordering to a taxonomy twice as large, with an independently pretrained
-encoder and 1,200 anchors: +10.84 pp retention, 10/10 seeds.
+encoder and 1,200 anchors: +10.84 pp retention, 10/10 seeds. The capacity
+control of Table 7 sharpens the point: doubling the width lowers the frozen
+baseline but enlarges the gain to +15.07 pp, and the update raises the
+full-label reference for the first time (56.85% → 61.28%) — capacity is
+harvestable only once labels shape it.
 
 **The geometry–harvest mismatch.**
 The cross-domain arm shows that absolute separability and retention can move
@@ -593,7 +633,8 @@ though we would expect much larger budgets to converge toward full
 fine-tuning. PanAf500 and UCF101 verdicts carry the quantization
 and weak-reference caveats of §4.8. At 120 classes the absolute retention
 stays in the FAILS band; the replication supports the recycling gain, not a
-band crossing at that scale. The calibration gate, while a useful
+band crossing at that scale. The capacity control covers one doubling
+(32 channels), not the standard 64-channel width. The calibration gate, while a useful
 safety mechanism, is itself a hyperparameter surface we did not explore.
 
 ---
@@ -608,7 +649,11 @@ moves a frozen physical layer past its ceiling. The ceiling yields to a
 simple idea: **recycle the same anchors that
 drive the semantic layer as supervision for a low-rank physical-layer
 update**. Across three weak-reference tiers this gains +10.20, +9.71, and
-+20.12 pp and crosses two pre-registered verdict bands. The effect's
++20.12 pp and crosses two pre-registered verdict bands. The ordering survives
+a 60→49 taxonomy merge (+11.25 pp over semantic-only) and a 120-class
+replication (+10.84 pp, 10/10 seeds), so the gain is not tied to a fixed
+label set or taxonomy size; a doubled-width encoder lowers the frozen
+baseline yet enlarges the gain to +15.07 pp. The effect's
 two-sided envelope (an anchor-mass floor for the naive recipe and a
 calibration-gate ceiling) is mapped and released, along with every per-seed
 number and the harness that produced them.
@@ -752,6 +797,7 @@ seed (734, 953, and 40 anchors for the three headline weak-reference tiers;
 | NTU120 | 60 | 7,337 | 4,663 | 734 | 58.37 | 74.96 |
 | UCF101 | 101 | 9,537 | 463 | 953 | 19.87 | 51.09 |
 | NTU120-120c | 120 | 12,000 | 2,400 | 1,200 | 44.33 | 66.33 |
+| NTU120-32ch | 60 | 7,337 | 4,663 | 734 | 56.85 | 68.48 |
 
 NTU60 is not re-run in this paper; its row reports the published retention
 of the prior study [41] and serves as the strong-reference anchor of the
@@ -825,7 +871,7 @@ Per-seed retention is the ratio of the seed's (b)-arm accuracy to its own
 full-label reference and can exceed 100% when the (b) arm beats that
 reference on a seed; the headline number is the ratio of means.
 
-Bootstrap of the ratio of means (10,000 resamples over seeds) gives 95% confidence intervals of +10.21 pp [+9.44, +11.06] on NTU120, +9.68 pp [+1.27, +16.25] on PanAf500, +20.17 pp [+12.73, +28.24] on UCF101, and +10.82 pp [+9.49, +12.31] on the 120-class replication. The per-seed sign tests are 10/0/0 ($p=0.002$), 5/3/2 ($p=0.453$), 9/0/1 ($p=0.022$), and 10/0/0 ($p=0.002$) on the 120-class replication; PanAf500's sign test is not significant, so its CONFIRMS verdict is descriptive rather than a significance claim. In raw (b)-arm accuracy the corresponding intervals are +5.85 pp [+5.04, +6.72], +4.00 pp [-2.40, +10.80], +3.63 pp [+2.03, +5.14], and +3.65 pp [+2.99, +4.40] on the 120-class replication.
+Bootstrap of the ratio of means (10,000 resamples over seeds) gives 95% confidence intervals of +10.21 pp [+9.44, +11.06] on NTU120, +9.68 pp [+1.27, +16.25] on PanAf500, +20.17 pp [+12.73, +28.24] on UCF101, and +10.82 pp [+9.49, +12.31] on the 120-class replication, and +15.07 pp [+13.63, +16.60] on the 32-channel capacity control. The per-seed sign tests are 10/0/0 ($p=0.002$), 5/3/2 ($p=0.453$), 9/0/1 ($p=0.022$), and 10/0/0 ($p=0.002$) on the 120-class replication, and 10/0/0 ($p=0.002$) on the capacity control; PanAf500's sign test is not significant, so its CONFIRMS verdict is descriptive rather than a significance claim. In raw (b)-arm accuracy the corresponding intervals are +5.85 pp [+5.04, +6.72], +4.00 pp [-2.40, +10.80], +3.63 pp [+2.03, +5.14], and +3.65 pp [+2.99, +4.40] on the 120-class replication, and +12.27 pp [+11.40, +13.17] on the capacity control.
 
 Table C2 gives the full NTU120 sensitivity grid. The augmentation rows use
 50 epochs and the no-augmentation rows 100 epochs, as in the main text;
@@ -863,23 +909,47 @@ ranges from 74.39% to 82.61%.
 | 50 | 29.46 | 31.46 | 74.60 |
 | 51 | 30.50 | 33.46 | 78.11 |
 
+Table C4 repeats the per-seed detail for the 32-channel capacity control. Every
+seed improves in retention; the frozen b-arm mean is
+38.93% and the recycled
+mean is 51.20%.
+
+| Seed | Frozen b-arm (%) | Recycling b-arm (%) | Recycling retention (%) |
+|:-----|:-----------------|:--------------------|:------------------------|
+| 42 | 38.43 | 51.19 | 83.23 |
+| 43 | 38.45 | 49.86 | 81.07 |
+| 44 | 40.51 | 51.75 | 83.49 |
+| 45 | 39.27 | 52.80 | 85.99 |
+| 46 | 38.75 | 53.40 | 85.57 |
+| 47 | 37.16 | 50.65 | 84.78 |
+| 48 | 39.67 | 53.23 | 87.89 |
+| 49 | 39.67 | 50.40 | 82.43 |
+| 50 | 38.88 | 49.05 | 79.80 |
+| 51 | 38.54 | 49.65 | 81.29 |
+
 ## Appendix D. Calibration-gate failure cases
 
 The calibration gate turns a silent quality collapse into an explicit
-error. Two configurations exceed the adaptation envelope and both stop in
+error. Three configurations exceed the adaptation envelope and all stop in
 the same place. On NTU120 at lr 4e-2, the anchor objective never leaves
 chance: the loss stays at 5.10 for 100 epochs and the anchor accuracy ends
 at 1.7% over 60 classes. On PanAf500 at lr 2e-2 with 4x augmentation, the
 anchor objective does fit (loss 5.51 to 1.75, anchor accuracy 35.7% over 9
 classes), but the adapted feature geometry still drives the selected
-similarity threshold to zero. In both cases the semantic stage raises
-`ValueError: tau must be positive: 0.0` from the threshold constructor
+similarity threshold to zero. In the 32-channel capacity control, the
+16-channel-optimal recipe (lr 2e-2, 8x augmentation) completes five seeds and
+trips on the sixth (seed 47): the anchor objective stays at chance (loss
+5.10, anchor accuracy 1.7% over 60 classes). In all cases the semantic stage
+raises `ValueError: tau must be positive: 0.0` from the threshold constructor
 before any pseudo-label is emitted.
 
-The two cases are complementary. The first shows a gate trip caused by an
+The three cases are complementary. The first shows a gate trip caused by an
 objective that never converged; the second shows a gate trip caused by a
 converged objective whose geometry is nevertheless incompatible with the
-semantic layer's calibration. A training-loss monitor alone would have
+semantic layer's calibration. The third shows that the upper edge moves with
+encoder width: the recipe that is stable at 16 channels is too strong at 32,
+so the capacity control uses lr 1e-2, where all ten seeds pass. A
+training-loss monitor alone would have
 accepted the second run. The gate is therefore not a duplicate of the
 training objective but an independent check on the feature geometry that
 the next stage will actually consume.
@@ -918,6 +988,12 @@ python scripts/p1_sprint/export_tier_feeder.py --tier ntu120_full
 python scripts/p1_sprint/labelfree_tier_replication.py --tier ntu120_full --seeds 10
 python scripts/p1_sprint/t4_budget_split_tier.py --tier ntu120_full --arm same10 \
   --seeds 10 --epochs 50 --lr 0.02 --aug-views 8 --tag full10
+
+# 6) 32-channel capacity control (same feeder via directory junction)
+python scripts/run_ntu_phaseb.py --config configs/labelfree_ntu120_32ch_pretext.yaml
+python scripts/p1_sprint/labelfree_tier_replication.py --tier ntu120_32ch --seeds 10
+python scripts/p1_sprint/t4_budget_split_tier.py --tier ntu120_32ch --arm same10 \
+  --seeds 10 --epochs 50 --lr 0.02 --aug-views 8 --tag aug8_lr2e2
 ```
 
 Checkpoints: the frozen pretexts are
@@ -931,6 +1007,7 @@ mirror under `reports/p1_sprint_evidence/` is byte-identical to the run
 outputs.
 
 <!-- APPENDIX:END -->
+
 
 
 

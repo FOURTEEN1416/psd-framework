@@ -41,6 +41,10 @@ TIERS = {
         EV / "labelfree_tiers/ntu120_full_labelfree_summary.json",
         EV / "adaptation/ntu120_full/summary_full10.json",
     ),
+    "NTU120-32ch": (
+        EV / "labelfree_tiers/ntu120_32ch_labelfree_summary.json",
+        EV / "adaptation/ntu120_32ch/summary_aug8_lr1e2.json",
+    ),
 }
 
 

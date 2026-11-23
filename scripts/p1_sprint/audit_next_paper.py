@@ -94,6 +94,22 @@ CHECKS: list[tuple[str, list[str]]] = [
     ("12,000", ["MANIFEST.md"]),
     ("2,400", ["MANIFEST.md"]),
     ("1,200", ["MANIFEST.md"]),
+    # 32ch 容量对照（Table 7 + Appendix C4/D）
+    ("68.48", ["labelfree_tiers/ntu120_32ch_labelfree_summary.json", "MANIFEST.md"]),
+    ("83.55", [f"{A}/ntu120_32ch/summary_aug8_lr1e2.json", "MANIFEST.md"]),
+    ("56.85", ["labelfree_tiers/ntu120_32ch_labelfree_summary.json", "MANIFEST.md"]),
+    ("61.28", [f"{A}/ntu120_32ch/summary_aug8_lr1e2.json", "MANIFEST.md"]),
+    ("51.20", [f"{A}/ntu120_32ch/summary_aug8_lr1e2.json", "MANIFEST.md"]),
+    ("39.04", ["MANIFEST.md"]),
+    ("15.07", ["next_paper_stats.json", "MANIFEST.md"]),
+    ("12.27", ["next_paper_stats.json", "MANIFEST.md"]),
+    ("13.49", ["next_paper_stats.json", "MANIFEST.md"]),
+    ("16.71", ["next_paper_stats.json", "MANIFEST.md"]),
+    ("11.40", ["next_paper_stats.json", "MANIFEST.md"]),
+    ("13.17", ["next_paper_stats.json", "MANIFEST.md"]),
+    ("4.43", ["MANIFEST.md"]),
+    ("84.20", ["MANIFEST.md"]),
+    ("2,826,088", ["labelfree_tiers/ntu120_32ch_labelfree_summary.json", "MANIFEST.md"]),
 ]
 
 

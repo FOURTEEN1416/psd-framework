@@ -37,8 +37,8 @@ def main() -> None:
     sd = torch.load(ckpt, map_location="cpu", weights_only=False)
     has_lora = any("lora_A" in k for k in sd.keys())
     if has_lora:
-        from labelfree_tier_replication import TIERS, build_model
-        model = build_model(TIERS[tier], "cpu")
+        from labelfree_tier_replication import TIERS, build_model, channels_for
+        model = build_model(TIERS[tier], "cpu", channels_for(tier))
         inject_lora(model.encoder_q, r=args.rank, alpha=args.alpha)
         inject_lora(model.encoder_k, r=args.rank, alpha=args.alpha)
         model.load_state_dict(sd, strict=True)

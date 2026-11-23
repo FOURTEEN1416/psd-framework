@@ -35,9 +35,14 @@ sys.path.insert(0, str(REPO / "scripts"))
 sys.path.insert(0, str(REPO / "external" / "AimCLR"))
 sys.path.insert(0, str(REPO / "external" / "AimCLR" / "torchlight"))
 
-TIERS = {"ntu120": 60, "ntu120_full": 120, "ucf101": 101, "panaf500": 9}
+TIERS = {"ntu120": 60, "ntu120_full": 120, "ntu120_32ch": 60, "ucf101": 101, "panaf500": 9}
+TIER_CHANNELS = {"ntu120_32ch": 32}
 BUDGET_FRAC = 0.10
 SEED_MAP = {10: tuple(range(42, 52))}
+
+
+def channels_for(tier: str) -> int:
+    return TIER_CHANNELS.get(tier, 16)
 
 
 class ScaledLR:
@@ -66,13 +71,13 @@ def latest_ckpt(pretext_dir: Path) -> Path:
     return cks[-1]
 
 
-def build_model(n_cls: int, device: str):
+def build_model(n_cls: int, device: str, hidden_channels: int = 16):
     from torchlight import import_class  # noqa: E402  (external/AimCLR torchlight)
     model_cls = import_class("net.aimclr.AimCLR")
     model = model_cls(
         base_encoder="net.st_gcn.Model", pretrain=True, feature_dim=128,
         queue_size=32768, momentum=0.999, Temperature=0.07, mlp=True,
-        in_channels=3, hidden_channels=16, hidden_dim=256, num_class=n_cls,
+        in_channels=3, hidden_channels=hidden_channels, hidden_dim=256, num_class=n_cls,
         dropout=0.5, graph_args={"layout": "ntu-rgb+d", "strategy": "spatial"},
         edge_importance_weighting=True,
     )
@@ -200,7 +205,7 @@ def main() -> None:
     ckpt = latest_ckpt(base / "pretext")
     print(f"[replicate:{tier}] ckpt = {ckpt}")
 
-    model = build_model(n_cls, "cpu")
+    model = build_model(n_cls, "cpu", channels_for(tier))
     sd = torch.load(ckpt, map_location="cpu", weights_only=False)
     model.load_state_dict(sd, strict=True)
     model = model.to(device).eval()
@@ -229,7 +234,7 @@ def main() -> None:
         "protocol": f"protocol-return of the pre-registered from-scratch ST-GCN pretext "
                     f"(150 ep, label-free AimCLR objective, single stream joint); "
                     f"the interim joint-MLP deviation (Amendment 2) is retained as prior readout",
-        "encoder": {"arch": "AimCLR (net.st_gcn base, 16 hidden ch.), from-scratch, label-free",
+        "encoder": {"arch": f"AimCLR (net.st_gcn base, {channels_for(tier)} hidden ch.), from-scratch, label-free",
                     "ckpt": str(ckpt.relative_to(REPO)), "epochs": 150,
                     "frozen": True, "trainable_params": 0,
                     "total_params": int(sum(p.numel() for p in model.parameters()))},

@@ -30,8 +30,8 @@ sys.path.insert(0, str(REPO / "external" / "AimCLR"))
 sys.path.insert(0, str(REPO / "external" / "AimCLR" / "torchlight"))
 
 from labelfree_tier_replication import (  # noqa: E402  统一尺复用
-    BUDGET_FRAC, SEED_MAP, ScaledLR, TIERS, build_model, dump_features,
-    extract_backbone, latest_ckpt, run_arms,
+    BUDGET_FRAC, SEED_MAP, ScaledLR, TIERS, build_model, channels_for,
+    dump_features, extract_backbone, latest_ckpt, run_arms,
 )
 
 
@@ -98,7 +98,7 @@ def load_frozen_model(tier: str, device: str, ckpt_path=None):
     n_cls = TIERS[tier]
     ckpt = (Path(ckpt_path).resolve() if ckpt_path else
             latest_ckpt(REPO / "runs" / "p1_sprint" / f"labelfree_{tier}" / "pretext"))
-    model = build_model(n_cls, "cpu")
+    model = build_model(n_cls, "cpu", channels_for(tier))
     sd = torch.load(ckpt, map_location="cpu", weights_only=False)
     model.load_state_dict(sd, strict=True)
     model = model.to(device).eval()

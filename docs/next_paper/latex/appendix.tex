@@ -35,6 +35,7 @@ PanAf500 & 9 & 400 & 25 & 40 & 64.00 & 82.50 \\
 NTU120 & 60 & 7,337 & 4,663 & 734 & 58.37 & 74.96 \\
 UCF101 & 101 & 9,537 & 463 & 953 & 19.87 & 51.09 \\
 NTU120-120c & 120 & 12,000 & 2,400 & 1,200 & 44.33 & 66.33 \\
+NTU120-32ch & 60 & 7,337 & 4,663 & 734 & 56.85 & 68.48 \\
 \bottomrule
 \end{tabular*}
 \end{table}
@@ -148,7 +149,7 @@ Per-seed retention is the ratio of the seed's (b)-arm accuracy to its own
 full-label reference and can exceed 100\% when the (b) arm beats that
 reference on a seed; the headline number is the ratio of means.
 
-Bootstrap of the ratio of means (10,000 resamples over seeds) gives $95\%$ confidence intervals of +10.21~pp [+9.44, +11.06] on NTU120, +9.68~pp [+1.27, +16.25] on PanAf500, +20.17~pp [+12.73, +28.24] on UCF101, and +10.82~pp [+9.49, +12.31] on the 120-class replication. The per-seed sign tests are 10/0/0 ($p=0.002$), 5/3/2 ($p=0.453$), 9/0/1 ($p=0.022$), and 10/0/0 ($p=0.002$) on the 120-class replication; PanAf500's sign test is not significant, so its CONFIRMS verdict is descriptive rather than a significance claim. In raw (b)-arm accuracy the corresponding intervals are +5.85~pp [+5.04, +6.72], +4.00~pp [-2.40, +10.80], +3.63~pp [+2.03, +5.14], and +3.65~pp [+2.99, +4.40] on the 120-class replication.
+Bootstrap of the ratio of means (10,000 resamples over seeds) gives $95\%$ confidence intervals of +10.21~pp [+9.44, +11.06] on NTU120, +9.68~pp [+1.27, +16.25] on PanAf500, +20.17~pp [+12.73, +28.24] on UCF101, and +10.82~pp [+9.49, +12.31] on the 120-class replication, and +15.07~pp [+13.63, +16.60] on the 32-channel capacity control. The per-seed sign tests are 10/0/0 ($p=0.002$), 5/3/2 ($p=0.453$), 9/0/1 ($p=0.022$), and 10/0/0 ($p=0.002$) on the 120-class replication, and 10/0/0 ($p=0.002$) on the capacity control; PanAf500's sign test is not significant, so its CONFIRMS verdict is descriptive rather than a significance claim. In raw (b)-arm accuracy the corresponding intervals are +5.85~pp [+5.04, +6.72], +4.00~pp [-2.40, +10.80], +3.63~pp [+2.03, +5.14], and +3.65~pp [+2.99, +4.40] on the 120-class replication, and +12.27~pp [+11.40, +13.17] on the capacity control.
 
 Table~\ref{tab:appC2} gives the full NTU120 sensitivity grid. The
 augmentation rows use 50 epochs and the no-augmentation rows 100 epochs, as
@@ -207,25 +208,60 @@ Seed & Frozen b-arm (\%) & Recycling b-arm (\%) & Recycling retention (\%) \\
 \end{tabular*}
 \end{table}
 
+Table~\ref{tab:appC4} repeats the per-seed detail for the 32-channel
+capacity control. Every seed improves in retention; the frozen b-arm mean is
+38.93\% and the recycled
+mean is 51.20\%.
+
+\begin{table}[H]
+\centering
+\caption{Per-seed detail of the 32-channel capacity control (ten seeds).}
+\label{tab:appC4}
+\small
+\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}rrrr@{}}
+\toprule
+Seed & Frozen b-arm (\%) & Recycling b-arm (\%) & Recycling retention (\%) \\
+\midrule
+42 & 38.43 & 51.19 & 83.23 \\
+43 & 38.45 & 49.86 & 81.07 \\
+44 & 40.51 & 51.75 & 83.49 \\
+45 & 39.27 & 52.80 & 85.99 \\
+46 & 38.75 & 53.40 & 85.57 \\
+47 & 37.16 & 50.65 & 84.78 \\
+48 & 39.67 & 53.23 & 87.89 \\
+49 & 39.67 & 50.40 & 82.43 \\
+50 & 38.88 & 49.05 & 79.80 \\
+51 & 38.54 & 49.65 & 81.29 \\
+\bottomrule
+\end{tabular*}
+\end{table}
+
 \section{Calibration-gate failure cases}
 \label{app:gate}
 
 The calibration gate turns a silent quality collapse into an explicit
-error. Two configurations exceed the adaptation envelope and both stop in
+error. Three configurations exceed the adaptation envelope and all stop in
 the same place. On NTU120 at lr 4e-2, the anchor objective never leaves
 chance: the loss stays at 5.10 for 100 epochs and the anchor accuracy ends
 at 1.7\% over 60 classes. On PanAf500 at lr 2e-2 with $4\times$
 augmentation, the anchor objective does fit (loss 5.51 to 1.75, anchor
 accuracy 35.7\% over 9 classes), but the adapted feature geometry still
-drives the selected similarity threshold to zero. In both cases the semantic
+drives the selected similarity threshold to zero. In the 32-channel capacity
+control, the 16-channel-optimal recipe (lr 2e-2, $8\times$ augmentation)
+completes five seeds and trips on the sixth (seed 47): the anchor objective
+stays at chance (loss 5.10, anchor accuracy 1.7\% over 60 classes). In all
+cases the semantic
 stage raises \texttt{ValueError} with the message
 ``tau must be positive: 0.0'' from the
 threshold constructor before any pseudo-label is emitted.
 
-The two cases are complementary. The first shows a gate trip caused by an
+The three cases are complementary. The first shows a gate trip caused by an
 objective that never converged; the second shows a gate trip caused by a
 converged objective whose geometry is nevertheless incompatible with the
-semantic layer's calibration. A training-loss monitor alone would have
+semantic layer's calibration. The third shows that the upper edge moves with
+encoder width: the recipe that is stable at 16 channels is too strong at 32,
+so the capacity control uses lr 1e-2, where all ten seeds pass. A
+training-loss monitor alone would have
 accepted the second run. The gate is therefore not a duplicate of the
 training objective but an independent check on the feature geometry that the
 next stage will actually consume.
@@ -274,6 +310,15 @@ python scripts/p1_sprint/labelfree_tier_replication.py \
 python scripts/p1_sprint/t4_budget_split_tier.py \
   --tier ntu120_full --arm same10 --seeds 10 --epochs 50 \
   --lr 0.02 --aug-views 8 --tag full10
+
+# 6) 32-channel capacity control (same feeder via directory junction)
+python scripts/run_ntu_phaseb.py \
+  --config configs/labelfree_ntu120_32ch_pretext.yaml
+python scripts/p1_sprint/labelfree_tier_replication.py \
+  --tier ntu120_32ch --seeds 10
+python scripts/p1_sprint/t4_budget_split_tier.py \
+  --tier ntu120_32ch --arm same10 --seeds 10 --epochs 50 \
+  --lr 0.02 --aug-views 8 --tag aug8_lr2e2
 \end{verbatim}
 }
 
