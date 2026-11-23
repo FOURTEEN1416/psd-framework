@@ -110,6 +110,22 @@ CHECKS: list[tuple[str, list[str]]] = [
     ("4.43", ["MANIFEST.md"]),
     ("84.20", ["MANIFEST.md"]),
     ("2,826,088", ["labelfree_tiers/ntu120_32ch_labelfree_summary.json", "MANIFEST.md"]),
+    # 64ch 标准宽度对照（Table 7 第三行 + Appendix C5）
+    ("74.78", ["labelfree_tiers/ntu120_64ch_labelfree_summary.json", "MANIFEST.md"]),
+    ("59.68", ["labelfree_tiers/ntu120_64ch_labelfree_summary.json", "MANIFEST.md"]),
+    ("6,364,200", ["labelfree_tiers/ntu120_64ch_labelfree_summary.json", "MANIFEST.md"]),
+    ("83.62", [f"{A}/ntu120_64ch/summary_aug8_lr1e2.json", "MANIFEST.md"]),
+    ("52.31", [f"{A}/ntu120_64ch/summary_aug8_lr1e2.json", "MANIFEST.md"]),
+    ("62.56", [f"{A}/ntu120_64ch/summary_aug8_lr1e2.json", "MANIFEST.md"]),
+    ("44.63", ["MANIFEST.md"]),
+    ("8.84", ["next_paper_stats.json", "MANIFEST.md"]),
+    ("7.98", ["next_paper_stats.json", "MANIFEST.md"]),
+    ("9.61", ["next_paper_stats.json", "MANIFEST.md"]),
+    ("7.68", ["next_paper_stats.json", "MANIFEST.md"]),
+    ("7.06", ["next_paper_stats.json", "MANIFEST.md"]),
+    ("8.32", ["next_paper_stats.json", "MANIFEST.md"]),
+    ("8.16", ["next_paper_stats.json", "MANIFEST.md"]),
+    ("2.88", ["MANIFEST.md"]),
 ]
 
 

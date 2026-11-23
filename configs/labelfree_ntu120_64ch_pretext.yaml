@@ -1,0 +1,61 @@
+# 容量对照层 (2026-11-23): NTU120 60-class tier, hidden_channels=64 (标准 ST-GCN 通道)
+# 目的: 把容量轴补到官方宽度，检验 anchor recycling 的结论在标准骨干下是否成立。
+# 除 hidden_channels 与 work_dir 外，其余超参与 configs/labelfree_ntu120_pretext.yaml
+# 逐项一致；feeder 为同一份 60 类分层文件（labelfree_ntu120/feeder 的目录联接）。
+# 显存: 64ch@batch64 预计 ~7GB（8GB 卡上限），若 OOM 降 batch 32/lr 0.025 并在此记录。
+
+work_dir: runs/p1_sprint/labelfree_ntu120_64ch/pretext
+
+# feeder —— 与 16ch tier 同一份数据（目录联接）
+train_feeder: feeder.ntu_feeder.Feeder_triple
+train_feeder_args:
+  data_path: runs/p1_sprint/labelfree_ntu120_64ch/feeder/train_position.npy
+  label_path: runs/p1_sprint/labelfree_ntu120_64ch/feeder/train_label.pkl
+  shear_amplitude: 0.5
+  temperal_padding_ratio: 6
+  mmap: True
+
+# model —— 官方 AimCLR + ST-GCN 编码器（NTU graph V=25）
+model: net.aimclr.AimCLR
+model_args:
+  base_encoder: net.st_gcn.Model
+  pretrain: True
+  feature_dim: 128
+  queue_size: 32768
+  momentum: 0.999
+  Temperature: 0.07
+  mlp: True
+  in_channels: 3
+  hidden_channels: 64     # 标准 ST-GCN 通道（容量对照臂，6.36M 参数）
+  hidden_dim: 256
+  num_class: 60
+  dropout: 0.5
+  graph_args:
+    layout: 'ntu-rgb+d'
+    strategy: 'spatial'
+  edge_importance_weighting: True
+
+# optim —— 与 16ch tier 原值一致
+nesterov: False
+weight_decay: 1e-4
+base_lr: 0.05
+optimizer: SGD
+step: [125]
+
+# training —— 单卡适配；与 16ch tier 同 epoch 数
+device: [0]
+batch_size: 64
+test_batch_size: 64
+num_epoch: 150
+start_epoch: 0
+stream: 'joint'
+num_worker: 0
+
+# nearest neighbor mining —— 官方口径
+topk: 1
+mining_epoch: 150
+
+# log
+save_interval: 5
+eval_interval: -1
+print_log: True

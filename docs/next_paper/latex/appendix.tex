@@ -36,6 +36,7 @@ NTU120 & 60 & 7,337 & 4,663 & 734 & 58.37 & 74.96 \\
 UCF101 & 101 & 9,537 & 463 & 953 & 19.87 & 51.09 \\
 NTU120-120c & 120 & 12,000 & 2,400 & 1,200 & 44.33 & 66.33 \\
 NTU120-32ch & 60 & 7,337 & 4,663 & 734 & 56.85 & 68.48 \\
+NTU120-64ch & 60 & 7,337 & 4,663 & 734 & 59.68 & 74.78 \\
 \bottomrule
 \end{tabular*}
 \end{table}
@@ -149,7 +150,7 @@ Per-seed retention is the ratio of the seed's (b)-arm accuracy to its own
 full-label reference and can exceed 100\% when the (b) arm beats that
 reference on a seed; the headline number is the ratio of means.
 
-Bootstrap of the ratio of means (10,000 resamples over seeds) gives $95\%$ confidence intervals of +10.21~pp [+9.44, +11.06] on NTU120, +9.68~pp [+1.27, +16.25] on PanAf500, +20.17~pp [+12.73, +28.24] on UCF101, and +10.82~pp [+9.49, +12.31] on the 120-class replication, and +15.07~pp [+13.63, +16.60] on the 32-channel capacity control. The per-seed sign tests are 10/0/0 ($p=0.002$), 5/3/2 ($p=0.453$), 9/0/1 ($p=0.022$), and 10/0/0 ($p=0.002$) on the 120-class replication, and 10/0/0 ($p=0.002$) on the capacity control; PanAf500's sign test is not significant, so its CONFIRMS verdict is descriptive rather than a significance claim. In raw (b)-arm accuracy the corresponding intervals are +5.85~pp [+5.04, +6.72], +4.00~pp [-2.40, +10.80], +3.63~pp [+2.03, +5.14], and +3.65~pp [+2.99, +4.40] on the 120-class replication, and +12.27~pp [+11.40, +13.17] on the capacity control.
+Bootstrap of the ratio of means (10,000 resamples over seeds) gives $95\%$ confidence intervals of +10.21~pp [+9.44, +11.06] on NTU120, +9.68~pp [+1.27, +16.25] on PanAf500, +20.17~pp [+12.73, +28.24] on UCF101, and +10.82~pp [+9.49, +12.31] on the 120-class replication, and +15.07~pp [+13.63, +16.60] on the 32-channel capacity control, and +8.84~pp [+8.16, +9.49] on the standard-width (64-channel) control. The per-seed sign tests are 10/0/0 ($p=0.002$), 5/3/2 ($p=0.453$), 9/0/1 ($p=0.022$), and 10/0/0 ($p=0.002$) on the 120-class replication, 10/0/0 ($p=0.002$) on the capacity control, and 10/0/0 ($p=0.002$) on the standard-width control; PanAf500's sign test is not significant, so its CONFIRMS verdict is descriptive rather than a significance claim. In raw (b)-arm accuracy the corresponding intervals are +5.85~pp [+5.04, +6.72], +4.00~pp [-2.40, +10.80], +3.63~pp [+2.03, +5.14], and +3.65~pp [+2.99, +4.40] on the 120-class replication, +12.27~pp [+11.40, +13.17] on the capacity control, and +7.68~pp [+7.06, +8.32] on the standard-width control.
 
 Table~\ref{tab:appC2} gives the full NTU120 sensitivity grid. The
 augmentation rows use 50 epochs and the no-augmentation rows 100 epochs, as
@@ -236,6 +237,34 @@ Seed & Frozen b-arm (\%) & Recycling b-arm (\%) & Recycling retention (\%) \\
 \end{tabular*}
 \end{table}
 
+Table~\ref{tab:appC5} repeats the per-seed detail for the standard-width
+(64-channel) control. Every seed improves in retention; the frozen b-arm mean
+is 44.63\% and the
+recycled mean is 52.31\%.
+
+\begin{table}[H]
+\centering
+\caption{Per-seed detail of the standard-width (64-channel) control (ten seeds).}
+\label{tab:appC5}
+\small
+\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}rrrr@{}}
+\toprule
+Seed & Frozen b-arm (\%) & Recycling b-arm (\%) & Recycling retention (\%) \\
+\midrule
+42 & 43.92 & 51.02 & 82.58 \\
+43 & 45.04 & 52.58 & 84.35 \\
+44 & 45.10 & 53.40 & 85.27 \\
+45 & 45.04 & 53.42 & 84.67 \\
+46 & 43.64 & 53.44 & 84.05 \\
+47 & 44.35 & 51.96 & 84.13 \\
+48 & 44.61 & 52.73 & 84.21 \\
+49 & 44.35 & 51.36 & 82.70 \\
+50 & 44.74 & 51.88 & 81.97 \\
+51 & 45.51 & 51.30 & 82.26 \\
+\bottomrule
+\end{tabular*}
+\end{table}
+
 \section{Calibration-gate failure cases}
 \label{app:gate}
 
@@ -318,7 +347,16 @@ python scripts/p1_sprint/labelfree_tier_replication.py \
   --tier ntu120_32ch --seeds 10
 python scripts/p1_sprint/t4_budget_split_tier.py \
   --tier ntu120_32ch --arm same10 --seeds 10 --epochs 50 \
-  --lr 0.02 --aug-views 8 --tag aug8_lr2e2
+  --lr 0.01 --aug-views 8 --tag aug8_lr1e2
+
+# 7) standard-width (64-channel) control
+python scripts/run_ntu_phaseb.py \
+  --config configs/labelfree_ntu120_64ch_pretext.yaml
+python scripts/p1_sprint/labelfree_tier_replication.py \
+  --tier ntu120_64ch --seeds 10
+python scripts/p1_sprint/t4_budget_split_tier.py \
+  --tier ntu120_64ch --arm same10 --seeds 10 --epochs 50 \
+  --lr 0.01 --aug-views 8 --tag aug8_lr1e2
 \end{verbatim}
 }
 
