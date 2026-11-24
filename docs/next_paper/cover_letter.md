@@ -1,15 +1,15 @@
-# Cover Letter — Anchor Recycling
+# Cover Letter — Anchor Recycling（Neurocomputing 投稿版）
 
-> 使用说明：`[JOURNAL]`/`[EDITOR]` 按目标期刊替换；三个定制段（TMM / PRL / CVIU）
-> 在文末，投哪本就把对应段落放进正文第 3 段并删除其余两段。
+> 目标期刊已定为 **Neurocomputing**（Elsevier，elsarticle 模板直投）。
+> 本文件为可直接粘贴的终版；如改投其他刊，见文末备用段。
 
 ---
 
-Dear [EDITOR],
+Dear Editor,
 
 We are pleased to submit our manuscript, **"Anchor Recycling: Label-Efficient
 Skeleton Behavior Recognition Under Evolving Taxonomies,"** for consideration
-as a [article type] in *[JOURNAL]*.
+as a Regular Article in *Neurocomputing*.
 
 **The problem.** In deployed skeleton-based behavior recognition, label
 taxonomies keep evolving (classes are merged, split, or added) and new domains
@@ -45,16 +45,21 @@ shared measurement implementation and audited against per-seed evidence:
   recycling is inert, and a calibration-gate ceiling above which the semantic
   layer refuses the adapted features.
 
+**Why Neurocomputing.** The paper fits Neurocomputing's scope on neural
+networks and learning systems applied to computer vision: it couples a
+neural architecture (frozen self-supervised encoder + low-rank adaptation)
+with a systematic study of what limits label efficiency under evolving
+taxonomies, evaluated on human and non-human (great ape) behavior tiers, with
+negative results and an operating envelope reported alongside the positive
+mechanism.
+
 **Statements.** This manuscript is original, has not been published
 previously, and is not under consideration elsewhere. All authors have read
 and approved the submission and declare no conflicts of interest. The
 measurement harness, configuration files, and all per-seed results are
-released with the paper to allow full reproduction. [Optional: data are
-publicly available from NTU, PanAf20K, and UCF101.]
-
-We believe the paper offers the community both a practical mechanism for
-label-efficient adaptation under changing taxonomies and an unusually
-thorough negative-result map of the alternatives.
+released with the paper to allow full reproduction. [Data availability: the
+skeleton datasets used are publicly available from NTU, PanAf20K, and
+UCF101.]
 
 Sincerely,
 [Corresponding author name, on behalf of all authors]
@@ -62,17 +67,7 @@ Sincerely,
 
 ---
 
-## 定制段（按刊选用）
-
-### TMM（IEEE Transactions on Multimedia）— 推荐首选
-
-> The paper fits TMM's scope on multimedia understanding and human-centered
-> motion analysis: it addresses skeleton-based behavior recognition, a
-> multimodal sensing modality widely used in surveillance, healthcare, and
-> human–computer interaction, and it targets the label-scarce, evolving
-> deployment settings that practical multimedia systems face. All evidence is
-> measured under one shared protocol with ten seeds per configuration, and the
-> paper releases its full per-seed results.
+## 备用段（改投其他刊时替换"Why Neurocomputing"段）
 
 ### PRL（Pattern Recognition Letters）
 
@@ -89,3 +84,13 @@ Sincerely,
 > what limits label efficiency under evolving taxonomies, including a
 > negative-result map and an operating envelope, evaluated on human and
 > non-human (great ape) behavior tiers with a released measurement harness.
+
+### TMM（IEEE Transactions on Multimedia）
+
+> The paper fits TMM's scope on multimedia understanding and human-centered
+> motion analysis: it addresses skeleton-based behavior recognition, a
+> multimodal sensing modality widely used in surveillance, healthcare, and
+> human–computer interaction, and it targets the label-scarce, evolving
+> deployment settings that practical multimedia systems face. All evidence is
+> measured under one shared protocol with ten seeds per configuration, and
+> the paper releases its full per-seed results.
